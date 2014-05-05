@@ -416,7 +416,7 @@ public final class BlockHelper {
 			return stacks;
 		}
 		worldObj.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(block) + (meta << 12));
-		worldObj.setBlock(x, y, z, Blocks.air);
+		worldObj.setBlockToAir(x, y, z);
 
 		List<EntityItem> result = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(x - 2, y - 2, z - 2, x + 3, y + 3, z + 3));
 		for (int i = 0; i < result.size(); i++) {

@@ -3,9 +3,11 @@
 #################
 
 *.pydevproject
+.gradle/
 .project
 .metadata
 bin/
+eclipse/
 tmp/
 *.tmp
 *.bak

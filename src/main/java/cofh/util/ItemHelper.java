@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -99,6 +100,14 @@ public final class ItemHelper {
 		}
 		stack.splitStack(1);
 		return stack;
+	}
+
+	/**
+	 * This prevents an overridden getDamage() call from messing up metadata acquisition.
+	 */
+	public static int getItemDamage(ItemStack stack) {
+
+		return Items.diamond.getDamage(stack);
 	}
 
 	/**
