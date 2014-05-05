@@ -1,0 +1,54 @@
+#es_ES
+
+gui.cofh.access=Acceso
+gui.cofh.accessMode=Modo de Acceso
+gui.cofh.accessPublic=Acceso Público
+gui.cofh.accessRestricted=Restringido
+gui.cofh.accessPrivate=Solo su Dueño
+gui.cofh.all=Todo
+gui.cofh.blank=en Blanco
+gui.cofh.charge=Carga
+gui.cofh.configuration=Configuración
+gui.cofh.contents=Contenidos
+gui.cofh.controlStatus=Control de Estado
+gui.cofh.empty=Vacio
+gui.cofh.energy=Energía
+gui.cofh.energyConsume=Energía Consumida
+gui.cofh.energyProduce=Energía Producida
+gui.cofh.energyStored=Energía Almacenada
+gui.cofh.fluid=Fluido
+gui.cofh.friendsList=Lista de Amigos
+gui.cofh.information=Información
+gui.cofh.infinite=Infinito
+gui.cofh.items=Objetos
+gui.cofh.level=Nivel
+gui.cofh.maxEnergyPerTick=Potencia Máxica
+gui.cofh.none=None
+gui.cofh.owner=Dueño
+gui.cofh.press=Presionar
+gui.cofh.receive=Recivir
+gui.cofh.receiving=Reciviendo
+gui.cofh.redstoneControl=Control de Redstone
+gui.cofh.redstoneControlOff=Desabilitado
+gui.cofh.redstoneControlOn=Habilitado
+gui.cofh.redstoneStateHigh=Alta
+gui.cofh.redstoneStateIgnored=Ignorada
+gui.cofh.redstoneStateLow=Baja
+gui.cofh.security=Seguridad
+gui.cofh.send=Enviar
+gui.cofh.sending=Enviando
+gui.cofh.signal=Señal
+gui.cofh.signalRequired=Señal Requerida
+gui.cofh.source=Origen
+gui.cofh.tutorial=Tutorial
+
+gui.cofh.tutorial.fluxRequired=Necesita un flujo de redstone para funcionar.
+gui.cofh.tutorial.tabConfiguration=La pestaña de configuración determina de que manera los objetos entran y salen de este dispositivo.
+gui.cofh.tutorial.tabConfiguration2=La pestaña de configuración determina los modos de funcionamiento de este dispositivo.
+gui.cofh.tutorial.tabRedstone=La pestaña de control de redstone configura cómo este dispositivo reacciona a las señales de redstone.
+
+item.invalid.name=Objeto Invalido (Destruir)
+
+message.cofh.holdShift1=Presiona
+message.cofh.holdShift2=Mayusculas
+message.cofh.holdShift3=para más Detalles

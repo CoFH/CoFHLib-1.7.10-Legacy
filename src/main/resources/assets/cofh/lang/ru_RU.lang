@@ -1,0 +1,54 @@
+﻿#ru_RU
+
+gui.cofh.access=Доступ
+gui.cofh.accessMode=Режим доступа
+gui.cofh.accessPublic=Публичный
+gui.cofh.accessRestricted=Ограниченный
+gui.cofh.accessPrivate=Приватный
+gui.cofh.all=Все
+gui.cofh.blank=Пусто
+gui.cofh.charge=Заряд
+gui.cofh.configuration=Конфигурация
+gui.cofh.contents=Содержит
+gui.cofh.controlStatus=Режим управления
+gui.cofh.empty=Пусто
+gui.cofh.energy=Энергия
+gui.cofh.energyConsume=Расход энергии
+gui.cofh.energyProduce=Вывод энергии
+gui.cofh.energyStored=Текущий заряд
+gui.cofh.fluid=Жидкость
+gui.cofh.friendsList=Список друзей
+gui.cofh.information=Информация
+#gui.cofh.infinite
+gui.cofh.items=Предметы
+gui.cofh.level=Уровень
+gui.cofh.maxEnergyPerTick=Макс. энергия
+gui.cofh.none=Ничего
+gui.cofh.owner=Владелец
+gui.cofh.press=Нажать
+gui.cofh.receive=Принять
+gui.cofh.receiving=Приём
+gui.cofh.redstoneControl=Красный контроль
+gui.cofh.redstoneControlOff=Выключено
+gui.cofh.redstoneControlOn=Включено
+gui.cofh.redstoneStateHigh=Высоко
+gui.cofh.redstoneStateIgnored=Игнорировать
+gui.cofh.redstoneStateLow=Низко
+gui.cofh.security=Безопастность
+gui.cofh.send=Передать
+gui.cofh.sending=Передача
+gui.cofh.signal=Сигнал
+gui.cofh.signalRequired=Нужный сигнал
+#gui.cofh.source
+gui.cofh.tutorial=Туториал
+
+gui.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
+gui.cofh.tutorial.tabConfiguration=Эта конфигурация определяет как предметы попадают и покидают машину.
+gui.cofh.tutorial.tabConfiguration2=Вкладка конфигурации настраивает режим работы этой машины.
+gui.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" настраивает поведение машины на сигнал красного камня.
+
+item.invalid.name=Неизвестный предмет (Уничтожить)
+
+message.cofh.holdShift1=Нажмите
+message.cofh.holdShift2=Shift
+message.cofh.holdShift3=для информации

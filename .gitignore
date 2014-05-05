@@ -1,0 +1,5 @@
+.gradle/
+bin/
+
+build/
+eclipse/
