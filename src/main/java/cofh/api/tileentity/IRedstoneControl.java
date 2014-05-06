@@ -10,7 +10,14 @@ package cofh.api.tileentity;
 public interface IRedstoneControl extends IRedstoneCache {
 
 	public static enum ControlMode {
-		DISABLED, LOW, HIGH;
+		DISABLED(true), LOW(false), HIGH(true);
+
+		private final boolean state;
+
+		private ControlMode(boolean state) {
+
+			this.state = state;
+		}
 
 		public boolean isDisabled() {
 
@@ -27,6 +34,11 @@ public interface IRedstoneControl extends IRedstoneCache {
 			return this == HIGH;
 		}
 
+		public boolean getState() {
+
+			return state;
+		}
+
 		public static ControlMode stepForward(ControlMode curControl) {
 
 			return curControl == DISABLED ? LOW : curControl == HIGH ? DISABLED : HIGH;
@@ -38,7 +50,7 @@ public interface IRedstoneControl extends IRedstoneCache {
 		}
 	}
 
-	public boolean setControl(ControlMode control);
+	public void setControl(ControlMode control);
 
 	public ControlMode getControl();
 
