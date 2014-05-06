@@ -17,18 +17,40 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0"
-group= "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+project.ext.buildnumber = "CUSTOM_BUILD" // referenced as project.buildnumber
+
+if (System.getenv().BUILD_NUMBER) // assuming jenkins ofcourse
+{
+    project.buildnumber = System.getenv().BUILD_NUMBER
+    println "Using build number ${project.buildnumber}..."
+}
+else
+{
+    println "!! No build number set !!"
+}
+
+version = "R1.0" // change this later.
+group= "cofh" // should technically be a domain...
+archivesBaseName = "CoFHLib" // should make this lower case.. but wtvr
 
 minecraft {
-    version = "1.7.2-10.12.1.1065"
-    assetDir = "eclipse/assets"
+    version = "1.7.2-10.12.1.1063" // latest right now.
+    assetDir = "run/assets" // run configs should point to 'run'
 }
 
+// the repository{} block is not needed because ForgeGradle adds the forge maven repo automatically.
 dependencies {
+    // adds CCL as a dependency
     compile "codechicken:CodeChickenLib:1.7.2-1.1.0.76:dev"
 }
+
+sourceSets {
+    main {
+        java.srcDir "src"
+        resources.srcDir "resources"
+    }
+}
+
 
 processResources
 {
@@ -49,3 +71,29 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+jar {
+    version = minecraft.version + project.version
+    classifier = project.buildnumber
+}
+
+task apiJar(type: Jar, dependsOn: 'sourceMainJava') {
+    from ('build/sources/java') {
+        include "**/api/**/*"
+    }
+    version = "API${minecraft.version}${project.version}"
+    classifier = project.buildnumber
+}
+
+task devJar(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.output
+    version = minecraft.version + project.version
+    classifier = "DEV-${project.buildnumber}"
+}
+
+artifacts {
+    archives devJar
+    archives apiJar
+}
+
+project.tasks.build.dependsOn devJar, apiJar
