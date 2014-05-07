@@ -2,12 +2,8 @@ package cofh.gui.element;
 
 import java.util.List;
 
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
-import cofh.audio.SoundBase;
 import cofh.gui.GuiBase;
-import cpw.mods.fml.client.FMLClientHandler;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
@@ -16,14 +12,6 @@ import cpw.mods.fml.client.FMLClientHandler;
  * 
  */
 public abstract class ElementBase {
-
-	public static final SoundHandler elementSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
-	public static final FontRenderer elementFontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
-
-	public static void playSound(String name, float volume, float pitch) {
-
-		elementSoundManager.playSound(new SoundBase(name, volume, pitch));
-	}
 
 	protected GuiBase gui;
 	protected ResourceLocation texture;

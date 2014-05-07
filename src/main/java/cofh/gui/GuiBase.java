@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
@@ -20,11 +21,13 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cofh.audio.SoundBase;
 import cofh.gui.element.ElementBase;
 import cofh.gui.element.TabBase;
 import cofh.gui.slot.SlotFalseCopy;
 import cofh.render.RenderHelper;
 import cofh.util.StringHelper;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.Loader;
 
 /**
@@ -33,6 +36,9 @@ import cpw.mods.fml.common.Loader;
  * @author King Lemming
  */
 public abstract class GuiBase extends GuiContainer {
+
+	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
+	public static final FontRenderer guiFontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
 	protected boolean drawInventory = true;
 	protected int mouseX = 0;
@@ -45,6 +51,11 @@ public abstract class GuiBase extends GuiContainer {
 	public ArrayList<TabBase> tabs = new ArrayList<TabBase>();
 	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
 	protected List<String> tooltip = new LinkedList<String>();
+
+	public static void playSound(String name, float volume, float pitch) {
+
+		guiSoundManager.playSound(new SoundBase(name, volume, pitch));
+	}
 
 	public GuiBase(Container container) {
 

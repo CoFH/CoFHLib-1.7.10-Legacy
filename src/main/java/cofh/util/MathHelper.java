@@ -1,5 +1,7 @@
 package cofh.util;
 
+import java.util.Random;
+
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
  * 
@@ -12,6 +14,7 @@ public final class MathHelper {
 
 	}
 
+	public static final Random RANDOM = new Random();
 	public static final double PHI = 1.618034;
 	public static final double[] SIN_TABLE = new double[65536];
 

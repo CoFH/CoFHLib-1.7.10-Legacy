@@ -16,6 +16,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
@@ -192,7 +196,7 @@ public final class ItemHelper {
 		return hashCode & 0xFF;
 	}
 
-	/* ORE DICT FUNCTIONS */
+	/* ORE DICTIONARY FUNCTIONS */
 	public static boolean hasOreName(ItemStack stack) {
 
 		return !getOreName(stack).equals("Unknown");
@@ -254,6 +258,41 @@ public final class ItemHelper {
 	public static boolean isLog(ItemStack stack) {
 
 		return getOreName(stack).startsWith(LOG);
+	}
+
+	/* CRAFTING HELPER FUNCTIONS */
+	public static boolean addGearRecipe(ItemStack gear, String ingot) {
+
+		if (!oreNameExists(ingot)) {
+			return false;
+		}
+		GameRegistry.addRecipe(new ShapedOreRecipe(gear, new Object[] { " X ", "XIX", " X ", 'X', ingot, 'I', Items.iron_ingot }));
+		return true;
+	}
+
+	public static boolean addReverseStorageRecipe(ItemStack nine, String one) {
+
+		if (oreNameExists(one)) {
+			return false;
+		}
+		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemHelper.cloneStack(nine, 9), new Object[] { one }));
+		return true;
+	}
+
+	public static boolean addStorageRecipe(ItemStack one, String nine) {
+
+		if (!oreNameExists(nine)) {
+			return false;
+		}
+		GameRegistry.addRecipe(one, new Object[] { "III", "III", "III", 'I', nine });
+		return true;
+	}
+
+	public static void registerWithHandlers(String oreName, ItemStack stack) {
+
+		OreDictionary.registerOre(oreName, stack);
+		GameRegistry.registerCustomItemStack(oreName, stack);
+		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", stack);
 	}
 
 	/**
