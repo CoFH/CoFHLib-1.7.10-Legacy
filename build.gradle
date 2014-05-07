@@ -44,14 +44,6 @@ dependencies {
     compile "codechicken:CodeChickenLib:1.7.2-1.1.0.76:dev"
 }
 
-sourceSets {
-    main {
-        java.srcDir "src"
-        resources.srcDir "resources"
-    }
-}
-
-
 processResources
 {
     // this will ensure that this task is redone when the versions change.
