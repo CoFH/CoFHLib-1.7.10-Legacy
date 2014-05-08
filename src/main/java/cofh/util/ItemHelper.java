@@ -472,6 +472,7 @@ public final class ItemHelper {
 				containedItems.add(curStack);
 				for (int j = 0; j < nbtList.tagCount(); j++) {
 					NBTTagCompound tag2 = nbtList.getCompoundTagAt(j);
+					@SuppressWarnings("unused")
 					int slot2 = tag.getInteger("Slot");
 					// TODO: ??
 
