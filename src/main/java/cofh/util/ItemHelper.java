@@ -284,7 +284,7 @@ public final class ItemHelper {
 		if (!oreNameExists(nine)) {
 			return false;
 		}
-		GameRegistry.addRecipe(one, new Object[] { "III", "III", "III", 'I', nine });
+		GameRegistry.addRecipe(new ShapedOreRecipe(one, new Object[] { "III", "III", "III", 'I', nine }));
 		return true;
 	}
 
