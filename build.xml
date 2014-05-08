@@ -3,16 +3,16 @@
 	
 	<!-- Basic directories -->
 	<property name="src.dir" value="src/main/java"/>
+	<property name="resources.dir" value="src/main/resources"/>
 	<property name="build.dir" value="build"/>
-	<property name="resources.dir" value="resources"/>
 	<property name="download.dir" value="${build.dir}/downloads"/>
 	
 	<!-- Project information -->
 	<property name="build.name" value="${ant.project.name}"/>
 	<property name="class.pckg" value="cofh"/>
-	<!-- Version file (main class) --> <!--
-	<property name="verclass.dir" value="" />
-	<property name="verclass.name" value=""/> -->
+	<!-- Version file -->
+	<property name="verclass.dir" value="${src.dir}/${class.pckg}/util/" />
+	<property name="verclass.name" value="CoFHVersion.java"/>
 	
 	<!-- Forge version -->
 	<property name="mc.version"  value="1.7.2"/>
@@ -34,7 +34,7 @@
 	<property name="lib.dir" value="${forgebuild.dir}/libs"/>
 	<property name="sources.dir" value="${forgebuild.dir}/sources/minecraft"/>
 	<property name="transformers.dir" value="${forge.dir}/src/main/resources/"/>
-	<property name="forge.jar" value="${forgebuild.dir}/dirtyArtifacts/forgeSrc-${forge.version}.jar"/>
+	<property name="forge.jar" value="${build.dir}/.gradle/caches/minecraft/net/minecraftforge/forge/${forge.version}/forgeSrc-${forge.version}.jar"/>
 	<property name="reobf.jar" value="${lib.dir}/modid-1.0.jar"/>
 	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${forge.version}/forge-${forge.version}-src.zip"/>
 	
@@ -92,8 +92,6 @@
 	</target>
 	
 	<macrodef name="move-transformers"><sequential>
-		
-		<copy file="${resources.dir}/cofhlib_at.cfg" todir="${transformers.dir}"/>
 		
 	</sequential></macrodef>
 	
@@ -201,8 +199,7 @@
 		<mkdir dir="${lib.dir}"/>
 		<javac srcdir="${forge.dir}/build/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false"/>
-		<jar destfile="${forge.dir}/build/dirtyArtifacts/forgeSrc-${forge.version}.jar" compress="true"
-			level="9" basedir="${compile.dir}"/>
+		<jar destfile="${forge.jar}" compress="true" level="9" basedir="${compile.dir}"/>
 		<delete dir="${compile.dir}"/>
 	</target>
 
@@ -280,22 +277,25 @@
 			
 			// open file and parse JSON structure
 			var file = new File(project.getProperty("resources.dir") + "/mcmod.info");
-			var mcmod = new Scanner(file, "UTF-8").useDelimiter("\\Z");
-			var data = new JsonParser().parse(mcmod.next()).getAsJsonArray();
-			mcmod.close();
-			
-			// update all version elements
-			for (var i = 0, e = data.size(); i < e; ++i) {
-				var element = data.get(i).getAsJsonObject();
-				element.addProperty("version", mfrversion);
-				element.addProperty("mcversion", mcversion);
+			if (file.exists())
+			{
+				var mcmod = new Scanner(file, "UTF-8").useDelimiter("\\Z");
+				var data = new JsonParser().parse(mcmod.next()).getAsJsonArray();
+				mcmod.close();
+				
+				// update all version elements
+				for (var i = 0, e = data.size(); i < e; ++i) {
+					var element = data.get(i).getAsJsonObject();
+					element.addProperty("version", mfrversion);
+					element.addProperty("mcversion", mcversion);
+				}
+				
+				// write file back, pretty-printed
+				var output = new JsonWriter(new FileWriter(file));
+				output.setIndent("    ");
+				new Gson().toJson(data, output);
+				output.close();
 			}
-			
-			// write file back, pretty-printed
-			var output = new JsonWriter(new FileWriter(file));
-			output.setIndent("    ");
-			new Gson().toJson(data, output);
-			output.close();
 		]]></script>
 		<echo message="Version: ${mfrv}"/>
 		<property name="build.full" value="-[${mcv}]${mfrv}-"/>

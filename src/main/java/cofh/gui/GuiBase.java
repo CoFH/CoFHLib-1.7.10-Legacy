@@ -140,7 +140,6 @@ public abstract class GuiBase extends GuiContainer {
 		}
 	}
 
-	@Override
 	public Slot getSlotAtPosition(int xCoord, int yCoord) {
 
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
