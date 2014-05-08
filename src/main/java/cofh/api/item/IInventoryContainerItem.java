@@ -65,4 +65,14 @@ public interface IInventoryContainerItem {
 	 */
 	int getSizeInventory(ItemStack container);
 
+	/**
+	 * Returns whether or not the container item's inventory is empty.
+	 */
+	boolean isEmpty(ItemStack container);
+
+	/**
+	 * Returns whether or not the container item's inventory is full.
+	 */
+	boolean isFull(ItemStack container);
+
 }
