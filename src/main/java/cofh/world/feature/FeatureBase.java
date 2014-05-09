@@ -1,11 +1,12 @@
 package cofh.world.feature;
 
+import cofh.api.world.IFeatureGenerator;
+
 import java.util.HashSet;
 import java.util.Random;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import cofh.api.world.IFeatureGenerator;
 
 public abstract class FeatureBase implements IFeatureGenerator {
 

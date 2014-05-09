@@ -1,9 +1,10 @@
 package cofh.gui.slot;
 
+import cofh.util.inventory.ComparableItemStack;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cofh.util.inventory.ComparableItemStack;
 
 /**
  * Slot which is restricted to a specific item and maximum amount.

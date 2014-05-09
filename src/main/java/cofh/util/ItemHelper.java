@@ -1,5 +1,8 @@
 package cofh.util;
 
+import cpw.mods.fml.common.event.FMLInterModComms;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +21,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.

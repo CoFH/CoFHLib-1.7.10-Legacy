@@ -1,10 +1,10 @@
 package cofh.gui.element;
 
-import java.util.List;
-
 import cofh.gui.GuiBase;
 import cofh.render.RenderHelper;
 import cofh.util.StringHelper;
+
+import java.util.List;
 
 public class ElementButton extends ElementBase {
 

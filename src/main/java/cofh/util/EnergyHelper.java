@@ -1,12 +1,13 @@
 package cofh.util;
 
+import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyHandler;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
 
 /**
  * This class contains helper functions related to Redstone Flux, the basis of the CoFH Energy System.

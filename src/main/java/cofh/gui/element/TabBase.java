@@ -1,14 +1,14 @@
 package cofh.gui.element;
 
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 import codechicken.lib.vec.Rectangle4i;
 import cofh.gui.GuiBase;
 import cofh.gui.GuiProps;
 import cofh.gui.TabTracker;
 import cofh.render.RenderHelper;
+
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.

@@ -1,9 +1,10 @@
 package cofh.util.inventory;
 
+import cofh.util.ItemHelper;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import cofh.util.ItemHelper;
 
 /**
  * This class allows for OreDictionary-compatible ItemStack comparisons.

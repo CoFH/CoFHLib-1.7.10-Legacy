@@ -1,9 +1,10 @@
 package cofh.util;
 
+import cpw.mods.fml.common.event.FMLInterModComms;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
-import cpw.mods.fml.common.event.FMLInterModComms;
 
 public class ThermalExpansionHelper {
 

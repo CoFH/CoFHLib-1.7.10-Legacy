@@ -1,9 +1,10 @@
 package cofh.gui.element;
 
+import cofh.gui.GuiBase;
+
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
-import cofh.gui.GuiBase;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.

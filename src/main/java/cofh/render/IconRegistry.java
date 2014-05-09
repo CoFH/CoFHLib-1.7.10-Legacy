@@ -2,6 +2,7 @@ package cofh.render;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 

@@ -1,7 +1,8 @@
 package cofh.util;
 
-import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
+
+import net.minecraft.world.World;
 
 /**
  * Contains various helper functions to assist with determining Server/Client status.

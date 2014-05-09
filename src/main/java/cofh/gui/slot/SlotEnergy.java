@@ -1,9 +1,10 @@
 package cofh.gui.slot;
 
+import cofh.util.EnergyHelper;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cofh.util.EnergyHelper;
 
 /**
  * Slot which only accepts Energy (Redstone Flux) Containers as valid.

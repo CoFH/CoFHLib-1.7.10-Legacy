@@ -1,8 +1,8 @@
 package cofh.api.tileentity;
 
-import java.util.List;
-
 import codechicken.lib.raytracer.IndexedCuboid6;
+
+import java.util.List;
 
 public interface ISubSelectionBoxProvider {
 

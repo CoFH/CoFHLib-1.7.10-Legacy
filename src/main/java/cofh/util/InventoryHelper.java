@@ -1,11 +1,12 @@
 package cofh.util;
 
+import cofh.api.transport.IItemDuct;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.transport.IItemDuct;
 
 /**
  * This class contains helper functions related to Inventories and Inventory manipulation.
