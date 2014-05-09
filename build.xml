@@ -232,11 +232,14 @@
 		</sequential>
 	</macrodef>
 	
-	<target name="verify-version" unless="build.full">
+	<target name="verify-version">
 		<script language="javascript"><![CDATA[
-			var name = project.getProperty("verclass.name");
+			var name = project.getProperty("build.full");
 			if (name == null || name == "") {
-				project.setProperty("build.full", "-");
+				name = project.getProperty("verclass.name");
+				if (name == null || name == "") {
+					project.setProperty("build.full", "-");
+				}
 			}
 		]]></script>
 	</target>
@@ -274,6 +277,11 @@
 			
 			project.setProperty("mfrv", mfrversion);
 			project.setProperty("mcv", mcversion);
+			
+			var c = project.getProperty("build.channel");
+			if (c == null || c == "")
+				project.setProperty("build.channel", mfrversion.indexOf("B") > 0 ? "alpha" : (
+													 mfrversion.indexOf("RC") > 0 ? "beta" : "release"));
 			
 			// open file and parse JSON structure
 			var file = new File(project.getProperty("resources.dir") + "/mcmod.info");
