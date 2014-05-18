@@ -28,15 +28,16 @@ public class FeatureOreGenUniform extends FeatureBase {
 		if (!newGen && !regen) {
 			return false;
 		}
+		if (dimensionRestriction != GenRestriction.NONE) {
+			if (dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.dimensionId)) {
+				return false;
+			}
+		}
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
 
-		if (type != BiomeRestriction.NONE) {
-			String biomeName = world.getBiomeGenForCoords(chunkX, chunkZ).biomeName.toLowerCase();
-			boolean onList = biomes.contains(biomeName);
-
-			// type == BiomeRestriction.BLACKLIST && onList || type == BiomeRestriction.WHITELIST && !onList
-			if (type == BiomeRestriction.BLACKLIST == onList) {
+		if (biomeRestriction != GenRestriction.NONE) {
+			if (biomeRestriction == GenRestriction.BLACKLIST == biomes.contains(world.getBiomeGenForCoords(chunkX, chunkZ).biomeName.toLowerCase())) {
 				return false;
 			}
 		}
@@ -48,4 +49,5 @@ public class FeatureOreGenUniform extends FeatureBase {
 		}
 		return true;
 	}
+
 }

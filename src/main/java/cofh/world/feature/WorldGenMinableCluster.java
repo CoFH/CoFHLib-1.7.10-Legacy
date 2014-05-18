@@ -25,7 +25,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
 	private final int genClusterSize;
-	private Block genBlock;
+	private final Block genBlock;
 
 	public WorldGenMinableCluster(ItemStack ore, int clusterSize) {
 
@@ -55,7 +55,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, Block block) {
 
 		cluster = resource;
-		genClusterSize = clusterSize;
+		genClusterSize = clusterSize > 32 ? 32 : clusterSize < 4 ? 4 : clusterSize;
 		genBlock = block;
 	}
 
@@ -98,7 +98,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && block != null && block.isReplaceableOreGen(world, k2, l2, i3, genBlock)) {
 									WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
-									world.setBlock(k2, l2, i3, ore.block, ore.metadata, 0);
+									world.setBlock(k2, l2, i3, ore.block, ore.metadata, 2);
 								}
 							}
 						}
