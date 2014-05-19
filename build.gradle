@@ -29,12 +29,12 @@ else
     println "!! No build number set !!"
 }
 
-version = "R1.0" // change this later.
-group= "cofh" // should technically be a domain...
-archivesBaseName = "CoFHLib" // should make this lower case.. but wtvr
+version = "R1.0"
+group= "cofh"
+archivesBaseName = "CoFHLib"
 
 minecraft {
-    version = "1.7.2-10.12.1.1063" // latest right now.
+    version = "1.7.2-10.12.1.1082" // latest right now.
     assetDir = "run/assets" // run configs should point to 'run'
 }
 

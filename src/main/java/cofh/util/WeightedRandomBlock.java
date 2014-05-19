@@ -1,4 +1,4 @@
-package cofh.api.world;
+package cofh.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

@@ -9,4 +9,5 @@ public interface IRotateableTile {
 	public void rotate(ForgeDirection axis);
 
 	public ForgeDirection getDirectionFacing();
+
 }
