@@ -14,7 +14,7 @@ public class Area {
 	public int zMin;
 	public int zMax;
 
-	private BlockPosition _origin;
+	private BlockPosition origin;
 
 	public Area(int xMin, int xMax, int yMin, int yMax, int zMin, int zMax) {
 
@@ -35,7 +35,7 @@ public class Area {
 		zMin = center.z - radius;
 		zMax = center.z + radius;
 
-		_origin = center;
+		origin = center;
 	}
 
 	public BlockPosition getMin() {
@@ -81,7 +81,7 @@ public class Area {
 
 	public BlockPosition getOrigin() {
 
-		return _origin.copy();
+		return origin.copy();
 	}
 
 	public AxisAlignedBB toAxisAlignedBB() {

@@ -364,11 +364,17 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
+		if (stackA == stackB) {
+			return true;
+		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB) {
 
+		if (stackA == stackB) {
+			return true;
+		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getHasSubtypes() == false || stackA.getItemDamage() == stackB.getItemDamage());
 	}
 
