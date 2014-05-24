@@ -1,5 +1,8 @@
 package cofh.util.position;
 
+import cofh.util.BlockHelper;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +11,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BlockPosition {
+public class BlockPosition implements Comparable<BlockPosition>, Serializable {
+
+	private static final long serialVersionUID = 8671402745765780610L;
 
 	public int x;
 	public int y;
@@ -57,19 +62,48 @@ public class BlockPosition {
 		x = tile.xCoord;
 		y = tile.yCoord;
 		z = tile.zCoord;
-		orientation = ForgeDirection.UNKNOWN;
+		if (tile instanceof IRotateableTile)
+			orientation = ((IRotateableTile)tile).getDirectionFacing();
+		else
+			orientation = ForgeDirection.UNKNOWN;
 	}
 
 	public static BlockPosition fromFactoryTile(IRotateableTile te) {
 
-		BlockPosition bp = new BlockPosition((TileEntity) te);
-		bp.orientation = te.getDirectionFacing();
-		return bp;
+		return new BlockPosition((TileEntity) te);
 	}
 
 	public BlockPosition copy() {
 
 		return new BlockPosition(x, y, z, orientation);
+	}
+
+	public void step(int dir) {
+
+		x += BlockHelper.SIDE_COORD_MOD[dir][0];
+		y += BlockHelper.SIDE_COORD_MOD[dir][1];
+		z += BlockHelper.SIDE_COORD_MOD[dir][2];
+	}
+
+	public void step(int dir, int dist) {
+
+		x += BlockHelper.SIDE_COORD_MOD[dir][0] * dist;
+		y += BlockHelper.SIDE_COORD_MOD[dir][1] * dist;
+		z += BlockHelper.SIDE_COORD_MOD[dir][2] * dist;
+	}
+
+	public void step(ForgeDirection dir) {
+
+		x += dir.offsetX;
+		y += dir.offsetY;
+		z += dir.offsetZ;
+	}
+
+	public void step(ForgeDirection dir, int dist) {
+
+		x += dir.offsetX * dist;
+		y += dir.offsetY * dist;
+		z += dir.offsetZ * dist;
 	}
 
 	public void moveRight(int step) {
@@ -192,7 +226,7 @@ public class BlockPosition {
 
 	public List<BlockPosition> getAdjacent(boolean includeVertical) {
 
-		List<BlockPosition> a = new ArrayList<BlockPosition>();
+		List<BlockPosition> a = new ArrayList<BlockPosition>(4 + (includeVertical ? 2 : 0));
 		a.add(new BlockPosition(x + 1, y, z, ForgeDirection.EAST));
 		a.add(new BlockPosition(x - 1, y, z, ForgeDirection.WEST));
 		a.add(new BlockPosition(x, y, z + 1, ForgeDirection.SOUTH));
@@ -225,6 +259,13 @@ public class BlockPosition {
 		} else {
 			return null;
 		}
+	}
+
+	/* Comparable */
+	@Override
+	public int compareTo(BlockPosition other) {
+
+		return this.x == other.x ? this.y == other.y ? this.z - other.z : this.y - other.y : this.x - other.x;
 	}
 
 }

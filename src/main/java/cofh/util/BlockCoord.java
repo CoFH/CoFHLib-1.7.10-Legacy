@@ -8,8 +8,9 @@ import net.minecraft.tileentity.TileEntity;
  * Standardized implementation for representing and manipulating Block Coordinates. Provides standard Java Collection interaction.
  * 
  * @author King Lemming
- * 
+ * @depcreated for cofh.util.position.BlockPosition
  */
+@Deprecated
 public final class BlockCoord implements Comparable<BlockCoord>, Serializable {
 
 	private static final long serialVersionUID = 2008801924277666412L;
