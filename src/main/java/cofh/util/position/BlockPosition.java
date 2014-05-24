@@ -106,31 +106,6 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		z += dir.offsetZ * dist;
 	}
 
-	public void moveRight(int step) {
-
-		switch (orientation) {
-		case SOUTH:
-			x = x - step;
-			break;
-		case NORTH:
-			x = x + step;
-			break;
-		case EAST:
-			z = z + step;
-			break;
-		case WEST:
-			z = z - step;
-			break;
-		default:
-			break;
-		}
-	}
-
-	public void moveLeft(int step) {
-
-		moveRight(-step);
-	}
-
 	public void moveForwards(int step) {
 
 		switch (orientation) {
@@ -161,6 +136,33 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		moveForwards(-step);
 	}
 
+	public void moveRight(int step) {
+
+		switch (orientation) {
+		case UP:
+		case SOUTH:
+			x = x - step;
+			break;
+		case DOWN:
+		case NORTH:
+			x = x + step;
+			break;
+		case EAST:
+			z = z + step;
+			break;
+		case WEST:
+			z = z - step;
+			break;
+		default:
+			break;
+		}
+	}
+
+	public void moveLeft(int step) {
+
+		moveRight(-step);
+	}
+
 	public void moveUp(int step) {
 
 		switch (orientation) {
@@ -170,6 +172,11 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		case SOUTH:
 			y = y + step;
 			break;
+		case UP:
+			z = z - step;
+			break;
+		case DOWN:
+			z = z + step;
 		default:
 			break;
 		}
