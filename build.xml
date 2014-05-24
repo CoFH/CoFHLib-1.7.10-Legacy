@@ -150,6 +150,7 @@
 		<!-- Reobf -->
 		<echo message="Reobfuscating..."/>
 		<java classpath="${reobf.cmd}" classname="immibis.bon.cui.MCPRemap">
+			<arg  line="-q -m"/>
 			<arg value="-to SRG"/>
 			<arg value="-from MCP"/>
 			<arg value="-mcp ${forge.stsh}/unpacked"/>
@@ -157,7 +158,6 @@
 			<arg value="-out ${dist.dir}/${build.name}${build.full}${build.number}.jar"/>
 			<arg value="-ref ${forge.jar}"/>
 			<arg value="-jref ${lib.dir}"/>
-			<arg value="-q"/>
 		</java>
 	</target>
 
