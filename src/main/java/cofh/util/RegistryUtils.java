@@ -1,11 +1,11 @@
 package cofh.util;
 
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
 import com.google.common.collect.BiMap;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.RegistryNamespaced;
@@ -71,15 +71,15 @@ public class RegistryUtils {
 	public static int getTextureColor(ResourceLocation texture) {
 
 		try {
-			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().
-					getResourceManager().getResource(texture).getInputStream());
-			
+			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(texture).getInputStream());
+
 			int[] a = new int[image.getWidth() * image.getHeight()];
 			image.getRGB(0, 0, image.getWidth(), image.getHeight(), a, 0, image.getWidth());
-			
+
 			int r = a[0];
-			for (int i = a.length; --i > 0; )
-				r = (int)(((long)r + a[i]) / 2L);
+			for (int i = a.length; --i > 0;) {
+				r = (int) (((long) r + a[i]) / 2L);
+			}
 			return r;
 		} catch (Throwable t) { // pokemon!
 			return 0xFFFFFF;

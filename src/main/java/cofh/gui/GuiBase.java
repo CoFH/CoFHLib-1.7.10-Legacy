@@ -209,7 +209,7 @@ public abstract class GuiBase extends GuiContainer {
 	// @Override
 	public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
 
-		if (GuiProxy.shouldShowTooltip(this)) {
+		if (mc.thePlayer.inventory.getItemStack() == null) {
 			addTooltips(tooltip);
 		}
 		return tooltip;

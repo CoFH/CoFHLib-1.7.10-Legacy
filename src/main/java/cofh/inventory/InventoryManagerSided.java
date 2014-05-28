@@ -6,7 +6,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class InventoryManagerSided extends InventoryManagerStandard {
 
-	private ISidedInventory _sidedInv;
+	private final ISidedInventory _sidedInv;
 
 	public InventoryManagerSided(ISidedInventory inventory, ForgeDirection targetSide) {
 
@@ -31,4 +31,5 @@ public class InventoryManagerSided extends InventoryManagerStandard {
 
 		return _sidedInv.getAccessibleSlotsFromSide(_targetSide.ordinal());
 	}
+
 }

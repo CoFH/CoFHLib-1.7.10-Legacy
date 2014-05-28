@@ -25,4 +25,5 @@ public interface IInventoryManager {
 	public int[] getSlots();
 
 	public Map<Integer, ItemStack> getContents();
+
 }
