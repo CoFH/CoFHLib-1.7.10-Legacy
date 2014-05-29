@@ -1,11 +1,11 @@
 package cofh.util;
 
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
 import com.google.common.collect.BiMap;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.RegistryNamespaced;
@@ -78,8 +78,17 @@ public class RegistryUtils {
 			image.getRGB(0, 0, image.getWidth(), image.getHeight(), a, 0, image.getWidth());
 			
 			int r = a[0];
-			for (int i = a.length; --i > 0; )
-				r = (int)(((long)r + a[i]) / 2L);
+			for (int i = a.length; i --> 1; ) {
+				int t = a[i], v;
+				v = (((r >> 24) & 255) + ((t >> 24) & 255)) / 2;
+				r &= 0x00FFFFFF; r |= v << 24;
+				v = (((r >> 16) & 255) + ((t >> 16) & 255)) / 2;
+				r &= 0xFF00FFFF; r |= v << 16;
+				v = (((r >>  8) & 255) + ((t >>  8) & 255)) / 2;
+				r &= 0xFFFF00FF; r |= v <<  8;
+				v = (((r >>  0) & 255) + ((t >>  0) & 255)) / 2;
+				r &= 0xFFFFFF00; r |= v <<  0;
+			}
 			return r;
 		} catch (Throwable t) { // pokemon!
 			return 0xFFFFFF;

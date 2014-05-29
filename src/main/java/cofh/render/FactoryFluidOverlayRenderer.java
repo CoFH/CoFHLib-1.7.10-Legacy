@@ -112,7 +112,7 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 
 		TextureUtil.func_147950_a(false, false);
 		GL11.glEnable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		if (type == ItemRenderType.INVENTORY) {
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -206,12 +206,12 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 				GL11.glDepthMask(true);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
-
-			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            GL11.glDisable(GL11.GL_ALPHA_TEST);
-			TextureUtil.func_147945_b();
 		}
+
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		TextureUtil.func_147945_b();
 		GL11.glPopMatrix();
 	}
 
