@@ -1,10 +1,10 @@
 package cofh.gui.element;
 
-import codechicken.lib.vec.Rectangle4i;
 import cofh.gui.GuiBase;
 import cofh.gui.GuiProps;
 import cofh.gui.TabTracker;
 import cofh.render.RenderHelper;
+import cofh.vec.Rectangle4i;
 
 import net.minecraft.util.ResourceLocation;
 

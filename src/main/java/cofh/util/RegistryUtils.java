@@ -71,12 +71,11 @@ public class RegistryUtils {
 	public static int getTextureColor(ResourceLocation texture) {
 
 		try {
-			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().
-					getResourceManager().getResource(texture).getInputStream());
-			
+			BufferedImage image = ImageIO.read(Minecraft.getMinecraft().getResourceManager().getResource(texture).getInputStream());
+
 			int[] a = new int[image.getWidth() * image.getHeight()];
 			image.getRGB(0, 0, image.getWidth(), image.getHeight(), a, 0, image.getWidth());
-			
+
 			int r = a[0];
 			for (int i = a.length; i --> 1; ) {
 				int t = a[i], v;

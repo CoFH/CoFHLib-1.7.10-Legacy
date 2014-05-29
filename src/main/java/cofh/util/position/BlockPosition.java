@@ -62,10 +62,11 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		x = tile.xCoord;
 		y = tile.yCoord;
 		z = tile.zCoord;
-		if (tile instanceof IRotateableTile)
-			orientation = ((IRotateableTile)tile).getDirectionFacing();
-		else
+		if (tile instanceof IRotateableTile) {
+			orientation = ((IRotateableTile) tile).getDirectionFacing();
+		} else {
 			orientation = ForgeDirection.UNKNOWN;
+		}
 	}
 
 	public static BlockPosition fromFactoryTile(IRotateableTile te) {

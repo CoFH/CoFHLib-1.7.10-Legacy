@@ -11,8 +11,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class InventoryManagerStandard implements IInventoryManager {
 
-	private IInventory _inv;
+	private final IInventory _inv;
 	protected ForgeDirection _targetSide;
+	protected int _cachedSize;
+	protected int[] _cachedSlots = new int[] {};
 
 	public InventoryManagerStandard(IInventory inventory, ForgeDirection targetSide) {
 
@@ -181,11 +183,14 @@ public class InventoryManagerStandard implements IInventoryManager {
 	@Override
 	public int[] getSlots() {
 
-		int[] slots = new int[_inv.getSizeInventory()];
-		for (int i = 0; i < slots.length; i++) {
-			slots[i] = i;
+		if (_inv.getSizeInventory() != _cachedSize) {
+			_cachedSize = _inv.getSizeInventory();
+			_cachedSlots = new int[_cachedSize];
+			for (int i = 0; i < _cachedSize; i++) {
+				_cachedSlots[i] = i;
+			}
 		}
-		return slots;
+		return _cachedSlots;
 	}
 
 	@Override
@@ -197,4 +202,5 @@ public class InventoryManagerStandard implements IInventoryManager {
 		}
 		return contents;
 	}
+
 }
