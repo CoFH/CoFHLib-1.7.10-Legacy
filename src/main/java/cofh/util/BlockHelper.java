@@ -392,12 +392,6 @@ public final class BlockHelper {
 		}
 	}
 
-	@Deprecated
-	public static boolean isBlock(int bId) {
-
-		return false;
-	}
-
 	public static List<ItemStack> breakBlock(World worldObj, int x, int y, int z, Block block, int fortune, boolean doBreak, boolean silkTouch) {
 
 		if (block.getBlockHardness(worldObj, x, y, z) == -1) {
@@ -411,7 +405,6 @@ public final class BlockHelper {
 		} else {
 			stacks = block.getDrops(worldObj, x, y, z, meta, fortune);
 		}
-
 		if (!doBreak) {
 			return stacks;
 		}

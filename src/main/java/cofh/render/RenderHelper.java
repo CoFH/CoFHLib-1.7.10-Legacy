@@ -29,6 +29,7 @@ public final class RenderHelper {
 	public static final ResourceLocation MC_ITEM_SHEET = new ResourceLocation("textures/atlas/items.png");
 	public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
 	public static final ResourceLocation MC_FONT_ALTERNATE = new ResourceLocation("textures/font/ascii_sga.png");
+	public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
 	private RenderHelper() {
 
@@ -61,7 +62,7 @@ public final class RenderHelper {
 
 	public static void renderItemAsBlock(RenderBlocks renderer, ItemStack item, double translateX, double translateY, double translateZ) {
 
-		Tessellator tessellator = tessellator();
+		Tessellator tessellator = Tessellator.instance;
 		Block block = Blocks.stone;
 		IIcon texture = item.getIconIndex();
 
@@ -109,7 +110,7 @@ public final class RenderHelper {
 		Tessellator.instance.draw();
 	}
 
-	public static void renderIcon(int x, int y, int z, IIcon icon, int width, int height) {
+	public static void renderIcon(double x, double y, double z, IIcon icon, int width, int height) {
 
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();

@@ -23,6 +23,9 @@ public abstract class TabBase extends ElementBase {
 	public boolean open;
 	public int side = 1;
 
+	public int headerColor = 0xe1c92f;
+	public int subheaderColor = 0xaaafb8;
+	public int textColor = 0x000000;
 	public int backgroundColor = 0xffffff;
 
 	public int currentShiftX = 0;
