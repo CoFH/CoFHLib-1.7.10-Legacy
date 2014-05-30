@@ -33,11 +33,8 @@ public class ElementDualScaled extends ElementBase {
 	}
 
 	@Override
-	public void draw() {
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		if (!visible) {
-			return;
-		}
 		RenderHelper.bindTexture(texture);
 
 		if (background) {
@@ -57,6 +54,12 @@ public class ElementDualScaled extends ElementBase {
 			drawTexturedModalRect(posX + sizeX - quantity, posY, sizeX + sizeX - quantity, 0, quantity, sizeY);
 			return;
 		}
+	}
+
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

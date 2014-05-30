@@ -31,15 +31,17 @@ public class ElementEnergyStored extends ElementBase {
 	}
 
 	@Override
-	public void draw() {
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		if (!visible) {
-			return;
-		}
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
 		int qty = getScaled();
 		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - qty, 16, DEFAULT_SCALE - qty, sizeX, qty);
+	}
+
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+
 	}
 
 	@Override
@@ -48,7 +50,7 @@ public class ElementEnergyStored extends ElementBase {
 		if (storage.getMaxEnergyStored() < 0) {
 			list.add("Infinite RF");
 		} else {
-			list.add("" + storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
+			list.add(storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
 		}
 	}
 

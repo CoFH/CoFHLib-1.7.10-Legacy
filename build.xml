@@ -72,6 +72,7 @@
 		</condition>
 		<condition property="have.libs">
 			<and>
+				<istrue value="${forge.exists}"/>
 				<available file="${lib.dir}/codechickenlib.jar" type="file"/>
 			</and>
 		</condition>

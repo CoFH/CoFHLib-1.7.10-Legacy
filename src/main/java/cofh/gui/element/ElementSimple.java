@@ -27,13 +27,16 @@ public class ElementSimple extends ElementBase {
 	}
 
 	@Override
-	public void draw() {
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		if (!visible) {
-			return;
-		}
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, texU, texV, sizeX, sizeY);
+	}
+
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+
+		return;
 	}
 
 }

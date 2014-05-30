@@ -51,16 +51,18 @@ public class ElementFluidTank extends ElementBase {
 	}
 
 	@Override
-	public void draw() {
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		if (!visible) {
-			return;
-		}
 		int amount = getScaled();
 
 		gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
+	}
+
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+
 	}
 
 	@Override
@@ -70,12 +72,6 @@ public class ElementFluidTank extends ElementBase {
 			list.add(StringHelper.getFluidName(tank.getFluid()));
 		}
 		list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
-	}
-
-	@Override
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
-
-		return false;
 	}
 
 	int getScaled() {

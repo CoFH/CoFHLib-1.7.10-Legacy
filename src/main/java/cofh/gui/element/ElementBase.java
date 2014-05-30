@@ -4,6 +4,7 @@ import cofh.gui.GuiBase;
 
 import java.util.List;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -23,18 +24,28 @@ public abstract class ElementBase {
 	protected int sizeX;
 	protected int sizeY;
 
-	public int texW = 256;
-	public int texH = 256;
+	protected int texW = 256;
+	protected int texH = 256;
 
 	protected String name;
 
 	protected boolean visible = true;
+	protected boolean enabled = true;
 
 	public ElementBase(GuiBase gui, int posX, int posY) {
 
 		this.gui = gui;
 		this.posX = gui.getGuiLeft() + posX;
 		this.posY = gui.getGuiTop() + posY;
+	}
+
+	public ElementBase(GuiBase gui, int posX, int posY, int width, int height) {
+
+		this.gui = gui;
+		this.posX = gui.getGuiLeft() + posX;
+		this.posY = gui.getGuiTop() + posY;
+		this.sizeX = width;
+		this.sizeY = height;
 	}
 
 	public ElementBase setName(String name) {
@@ -65,32 +76,47 @@ public abstract class ElementBase {
 		return this;
 	}
 
-	public ElementBase setVisible(boolean visible) {
+	public final ElementBase setVisible(boolean visible) {
 
 		this.visible = visible;
 		return this;
 	}
 
-	public boolean isVisible() {
+	public final boolean isVisible() {
 
 		return visible;
+	}
+
+	public final void setEnabled(boolean enabled) {
+
+		this.enabled = enabled;
+	}
+
+	public final boolean isEnabled() {
+
+		return enabled;
+	}
+
+	public void update(int mouseX, int mouseY) {
+		
+		update();
 	}
 
 	public void update() {
 
 	}
 
-	public abstract void draw();
+	public abstract void drawBackground(int mouseX, int mouseY, float gameTicks);
 
-	public void draw(int x, int y) {
-
-		this.posX = x;
-		this.posY = y;
-		draw();
-	}
+	public abstract void drawForeground(int mouseX, int mouseY);
 
 	public void addTooltip(List<String> list) {
 
+	}
+
+	public void drawModalRect(int x, int y, int width, int height, int color) {
+
+		gui.drawSizedModalRect(x, y, width, height, color);
 	}
 
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
@@ -98,7 +124,27 @@ public abstract class ElementBase {
 		gui.drawSizedTexturedModalRect(x, y, u, v, width, height, texW, texH);
 	}
 
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+	public void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
+
+		fontRenderer.drawStringWithShadow(text, x - fontRenderer.getStringWidth(text) / 2, y, color);
+	}
+
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+
+		return false;
+	}
+
+	public void onMouseReleased(int mouseX, int mouseY) {
+
+		return;
+	}
+
+	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
+
+		return false;
+	}
+
+	public boolean onKeyTyped(char characterTyped, int keyPressed) {
 
 		return false;
 	}
@@ -114,9 +160,34 @@ public abstract class ElementBase {
 		return false;
 	}
 
-	public String getName() {
+	public final String getName() {
 
 		return name;
+	}
+	
+	public final GuiBase getContainerScreen() {
+		
+		return gui;
+	}
+
+	public final int getPosY() {
+
+		return posY;
+	}
+
+	public final int getPosX() {
+
+		return posX;
+	}
+
+	public final int getHeight() {
+
+		return sizeY;
+	}
+
+	public final int getWidth() {
+
+		return sizeX;
 	}
 
 }

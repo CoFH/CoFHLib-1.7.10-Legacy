@@ -64,7 +64,7 @@ public class ElementButton extends ElementBase {
 	}
 
 	@Override
-	public void draw() {
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		RenderHelper.bindTexture(texture);
 		if (!disabled) {
@@ -80,6 +80,11 @@ public class ElementButton extends ElementBase {
 	}
 
 	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+
+	}
+
+	@Override
 	public void addTooltip(List<String> list) {
 
 		if (tooltip != null) {
@@ -92,7 +97,7 @@ public class ElementButton extends ElementBase {
 	}
 
 	@Override
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+	public boolean onMousePressed(int x, int y, int mouseButton) {
 
 		if (!disabled) {
 			gui.handleElementButtonClick(getName(), mouseButton);

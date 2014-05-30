@@ -20,12 +20,14 @@ public class ElementFluid extends ElementBase {
 	}
 
 	@Override
-	public void draw() {
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		if (!visible) {
-			return;
-		}
 		gui.drawFluid(posX, posY, fluid, sizeX, sizeY);
+	}
+
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+
 	}
 
 }
