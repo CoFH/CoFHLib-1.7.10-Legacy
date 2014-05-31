@@ -116,11 +116,6 @@ public final class StringHelper {
 		return numString;
 	}
 
-	public static String getShiftText() {
-
-		return shiftForInfo;
-	}
-
 	public static String getActivationText(String key) {
 
 		return BRIGHT_BLUE + ITALIC + localize(key) + END;
@@ -139,6 +134,12 @@ public final class StringHelper {
 	public static String getFlavorText(String key) {
 
 		return WHITE + ITALIC + localize(key) + END;
+	}
+
+	public static String shiftForInfo() {
+
+		return LIGHT_GRAY + localize("message.cofh.holdShift1") + " " + YELLOW + ITALIC + localize("message.cofh.holdShift2") + " " + END + LIGHT_GRAY
+				+ localize("message.cofh.holdShift3") + END;
 	}
 
 	/** When formatting a string, always apply color before font modification. */
@@ -168,8 +169,5 @@ public final class StringHelper {
 
 	public static boolean displayShiftForDetail = true;
 	public static boolean displayStackCount = false;
-
-	public static String shiftForInfo = LIGHT_GRAY + localize("message.cofh.holdShift1") + " " + YELLOW + ITALIC + localize("message.cofh.holdShift2") + " "
-			+ END + LIGHT_GRAY + localize("message.cofh.holdShift3") + END;
 
 }

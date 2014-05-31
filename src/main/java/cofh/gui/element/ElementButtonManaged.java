@@ -9,9 +9,9 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class ElementButtonManaged extends ElementBase {
 
-	public static final ResourceLocation HOVER = new ResourceLocation(GuiProps.PATH_ELEMENTS + "button_hover.png");
-	public static final ResourceLocation ENABLED = new ResourceLocation(GuiProps.PATH_ELEMENTS + "button_enabled.png");
-	public static final ResourceLocation DISABLED = new ResourceLocation(GuiProps.PATH_ELEMENTS + "button_disabled.png");
+	public static final ResourceLocation HOVER = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Button_Hover.png");
+	public static final ResourceLocation ENABLED = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Button_Enabled.png");
+	public static final ResourceLocation DISABLED = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Button_Disabled.png");
 	private String _text;
 
 	public ElementButtonManaged(GuiBase containerScreen, int posX, int posY, int sizeX, int sizeY, String text) {
@@ -45,8 +45,8 @@ public abstract class ElementButtonManaged extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		String text = gui.fontRendererObj.trimStringToWidth(_text, sizeX - 4);
-		drawCenteredString(gui.fontRendererObj, text, posX + sizeX / 2, posY + (sizeY - 8) / 2, getTextColor(mouseX, mouseY));
+		String text = getFontRenderer().trimStringToWidth(_text, sizeX - 4);
+		drawCenteredString(getFontRenderer(), text, posX + sizeX / 2, posY + (sizeY - 8) / 2, getTextColor(mouseX, mouseY));
 	}
 
 	protected int getTextColor(int mouseX, int mouseY) {

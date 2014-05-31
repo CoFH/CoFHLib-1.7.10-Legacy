@@ -167,4 +167,9 @@ public final class RenderHelper {
 		bindTexture(MC_FONT_ALTERNATE);
 	}
 
+	public static final void enableGUIStandardItemLighting() {
+
+		net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+	}
+
 }

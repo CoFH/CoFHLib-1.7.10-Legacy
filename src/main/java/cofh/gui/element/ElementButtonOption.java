@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class ElementButtonOption extends ElementButtonManaged {
 
-	private Map<Integer, String> _values = new HashMap<Integer, String>();
+	private final Map<Integer, String> _values = new HashMap<Integer, String>();
 	private int _currentValue = 0;
 	private int _maxValue;
 
@@ -69,4 +69,5 @@ public abstract class ElementButtonOption extends ElementButtonManaged {
 	}
 
 	public abstract void onValueChanged(int value, String label);
+
 }

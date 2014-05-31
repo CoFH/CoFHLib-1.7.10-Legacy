@@ -18,12 +18,12 @@ public abstract class ElementListBox extends ElementBase {
 	public int textColor = new GuiColor(150, 150, 150, 255).getColor();
 	public int selectedTextColor = new GuiColor(255, 255, 255, 255).getColor();
 
-	private int _marginTop = 2;
-	private int _marginLeft = 2;
-	private int _marginRight = 2;
-	private int _marginBottom = 2;
+	private final int _marginTop = 2;
+	private final int _marginLeft = 2;
+	private final int _marginRight = 2;
+	private final int _marginBottom = 2;
 
-	private List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
+	private final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
 
 	private int _firstIndexDisplayed;
 	private int _selectedIndex;
@@ -223,4 +223,5 @@ public abstract class ElementListBox extends ElementBase {
 	};
 
 	protected abstract void onSelectionChanged(int newIndex, IListBoxElement newElement);
+
 }

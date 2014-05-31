@@ -98,7 +98,7 @@ public abstract class ElementBase {
 	}
 
 	public void update(int mouseX, int mouseY) {
-		
+
 		update();
 	}
 
@@ -164,10 +164,15 @@ public abstract class ElementBase {
 
 		return name;
 	}
-	
+
 	public final GuiBase getContainerScreen() {
-		
+
 		return gui;
+	}
+
+	public final FontRenderer getFontRenderer() {
+
+		return gui.getFontRenderer();
 	}
 
 	public final int getPosY() {

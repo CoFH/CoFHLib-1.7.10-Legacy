@@ -59,16 +59,16 @@ public abstract class TabBase extends ElementBase {
 			texture = DEFAULT_TEXTURE_RIGHT;
 		}
 	}
-	
+
 	public void draw(int x, int y) {
-		
+
 		posX = x;
 		posY = y;
 		draw();
 	}
-	
+
 	public void draw() {
-		
+
 		return;
 	}
 

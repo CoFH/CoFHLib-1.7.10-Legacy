@@ -58,8 +58,9 @@ public class ElementDualScaled extends ElementBase {
 
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
+
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

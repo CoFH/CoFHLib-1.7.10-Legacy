@@ -1,5 +1,6 @@
 package cofh.util;
 
+import cofh.api.item.IEmpowerableItem;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -332,6 +333,27 @@ public final class ItemHelper {
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", stack);
 	}
 
+	/* EMPOWERED ITEM HELPERS */
+	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
+
+		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		return equipped instanceof IEmpowerableItem;
+	}
+
+	public static boolean isPlayerHoldingEmpoweredItem(EntityPlayer player) {
+
+		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		return equipped instanceof IEmpowerableItem && ((IEmpowerableItem) equipped).isEmpowered(player.getCurrentEquippedItem());
+	}
+
+	public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped.getItem();
+
+		return empowerableItem.setEmpoweredState(equipped, !empowerableItem.isEmpowered(equipped));
+	}
+
 	/**
 	 * Determine if a player is holding a registered Fluid Container.
 	 */
@@ -348,6 +370,11 @@ public final class ItemHelper {
 	public static final boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
 		return EnergyHelper.isPlayerHoldingEnergyContainerItem(player);
+	}
+
+	public static final boolean isPlayerHoldingNothing(EntityPlayer player) {
+
+		return player.getCurrentEquippedItem() == null;
 	}
 
 	public static Item getItemFromStack(ItemStack theStack) {
@@ -485,7 +512,7 @@ public final class ItemHelper {
 		if (stack.stackTagCompound.hasKey("Inventory") && stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() > 0) {
 
 			if (StringHelper.displayShiftForDetail && !StringHelper.isShiftKeyDown()) {
-				list.add(StringHelper.shiftForInfo);
+				list.add(StringHelper.shiftForInfo());
 			}
 			if (!StringHelper.isShiftKeyDown()) {
 				return;

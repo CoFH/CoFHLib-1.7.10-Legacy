@@ -4,7 +4,7 @@ import cofh.gui.element.ElementListBox;
 
 public class ListBoxElementText implements IListBoxElement {
 
-	private String _text;
+	private final String _text;
 
 	public ListBoxElementText(String text) {
 
@@ -26,7 +26,8 @@ public class ListBoxElementText implements IListBoxElement {
 	@Override
 	public void draw(ElementListBox listBox, int x, int y, int backColor, int textColor) {
 
-		String text = listBox.getContainerScreen().fontRendererObj.trimStringToWidth(_text, listBox.getContentWidth());
-		listBox.getContainerScreen().fontRendererObj.drawStringWithShadow(text, x, y, textColor);
+		String text = listBox.getFontRenderer().trimStringToWidth(_text, listBox.getContentWidth());
+		listBox.getFontRenderer().drawStringWithShadow(text, x, y, textColor);
 	}
+
 }

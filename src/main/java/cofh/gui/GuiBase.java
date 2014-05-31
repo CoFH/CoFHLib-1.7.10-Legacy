@@ -38,7 +38,7 @@ import org.lwjgl.opengl.GL12;
 public abstract class GuiBase extends GuiContainer {
 
 	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
-	public static final FontRenderer guiFontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+	// public static final FontRenderer guiFontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
 	protected boolean drawInventory = true;
 	protected int mouseX = 0;
@@ -91,7 +91,7 @@ public abstract class GuiBase extends GuiContainer {
 
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
-	
+
 		updateElements();
 	}
 
@@ -124,7 +124,7 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	protected void keyTyped(char characterTyped, int keyPressed) {
 
-		for (int i = elements.size(); i --> 0; ) {
+		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled()) {
 				continue;
@@ -144,7 +144,7 @@ public abstract class GuiBase extends GuiContainer {
 		int wheelMovement = Mouse.getEventDWheel();
 
 		if (wheelMovement != 0) {
-			for (int i = elements.size(); i --> 0; ) {
+			for (int i = elements.size(); i-- > 0;) {
 				ElementBase c = elements.get(i);
 				if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 					continue;
@@ -163,7 +163,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseX -= guiLeft;
 		mouseY -= guiTop;
 
-		for (int i = elements.size(); i --> 0; ) {
+		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 				continue;
@@ -173,9 +173,9 @@ public abstract class GuiBase extends GuiContainer {
 			}
 		}
 
-		TabBase tab = getTabAtPosition(mouseX, mouseY); 
+		TabBase tab = getTabAtPosition(mouseX, mouseY);
 		if (tab != null && !tab.onMousePressed(mouseX, mouseY, mouseButton)) {
-			for (int i = tabs.size(); i --> 0; ) {
+			for (int i = tabs.size(); i-- > 0;) {
 				TabBase other = tabs.get(i);
 				if (other != tab && other.open && other.side == tab.side) {
 					other.toggleOpen();
@@ -197,7 +197,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseY -= guiTop;
 
 		if (mouseButton >= 0 && mouseButton <= 2) { // 0:left, 1:right, 2: middle
-			for (int i = elements.size(); i --> 0; ) {
+			for (int i = elements.size(); i-- > 0;) {
 				ElementBase c = elements.get(i);
 				if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
 					continue;
@@ -251,15 +251,19 @@ public abstract class GuiBase extends GuiContainer {
 	 */
 	protected void drawElements(float partialTick, boolean foreground) {
 
-		if (foreground) for (int i = elements.size(); i --> 0; ) {
-			ElementBase element = elements.get(i);
-			if (element.isVisible()) {
-				element.drawForeground(mouseX, mouseY);
+		if (foreground) {
+			for (int i = elements.size(); i-- > 0;) {
+				ElementBase element = elements.get(i);
+				if (element.isVisible()) {
+					element.drawForeground(mouseX, mouseY);
+				}
 			}
-		} else for (int i = elements.size(); i --> 0; ) {
-			ElementBase element = elements.get(i);
-			if (element.isVisible()) {
-				element.drawBackground(mouseX, mouseY, partialTick);
+		} else {
+			for (int i = elements.size(); i-- > 0;) {
+				ElementBase element = elements.get(i);
+				if (element.isVisible()) {
+					element.drawBackground(mouseX, mouseY, partialTick);
+				}
 			}
 		}
 	}
@@ -269,12 +273,13 @@ public abstract class GuiBase extends GuiContainer {
 	 */
 	protected void drawTabs(float partialTick, boolean foreground) {
 
-		if (foreground)
+		if (foreground) {
 			return; // TODO:
+		}
 		int yPosRight = 4;
 		int yPosLeft = 4;
 
-		for (int i = tabs.size(); i --> 0; ) {
+		for (int i = tabs.size(); i-- > 0;) {
 			TabBase tab = tabs.get(i);
 			tab.update();
 			if (!tab.isVisible()) {
@@ -337,7 +342,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected ElementBase getElementAtPosition(int mX, int mY) {
 
-		for (int i = elements.size(); i --> 0; ) {
+		for (int i = elements.size(); i-- > 0;) {
 			ElementBase element = elements.get(i);
 			if (element.intersectsWith(mX, mY)) {
 				return element;
@@ -351,7 +356,7 @@ public abstract class GuiBase extends GuiContainer {
 		int xShift = 0;
 		int yShift = 4;
 
-		for (int i = tabs.size(); i --> 0; ) {
+		for (int i = tabs.size(); i-- > 0;) {
 			TabBase tab = tabs.get(i);
 			if (!tab.isVisible() || tab.side == 1) {
 				continue;
@@ -367,7 +372,7 @@ public abstract class GuiBase extends GuiContainer {
 		xShift = xSize;
 		yShift = 4;
 
-		for (int i = tabs.size(); i --> 0; ) {
+		for (int i = tabs.size(); i-- > 0;) {
 			TabBase tab = tabs.get(i);
 			if (!tab.isVisible() || tab.side == 0) {
 				continue;
@@ -384,7 +389,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected void updateElements() {
 
-		for (int i = elements.size(); i --> 0; ) {
+		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
 			if (c.isVisible() && c.isEnabled()) {
 				c.update(mouseX, mouseY);
@@ -397,7 +402,7 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	/* HELPERS */
-	
+
 	public void bindTexture(ResourceLocation texture) {
 
 		mc.renderEngine.bindTexture(texture);
@@ -615,6 +620,11 @@ public abstract class GuiBase extends GuiContainer {
 	public void mouseClicked(int mouseButton) {
 
 		super.mouseClicked(guiLeft + mouseX, guiTop + mouseY, mouseButton);
+	}
+
+	public FontRenderer getFontRenderer() {
+
+		return fontRendererObj;
 	}
 
 	protected int getCenteredOffset(String string) {

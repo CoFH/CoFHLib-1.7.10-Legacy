@@ -1,6 +1,8 @@
 package cofh.gui.element.listbox;
 
-import static cofh.gui.element.ElementButtonManaged.*;
+import static cofh.gui.element.ElementButtonManaged.DISABLED;
+import static cofh.gui.element.ElementButtonManaged.ENABLED;
+import static cofh.gui.element.ElementButtonManaged.HOVER;
 
 import cofh.gui.GuiBase;
 import cofh.gui.GuiColor;
@@ -58,8 +60,7 @@ public abstract class SliderVertical extends ElementBase {
 		drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderWidth / 2, sliderHeight / 2);
 		drawTexturedModalRect(sliderX, sliderY + sliderHeight / 2, 0, 256 - sliderHeight / 2, sliderWidth / 2, sliderHeight / 2);
 		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY, 256 - sliderWidth / 2, 0, sliderWidth / 2, sliderHeight / 2);
-		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY + sliderHeight / 2, 256 - sizeX / 2, 256 - sliderHeight / 2, sliderWidth / 2,
-				sliderHeight / 2);
+		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY + sliderHeight / 2, 256 - sizeX / 2, 256 - sliderHeight / 2, sliderWidth / 2, sliderHeight / 2);
 	}
 
 	@Override
