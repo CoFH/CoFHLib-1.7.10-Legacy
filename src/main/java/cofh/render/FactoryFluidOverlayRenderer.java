@@ -27,44 +27,46 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 
 	private boolean canFlip;
 
-	public FactoryFluidOverlayRenderer()
-	{
+	public FactoryFluidOverlayRenderer() {
+
 		this(true);
 	}
 
-	public FactoryFluidOverlayRenderer(boolean canFlip)
-	{
+	public FactoryFluidOverlayRenderer(boolean canFlip) {
+
 		this.canFlip = canFlip;
 	}
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+
 		return (type.ordinal() < ItemRenderType.FIRST_PERSON_MAP.ordinal());
 	}
 
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
+
 		return handleRenderType(item, type) & helper.ordinal() < ItemRendererHelper.EQUIPPED_BLOCK.ordinal();
 	}
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack itemstack, Object... data) {
+
 		Item item = itemstack.getItem();
 		FluidStack liquid = null;
-		if (item instanceof IFluidContainerItem)
-		{
-			IFluidContainerItem fluidItem = (IFluidContainerItem)item;
+		if (item instanceof IFluidContainerItem) {
+			IFluidContainerItem fluidItem = (IFluidContainerItem) item;
 			liquid = fluidItem.getFluid(itemstack);
-		}
-		else if (item instanceof IFluidOverlayItem)
-		{
-			if (item.getRenderPasses(itemstack.getItemDamage()) == 2)
+		} else if (item instanceof IFluidOverlayItem) {
+			if (item.getRenderPasses(itemstack.getItemDamage()) == 2) {
 				liquid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
+			}
 		}
 		doRenderItem(type, itemstack, item, liquid);
 	}
 
 	protected void doRenderItem(ItemRenderType type, ItemStack item, Item iconItem, FluidStack liquid) {
+
 		IIcon icon = iconItem.getIcon(item, 0);
 		IIcon mask = iconItem.getIcon(item, 1);
 		boolean hasLiquid = liquid != null;
@@ -118,18 +120,18 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 			GL11.glDisable(GL11.GL_LIGHTING);
 
 			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV(0,  16, 0, iconMinX, iconMaxY);
+			tessellator.addVertexWithUV(0, 16, 0, iconMinX, iconMaxY);
 			tessellator.addVertexWithUV(16, 16, 0, iconMaxX, iconMaxY);
-			tessellator.addVertexWithUV(16,  0, 0, iconMaxX, iconMinY);
-			tessellator.addVertexWithUV(0,   0, 0, iconMinX, iconMinY);
+			tessellator.addVertexWithUV(16, 0, 0, iconMaxX, iconMinY);
+			tessellator.addVertexWithUV(0, 0, 0, iconMinX, iconMinY);
 			tessellator.draw();
 
 			if (hasLiquid) {
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(0,  16, 0.001, maskMinX, maskMaxY);
+				tessellator.addVertexWithUV(0, 16, 0.001, maskMinX, maskMaxY);
 				tessellator.addVertexWithUV(16, 16, 0.001, maskMaxX, maskMaxY);
-				tessellator.addVertexWithUV(16,  0, 0.001, maskMaxX, maskMinY);
-				tessellator.addVertexWithUV(0,   0, 0.001, maskMinX, maskMinY);
+				tessellator.addVertexWithUV(16, 0, 0.001, maskMaxX, maskMinY);
+				tessellator.addVertexWithUV(0, 0, 0.001, maskMinX, maskMinY);
 				tessellator.draw();
 
 				GL11.glEnable(GL11.GL_CULL_FACE);
@@ -141,10 +143,10 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 
 				tessellator.startDrawingQuads();
 				tessellator.setColorOpaque_I(colorMult);
-				tessellator.addVertexWithUV(0,  16, 0.001, fluidMinX, fluidMaxY);
+				tessellator.addVertexWithUV(0, 16, 0.001, fluidMinX, fluidMaxY);
 				tessellator.addVertexWithUV(16, 16, 0.001, fluidMaxX, fluidMaxY);
-				tessellator.addVertexWithUV(16,  0, 0.001, fluidMaxX, fluidMinY);
-				tessellator.addVertexWithUV(0,   0, 0.001, fluidMinX, fluidMinY);
+				tessellator.addVertexWithUV(16, 0, 0.001, fluidMaxX, fluidMinY);
+				tessellator.addVertexWithUV(0, 0, 0.001, fluidMinX, fluidMinY);
 				tessellator.draw();
 
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -166,10 +168,10 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 			if (hasLiquid) {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(0, 0, 1);
-				tessellator.addVertexWithUV(0, 0,  0.001, maskMaxX, maskMaxY);
-				tessellator.addVertexWithUV(1, 0,  0.001, maskMinX, maskMaxY);
-				tessellator.addVertexWithUV(1, 1,  0.001, maskMinX, maskMinY);
-				tessellator.addVertexWithUV(0, 1,  0.001, maskMaxX, maskMinY);
+				tessellator.addVertexWithUV(0, 0, 0.001, maskMaxX, maskMaxY);
+				tessellator.addVertexWithUV(1, 0, 0.001, maskMinX, maskMaxY);
+				tessellator.addVertexWithUV(1, 1, 0.001, maskMinX, maskMinY);
+				tessellator.addVertexWithUV(0, 1, 0.001, maskMaxX, maskMinY);
 				tessellator.draw();
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(0, 0, -1);
@@ -188,10 +190,10 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(0, 0, 1);
 				tessellator.setColorOpaque_I(colorMult);
-				tessellator.addVertexWithUV(0, 0,  0.001, fluidMaxX, fluidMaxY);
-				tessellator.addVertexWithUV(1, 0,  0.001, fluidMinX, fluidMaxY);
-				tessellator.addVertexWithUV(1, 1,  0.001, fluidMinX, fluidMinY);
-				tessellator.addVertexWithUV(0, 1,  0.001, fluidMaxX, fluidMinY);
+				tessellator.addVertexWithUV(0, 0, 0.001, fluidMaxX, fluidMaxY);
+				tessellator.addVertexWithUV(1, 0, 0.001, fluidMinX, fluidMaxY);
+				tessellator.addVertexWithUV(1, 1, 0.001, fluidMinX, fluidMinY);
+				tessellator.addVertexWithUV(0, 1, 0.001, fluidMaxX, fluidMinY);
 				tessellator.draw();
 
 				tessellator.startDrawingQuads();
@@ -215,12 +217,13 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 		GL11.glPopMatrix();
 	}
 
-	protected void bindTexture(TextureManager renderEngine, int spriteNumber)
-	{
-		if (spriteNumber == 0)
+	protected void bindTexture(TextureManager renderEngine, int spriteNumber) {
+
+		if (spriteNumber == 0) {
 			renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-		else
+		} else {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, spriteNumber);
+		}
 	}
 
 }

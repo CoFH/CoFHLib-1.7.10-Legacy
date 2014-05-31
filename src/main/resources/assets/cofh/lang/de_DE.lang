@@ -42,11 +42,6 @@ gui.cofh.signalRequired=Signal benötigt
 gui.cofh.source=Quelle
 gui.cofh.tutorial=Tutorial
 
-gui.cofh.tutorial.fluxRequired=Benötigt Redstone-Flux zum Arbeiten.
-gui.cofh.tutorial.tabConfiguration=Der Konfigurations-Tab bestimmt, wie Items dieses Gerät erreichen und verlassen.
-gui.cofh.tutorial.tabConfiguration2=Der Konfigurations-Tab bestimmt die Operations-Modi dieses Gerätes.
-gui.cofh.tutorial.tabRedstone=Der Redstone-Kontroll-Tab konfiguriert, wie dieses Gerät auf Redstone-Signale reagiert.
-
 item.invalid.name=Ungültiges Item (Zerstören)
 
 message.cofh.holdShift1=Halte

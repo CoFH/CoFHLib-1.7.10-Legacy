@@ -42,11 +42,6 @@ gui.cofh.signalRequired=Нужный сигнал
 #gui.cofh.source
 gui.cofh.tutorial=Туториал
 
-gui.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
-gui.cofh.tutorial.tabConfiguration=Эта конфигурация определяет как предметы попадают и покидают машину.
-gui.cofh.tutorial.tabConfiguration2=Вкладка конфигурации настраивает режим работы этой машины.
-gui.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" настраивает поведение машины на сигнал красного камня.
-
 item.invalid.name=Неизвестный предмет (Уничтожить)
 
 message.cofh.holdShift1=Нажмите

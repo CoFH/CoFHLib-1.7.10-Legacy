@@ -86,6 +86,42 @@ public final class ItemHelper {
 		return tag;
 	}
 
+	public static ItemStack readItemStackFromNBT(NBTTagCompound nbt) {
+
+		ItemStack stack = new ItemStack(Item.getItemById(nbt.getShort("id")));
+		stack.stackSize = nbt.getInteger("Count");
+		stack.setItemDamage(Math.max(0, nbt.getShort("Damage")));
+
+		if (nbt.hasKey("tag", 10)) {
+			stack.stackTagCompound = nbt.getCompoundTag("tag");
+		}
+		return stack;
+	}
+
+	public static NBTTagCompound writeItemStackToNBT(ItemStack stack, NBTTagCompound nbt) {
+
+		nbt.setShort("id", (short) Item.getIdFromItem(stack.getItem()));
+		nbt.setInteger("Count", stack.stackSize);
+		nbt.setShort("Damage", (short) stack.getItemDamage());
+
+		if (stack.stackTagCompound != null) {
+			nbt.setTag("tag", stack.stackTagCompound);
+		}
+		return nbt;
+	}
+
+	public static NBTTagCompound writeItemStackToNBT(ItemStack stack, int amount, NBTTagCompound nbt) {
+
+		nbt.setShort("id", (short) Item.getIdFromItem(stack.getItem()));
+		nbt.setInteger("Count", amount);
+		nbt.setShort("Damage", (short) stack.getItemDamage());
+
+		if (stack.stackTagCompound != null) {
+			nbt.setTag("tag", stack.stackTagCompound);
+		}
+		return nbt;
+	}
+
 	public static String getNameFromItemStack(ItemStack stack) {
 
 		if (stack == null || stack.stackTagCompound == null || !stack.stackTagCompound.hasKey("display")) {
@@ -501,14 +537,13 @@ public final class ItemHelper {
 				int maxStackSize = item.getMaxStackSize();
 
 				if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.GRAY + item.getDisplayName());
+					list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
 				} else {
 					if (item.stackSize % maxStackSize != 0) {
 						list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
-								+ " " + StringHelper.GRAY + item.getDisplayName());
+								+ " " + StringHelper.getItemName(item));
 					} else {
-						list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.GRAY
-								+ item.getDisplayName());
+						list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 					}
 				}
 			}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -66,17 +67,32 @@ public final class StringHelper {
 
 	public static String getFluidName(Fluid fluid) {
 
-		String fluidName = "";
+		String name = "" + END;
 		if (fluid.getRarity() == EnumRarity.uncommon) {
-			fluidName += YELLOW;
+			name += YELLOW;
 		} else if (fluid.getRarity() == EnumRarity.rare) {
-			fluidName += BRIGHT_BLUE;
+			name += BRIGHT_BLUE;
 		} else if (fluid.getRarity() == EnumRarity.epic) {
-			fluidName += PINK;
+			name += PINK;
 		}
-		fluidName += fluid.getLocalizedName() + END;
+		name += fluid.getLocalizedName() + END;
 
-		return fluidName;
+		return name;
+	}
+
+	public static String getItemName(ItemStack item) {
+
+		String name = "" + END;
+		if (item.getRarity() == EnumRarity.uncommon) {
+			name += YELLOW;
+		} else if (item.getRarity() == EnumRarity.rare) {
+			name += BRIGHT_BLUE;
+		} else if (item.getRarity() == EnumRarity.epic) {
+			name += PINK;
+		}
+		name += item.getDisplayName() + END;
+
+		return name;
 	}
 
 	public static String getScaledNumber(int number) {
