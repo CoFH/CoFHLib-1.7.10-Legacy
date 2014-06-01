@@ -139,8 +139,10 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	public void handleMouseInput() {
 
-		mouseX = Mouse.getEventX() * width / mc.displayWidth - guiLeft;
-		mouseY = height - Mouse.getEventY() * height / mc.displayHeight - 1 - guiTop;
+		int x = Mouse.getEventX() * width / mc.displayWidth - guiLeft;
+		int y = height - Mouse.getEventY() * height / mc.displayHeight - 1 - guiTop;
+		mouseX = x - guiLeft;
+		mouseY = y - guiTop;
 		int wheelMovement = Mouse.getEventDWheel();
 
 		if (wheelMovement != 0) {
@@ -187,7 +189,7 @@ public abstract class GuiBase extends GuiContainer {
 
 		mouseX += guiLeft;
 		mouseY += guiTop;
-		super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
@@ -387,14 +389,18 @@ public abstract class GuiBase extends GuiContainer {
 		return null;
 	}
 
-	protected void updateElements() {
+	protected final void updateElements() {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i --> 0; ) {
 			ElementBase c = elements.get(i);
 			if (c.isVisible() && c.isEnabled()) {
 				c.update(mouseX, mouseY);
 			}
 		}
+	}
+	
+	protected void updateElementInformation() {
+		
 	}
 
 	public void handleElementButtonClick(String buttonName, int mouseButton) {
@@ -546,7 +552,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	public void drawTooltip(List<String> list) {
 
-		drawTooltipHoveringText(list, mouseX, mouseY, fontRendererObj);
+		drawTooltipHoveringText(list, mouseX + guiLeft, mouseY + guiTop, fontRendererObj);
 		tooltip.clear();
 	}
 
