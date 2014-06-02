@@ -95,7 +95,7 @@
 	
 	<macrodef name="move-transformers"><sequential>
 		
-		<copy file="${resources.dir}/cofhlib_at.cfg" todir="${transformers.dir}"/>
+		<copy file="${resources.dir}/cofhlib_at.cfg" tofile="${transformers.dir}/z_CoFH_at.cfg"/>
 		
 	</sequential></macrodef>
 	
