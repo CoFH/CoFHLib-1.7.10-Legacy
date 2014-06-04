@@ -81,6 +81,8 @@ public abstract class GuiBase extends GuiContainer {
 
 	@Override
 	public void drawScreen(int x, int y, float partialTick) {
+		
+		updateElementInformation();
 
 		super.drawScreen(x, y, partialTick);
 
