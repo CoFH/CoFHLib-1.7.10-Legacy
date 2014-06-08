@@ -1,6 +1,6 @@
-package cofh.util;
+package cofh.util.position;
 
-import cofh.util.position.BlockPosition;
+import cofh.util.BlockHelper;
 
 import java.io.Serializable;
 
@@ -23,15 +23,6 @@ public final class ChunkCoord implements Comparable<ChunkCoord>, Serializable {
 
 		this.chunkX = chunk.xPosition;
 		this.chunkZ = chunk.zPosition;
-	}
-
-	/**
-	 * @deprecated for ChunkCoord(BlockPosition)
-	 */
-	@Deprecated
-	public ChunkCoord(BlockCoord c) {
-
-		this(c.x >> 4, c.z >> 4);
 	}
 
 	public ChunkCoord(BlockPosition c) {

@@ -1,7 +1,9 @@
 package cofh.util.inventory;
 
+import cofh.util.ItemHelper;
+
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This is basically a default "safe" implementation of a ComparableItemStack - the OreID will only be used for the 5 "basic" conventions.
@@ -24,9 +26,9 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 
 	public static int getOreID(ItemStack stack) {
 
-		int id = OreDictionary.getOreID(stack);
+		int id = ItemHelper.oreProxy.getOreID(stack);
 
-		if (id == -1 || !safeOreType(OreDictionary.getOreName(id))) {
+		if (!safeOreType(ItemHelper.oreProxy.getOreName(id))) {
 			return -1;
 		}
 		return id;
@@ -37,7 +39,7 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 		if (!safeOreType(oreName)) {
 			return -1;
 		}
-		return OreDictionary.getOreID(oreName);
+		return ItemHelper.oreProxy.getOreID(oreName);
 	}
 
 	public ComparableItemStackSafe(ItemStack stack) {
@@ -46,9 +48,9 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 		oreID = getOreID(stack);
 	}
 
-	public ComparableItemStackSafe(int itemID, int damage, int stackSize) {
+	public ComparableItemStackSafe(Item item, int damage, int stackSize) {
 
-		super(itemID, damage, stackSize);
+		super(item, damage, stackSize);
 		this.oreID = getOreID(this.toItemStack());
 	}
 

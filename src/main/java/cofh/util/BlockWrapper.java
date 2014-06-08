@@ -12,24 +12,36 @@ public final class BlockWrapper {
 
 	public Block block;
 	public int metadata;
-	public int hashcode;
 
 	public static int getHashCode(Block block, int metadata) {
 
-		return block.hashCode() * 31 + metadata;
+		return metadata | Block.getIdFromBlock(block) << 16;
 	}
 
 	public BlockWrapper(Block block, int metadata) {
 
 		this.block = block;
 		this.metadata = metadata;
-		this.hashcode = block.hashCode() * 31 + metadata;
+	}
+
+	public boolean isEqual(BlockWrapper other) {
+
+		return other != null && block == other.block && metadata == other.metadata;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+
+		if (!(o instanceof BlockWrapper)) {
+			return false;
+		}
+		return isEqual((BlockWrapper) o);
 	}
 
 	@Override
 	public int hashCode() {
 
-		return hashcode;
+		return metadata | Block.getIdFromBlock(block) << 16;
 	}
 
 }

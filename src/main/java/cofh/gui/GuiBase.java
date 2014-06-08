@@ -38,7 +38,6 @@ import org.lwjgl.opengl.GL12;
 public abstract class GuiBase extends GuiContainer {
 
 	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
-	// public static final FontRenderer guiFontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 
 	protected boolean drawInventory = true;
 	protected int mouseX = 0;
@@ -81,7 +80,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	@Override
 	public void drawScreen(int x, int y, float partialTick) {
-		
+
 		updateElementInformation();
 
 		super.drawScreen(x, y, partialTick);
@@ -90,7 +89,6 @@ public abstract class GuiBase extends GuiContainer {
 			addTooltips(tooltip);
 			drawTooltip(tooltip);
 		}
-
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
 
@@ -141,10 +139,12 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	public void handleMouseInput() {
 
-		int x = Mouse.getEventX() * width / mc.displayWidth - guiLeft;
-		int y = height - Mouse.getEventY() * height / mc.displayHeight - 1 - guiTop;
+		int x = Mouse.getEventX() * width / mc.displayWidth;
+		int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
+
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
+
 		int wheelMovement = Mouse.getEventDWheel();
 
 		if (wheelMovement != 0) {
@@ -176,7 +176,6 @@ public abstract class GuiBase extends GuiContainer {
 				return;
 			}
 		}
-
 		TabBase tab = getTabAtPosition(mouseX, mouseY);
 		if (tab != null && !tab.onMousePressed(mouseX, mouseY, mouseButton)) {
 			for (int i = tabs.size(); i-- > 0;) {
@@ -188,7 +187,6 @@ public abstract class GuiBase extends GuiContainer {
 			tab.toggleOpen();
 			return;
 		}
-
 		mouseX += guiLeft;
 		mouseY += guiTop;
 		super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -209,7 +207,6 @@ public abstract class GuiBase extends GuiContainer {
 				c.onMouseReleased(mouseX, mouseY);
 			}
 		}
-
 		mouseX += guiLeft;
 		mouseY += guiTop;
 		super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
@@ -241,7 +238,6 @@ public abstract class GuiBase extends GuiContainer {
 				return slot;
 			}
 		}
-
 		return null;
 	}
 
@@ -256,14 +252,14 @@ public abstract class GuiBase extends GuiContainer {
 	protected void drawElements(float partialTick, boolean foreground) {
 
 		if (foreground) {
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = 0; i < elements.size(); i++) {
 				ElementBase element = elements.get(i);
 				if (element.isVisible()) {
 					element.drawForeground(mouseX, mouseY);
 				}
 			}
 		} else {
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = 0; i < elements.size(); i++) {
 				ElementBase element = elements.get(i);
 				if (element.isVisible()) {
 					element.drawBackground(mouseX, mouseY, partialTick);
@@ -283,7 +279,7 @@ public abstract class GuiBase extends GuiContainer {
 		int yPosRight = 4;
 		int yPosLeft = 4;
 
-		for (int i = tabs.size(); i-- > 0;) {
+		for (int i = 0; i < tabs.size(); i++) {
 			TabBase tab = tabs.get(i);
 			tab.update();
 			if (!tab.isVisible()) {
@@ -360,7 +356,7 @@ public abstract class GuiBase extends GuiContainer {
 		int xShift = 0;
 		int yShift = 4;
 
-		for (int i = tabs.size(); i-- > 0;) {
+		for (int i = 0; i < tabs.size(); i++) {
 			TabBase tab = tabs.get(i);
 			if (!tab.isVisible() || tab.side == 1) {
 				continue;
@@ -376,7 +372,7 @@ public abstract class GuiBase extends GuiContainer {
 		xShift = xSize;
 		yShift = 4;
 
-		for (int i = tabs.size(); i-- > 0;) {
+		for (int i = 0; i < tabs.size(); i++) {
 			TabBase tab = tabs.get(i);
 			if (!tab.isVisible() || tab.side == 0) {
 				continue;
@@ -393,16 +389,16 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected final void updateElements() {
 
-		for (int i = elements.size(); i --> 0; ) {
+		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
 			if (c.isVisible() && c.isEnabled()) {
 				c.update(mouseX, mouseY);
 			}
 		}
 	}
-	
+
 	protected void updateElementInformation() {
-		
+
 	}
 
 	public void handleElementButtonClick(String buttonName, int mouseButton) {
@@ -494,7 +490,6 @@ public abstract class GuiBase extends GuiContainer {
 			x1 = x2;
 			x2 = temp;
 		}
-
 		if (y1 < y2) {
 			temp = y1;
 			y1 = y2;

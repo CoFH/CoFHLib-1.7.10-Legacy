@@ -4,10 +4,9 @@ import cofh.util.ItemHelper;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
- * This class allows for OreDictionary-compatible ItemStack comparisons.
+ * This class allows for OreDictionary-compatible ItemStack comparisons and Integer-based Hashes without collisions.
  * 
  * The intended purpose of this is for things such as Recipe Handlers or HashMaps of ItemStacks.
  * 
@@ -16,7 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public class ComparableItemStack {
 
-	public int itemID = -1;
+	public Item item = null;
 	public int metadata = -1;
 	public int stackSize = -1;
 	public int oreID = -1;
@@ -24,24 +23,24 @@ public class ComparableItemStack {
 	public ComparableItemStack(ItemStack stack) {
 
 		if (stack != null) {
-			itemID = Item.getIdFromItem(stack.getItem());
+			item = stack.getItem();
 			metadata = stack.getItemDamage();
 			stackSize = stack.stackSize;
-			oreID = OreDictionary.getOreID(stack);
+			oreID = ItemHelper.oreProxy.getOreID(stack);
 		}
 	}
 
-	public ComparableItemStack(int itemID, int damage, int stackSize) {
+	public ComparableItemStack(Item item, int damage, int stackSize) {
 
-		this.itemID = itemID;
+		this.item = item;
 		this.metadata = damage;
 		this.stackSize = stackSize;
-		this.oreID = OreDictionary.getOreID(this.toItemStack());
+		this.oreID = ItemHelper.oreProxy.getOreID(this.toItemStack());
 	}
 
 	public ComparableItemStack(ComparableItemStack stack) {
 
-		this.itemID = stack.itemID;
+		this.item = stack.item;
 		this.metadata = stack.metadata;
 		this.stackSize = stack.stackSize;
 		this.oreID = stack.oreID;
@@ -50,23 +49,23 @@ public class ComparableItemStack {
 	public ComparableItemStack(String oreName) {
 
 		if (ItemHelper.oreNameExists(oreName)) {
-			ItemStack stack = OreDictionary.getOres(oreName).get(0);
-			itemID = Item.getIdFromItem(stack.getItem());
+			ItemStack stack = ItemHelper.oreProxy.getOre(oreName);
+			item = stack.getItem();
 			metadata = stack.getItemDamage();
 			stackSize = 1;
-			oreID = OreDictionary.getOreID(oreName);
+			oreID = ItemHelper.oreProxy.getOreID(stack);
 		}
 	}
 
 	public ComparableItemStack set(ItemStack stack) {
 
 		if (stack != null) {
-			itemID = Item.getIdFromItem(stack.getItem());
+			item = stack.getItem();
 			metadata = stack.getItemDamage();
 			stackSize = stack.stackSize;
-			oreID = OreDictionary.getOreID(stack);
+			oreID = ItemHelper.oreProxy.getOreID(stack);
 		} else {
-			itemID = -1;
+			item = null;
 			metadata = -1;
 			stackSize = -1;
 			oreID = -1;
@@ -77,12 +76,12 @@ public class ComparableItemStack {
 	public ComparableItemStack set(ComparableItemStack stack) {
 
 		if (stack != null) {
-			itemID = stack.itemID;
+			item = stack.item;
 			metadata = stack.metadata;
 			stackSize = stack.stackSize;
 			oreID = stack.oreID;
 		} else {
-			itemID = -1;
+			item = null;
 			metadata = -1;
 			stackSize = -1;
 			oreID = -1;
@@ -92,7 +91,7 @@ public class ComparableItemStack {
 
 	public boolean isItemEqual(ComparableItemStack other) {
 
-		return other != null && (oreID != -1 && oreID == other.oreID || itemID == other.itemID && metadata == other.metadata);
+		return other != null && (oreID != -1 && oreID == other.oreID || item == other.item && metadata == other.metadata);
 	}
 
 	public boolean isStackEqual(ComparableItemStack other) {
@@ -102,17 +101,11 @@ public class ComparableItemStack {
 
 	public boolean isStackValid() {
 
-		return getItem() != null;
-	}
-
-	public Item getItem() {
-
-		return Item.getItemById(itemID);
+		return item != null;
 	}
 
 	public ItemStack toItemStack() {
 
-		Item item = getItem();
 		return item != null ? new ItemStack(item, stackSize, metadata) : null;
 	}
 
@@ -125,7 +118,7 @@ public class ComparableItemStack {
 	@Override
 	public int hashCode() {
 
-		return oreID != -1 ? oreID : metadata | itemID << 16;
+		return oreID != -1 ? oreID : metadata | Item.getIdFromItem(item) << 16;
 	}
 
 	@Override

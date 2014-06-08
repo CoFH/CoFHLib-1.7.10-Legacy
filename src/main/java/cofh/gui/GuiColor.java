@@ -2,7 +2,7 @@ package cofh.gui;
 
 public class GuiColor {
 
-	private int _color;
+	private final int _color;
 
 	public GuiColor(int color) {
 
@@ -63,4 +63,5 @@ public class GuiColor {
 
 		return ((_color >> 24) & 0xFF) / 0xFF;
 	}
+
 }

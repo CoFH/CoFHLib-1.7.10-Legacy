@@ -14,7 +14,11 @@ public class ThermalExpansionHelper {
 
 	public static void addFurnaceRecipe(int energy, ItemStack input, ItemStack output) {
 
+		if (input == null || output == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
+
 		toSend.setInteger("energy", energy);
 		toSend.setTag("input", new NBTTagCompound());
 		toSend.setTag("output", new NBTTagCompound());
@@ -36,6 +40,9 @@ public class ThermalExpansionHelper {
 
 	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
+		if (input == null || primaryOutput == null || secondaryOutput == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setInteger("energy", energy);
@@ -63,6 +70,9 @@ public class ThermalExpansionHelper {
 
 	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
+		if (input == null || primaryOutput == null || secondaryOutput == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setInteger("energy", energy);
@@ -91,6 +101,9 @@ public class ThermalExpansionHelper {
 	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput,
 			int secondaryChance) {
 
+		if (primaryInput == null || secondaryInput == null || primaryOutput == null || secondaryOutput == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setInteger("energy", energy);
@@ -127,6 +140,9 @@ public class ThermalExpansionHelper {
 
 	public static void addCrucibleRecipe(int energy, ItemStack input, FluidStack output) {
 
+		if (input == null || output == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setInteger("energy", energy);
@@ -141,6 +157,9 @@ public class ThermalExpansionHelper {
 
 	public static void addTransposerFill(int energy, ItemStack input, ItemStack output, FluidStack fluid, boolean reversible) {
 
+		if (input == null || output == null || fluid == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setInteger("energy", energy);
@@ -158,6 +177,9 @@ public class ThermalExpansionHelper {
 
 	public static void addTransposerExtract(int energy, ItemStack input, ItemStack output, FluidStack fluid, int chance, boolean reversible) {
 
+		if (input == null || output == null || fluid == null) {
+			return;
+		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setInteger("energy", energy);

@@ -1,6 +1,7 @@
 package cofh.util;
 
 import cofh.api.item.IEmpowerableItem;
+import cofh.util.oredict.OreDictionaryProxy;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -37,6 +38,8 @@ public final class ItemHelper {
 	public static final String INGOT = "ingot";
 	public static final String NUGGET = "nugget";
 	public static final String LOG = "log";
+
+	public static OreDictionaryProxy oreProxy = new OreDictionaryProxy();
 
 	private ItemHelper() {
 
@@ -133,15 +136,22 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack) {
 
-		if (stack.stackSize == 1) {
-			if (stack.getItem().hasContainerItem(stack)) {
-				return stack.getItem().getContainerItem(stack);
-			} else {
+		Item item = stack.getItem();
+
+		stack.stackSize -= 1;
+
+		if (item.hasContainerItem(stack)) {
+			ItemStack ret = item.getContainerItem(stack);
+
+			if (ret == null) {
 				return null;
 			}
+			if (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage()) {
+				ret = null;
+			}
+			return ret;
 		}
-		stack.splitStack(1);
-		return stack;
+		return stack.stackSize > 0 ? stack : null;
 	}
 
 	/**
@@ -192,80 +202,36 @@ public final class ItemHelper {
 		}
 	}
 
-	/**
-	 * Get a hashcode based on the ItemStack's ID and Metadata. As both of these are shorts, this should be collision-free for non-NBT sensitive ItemStacks.
-	 * 
-	 * @param stack
-	 *            The ItemStack to get a hashcode for.
-	 * @return The hashcode.
-	 */
-	public static int getHashCode(ItemStack stack) {
-
-		return stack.getItemDamage() | Item.getIdFromItem(stack.getItem()) << 16;
-	}
-
-	/**
-	 * Get a hashcode based on an ID and Metadata pair. As both of these are shorts, this should be collision-free if NBT is not involved.
-	 * 
-	 * @param id
-	 *            ID value to use.
-	 * @param metadata
-	 *            Metadata value to use.
-	 * @return The hashcode.
-	 */
-	public static int getHashCode(int id, int metadata) {
-
-		return metadata | id << 16;
-	}
-
-	/**
-	 * Extract the ID from a hashcode created from one of the getHashCode() methods in this class.
-	 */
-	public static int getIDFromHashCode(int hashCode) {
-
-		return hashCode >>> 16;
-	}
-
-	/**
-	 * Extract the Metadata from a hashcode created from one of the getHashCode() methods in this class.
-	 */
-	public static int getMetaFromHashCode(int hashCode) {
-
-		return hashCode & 0xFF;
-	}
-
 	/* ORE DICTIONARY FUNCTIONS */
-	public static boolean hasOreName(ItemStack stack) {
 
-		return !getOreName(stack).equals("Unknown");
+	public static ItemStack getOre(String oreName) {
+
+		return oreProxy.getOre(oreName);
 	}
 
 	public static String getOreName(ItemStack stack) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack));
+		return oreProxy.getOreName(stack);
 	}
 
-	public static boolean isOreID(ItemStack stack, int oreID) {
+	public static boolean isOreIDEqual(ItemStack stack, int oreID) {
 
-		return OreDictionary.getOreID(stack) == oreID;
+		return oreProxy.isOreIDEqual(stack, oreID);
 	}
 
-	public static boolean isOreName(ItemStack stack, String oreName) {
+	public static boolean isOreNameEqual(ItemStack stack, String oreName) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack)).equals(oreName);
+		return oreProxy.isOreNameEqual(stack, oreName);
 	}
 
 	public static boolean oreNameExists(String oreName) {
 
-		return !OreDictionary.getOres(oreName).isEmpty();
+		return oreProxy.oreNameExists(oreName);
 	}
 
-	public static ItemStack getOre(String oreName) {
+	public static boolean hasOreName(ItemStack stack) {
 
-		if (!oreNameExists(oreName)) {
-			return null;
-		}
-		return cloneStack(OreDictionary.getOres(oreName).get(0), 1);
+		return !getOreName(stack).equals("Unknown");
 	}
 
 	public static boolean isBlock(ItemStack stack) {
@@ -482,8 +448,8 @@ public final class ItemHelper {
 
 	public static boolean doOreIDsMatch(ItemStack stackA, ItemStack stackB) {
 
-		int id = OreDictionary.getOreID(stackA);
-		return id >= 0 && id == OreDictionary.getOreID(stackB);
+		int id = oreProxy.getOreID(stackA);
+		return id >= 0 && id == oreProxy.getOreID(stackB);
 	}
 
 	public static boolean isBlacklist(ItemStack output) {
@@ -542,11 +508,9 @@ public final class ItemHelper {
 				containedItems.add(curStack);
 				for (int j = 0; j < nbtList.tagCount(); j++) {
 					NBTTagCompound tag2 = nbtList.getCompoundTagAt(j);
-					@SuppressWarnings("unused")
 					int slot2 = tag.getInteger("Slot");
-					// TODO: ??
 
-					if (visited[j] || slot < minSlot || slot > maxSlot) {
+					if (visited[j] || slot2 < minSlot || slot2 > maxSlot) {
 						continue;
 					}
 					curStack2 = ItemStack.loadItemStackFromNBT(tag2);

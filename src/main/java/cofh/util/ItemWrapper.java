@@ -13,36 +13,52 @@ public final class ItemWrapper {
 
 	public Item item;
 	public int metadata;
-	public int hashcode;
 
 	public static int getHashCode(Item item, int metadata) {
 
-		return (31 + item.hashCode()) * 31 + metadata;
+		return metadata | Item.getIdFromItem(item) << 16;
 	}
 
 	public static int getHashCode(ItemStack stack) {
 
-		return (31 + stack.getItem().hashCode()) * 31 + ItemHelper.getItemDamage(stack);
+		return stack.getItemDamage() | Item.getIdFromItem(stack.getItem()) << 16;
+	}
+
+	public static ItemWrapper fromItemStack(ItemStack stack) {
+
+		return new ItemWrapper(stack);
 	}
 
 	public ItemWrapper(Item item, int metadata) {
 
 		this.item = item;
 		this.metadata = metadata;
-		this.hashcode = (31 + item.hashCode()) * 31 + metadata;
 	}
 
 	public ItemWrapper(ItemStack stack) {
 
 		this.item = stack.getItem();
 		this.metadata = ItemHelper.getItemDamage(stack);
-		this.hashcode = (31 + item.hashCode()) * 31 + metadata;
+	}
+
+	public boolean isEqual(ItemWrapper other) {
+
+		return other != null && item == other.item && metadata == other.metadata;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+
+		if (!(o instanceof ItemWrapper)) {
+			return false;
+		}
+		return isEqual((ItemWrapper) o);
 	}
 
 	@Override
 	public int hashCode() {
 
-		return hashcode;
+		return metadata | Item.getIdFromItem(item) << 16;
 	}
 
 }
