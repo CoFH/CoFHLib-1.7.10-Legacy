@@ -47,9 +47,8 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 		if (row >= 0 && row < this.inventoryWidth) {
 			int k = row + column * this.inventoryWidth;
 			return this.getStackInSlot(k);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -71,9 +70,8 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 			ItemStack itemstack = masterInv.getStackInSlot(invOffset + slot);
 			masterInv.setInventorySlotContents(invOffset + slot, null);
 			return itemstack;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -97,9 +95,8 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 				this.eventHandler.onCraftMatrixChanged(this);
 				return itemstack;
 			}
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override

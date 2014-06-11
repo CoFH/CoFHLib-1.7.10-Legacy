@@ -3,12 +3,10 @@ package cofh.render;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -23,16 +21,16 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
-public class FactoryFluidOverlayRenderer implements IItemRenderer {
+public class RenderFluidOverlayItem implements IItemRenderer {
 
-	private boolean canFlip;
+	private final boolean canFlip;
 
-	public FactoryFluidOverlayRenderer() {
+	public RenderFluidOverlayItem() {
 
 		this(true);
 	}
 
-	public FactoryFluidOverlayRenderer(boolean canFlip) {
+	public RenderFluidOverlayItem(boolean canFlip) {
 
 		this.canFlip = canFlip;
 	}
@@ -53,35 +51,34 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 	public void renderItem(ItemRenderType type, ItemStack itemstack, Object... data) {
 
 		Item item = itemstack.getItem();
-		FluidStack liquid = null;
+		FluidStack fluid = null;
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem fluidItem = (IFluidContainerItem) item;
-			liquid = fluidItem.getFluid(itemstack);
+			fluid = fluidItem.getFluid(itemstack);
 		} else if (item instanceof IFluidOverlayItem) {
 			if (item.getRenderPasses(itemstack.getItemDamage()) == 2) {
-				liquid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
+				fluid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
 			}
 		}
-		doRenderItem(type, itemstack, item, liquid);
+		doRenderItem(type, itemstack, item, fluid);
 	}
 
-	protected void doRenderItem(ItemRenderType type, ItemStack item, Item iconItem, FluidStack liquid) {
+	protected void doRenderItem(ItemRenderType type, ItemStack item, Item iconItem, FluidStack fluid) {
 
 		IIcon icon = iconItem.getIcon(item, 0);
 		IIcon mask = iconItem.getIcon(item, 1);
-		boolean hasLiquid = liquid != null;
-		IIcon fluid = hasLiquid ? liquid != null ? liquid.getFluid().getIcon(liquid) : null : mask;
-		int liquidSheet = hasLiquid & liquid != null ? liquid.getFluid().getSpriteNumber() : 0;
-		int colorMult = hasLiquid & liquid != null ? liquid.getFluid().getColor(liquid) : 0xFFFFFF;
-		boolean isFloaty = hasLiquid & liquid != null ? liquid.getFluid().getDensity(liquid) < 0 : false;
+		boolean hasFluid = fluid != null;
+
+		IIcon fluidIcon = hasFluid ? fluid.getFluid().getIcon(fluid) : mask;
+		int fluidSheet = hasFluid ? fluid.getFluid().getSpriteNumber() : 0;
+		int colorMult = hasFluid ? fluid.getFluid().getColor(fluid) : 0xFFFFFF;
+		boolean isFloaty = hasFluid ? fluid.getFluid().getDensity(fluid) < 0 : false;
 
 		if (fluid == null) {
-			fluid = Blocks.flowing_lava.getIcon(2, 0);
-			liquidSheet = 0;
+			fluidIcon = Blocks.flowing_lava.getIcon(2, 0);
+			fluidSheet = 0;
 			colorMult = 0x3F3F3F;
 		}
-
-		TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 		GL11.glPushMatrix();
 
 		Tessellator tessellator = Tessellator.instance;
@@ -96,10 +93,10 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 		float maskMinY = mask.getMinV();
 		float maskMaxY = mask.getMaxV();
 
-		float fluidMinX = fluid.getMinU();
-		float fluidMaxX = fluid.getMaxU();
-		float fluidMinY = fluid.getMinV();
-		float fluidMaxY = fluid.getMaxV();
+		float fluidMinX = fluidIcon.getMinU();
+		float fluidMaxX = fluidIcon.getMaxU();
+		float fluidMinY = fluidIcon.getMinV();
+		float fluidMaxY = fluidIcon.getMaxV();
 
 		if (isFloaty && canFlip) {
 			iconMaxY = icon.getMinV();
@@ -108,14 +105,14 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 			maskMaxY = mask.getMinV();
 			maskMinY = mask.getMaxV();
 
-			fluidMaxY = fluid.getMinV();
-			fluidMinY = fluid.getMaxV();
+			fluidMaxY = fluidIcon.getMinV();
+			fluidMinY = fluidIcon.getMaxV();
 		}
-
 		TextureUtil.func_147950_a(false, false);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+
 		if (type == ItemRenderType.INVENTORY) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 
@@ -126,7 +123,7 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 			tessellator.addVertexWithUV(0, 0, 0, iconMinX, iconMinY);
 			tessellator.draw();
 
-			if (hasLiquid) {
+			if (hasFluid) {
 				tessellator.startDrawingQuads();
 				tessellator.addVertexWithUV(0, 16, 0.001, maskMinX, maskMaxY);
 				tessellator.addVertexWithUV(16, 16, 0.001, maskMaxX, maskMaxY);
@@ -138,7 +135,7 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 				GL11.glDepthFunc(GL11.GL_EQUAL);
 				GL11.glDepthMask(false);
 				GL11.glMatrixMode(GL11.GL_TEXTURE);
-				bindTexture(renderEngine, liquidSheet);
+				bindTexture(RenderHelper.engine(), fluidSheet);
 				OpenGlHelper.glBlendFunc(GL11.GL_ONE, GL11.GL_ZERO, GL11.GL_ONE, GL11.GL_ZERO);
 
 				tessellator.startDrawingQuads();
@@ -162,10 +159,9 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 				GL11.glTranslatef(0.5f, 4 / -16f, 0);
 				GL11.glRotatef(180, 0, 1, 0);
 			}
-
 			ItemRenderer.renderItemIn2D(tessellator, iconMaxX, iconMinY, iconMinX, iconMaxY, icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
 
-			if (hasLiquid) {
+			if (hasFluid) {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(0, 0, 1);
 				tessellator.addVertexWithUV(0, 0, 0.001, maskMaxX, maskMaxY);
@@ -184,7 +180,7 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				GL11.glDepthFunc(GL11.GL_EQUAL);
 				GL11.glDepthMask(false);
-				bindTexture(renderEngine, liquidSheet);
+				bindTexture(RenderHelper.engine(), fluidSheet);
 				OpenGlHelper.glBlendFunc(GL11.GL_ONE, GL11.GL_ZERO, GL11.GL_ONE, GL11.GL_ZERO);
 
 				tessellator.startDrawingQuads();
@@ -220,7 +216,7 @@ public class FactoryFluidOverlayRenderer implements IItemRenderer {
 	protected void bindTexture(TextureManager renderEngine, int spriteNumber) {
 
 		if (spriteNumber == 0) {
-			renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+			renderEngine.bindTexture(RenderHelper.MC_BLOCK_SHEET);
 		} else {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, spriteNumber);
 		}

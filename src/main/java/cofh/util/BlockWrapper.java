@@ -13,15 +13,22 @@ public final class BlockWrapper {
 	public Block block;
 	public int metadata;
 
-	public static int getHashCode(Block block, int metadata) {
-
-		return metadata | Block.getIdFromBlock(block) << 16;
-	}
-
 	public BlockWrapper(Block block, int metadata) {
 
 		this.block = block;
 		this.metadata = metadata;
+	}
+
+	public BlockWrapper set(Block block, int metadata) {
+
+		if (block != null) {
+			this.block = block;
+			this.metadata = metadata;
+		} else {
+			this.block = null;
+			this.metadata = 0;
+		}
+		return this;
 	}
 
 	public boolean isEqual(BlockWrapper other) {

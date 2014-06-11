@@ -22,9 +22,8 @@ public class TimeTracker {
 		} else if (lastMark + delay <= currentTime) {
 			lastMark = currentTime;
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	public void markTime(World world) {

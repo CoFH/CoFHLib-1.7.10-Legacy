@@ -14,16 +14,6 @@ public final class ItemWrapper {
 	public Item item;
 	public int metadata;
 
-	public static int getHashCode(Item item, int metadata) {
-
-		return metadata | Item.getIdFromItem(item) << 16;
-	}
-
-	public static int getHashCode(ItemStack stack) {
-
-		return stack.getItemDamage() | Item.getIdFromItem(stack.getItem()) << 16;
-	}
-
 	public static ItemWrapper fromItemStack(ItemStack stack) {
 
 		return new ItemWrapper(stack);
@@ -39,6 +29,18 @@ public final class ItemWrapper {
 
 		this.item = stack.getItem();
 		this.metadata = ItemHelper.getItemDamage(stack);
+	}
+
+	public ItemWrapper set(ItemStack stack) {
+
+		if (stack != null) {
+			this.item = stack.getItem();
+			this.metadata = ItemHelper.getItemDamage(stack);
+		} else {
+			this.item = null;
+			this.metadata = 0;
+		}
+		return this;
 	}
 
 	public boolean isEqual(ItemWrapper other) {

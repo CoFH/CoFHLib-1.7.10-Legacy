@@ -276,7 +276,7 @@ public final class ItemHelper {
 
 	public static boolean addReverseStorageRecipe(ItemStack nine, String one) {
 
-		if (oreNameExists(one)) {
+		if (!oreNameExists(one)) {
 			return false;
 		}
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemHelper.cloneStack(nine, 9), new Object[] { one }));
