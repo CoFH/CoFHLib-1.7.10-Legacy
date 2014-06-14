@@ -11,8 +11,8 @@
 	<property name="build.name" value="${ant.project.name}"/>
 	<property name="class.pckg" value="cofh"/>
 	<!-- Version file -->
-	<property name="verclass.dir" value="${src.dir}/${class.pckg}/util/" />
-	<property name="verclass.name" value="CoFHVersion.java"/>
+	<property name="verclass.dir" value="${src.dir}/${class.pckg}/core/" />
+	<property name="verclass.name" value="CoFHLibProps.java"/>
 	
 	<!-- Forge version -->
 	<property name="mc.version"  value="1.7.2"/>
