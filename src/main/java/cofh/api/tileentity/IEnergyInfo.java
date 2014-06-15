@@ -13,21 +13,21 @@ public interface IEnergyInfo {
 	/**
 	 * Returns energy usage/generation per tick (RF/t).
 	 */
-	public int getInfoEnergyPerTick();
+	int getInfoEnergyPerTick();
 
 	/**
 	 * Returns maximum energy usage/generation per tick (RF/t).
 	 */
-	public int getInfoMaxEnergyPerTick();
+	int getInfoMaxEnergyPerTick();
 
 	/**
 	 * Returns energy stored (RF).
 	 */
-	public int getInfoEnergy();
+	int getInfoEnergyStored();
 
 	/**
 	 * Returns maximum energy stored (RF).
 	 */
-	public int getInfoMaxEnergy();
+	int getInfoMaxEnergyStored();
 
 }

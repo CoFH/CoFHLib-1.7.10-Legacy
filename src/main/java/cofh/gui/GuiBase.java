@@ -7,7 +7,6 @@ import cofh.gui.slot.SlotFalseCopy;
 import cofh.render.RenderHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.Loader;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,7 +51,9 @@ public abstract class GuiBase extends GuiContainer {
 	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
 
 	protected List<String> tooltip = new LinkedList<String>();
-	protected boolean tooltips = !Loader.isModLoaded("NotEnoughItems");
+	protected boolean tooltips = true;
+
+	// protected boolean tooltips = !Loader.isModLoaded("NotEnoughItems");
 
 	public static void playSound(String name, float volume, float pitch) {
 
@@ -189,6 +190,7 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		mouseX += guiLeft;
 		mouseY += guiTop;
+
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
@@ -209,6 +211,7 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		mouseX += guiLeft;
 		mouseY += guiTop;
+
 		super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
 	}
 
@@ -331,7 +334,15 @@ public abstract class GuiBase extends GuiContainer {
 
 	public TabBase addTab(TabBase tab) {
 
+		int yOffset = 4;
+		for (int i = 0; i < tabs.size(); i++) {
+			if (tabs.get(i).side == tab.side && tabs.get(i).isVisible()) {
+				yOffset += tabs.get(i).currentHeight;
+			}
+		}
+		tab.setPosition(tab.side == 0 ? 0 : xSize, yOffset);
 		tabs.add(tab);
+
 		if (TabTracker.getOpenedLeftTab() != null && tab.getClass().equals(TabTracker.getOpenedLeftTab())) {
 			tab.setFullyOpen();
 		} else if (TabTracker.getOpenedRightTab() != null && tab.getClass().equals(TabTracker.getOpenedRightTab())) {

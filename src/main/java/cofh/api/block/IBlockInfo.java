@@ -37,6 +37,6 @@ public interface IBlockInfo {
 	 * @param debug
 	 *            If true, the block should return "debug" information.
 	 */
-	public void getBlockInfo(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player, List<String> info, boolean debug);
+	void getBlockInfo(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player, List<String> info, boolean debug);
 
 }

@@ -12,9 +12,10 @@ public class FeatureOreGenNormal extends FeatureBase {
 	final int meanY;
 	final int maxVar;
 
-	public FeatureOreGenNormal(String name, WorldGenerator worldGen, int count, int meanY, int maxVar, boolean regen) {
+	public FeatureOreGenNormal(String name, WorldGenerator worldGen, int count, int meanY, int maxVar, GenRestriction biomeRes, boolean regen,
+			GenRestriction dimRes) {
 
-		super(name, regen);
+		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
 		this.meanY = meanY;

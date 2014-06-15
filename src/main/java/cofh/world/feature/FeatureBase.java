@@ -5,6 +5,7 @@ import cofh.api.world.IFeatureGenerator;
 import gnu.trove.set.hash.THashSet;
 
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.world.World;
 
@@ -14,12 +15,12 @@ public abstract class FeatureBase implements IFeatureGenerator {
 		NONE, BLACKLIST, WHITELIST
 	}
 
-	final String name;
-	final GenRestriction biomeRestriction;
-	final GenRestriction dimensionRestriction;
-	final boolean regen;
-	protected final THashSet<String> biomes = new THashSet<String>();
-	protected final THashSet<Integer> dimensions = new THashSet<Integer>();
+	public final String name;
+	public final GenRestriction biomeRestriction;
+	public final GenRestriction dimensionRestriction;
+	public final boolean regen;
+	protected final Set<String> biomes = new THashSet<String>();
+	protected final Set<Integer> dimensions = new THashSet<Integer>();
 
 	/**
 	 * Shortcut to add a Feature with no biome or dimension restriction.

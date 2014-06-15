@@ -8,7 +8,12 @@ import net.minecraft.item.ItemStack;
  * @author King Lemming
  * 
  */
-public interface IEnderItemReceptor {
+public interface IEnderItemHandler extends IEnderAttuned {
+
+	/**
+	 * Return whether or not the Ender Attuned object can currently send ItemStacks.
+	 */
+	boolean canSendItems();
 
 	/**
 	 * This should be checked to see if the Ender Attuned object can currently receive an ItemStack.

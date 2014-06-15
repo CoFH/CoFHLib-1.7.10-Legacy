@@ -9,7 +9,7 @@ import net.minecraft.util.IIcon;
  * @author Zeldo Kavira
  * 
  */
-public interface ISidedBlockTexture {
+public interface ISidedTexture {
 
 	/**
 	 * Returns the icon to use for a given side and render pass.
@@ -20,6 +20,6 @@ public interface ISidedBlockTexture {
 	 *            Render pass.
 	 * @return The icon to use.
 	 */
-	public IIcon getBlockTexture(int side, int pass);
+	IIcon getTexture(int side, int pass);
 
 }

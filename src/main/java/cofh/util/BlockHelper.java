@@ -128,14 +128,18 @@ public final class BlockHelper {
 		rotateType[Block.getIdFromBlock(Blocks.quartz_stairs)] = RotationType.STAIRS;
 	}
 
-	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player) {
+	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, double distance) {
 
-		double distance = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
 		Vec3 posVec = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
 		Vec3 lookVec = player.getLook(1);
 		posVec.yCoord += player.getEyeHeight();
 		lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
 		return player.worldObj.rayTraceBlocks(posVec, lookVec);
+	}
+
+	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player) {
+
+		return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F);
 	}
 
 	public static int getCurrentMousedOverSide(EntityPlayer player) {
@@ -226,6 +230,11 @@ public final class BlockHelper {
 	}
 
 	/* COORDINATE TRANSFORM */
+	public static int[] getAdjacentCoordinatesForSide(MovingObjectPosition pos) {
+
+		return getAdjacentCoordinatesForSide(pos.blockX, pos.blockY, pos.blockZ, pos.sideHit);
+	}
+
 	public static int[] getAdjacentCoordinatesForSide(int x, int y, int z, int side) {
 
 		return new int[] { x + SIDE_COORD_MOD[side][0], y + SIDE_COORD_MOD[side][1], z + SIDE_COORD_MOD[side][2] };

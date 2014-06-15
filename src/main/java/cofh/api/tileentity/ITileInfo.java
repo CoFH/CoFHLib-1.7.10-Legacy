@@ -28,6 +28,6 @@ public interface ITileInfo {
 	 * @param debug
 	 *            If true, the tile should return "debug" information.
 	 */
-	public void getTileInfo(List<String> info, ForgeDirection side, EntityPlayer player, boolean debug);
+	void getTileInfo(List<String> info, ForgeDirection side, EntityPlayer player, boolean debug);
 
 }

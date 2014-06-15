@@ -43,14 +43,14 @@ public interface ISecureTile {
 		}
 	}
 
-	public boolean setAccess(AccessMode access);
+	boolean setAccess(AccessMode access);
 
-	public boolean setOwnerName(String name);
+	boolean setOwnerName(String name);
 
-	public AccessMode getAccess();
+	AccessMode getAccess();
 
-	public String getOwnerName();
+	String getOwnerName();
 
-	public boolean canPlayerAccess(String name);
+	boolean canPlayerAccess(String name);
 
 }

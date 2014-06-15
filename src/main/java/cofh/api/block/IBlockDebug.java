@@ -31,6 +31,6 @@ public interface IBlockDebug {
 	 * @param player
 	 *            Player doing the debugging.
 	 */
-	public void debugBlock(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player);
+	void debugBlock(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player);
 
 }

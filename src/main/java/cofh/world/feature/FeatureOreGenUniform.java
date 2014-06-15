@@ -12,9 +12,10 @@ public class FeatureOreGenUniform extends FeatureBase {
 	final int minY;
 	final int maxY;
 
-	public FeatureOreGenUniform(String name, WorldGenerator worldGen, int count, int minY, int maxY, boolean regen) {
+	public FeatureOreGenUniform(String name, WorldGenerator worldGen, int count, int minY, int maxY, GenRestriction biomeRes, boolean regen,
+			GenRestriction dimRes) {
 
-		super(name, regen);
+		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
 		this.minY = minY;

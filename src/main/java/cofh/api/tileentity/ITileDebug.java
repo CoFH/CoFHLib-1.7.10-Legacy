@@ -22,6 +22,6 @@ public interface ITileDebug {
 	 * @param player
 	 *            Player doing the debugging.
 	 */
-	public void debugTile(ForgeDirection side, EntityPlayer player);
+	void debugTile(ForgeDirection side, EntityPlayer player);
 
 }

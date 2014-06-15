@@ -17,7 +17,7 @@ public interface IReconfigurableSides {
 	 *            The side to decrement.
 	 * @return True if config was changed, false otherwise.
 	 */
-	public boolean decrSide(int side);
+	boolean decrSide(int side);
 
 	/**
 	 * Increment the config for a given side.
@@ -26,7 +26,7 @@ public interface IReconfigurableSides {
 	 *            The side to decrement.
 	 * @return True if config was changed, false otherwise.
 	 */
-	public boolean incrSide(int side);
+	boolean incrSide(int side);
 
 	/**
 	 * Set the config for a given side.
@@ -37,18 +37,18 @@ public interface IReconfigurableSides {
 	 *            The config value to use.
 	 * @return True of config was set, false otherwise.
 	 */
-	public boolean setSide(int side, int config);
+	boolean setSide(int side, int config);
 
 	/**
 	 * Reset configs on all sides to their base values.
 	 * 
 	 * @return True if reset was successful, false otherwise.
 	 */
-	public boolean resetSides();
+	boolean resetSides();
 
 	/**
 	 * Returns the number of possible config settings for a given side.
 	 */
-	public int getNumConfig(int side);
+	int getNumConfig(int side);
 
 }

@@ -6,10 +6,15 @@ package cofh.api.transport;
  * @author King Lemming
  * 
  */
-public interface IEnderEnergyReceptor {
+public interface IEnderEnergyHandler extends IEnderAttuned {
 
 	/**
-	 * This should be checked to see if the Ender Attuned object can currently receive energy.
+	 * Return whether or not the Ender Attuned object can currently send energy (Redstone Flux).
+	 */
+	boolean canSendEnergy();
+
+	/**
+	 * This should be checked to see if the Ender Attuned object can currently receive energy (Redstone Flux).
 	 * 
 	 * Note: In practice, this can (and should) be used to ensure that something does not send to itself.
 	 */

@@ -8,7 +8,12 @@ import net.minecraftforge.fluids.FluidStack;
  * @author King Lemming
  * 
  */
-public interface IEnderFluidReceptor {
+public interface IEnderFluidHandler extends IEnderAttuned {
+
+	/**
+	 * Return whether or not the Ender Attuned object can currently send FluidStacks.
+	 */
+	boolean canSendFluid();
 
 	/**
 	 * This should be checked to see if the Ender Attuned object can currently receive a FluidStack.
