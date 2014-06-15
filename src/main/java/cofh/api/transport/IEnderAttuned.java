@@ -1,17 +1,13 @@
 package cofh.api.transport;
 
-public interface IEnderAttuned {
+interface IEnderAttuned {
 
-	public enum EnderTypes {
-		ITEM, FLUID, REDSTONE_FLUX
-	}
+	public String getOwnerString();
 
-	String getOwnerString();
+	public int getFrequency();
 
-	int getFrequency();
+	public boolean setFrequency(int frequency);
 
-	boolean setFrequency(int frequency);
-
-	boolean clearFrequency();
+	public boolean clearFrequency();
 
 }
