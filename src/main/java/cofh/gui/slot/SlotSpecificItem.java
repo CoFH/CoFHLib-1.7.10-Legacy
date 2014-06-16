@@ -15,9 +15,9 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotSpecificItem extends Slot {
 
-	final ComparableItemStack stack;
-	ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.stone));
-	int slotStackLimit = -1;
+	protected final ComparableItemStack stack;
+	protected ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.stone));
+	protected int slotStackLimit = -1;
 
 	public SlotSpecificItem(IInventory inventory, int slotIndex, int x, int y, ItemStack stack) {
 

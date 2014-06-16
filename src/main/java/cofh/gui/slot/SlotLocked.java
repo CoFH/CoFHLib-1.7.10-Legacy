@@ -9,8 +9,9 @@ import net.minecraft.item.ItemStack;
  * Slot which prevents player interaction.
  * 
  * @author King Lemming
- * 
+ * @deprecated for SlotViewOnly (clearer naming, more features)
  */
+@Deprecated
 public class SlotLocked extends Slot {
 
 	public SlotLocked(IInventory inventory, int x, int y, int z) {

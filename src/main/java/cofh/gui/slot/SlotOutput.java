@@ -8,8 +8,9 @@ import net.minecraft.item.ItemStack;
  * Slot which players can only remove items from.
  * 
  * @author King Lemming
- * 
+ * @deprecated for SlotRemoveOnly (clearer naming) 
  */
+@Deprecated
 public class SlotOutput extends Slot {
 
 	public SlotOutput(IInventory inventory, int x, int y, int z) {
