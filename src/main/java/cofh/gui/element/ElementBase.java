@@ -29,8 +29,8 @@ public abstract class ElementBase {
 
 	protected String name;
 
-	protected boolean visible = true;
-	protected boolean enabled = true;
+	private boolean visible = true;
+	private boolean enabled = true;
 
 	public ElementBase(GuiBase gui, int posX, int posY) {
 

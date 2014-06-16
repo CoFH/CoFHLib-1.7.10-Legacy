@@ -62,7 +62,7 @@ public abstract class ElementSlider extends ElementBase {
 		int sliderX = posX + getSliderX();
 		int sliderY = posY + getSliderY();
 
-		if (!enabled) {
+		if (!isEnabled()) {
 			gui.bindTexture(DISABLED);
 		} else if (isHovering(mouseX, mouseY)) {
 			gui.bindTexture(HOVER);

@@ -28,7 +28,7 @@ public abstract class ElementButtonManaged extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		if (!enabled) {
+		if (!isEnabled()) {
 			gui.bindTexture(DISABLED);
 		} else if (intersectsWith(mouseX, mouseY)) {
 			gui.bindTexture(HOVER);
@@ -51,7 +51,7 @@ public abstract class ElementButtonManaged extends ElementBase {
 
 	protected int getTextColor(int mouseX, int mouseY) {
 
-		if (!enabled) {
+		if (!isEnabled()) {
 			return -6250336;
 		} else if (intersectsWith(mouseX, mouseY)) {
 			return 16777120;
