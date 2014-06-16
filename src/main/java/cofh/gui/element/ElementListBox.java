@@ -61,7 +61,7 @@ public abstract class ElementListBox extends ElementBase {
 		
 		int width = 0;
 		for (int i = 0; i < _elements.size(); i++) {
-			width += _elements.get(i).getWidth();
+			width = Math.max(_elements.get(i).getWidth(), width);
 		}
 		return width;
 	}
@@ -214,7 +214,7 @@ public abstract class ElementListBox extends ElementBase {
 			_firstIndexDisplayed++;
 		}
 
-		onScroll(_firstIndexDisplayed);
+		onScrollV(_firstIndexDisplayed);
 	}
 
 	public void scrollUp() {
@@ -222,7 +222,7 @@ public abstract class ElementListBox extends ElementBase {
 		if (_firstIndexDisplayed > 0) {
 			_firstIndexDisplayed--;
 		}
-		onScroll(_firstIndexDisplayed);
+		onScrollV(_firstIndexDisplayed);
 	}
 
 	public void scrollLeft() {
@@ -293,7 +293,7 @@ public abstract class ElementListBox extends ElementBase {
 		return _elements.size();
 	}
 
-	public void scrollTo(int index) {
+	public void scrollToV(int index) {
 
 		if (index >= 0 && index < _elements.size()) {
 			_firstIndexDisplayed = index;
@@ -311,7 +311,7 @@ public abstract class ElementListBox extends ElementBase {
 
 	};
 
-	protected void onScroll(int newStartIndex) {
+	protected void onScrollV(int newStartIndex) {
 
 	};
 
