@@ -1,6 +1,5 @@
 package cofh.api.transport;
 
-
 import gnu.trove.map.hash.THashMap;
 
 import java.util.ArrayList;
@@ -15,19 +14,13 @@ import net.minecraftforge.common.config.Configuration;
 
 public final class RegistryEnderAttuned {
 
-	public static Map<String, Map<Integer, List<IEnderItemHandler>>> inputItem =
-			new THashMap<String, Map<Integer, List<IEnderItemHandler>>>();
-	public static Map<String, Map<Integer, List<IEnderFluidHandler>>> inputFluid =
-			new THashMap<String, Map<Integer, List<IEnderFluidHandler>>>();
-	public static Map<String, Map<Integer, List<IEnderEnergyHandler>>> inputEnergy =
-			new THashMap<String, Map<Integer, List<IEnderEnergyHandler>>>();
+	public static Map<String, Map<Integer, List<IEnderItemHandler>>> inputItem = new THashMap<String, Map<Integer, List<IEnderItemHandler>>>();
+	public static Map<String, Map<Integer, List<IEnderFluidHandler>>> inputFluid = new THashMap<String, Map<Integer, List<IEnderFluidHandler>>>();
+	public static Map<String, Map<Integer, List<IEnderEnergyHandler>>> inputEnergy = new THashMap<String, Map<Integer, List<IEnderEnergyHandler>>>();
 
-	public static Map<String, Map<Integer, List<IEnderItemHandler>>> outputItem =
-			new THashMap<String, Map<Integer, List<IEnderItemHandler>>>();
-	public static Map<String, Map<Integer, List<IEnderFluidHandler>>> outputFluid =
-			new THashMap<String, Map<Integer, List<IEnderFluidHandler>>>();
-	public static Map<String, Map<Integer, List<IEnderEnergyHandler>>> outputEnergy =
-			new THashMap<String, Map<Integer, List<IEnderEnergyHandler>>>();
+	public static Map<String, Map<Integer, List<IEnderItemHandler>>> outputItem = new THashMap<String, Map<Integer, List<IEnderItemHandler>>>();
+	public static Map<String, Map<Integer, List<IEnderFluidHandler>>> outputFluid = new THashMap<String, Map<Integer, List<IEnderFluidHandler>>>();
+	public static Map<String, Map<Integer, List<IEnderEnergyHandler>>> outputEnergy = new THashMap<String, Map<Integer, List<IEnderEnergyHandler>>>();
 
 	public static Configuration linkConf;
 
