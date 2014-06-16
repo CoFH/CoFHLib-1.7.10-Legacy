@@ -84,5 +84,16 @@ public abstract class SliderHorizontal extends ElementBase {
 		}
 	}
 
+	@Override
+	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
+
+		if (movement > 0) {
+			setValue(_value - 1);
+		} else if (movement < 0) {
+			setValue(_value + 1);
+		}
+		return true;
+	}
+
 	public abstract void onValueChanged(int value);
 }

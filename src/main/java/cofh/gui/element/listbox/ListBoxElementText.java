@@ -1,5 +1,7 @@
 package cofh.gui.element.listbox;
 
+import net.minecraft.client.Minecraft;
+
 import cofh.gui.element.ElementListBox;
 
 public class ListBoxElementText implements IListBoxElement {
@@ -24,10 +26,15 @@ public class ListBoxElementText implements IListBoxElement {
 	}
 
 	@Override
+	public int getWidth() {
+
+		return Minecraft.getMinecraft().fontRenderer.getStringWidth(_text);
+	}
+
+	@Override
 	public void draw(ElementListBox listBox, int x, int y, int backColor, int textColor) {
 
-		String text = listBox.getFontRenderer().trimStringToWidth(_text, listBox.getContentWidth());
-		listBox.getFontRenderer().drawStringWithShadow(text, x, y, textColor);
+		listBox.getFontRenderer().drawStringWithShadow(_text, x, y, textColor);
 	}
 
 }

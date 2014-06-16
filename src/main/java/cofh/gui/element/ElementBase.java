@@ -35,15 +35,15 @@ public abstract class ElementBase {
 	public ElementBase(GuiBase gui, int posX, int posY) {
 
 		this.gui = gui;
-		this.posX = gui.getGuiLeft() + posX;
-		this.posY = gui.getGuiTop() + posY;
+		this.posX = posX;
+		this.posY = posY;
 	}
 
 	public ElementBase(GuiBase gui, int posX, int posY, int width, int height) {
 
 		this.gui = gui;
-		this.posX = gui.getGuiLeft() + posX;
-		this.posY = gui.getGuiTop() + posY;
+		this.posX = posX;
+		this.posY = posY;
 		this.sizeX = width;
 		this.sizeY = height;
 	}
@@ -56,8 +56,8 @@ public abstract class ElementBase {
 
 	public ElementBase setPosition(int posX, int posY) {
 
-		this.posX = gui.getGuiLeft() + posX;
-		this.posY = gui.getGuiTop() + posY;
+		this.posX = posX;
+		this.posY = posY;
 		return this;
 	}
 
@@ -151,9 +151,6 @@ public abstract class ElementBase {
 
 	public boolean intersectsWith(int mouseX, int mouseY) {
 
-		mouseX += gui.getGuiLeft();
-		mouseY += gui.getGuiTop();
-
 		if (mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY) {
 			return true;
 		}
@@ -175,11 +172,17 @@ public abstract class ElementBase {
 		return gui.getFontRenderer();
 	}
 
+	/**
+	 * This method is relative to the GUI's y coordinate
+	 */
 	public final int getPosY() {
 
 		return posY;
 	}
 
+	/**
+	 * This method is relative to the GUI's x coordinate
+	 */
 	public final int getPosX() {
 
 		return posX;

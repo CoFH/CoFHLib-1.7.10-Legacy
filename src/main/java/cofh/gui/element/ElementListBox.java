@@ -1,14 +1,17 @@
 package cofh.gui.element;
 
+import static org.lwjgl.opengl.GL11.*;
+
+import net.minecraft.client.renderer.Tessellator;
+
 import cofh.gui.GuiBase;
 import cofh.gui.GuiColor;
 import cofh.gui.element.listbox.IListBoxElement;
+import cofh.util.StringHelper;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
 
 public abstract class ElementListBox extends ElementBase {
 
@@ -27,6 +30,7 @@ public abstract class ElementListBox extends ElementBase {
 
 	private int _firstIndexDisplayed;
 	private int _selectedIndex;
+	private int scrollHoriz;
 
 	public ElementListBox(GuiBase containerScreen, int x, int y, int width, int height) {
 
@@ -52,6 +56,24 @@ public abstract class ElementListBox extends ElementBase {
 
 		_elements.remove(index);
 	}
+	
+	public int getInternalWidth() {
+		
+		int width = 0;
+		for (int i = 0; i < _elements.size(); i++) {
+			width += _elements.get(i).getWidth();
+		}
+		return width;
+	}
+	
+	public int getInternalHeight() {
+		
+		int height = 0;
+		for (int i = 0; i < _elements.size(); i++) {
+			height += _elements.get(i).getHeight();
+		}
+		return height;
+	}
 
 	public int getContentWidth() {
 
@@ -63,14 +85,24 @@ public abstract class ElementListBox extends ElementBase {
 		return sizeY - _marginTop - _marginBottom;
 	}
 
-	protected int getContentTop() {
+	public int getContentTop() {
 
 		return posY + _marginTop;
 	}
 
-	protected int getContentLeft() {
+	public int getContentLeft() {
 
 		return posX + _marginLeft;
+	}
+
+	public final int getContentBottom() {
+
+		return getContentTop() + getContentHeight();
+	}
+
+	public final int getContentRight() {
+
+		return getContentLeft() + getContentWidth();
 	}
 
 	@Override
@@ -86,9 +118,34 @@ public abstract class ElementListBox extends ElementBase {
 		int heightDrawn = 0;
 		int nextElement = _firstIndexDisplayed;
 
-		GL11.glDisable(GL11.GL_LIGHTING);
+		glDisable(GL_LIGHTING);
+		glPushMatrix();
 
-		while (nextElement < _elements.size() && heightDrawn + _elements.get(nextElement).getHeight() <= getContentHeight()) {
+		glDisable(GL_TEXTURE_2D);
+		glEnable(GL_STENCIL_TEST);
+		glClear(GL_STENCIL_BUFFER_BIT);
+		glStencilFunc(GL_ALWAYS, 1, 1);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilMask(1);
+		glColorMask(false, false, false, false);
+		glDepthMask(false);
+		
+		Tessellator.instance.startDrawingQuads();
+		Tessellator.instance.addVertex(getContentLeft() , getContentBottom(), 0);
+		Tessellator.instance.addVertex(getContentRight(), getContentBottom(), 0);
+		Tessellator.instance.addVertex(getContentRight(), getContentTop()   , 0);
+		Tessellator.instance.addVertex(getContentLeft() , getContentTop()   , 0);
+		Tessellator.instance.draw();
+
+		glEnable(GL_TEXTURE_2D);
+		glStencilFunc(GL_EQUAL, 1, 1);
+		glStencilMask(0);
+		glColorMask(true, true, true, true);
+		glDepthMask(true);
+		glTranslated(-scrollHoriz, 0, 0);
+
+		int e = _elements.size();
+		while (nextElement < e && heightDrawn <= getContentHeight()) {
 			if (nextElement == _selectedIndex) {
 				_elements.get(nextElement).draw(this, getContentLeft(), getContentTop() + heightDrawn, selectedLineColor, selectedTextColor);
 			} else {
@@ -97,6 +154,10 @@ public abstract class ElementListBox extends ElementBase {
 			heightDrawn += _elements.get(nextElement).getHeight();
 			nextElement++;
 		}
+
+		glDisable(GL_STENCIL_TEST);
+
+		glPopMatrix();
 	}
 
 	@Override
@@ -121,10 +182,18 @@ public abstract class ElementListBox extends ElementBase {
 	@Override
 	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
 
-		if (movement > 0) {
-			scrollUp();
-		} else if (movement < 0) {
-			scrollDown();
+		if (StringHelper.isControlKeyDown()) {
+			if (movement > 0) {
+				scrollLeft();
+			} else if (movement < 0) {
+				scrollRight();
+			}
+		} else {
+			if (movement > 0) {
+				scrollUp();
+			} else if (movement < 0) {
+				scrollDown();
+			}
 		}
 		return true;
 	}
@@ -156,6 +225,18 @@ public abstract class ElementListBox extends ElementBase {
 		onScroll(_firstIndexDisplayed);
 	}
 
+	public void scrollLeft() {
+		
+		scrollHoriz = Math.max(scrollHoriz - 15, 0);
+		onScrollH(scrollHoriz);
+	}
+
+	public void scrollRight() {
+		
+		scrollHoriz = Math.min(scrollHoriz + 15, getLastScrollPositionH());
+		onScrollH(scrollHoriz);
+	}
+
 	public int getLastScrollPosition() {
 
 		int position = _elements.size() - 1;
@@ -167,6 +248,11 @@ public abstract class ElementListBox extends ElementBase {
 		}
 
 		return position + 1;
+	}
+
+	public int getLastScrollPositionH() {
+
+		return Math.max(getInternalWidth() - getContentWidth(), 0);
 	}
 
 	public int getSelectedIndex() {
@@ -214,11 +300,22 @@ public abstract class ElementListBox extends ElementBase {
 		}
 	}
 
+	public void scrollToH(int index) {
+
+		if (index >= 0 && index < getLastScrollPositionH()) {
+			scrollHoriz = index;
+		}
+	}
+
 	protected void onElementClicked(IListBoxElement element) {
 
 	};
 
 	protected void onScroll(int newStartIndex) {
+
+	};
+
+	protected void onScrollH(int newStartIndex) {
 
 	};
 
