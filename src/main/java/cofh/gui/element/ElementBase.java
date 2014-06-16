@@ -82,17 +82,18 @@ public abstract class ElementBase {
 		return this;
 	}
 
-	public final boolean isVisible() {
+	public boolean isVisible() {
 
 		return visible;
 	}
 
-	public final void setEnabled(boolean enabled) {
+	public final ElementBase setEnabled(boolean enabled) {
 
 		this.enabled = enabled;
+		return this;
 	}
 
-	public final boolean isEnabled() {
+	public boolean isEnabled() {
 
 		return enabled;
 	}
