@@ -5,25 +5,31 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 
 /**
- * Slot that will only accept itemstacks when the IInventory returns true from isItemValidForSlot and
- * canInsertItem (from side 6 (unknown)) when alos an ISidedInventory
+ * Slot that will only accept ItemStacks when the IInventory returns true from isItemValidForSlot.
+ * 
+ * If an ISidedInventory, canInsertItem (from side 6 (UNKNOWN)) must also return true.
  */
-public class SlotAcceptInsertable extends SlotAcceptValid
-{
-	protected ISidedInventory _inv;
-	public SlotAcceptInsertable(IInventory par1iInventory, int par2, int par3, int par4)
-	{
-		super(par1iInventory, par2, par3, par4);
-		if (par1iInventory instanceof ISidedInventory)
-			_inv = (ISidedInventory)par1iInventory;
-		else
-			_inv = null;
+public class SlotAcceptInsertable extends SlotAcceptValid {
+
+	protected ISidedInventory sidedInv;
+
+	public SlotAcceptInsertable(IInventory inventory, int index, int x, int y) {
+
+		super(inventory, index, x, y);
+
+		if (inventory instanceof ISidedInventory) {
+			sidedInv = (ISidedInventory) inventory;
+		} else {
+			sidedInv = null;
+		}
 	}
 
-    @Override
-	public boolean isItemValid(ItemStack par1ItemStack)
-    {
-    	boolean valid = super.isItemValid(par1ItemStack);
-        return valid && _inv != null ? _inv.canInsertItem(slotNumber, par1ItemStack, 6) : valid;
-    }
+	@Override
+	public boolean isItemValid(ItemStack stack) {
+
+		boolean valid = super.isItemValid(stack);
+
+		return valid && sidedInv != null ? sidedInv.canInsertItem(slotNumber, stack, 6) : valid;
+	}
+
 }

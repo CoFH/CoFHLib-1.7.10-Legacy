@@ -1,11 +1,13 @@
 package cofh.gui.element;
 
-import static cofh.gui.element.ElementButtonManaged.*;
-
-import org.lwjgl.opengl.GL11;
+import static cofh.gui.element.ElementButtonManaged.DISABLED;
+import static cofh.gui.element.ElementButtonManaged.ENABLED;
+import static cofh.gui.element.ElementButtonManaged.HOVER;
 
 import cofh.gui.GuiBase;
 import cofh.gui.GuiColor;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class ElementSlider extends ElementBase {
 
@@ -73,11 +75,12 @@ public abstract class ElementSlider extends ElementBase {
 		drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderWidth / 2, sliderHeight / 2);
 		drawTexturedModalRect(sliderX, sliderY + sliderHeight / 2, 0, 256 - sliderHeight / 2, sliderWidth / 2, sliderHeight / 2);
 		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY, 256 - sliderWidth / 2, 0, sliderWidth / 2, sliderHeight / 2);
-		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY + sliderHeight / 2, 256 - sliderWidth / 2, 256 - sliderHeight / 2, sliderWidth / 2, sliderHeight / 2);
+		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY + sliderHeight / 2, 256 - sliderWidth / 2, 256 - sliderHeight / 2, sliderWidth / 2,
+				sliderHeight / 2);
 	}
-	
+
 	protected boolean isHovering(int x, int y) {
-		
+
 		return intersectsWith(x, y);
 	}
 

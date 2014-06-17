@@ -14,9 +14,9 @@ public class SlotValidated extends Slot {
 
 	ISlotValidator validator;
 
-	public SlotValidated(ISlotValidator validator, IInventory inventory, int slotIndex, int x, int y) {
+	public SlotValidated(ISlotValidator validator, IInventory inventory, int index, int x, int y) {
 
-		super(inventory, slotIndex, x, y);
+		super(inventory, index, x, y);
 		this.validator = validator;
 	}
 

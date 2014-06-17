@@ -1,8 +1,24 @@
 package cofh.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
-import net.minecraft.client.renderer.Tessellator;
+import static org.lwjgl.opengl.GL11.GL_ALWAYS;
+import static org.lwjgl.opengl.GL11.GL_EQUAL;
+import static org.lwjgl.opengl.GL11.GL_KEEP;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_REPLACE;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_TEST;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glColorMask;
+import static org.lwjgl.opengl.GL11.glDepthMask;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glStencilFunc;
+import static org.lwjgl.opengl.GL11.glStencilMask;
+import static org.lwjgl.opengl.GL11.glStencilOp;
+import static org.lwjgl.opengl.GL11.glTranslated;
 
 import cofh.gui.GuiBase;
 import cofh.gui.GuiColor;
@@ -12,6 +28,8 @@ import cofh.util.StringHelper;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import net.minecraft.client.renderer.Tessellator;
 
 public abstract class ElementListBox extends ElementBase {
 
@@ -56,18 +74,18 @@ public abstract class ElementListBox extends ElementBase {
 
 		_elements.remove(index);
 	}
-	
+
 	public int getInternalWidth() {
-		
+
 		int width = 0;
 		for (int i = 0; i < _elements.size(); i++) {
 			width = Math.max(_elements.get(i).getWidth(), width);
 		}
 		return width;
 	}
-	
+
 	public int getInternalHeight() {
-		
+
 		int height = 0;
 		for (int i = 0; i < _elements.size(); i++) {
 			height += _elements.get(i).getHeight();
@@ -129,12 +147,12 @@ public abstract class ElementListBox extends ElementBase {
 		glStencilMask(1);
 		glColorMask(false, false, false, false);
 		glDepthMask(false);
-		
+
 		Tessellator.instance.startDrawingQuads();
-		Tessellator.instance.addVertex(getContentLeft() , getContentBottom(), 0);
+		Tessellator.instance.addVertex(getContentLeft(), getContentBottom(), 0);
 		Tessellator.instance.addVertex(getContentRight(), getContentBottom(), 0);
-		Tessellator.instance.addVertex(getContentRight(), getContentTop()   , 0);
-		Tessellator.instance.addVertex(getContentLeft() , getContentTop()   , 0);
+		Tessellator.instance.addVertex(getContentRight(), getContentTop(), 0);
+		Tessellator.instance.addVertex(getContentLeft(), getContentTop(), 0);
 		Tessellator.instance.draw();
 
 		glEnable(GL_TEXTURE_2D);
@@ -226,13 +244,13 @@ public abstract class ElementListBox extends ElementBase {
 	}
 
 	public void scrollLeft() {
-		
+
 		scrollHoriz = Math.max(scrollHoriz - 15, 0);
 		onScrollH(scrollHoriz);
 	}
 
 	public void scrollRight() {
-		
+
 		scrollHoriz = Math.min(scrollHoriz + 15, getLastScrollPositionH());
 		onScrollH(scrollHoriz);
 	}

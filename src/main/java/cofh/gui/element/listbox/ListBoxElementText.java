@@ -1,8 +1,8 @@
 package cofh.gui.element.listbox;
 
-import net.minecraft.client.Minecraft;
-
 import cofh.gui.element.ElementListBox;
+
+import net.minecraft.client.Minecraft;
 
 public class ListBoxElementText implements IListBoxElement {
 

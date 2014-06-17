@@ -20,7 +20,7 @@ public abstract class SliderHorizontal extends ElementSlider {
 	@Override
 	public void dragSlider(int v, int y) {
 
-		v += Math.round(_sliderWidth * (v / (float)sizeX - 0.5f));
+		v += Math.round(_sliderWidth * (v / (float) sizeX - 0.5f));
 		setValue(_valueMax * v / sizeX);
 	}
 }

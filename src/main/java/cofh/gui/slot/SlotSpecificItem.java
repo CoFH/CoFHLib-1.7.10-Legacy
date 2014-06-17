@@ -19,9 +19,9 @@ public class SlotSpecificItem extends Slot {
 	protected ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.stone));
 	protected int slotStackLimit = -1;
 
-	public SlotSpecificItem(IInventory inventory, int slotIndex, int x, int y, ItemStack stack) {
+	public SlotSpecificItem(IInventory inventory, int index, int x, int y, ItemStack stack) {
 
-		super(inventory, slotIndex, x, y);
+		super(inventory, index, x, y);
 
 		this.stack = new ComparableItemStack(stack);
 	}

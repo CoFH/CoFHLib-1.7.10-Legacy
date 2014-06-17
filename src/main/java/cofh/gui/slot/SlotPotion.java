@@ -6,18 +6,19 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 /**
- * Slot that will only accept potion ingredients
+ * Slot that will only accept Potions.
  */
-public class SlotPotion extends Slot
-{
-	public SlotPotion(IInventory inv, int index, int x, int y)
-	{
-		super(inv, index, x, y);
+public class SlotPotion extends Slot {
+
+	public SlotPotion(IInventory inventory, int index, int x, int y) {
+
+		super(inventory, index, x, y);
 	}
-	
+
 	@Override
-	public boolean isItemValid(ItemStack stack)
-	{
+	public boolean isItemValid(ItemStack stack) {
+
 		return stack != null && stack.getItem().equals(Items.potionitem);
 	}
+
 }

@@ -15,16 +15,15 @@ public class SlotFalseCopy extends Slot {
 
 	public int slotIndex = 0;
 
-	public SlotFalseCopy(IInventory inventory, int slot, int x, int z) {
+	public SlotFalseCopy(IInventory inventory, int index, int x, int y) {
 
-		super(inventory, slot, x, z);
-		slotIndex = slot;
+		super(inventory, index, x, y);
+		slotIndex = index;
 	}
 
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
 
-		// putStack(null);
 		return false;
 	}
 

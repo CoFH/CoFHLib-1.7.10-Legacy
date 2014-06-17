@@ -14,9 +14,9 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotEnergy extends Slot {
 
-	public SlotEnergy(IInventory inventory, int x, int y, int z) {
+	public SlotEnergy(IInventory inventory, int index, int x, int y) {
 
-		super(inventory, x, y, z);
+		super(inventory, index, x, y);
 	}
 
 	@Override
