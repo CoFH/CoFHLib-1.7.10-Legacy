@@ -183,10 +183,10 @@ public abstract class ElementListBox extends ElementBase {
 
 		int heightChecked = 0;
 		for (int i = _firstIndexDisplayed; i < _elements.size(); i++) {
-			int elementHeight = _elements.get(i).getHeight();
-			if (heightChecked + elementHeight > getContentHeight()) {
+			if (heightChecked > getContentHeight()) {
 				break;
 			}
+			int elementHeight = _elements.get(i).getHeight();
 			if (getContentTop() + heightChecked <= mouseY && getContentTop() + heightChecked + elementHeight >= mouseY) {
 				setSelectedIndex(i);
 				onElementClicked(_elements.get(i));

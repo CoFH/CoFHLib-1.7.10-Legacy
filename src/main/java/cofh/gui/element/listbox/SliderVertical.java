@@ -8,13 +8,13 @@ public abstract class SliderVertical extends ElementSlider {
 	protected SliderVertical(GuiBase containerScreen, int x, int y, int width, int height, int maxValue) {
 
 		super(containerScreen, x, y, width, height, maxValue);
-		setSliderSize(width, 9);
+		setSliderSize(width, maxValue == 0 ? height : Math.max(height / maxValue, 9));
 	}
 
 	@Override
 	public int getSliderY() {
 
-		return (_valueMax == 0 ? 0 : (sizeY - _sliderHeight - 1) * _value / _valueMax);
+		return Math.min(_valueMax == 0 ? 0 : (sizeY - _sliderHeight) * _value / _valueMax, sizeY - _sliderHeight);
 	}
 
 	@Override
