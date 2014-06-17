@@ -1,4 +1,4 @@
-package cofh.api.tileentity;
+package cofh.api.core;
 
 /**
  * Implement this interface on Tile Entities which have access restrictions.
@@ -6,7 +6,7 @@ package cofh.api.tileentity;
  * @author King Lemming
  * 
  */
-public interface ISecureTile {
+public interface ISecurable {
 
 	/**
 	 * Enum for Access Modes - Restricted is Friends Only, Private is Owner only.

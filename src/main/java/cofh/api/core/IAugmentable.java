@@ -1,14 +1,14 @@
-package cofh.api.tileentity;
+package cofh.api.core;
 
 import net.minecraft.item.ItemStack;
 
 /**
- * Implemented on TileEntities which support Augments.
+ * Implemented on objects which support Augments.
  * 
  * @author King Lemming
  * 
  */
-public interface IAugmentableTile {
+public interface IAugmentable {
 
 	/**
 	 * Attempt to reconfigure the tile based on the Augmentations present. Return TRUE if it was successful; FALSE if a condition was not met.

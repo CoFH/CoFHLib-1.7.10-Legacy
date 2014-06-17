@@ -1,6 +1,7 @@
 package cofh.util;
 
 import cofh.api.item.IEmpowerableItem;
+import cofh.api.item.IInventoryContainerItem;
 import cofh.util.oredict.OreDictionaryProxy;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -475,67 +476,137 @@ public final class ItemHelper {
 
 	public static void addInventoryInformation(ItemStack stack, List<String> list, int minSlot, int maxSlot) {
 
-		if (stack.stackTagCompound.hasKey("Inventory") && stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() > 0) {
+		if (StringHelper.displayShiftForDetail && !StringHelper.isShiftKeyDown()) {
+			list.add(StringHelper.shiftForInfo());
+		}
+		if (!StringHelper.isShiftKeyDown()) {
+			return;
+		}
+		if (stack.getItem() instanceof IInventoryContainerItem && stack.stackTagCompound.hasKey("Accessible")) {
+			addAccessibleInventoryInformation(stack, list, minSlot, maxSlot);
+			return;
+		}
+		if (!stack.stackTagCompound.hasKey("Inventory") || stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
+			list.add(StringHelper.localize("info.cofh.empty"));
+			return;
+		}
+		NBTTagList nbtList = stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId());
+		ItemStack curStack;
+		ItemStack curStack2;
 
-			if (StringHelper.displayShiftForDetail && !StringHelper.isShiftKeyDown()) {
-				list.add(StringHelper.shiftForInfo());
+		ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
+
+		boolean[] visited = new boolean[nbtList.tagCount()];
+
+		for (int i = 0; i < nbtList.tagCount(); i++) {
+			NBTTagCompound tag = nbtList.getCompoundTagAt(i);
+			int slot = tag.getInteger("Slot");
+
+			if (visited[i] || slot < minSlot || slot > maxSlot) {
+				continue;
 			}
-			if (!StringHelper.isShiftKeyDown()) {
-				return;
+			visited[i] = true;
+			curStack = ItemStack.loadItemStackFromNBT(tag);
+
+			if (curStack == null) {
+				continue;
 			}
+			containedItems.add(curStack);
+			for (int j = 0; j < nbtList.tagCount(); j++) {
+				NBTTagCompound tag2 = nbtList.getCompoundTagAt(j);
+				int slot2 = tag.getInteger("Slot");
+
+				if (visited[j] || slot2 < minSlot || slot2 > maxSlot) {
+					continue;
+				}
+				curStack2 = ItemStack.loadItemStackFromNBT(tag2);
+
+				if (curStack2 == null) {
+					continue;
+				}
+				if (itemsEqualWithMetadata(curStack, curStack2)) {
+					curStack.stackSize += curStack2.stackSize;
+					visited[j] = true;
+				}
+			}
+		}
+		if (containedItems.size() > 0) {
 			list.add(StringHelper.localize("info.cofh.contents") + ":");
-			NBTTagList nbtList = stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId());
-			ItemStack curStack;
-			ItemStack curStack2;
+		}
+		for (ItemStack item : containedItems) {
+			int maxStackSize = item.getMaxStackSize();
 
-			ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
-
-			boolean[] visited = new boolean[nbtList.tagCount()];
-
-			for (int i = 0; i < nbtList.tagCount(); i++) {
-				NBTTagCompound tag = nbtList.getCompoundTagAt(i);
-				int slot = tag.getInteger("Slot");
-
-				if (visited[i] || slot < minSlot || slot > maxSlot) {
-					continue;
-				}
-				visited[i] = true;
-				curStack = ItemStack.loadItemStackFromNBT(tag);
-
-				if (curStack == null) {
-					continue;
-				}
-				containedItems.add(curStack);
-				for (int j = 0; j < nbtList.tagCount(); j++) {
-					NBTTagCompound tag2 = nbtList.getCompoundTagAt(j);
-					int slot2 = tag.getInteger("Slot");
-
-					if (visited[j] || slot2 < minSlot || slot2 > maxSlot) {
-						continue;
-					}
-					curStack2 = ItemStack.loadItemStackFromNBT(tag2);
-
-					if (curStack2 == null) {
-						continue;
-					}
-					if (itemsEqualWithMetadata(curStack, curStack2)) {
-						curStack.stackSize += curStack2.stackSize;
-						visited[j] = true;
-					}
+			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
+				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+			} else {
+				if (item.stackSize % maxStackSize != 0) {
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
+							+ " " + StringHelper.getItemName(item));
+				} else {
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
-			for (ItemStack item : containedItems) {
-				int maxStackSize = item.getMaxStackSize();
+		}
+	}
 
-				if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+	public static void addAccessibleInventoryInformation(ItemStack stack, List<String> list, int minSlot, int maxSlot) {
+
+		int invSize = ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack);
+		ItemStack curStack;
+		ItemStack curStack2;
+
+		ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
+
+		boolean[] visited = new boolean[invSize];
+
+		for (int i = minSlot; i < Math.min(invSize, maxSlot); i++) {
+			if (visited[i]) {
+				continue;
+			}
+			if (!stack.stackTagCompound.hasKey("Slot" + i)) {
+				continue;
+			}
+			curStack = ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("Slot" + i));
+			visited[i] = true;
+
+			if (curStack == null) {
+				continue;
+			}
+			containedItems.add(curStack);
+			for (int j = minSlot; j < Math.min(invSize, maxSlot); j++) {
+				if (visited[j]) {
+					continue;
+				}
+				if (!stack.stackTagCompound.hasKey("Slot" + j)) {
+					continue;
+				}
+				curStack2 = ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("Slot" + j));
+
+				if (curStack2 == null) {
+					continue;
+				}
+				if (itemsEqualWithMetadata(curStack, curStack2)) {
+					curStack.stackSize += curStack2.stackSize;
+					visited[j] = true;
+				}
+			}
+		}
+		if (containedItems.size() > 0) {
+			list.add(StringHelper.localize("info.cofh.contents") + ":");
+		} else {
+			list.add(StringHelper.localize("info.cofh.empty"));
+		}
+		for (ItemStack item : containedItems) {
+			int maxStackSize = item.getMaxStackSize();
+
+			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
+				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+			} else {
+				if (item.stackSize % maxStackSize != 0) {
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
+							+ " " + StringHelper.getItemName(item));
 				} else {
-					if (item.stackSize % maxStackSize != 0) {
-						list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
-								+ " " + StringHelper.getItemName(item));
-					} else {
-						list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
-					}
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}

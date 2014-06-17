@@ -1,6 +1,6 @@
 package cofh.api.item;
 
-import cofh.api.tileentity.IAugmentableTile;
+import cofh.api.core.IAugmentable;
 
 import net.minecraft.item.ItemStack;
 
@@ -19,7 +19,7 @@ public interface IAugmentItem {
 	 *            Augmentable Tile receiving the ItemStack.
 	 * @return TRUE if the requisite conditions are met.
 	 */
-	boolean canInstall(ItemStack stack, IAugmentableTile tile);
+	boolean canInstall(ItemStack stack, IAugmentable tile);
 
 	/**
 	 * Get the augmentation level for a given Augment.

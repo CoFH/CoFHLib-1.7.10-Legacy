@@ -1,12 +1,11 @@
 package cofh.gui.slot;
 
-import cofh.api.tileentity.ICustomInventory;
+import cofh.api.core.ICustomInventory;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
 public class SlotCustomInventory extends Slot {
 
@@ -44,7 +43,7 @@ public class SlotCustomInventory extends Slot {
 	@Override
 	public void onSlotChanged() {
 
-		((TileEntity) myTile).markDirty();
+		myTile.onSlotUpdate();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package cofh.gui;
+package cofh.gui.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
