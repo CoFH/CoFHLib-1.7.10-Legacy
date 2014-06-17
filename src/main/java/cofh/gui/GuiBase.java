@@ -293,10 +293,10 @@ public abstract class GuiBase extends GuiContainer {
 			}
 			// TODO: convert these over to foreground/background (maybe logic for top/bottom tabs?)
 			if (tab.side == 0) {
-				tab.draw(guiLeft, guiTop + yPosLeft);
+				tab.draw(0,  yPosLeft);
 				yPosLeft += tab.currentHeight;
 			} else {
-				tab.draw(guiLeft + xSize, guiTop + yPosRight);
+				tab.draw(xSize, yPosRight);
 				yPosRight += tab.currentHeight;
 			}
 		}

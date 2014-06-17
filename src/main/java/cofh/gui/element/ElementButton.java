@@ -14,7 +14,6 @@ public class ElementButton extends ElementBase {
 	int hoverY;
 	int disabledX = 0;
 	int disabledY = 0;
-	boolean disabled = false;
 	boolean tooltipLocalized = false;
 	String tooltip;
 
@@ -67,8 +66,8 @@ public class ElementButton extends ElementBase {
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		RenderHelper.bindTexture(texture);
-		if (!disabled) {
-			if (intersectsWith(gui.getMouseX(), gui.getMouseY())) {
+		if (isEnabled()) {
+			if (intersectsWith(mouseX, mouseY)) {
 
 				drawTexturedModalRect(posX, posY, hoverX, hoverY, sizeX, sizeY);
 			} else {
@@ -99,7 +98,7 @@ public class ElementButton extends ElementBase {
 	@Override
 	public boolean onMousePressed(int x, int y, int mouseButton) {
 
-		if (!disabled) {
+		if (isEnabled()) {
 			gui.handleElementButtonClick(getName(), mouseButton);
 			return true;
 		}
@@ -128,12 +127,12 @@ public class ElementButton extends ElementBase {
 
 	public void setActive() {
 
-		disabled = false;
+		setEnabled(true);
 	}
 
 	public void setDisabled() {
 
-		disabled = true;
+		setEnabled(false);
 	}
 
 }
