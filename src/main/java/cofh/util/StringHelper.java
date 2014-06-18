@@ -167,6 +167,8 @@ public final class StringHelper {
 	public static final String ITALIC = (char) 167 + "o";
 	public static final String END = (char) 167 + "r";
 
+	public static final String[] ROMAN_NUMERAL = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
+
 	public static boolean displayShiftForDetail = true;
 	public static boolean displayStackCount = false;
 
