@@ -1,25 +1,12 @@
 package cofh.api.item;
 
-import cofh.api.core.IAugmentable;
-
 import net.minecraft.item.ItemStack;
 
 public interface IAugmentItem {
 
 	public enum AugmentType {
-		CONTROL, EFFICIENCY, ENDER, ENERGY, FLEXIBILITY, POTENCY, RADIUS, REDSTONE, SPEED
+		CONTROL, EFFICIENCY, ENDER, ENERGY, FLEXIBILITY, POTENCY, RANGE, REDSTONE, SPEED
 	}
-
-	/**
-	 * Check to see if a given Augment can be installed in a given Tile Entity.
-	 * 
-	 * @param stack
-	 *            ItemStack representing the Augment.
-	 * @param tile
-	 *            Augmentable Tile receiving the ItemStack.
-	 * @return TRUE if the requisite conditions are met.
-	 */
-	boolean canInstall(ItemStack stack, IAugmentable tile);
 
 	/**
 	 * Get the augmentation level for a given Augment.

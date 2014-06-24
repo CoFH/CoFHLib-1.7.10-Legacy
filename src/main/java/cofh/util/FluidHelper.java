@@ -197,10 +197,10 @@ public class FluidHelper {
 		return fluid == null ? 0 : fluid.getLuminosity();
 	}
 
-	public static FluidStack getFluidFromWorld(World worldObj, int x, int y, int z) {
+	public static FluidStack getFluidFromWorld(World world, int x, int y, int z) {
 
-		Block bId = worldObj.getBlock(x, y, z);
-		int bMeta = worldObj.getBlockMetadata(x, y, z);
+		Block bId = world.getBlock(x, y, z);
+		int bMeta = world.getBlockMetadata(x, y, z);
 
 		if (Block.isEqualTo(bId, Blocks.water)) {
 			if (bMeta == 0) {
@@ -216,9 +216,20 @@ public class FluidHelper {
 			}
 		} else if (bId instanceof IFluidBlock) {
 			IFluidBlock block = (IFluidBlock) bId;
-			return block.drain(worldObj, x, y, z, true);
+			return block.drain(world, x, y, z, true);
 		}
 		return null;
+	}
+
+	public static Fluid lookupFluidForBlock(Block block) {
+
+		if (block == Blocks.flowing_water) {
+			return FluidRegistry.WATER;
+		}
+		if (block == Blocks.flowing_lava) {
+			return FluidRegistry.LAVA;
+		}
+		return FluidRegistry.lookupFluidForBlock(block);
 	}
 
 	public static FluidStack getFluidForFilledItem(ItemStack container) {

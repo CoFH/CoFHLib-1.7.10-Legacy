@@ -192,7 +192,7 @@ public final class ItemHelper {
 			return new ItemStack(dmgItems[0].getItem(), 1, var10);
 		} else {
 			IRecipe recipe;
-			for (int i = 0; i < CraftingManager.getInstance().getRecipeList().size(); ++i) {
+			for (int i = 0; i < CraftingManager.getInstance().getRecipeList().size(); i++) {
 				recipe = (IRecipe) CraftingManager.getInstance().getRecipeList().get(i);
 
 				if (recipe.matches(inv, world)) {
@@ -268,16 +268,16 @@ public final class ItemHelper {
 	/* CRAFTING HELPER FUNCTIONS */
 	public static boolean addGearRecipe(ItemStack gear, String ingot) {
 
-		if (!oreNameExists(ingot)) {
+		if (gear == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, new Object[] { " X ", "XIX", " X ", 'X', ingot, 'I', Items.iron_ingot }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(gear, new Object[] { " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron" }));
 		return true;
 	}
 
 	public static boolean addReverseStorageRecipe(ItemStack nine, String one) {
 
-		if (!oreNameExists(one)) {
+		if (nine == null || !oreNameExists(one)) {
 			return false;
 		}
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ItemHelper.cloneStack(nine, 9), new Object[] { one }));
@@ -286,7 +286,7 @@ public final class ItemHelper {
 
 	public static boolean addStorageRecipe(ItemStack one, String nine) {
 
-		if (!oreNameExists(nine)) {
+		if (one == null || !oreNameExists(nine)) {
 			return false;
 		}
 		GameRegistry.addRecipe(new ShapedOreRecipe(one, new Object[] { "III", "III", "III", 'I', nine }));

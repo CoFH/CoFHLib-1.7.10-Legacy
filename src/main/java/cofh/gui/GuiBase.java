@@ -38,6 +38,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
 
+	protected boolean drawTitle = true;
 	protected boolean drawInventory = true;
 	protected int mouseX = 0;
 	protected int mouseY = 0;
@@ -99,11 +100,12 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
 
-		fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
+		if (drawTitle) {
+			fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
+		}
 		if (drawInventory) {
 			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
-
 		drawElements(0, true);
 		drawTabs(0, true);
 	}

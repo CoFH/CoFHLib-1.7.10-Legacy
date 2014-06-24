@@ -11,18 +11,8 @@ import net.minecraft.inventory.Slot;
 public interface IAugmentableContainer {
 
 	/**
-	 * Install the Augmentations. Basically a callback to the Tile Entity that the container has.
-	 */
-	void installAugments();
-
-	/**
 	 * Returns the Augment slots.
 	 */
 	Slot[] getAugmentSlots();
-
-	/**
-	 * Returns the status of each upgrade in the slots - should return false for a given Upgrade if a requirement is not met. Used on the tab display.
-	 */
-	boolean[] getAugmentStatus();
 
 }
