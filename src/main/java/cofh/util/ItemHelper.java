@@ -204,7 +204,6 @@ public final class ItemHelper {
 	}
 
 	/* ORE DICTIONARY FUNCTIONS */
-
 	public static ItemStack getOre(String oreName) {
 
 		return oreProxy.getOre(oreName);

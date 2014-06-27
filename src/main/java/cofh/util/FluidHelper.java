@@ -1,6 +1,8 @@
 package cofh.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInput;
+import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.IOException;
 
@@ -90,13 +92,13 @@ public class FluidHelper {
 		return handler instanceof IFluidHandler ? ((IFluidHandler) handler).fill(ForgeDirection.VALID_DIRECTIONS[side ^ 1], fluid, doFill) : 0;
 	}
 
-	// TODO: Replace with sided version post-1.7 Fluid revamp
+	// TODO: Replace with sided version post-1.8 Fluid revamp
 	public static boolean isAdjacentFluidHandler(TileEntity tile, int side) {
 
 		return BlockHelper.getAdjacentTileEntity(tile, side) instanceof IFluidHandler;
 	}
 
-	// TODO: Replace with sided version post-1.7 Fluid revamp
+	// TODO: Replace with sided version post-1.8 Fluid revamp
 	public static boolean isFluidHandler(TileEntity tile) {
 
 		return tile instanceof IFluidHandler;
@@ -177,7 +179,7 @@ public class FluidHelper {
 		} else {
 			byte[] abyte = new byte[length];
 			data.readFully(abyte);
-			return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.decompress(abyte));
+			return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.read(new DataInputStream(new ByteArrayInputStream(abyte))));
 		}
 	}
 

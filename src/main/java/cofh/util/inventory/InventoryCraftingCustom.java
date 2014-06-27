@@ -19,14 +19,14 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	 */
 	public final Container eventHandler;
 
-	public InventoryCraftingCustom(Container container, int rows, int columns, IInventory masterTile, int startingInventoryIndex) {
+	public InventoryCraftingCustom(Container container, int rows, int columns, IInventory master, int startingInventoryIndex) {
 
 		super(container, rows, columns);
 		invSize = rows * columns;
 		this.eventHandler = container;
 		this.inventoryWidth = rows;
 		invOffset = startingInventoryIndex;
-		masterInv = masterTile;
+		masterInv = master;
 	}
 
 	@Override
@@ -52,24 +52,12 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public String getInventoryName() {
-
-		return "container.crafting";
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-
-		return false;
-	}
-
-	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 
 		if (masterInv.getStackInSlot(invOffset + slot) != null) {
-			ItemStack itemstack = masterInv.getStackInSlot(invOffset + slot);
+			ItemStack stack = masterInv.getStackInSlot(invOffset + slot);
 			masterInv.setInventorySlotContents(invOffset + slot, null);
-			return itemstack;
+			return stack;
 		}
 		return null;
 	}
@@ -78,22 +66,21 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	public ItemStack decrStackSize(int slot, int amount) {
 
 		if (masterInv.getStackInSlot(invOffset + slot) != null) {
-			ItemStack itemstack;
+			ItemStack stack;
 
 			if (masterInv.getStackInSlot(invOffset + slot).stackSize <= amount) {
-				itemstack = masterInv.getStackInSlot(invOffset + slot);
+				stack = masterInv.getStackInSlot(invOffset + slot);
 				masterInv.setInventorySlotContents(invOffset + slot, null);
 				this.eventHandler.onCraftMatrixChanged(this);
-				return itemstack;
+				return stack;
 			} else {
-				itemstack = masterInv.getStackInSlot(invOffset + slot).splitStack(amount);
+				stack = masterInv.getStackInSlot(invOffset + slot).splitStack(amount);
 
 				if (masterInv.getStackInSlot(invOffset + slot).stackSize <= 0) {
 					masterInv.setInventorySlotContents(invOffset + slot, null);
 				}
-
 				this.eventHandler.onCraftMatrixChanged(this);
-				return itemstack;
+				return stack;
 			}
 		}
 		return null;

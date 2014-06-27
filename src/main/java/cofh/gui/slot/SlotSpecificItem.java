@@ -41,10 +41,7 @@ public class SlotSpecificItem extends Slot {
 	@Override
 	public int getSlotStackLimit() {
 
-		if (slotStackLimit <= 0) {
-			return this.inventory.getInventoryStackLimit();
-		}
-		return slotStackLimit;
+		return slotStackLimit <= 0 ? inventory.getInventoryStackLimit() : slotStackLimit;
 	}
 
 }

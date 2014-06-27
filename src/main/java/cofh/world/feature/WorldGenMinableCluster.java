@@ -55,26 +55,29 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, Block block) {
 
 		cluster = resource;
-		genClusterSize = clusterSize > 32 ? 32 : clusterSize < 4 ? 4 : clusterSize;
+		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
 		genBlock = block;
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) {
+	public boolean generate(World world, Random random, int x, int y, int z) {
 
-		float f = rand.nextFloat() * (float) Math.PI;
+		if (genClusterSize < 4) {
+			return generateTiny(world, random, x, y, z);
+		}
+		float f = random.nextFloat() * (float) Math.PI;
 		double d0 = x + 8 + MathHelper.sin(f) * genClusterSize / 8.0F;
 		double d1 = x + 8 - MathHelper.sin(f) * genClusterSize / 8.0F;
 		double d2 = z + 8 + MathHelper.cos(f) * genClusterSize / 8.0F;
 		double d3 = z + 8 - MathHelper.cos(f) * genClusterSize / 8.0F;
-		double d4 = y + rand.nextInt(3) - 2;
-		double d5 = y + rand.nextInt(3) - 2;
+		double d4 = y + random.nextInt(3) - 2;
+		double d5 = y + random.nextInt(3) - 2;
 
 		for (int l = 0; l <= genClusterSize; l++) {
 			double d6 = d0 + (d1 - d0) * l / genClusterSize;
 			double d7 = d4 + (d5 - d4) * l / genClusterSize;
 			double d8 = d2 + (d3 - d2) * l / genClusterSize;
-			double d9 = rand.nextDouble() * genClusterSize / 16.0D;
+			double d9 = random.nextDouble() * genClusterSize / 16.0D;
 			double d10 = (MathHelper.sin(l * (float) Math.PI / genClusterSize) + 1.0F) * d9 + 1.0D;
 			double d11 = (MathHelper.sin(l * (float) Math.PI / genClusterSize) + 1.0F) * d9 + 1.0D;
 			int i1 = MathHelper.floor_double(d6 - d10 / 2.0D);
@@ -104,6 +107,19 @@ public class WorldGenMinableCluster extends WorldGenerator {
 						}
 					}
 				}
+			}
+		}
+		return true;
+	}
+
+	public boolean generateTiny(World world, Random random, int x, int y, int z) {
+
+		for (int i = 0; i < genClusterSize; i++) {
+			Block block = world.getBlock(x + random.nextInt(2), y + random.nextInt(2), z + random.nextInt(2));
+
+			if (block != null && block.isReplaceableOreGen(world, x, y, z, genBlock)) {
+				WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
+				world.setBlock(x, y, z, ore.block, ore.metadata, 2);
 			}
 		}
 		return true;

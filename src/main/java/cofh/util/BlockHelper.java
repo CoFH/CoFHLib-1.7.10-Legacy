@@ -242,7 +242,7 @@ public final class BlockHelper {
 
 	public static AxisAlignedBB getAdjacentAABBForSide(int x, int y, int z, int side) {
 
-		return AxisAlignedBB.getAABBPool().getAABB(x + SIDE_COORD_MOD[side][0], y + SIDE_COORD_MOD[side][1], z + SIDE_COORD_MOD[side][2],
+		return AxisAlignedBB.getBoundingBox(x + SIDE_COORD_MOD[side][0], y + SIDE_COORD_MOD[side][1], z + SIDE_COORD_MOD[side][2],
 				x + SIDE_COORD_AABB[side][0], y + SIDE_COORD_AABB[side][1], z + SIDE_COORD_AABB[side][2]);
 	}
 

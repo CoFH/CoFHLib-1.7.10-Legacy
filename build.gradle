@@ -29,13 +29,13 @@ else
     println "!! No build number set !!"
 }
 
-version = "R1.0"
-group= "cofh"
+version = "1.7.10R3.0.0"
+group = "cofh"
 archivesBaseName = "CoFHLib"
 
 minecraft {
-    version = "1.7.2-10.12.1.1082" // latest right now.
-    assetDir = "run/assets" // run configs should point to 'run'
+    version = "1.7.10-10.13.0.1151"
+    assetDir = "eclipse/assets"
 }
 
 processResources
