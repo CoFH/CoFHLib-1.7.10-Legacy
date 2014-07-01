@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 public interface IAugmentable {
 
 	/**
-	 * Attempt to reconfigure the tile based on the Augmentations present. Return TRUE if it was successful; FALSE if a condition was not met.
+	 * Attempt to reconfigure the tile based on the Augmentations present.
 	 */
-	boolean installAugments();
+	void installAugments();
 
 	/**
 	 * Returns an array of the Augment slots for this Tile Entity.
