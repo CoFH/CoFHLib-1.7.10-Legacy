@@ -28,12 +28,12 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		orientation = ForgeDirection.UNKNOWN;
 	}
 
-	public BlockPosition(int x, int y, int z, ForgeDirection corientation) {
+	public BlockPosition(int x, int y, int z, ForgeDirection orientation) {
 
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		orientation = corientation;
+		this.orientation = orientation;
 	}
 
 	public BlockPosition(BlockPosition p) {
@@ -69,9 +69,9 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		}
 	}
 
-	public static BlockPosition fromFactoryTile(IRotateableTile te) {
+	public static <T extends TileEntity & IRotateableTile> BlockPosition fromRotateableTile(T te) {
 
-		return new BlockPosition((TileEntity) te);
+		return new BlockPosition(te);
 	}
 
 	public BlockPosition copy() {
@@ -79,35 +79,52 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		return new BlockPosition(x, y, z, orientation);
 	}
 
-	public void step(int dir) {
+	public BlockPosition copy(ForgeDirection orientation) {
 
-		x += BlockHelper.SIDE_COORD_MOD[dir][0];
-		y += BlockHelper.SIDE_COORD_MOD[dir][1];
-		z += BlockHelper.SIDE_COORD_MOD[dir][2];
+		return new BlockPosition(x, y, z, orientation);
+	}
+	
+	public BlockPosition setOrientation(ForgeDirection o) {
+		
+		orientation = o;
+		return this;
 	}
 
-	public void step(int dir, int dist) {
+	public BlockPosition step(int dir) {
 
-		x += BlockHelper.SIDE_COORD_MOD[dir][0] * dist;
-		y += BlockHelper.SIDE_COORD_MOD[dir][1] * dist;
-		z += BlockHelper.SIDE_COORD_MOD[dir][2] * dist;
+		int[] d = BlockHelper.SIDE_COORD_MOD[dir];
+		x += d[0];
+		y += d[1];
+		z += d[2];
+		return this;
 	}
 
-	public void step(ForgeDirection dir) {
+	public BlockPosition step(int dir, int dist) {
+
+		int[] d = BlockHelper.SIDE_COORD_MOD[dir];
+		x += d[0] * dist;
+		y += d[1] * dist;
+		z += d[2] * dist;
+		return this;
+	}
+
+	public BlockPosition step(ForgeDirection dir) {
 
 		x += dir.offsetX;
 		y += dir.offsetY;
 		z += dir.offsetZ;
+		return this;
 	}
 
-	public void step(ForgeDirection dir, int dist) {
+	public BlockPosition step(ForgeDirection dir, int dist) {
 
 		x += dir.offsetX * dist;
 		y += dir.offsetY * dist;
 		z += dir.offsetZ * dist;
+		return this;
 	}
 
-	public void moveForwards(int step) {
+	public BlockPosition moveForwards(int step) {
 
 		switch (orientation) {
 		case UP:
@@ -130,14 +147,15 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 			break;
 		default:
 		}
+		return this;
 	}
 
-	public void moveBackwards(int step) {
+	public BlockPosition moveBackwards(int step) {
 
-		moveForwards(-step);
+		return moveForwards(-step);
 	}
 
-	public void moveRight(int step) {
+	public BlockPosition moveRight(int step) {
 
 		switch (orientation) {
 		case UP:
@@ -157,14 +175,15 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		default:
 			break;
 		}
+		return this;
 	}
 
-	public void moveLeft(int step) {
+	public BlockPosition moveLeft(int step) {
 
-		moveRight(-step);
+		return moveRight(-step);
 	}
 
-	public void moveUp(int step) {
+	public BlockPosition moveUp(int step) {
 
 		switch (orientation) {
 		case EAST:
@@ -181,12 +200,12 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		default:
 			break;
 		}
-
+		return this;
 	}
 
-	public void moveDown(int step) {
+	public BlockPosition moveDown(int step) {
 
-		moveUp(-step);
+		return moveUp(-step);
 	}
 
 	public void writeToNBT(NBTTagCompound tag) {
@@ -213,7 +232,14 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 			return false;
 		}
 		BlockPosition bp = (BlockPosition) obj;
-		return bp.x == x && bp.y == y && bp.z == z && bp.orientation == orientation;
+		return bp.x == x & bp.y == y & bp.z == z & bp.orientation == orientation;
+	}
+
+	// so compiler will optimize
+	public boolean equals(BlockPosition obj) {
+
+		BlockPosition bp = obj;
+		return bp.x == x & bp.y == y & bp.z == z & bp.orientation == orientation;
 	}
 
 	@Override
@@ -235,13 +261,13 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 	public List<BlockPosition> getAdjacent(boolean includeVertical) {
 
 		List<BlockPosition> a = new ArrayList<BlockPosition>(4 + (includeVertical ? 2 : 0));
-		a.add(new BlockPosition(x + 1, y, z, ForgeDirection.EAST));
-		a.add(new BlockPosition(x - 1, y, z, ForgeDirection.WEST));
-		a.add(new BlockPosition(x, y, z + 1, ForgeDirection.SOUTH));
-		a.add(new BlockPosition(x, y, z - 1, ForgeDirection.NORTH));
+		a.add(copy(ForgeDirection.EAST).moveForwards(1));
+		a.add(copy(ForgeDirection.WEST).moveForwards(1));
+		a.add(copy(ForgeDirection.SOUTH).moveForwards(1));
+		a.add(copy(ForgeDirection.NORTH).moveForwards(1));
 		if (includeVertical) {
-			a.add(new BlockPosition(x, y + 1, z, ForgeDirection.UP));
-			a.add(new BlockPosition(x, y - 1, z, ForgeDirection.DOWN));
+			a.add(copy(ForgeDirection.UP).moveForwards(1));
+			a.add(copy(ForgeDirection.DOWN).moveForwards(1));
 		}
 		return a;
 	}
@@ -251,19 +277,29 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		return world.getTileEntity(x, y, z);
 	}
 
+	@SuppressWarnings("unchecked")
+	public <T> T getTileEntity(World world, Class<T> targetClass) {
+
+		TileEntity te = world.getTileEntity(x, y, z);
+		if (targetClass.isInstance(te)) {
+			return (T)te;
+		} else {
+			return null;
+		}
+	}
+
 	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection direction) {
 
-		BlockPosition p = new BlockPosition(start);
-		p.orientation = direction;
-		p.moveForwards(1);
+		BlockPosition p = new BlockPosition(start).step(direction);
 		return start.getWorldObj().getTileEntity(p.x, p.y, p.z);
 	}
 
-	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection direction, Class<? extends TileEntity> targetClass) {
+	@SuppressWarnings("unchecked")
+	public static <T> T getAdjacentTileEntity(TileEntity start, ForgeDirection direction, Class<T> targetClass) {
 
 		TileEntity te = getAdjacentTileEntity(start, direction);
-		if (targetClass.isAssignableFrom(te.getClass())) {
-			return te;
+		if (targetClass.isInstance(te)) {
+			return (T)te;
 		} else {
 			return null;
 		}
