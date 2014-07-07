@@ -83,9 +83,9 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 
 		return new BlockPosition(x, y, z, orientation);
 	}
-	
+
 	public BlockPosition setOrientation(ForgeDirection o) {
-		
+
 		orientation = o;
 		return this;
 	}
@@ -282,7 +282,7 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (targetClass.isInstance(te)) {
-			return (T)te;
+			return (T) te;
 		} else {
 			return null;
 		}
@@ -299,7 +299,7 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 
 		TileEntity te = getAdjacentTileEntity(start, direction);
 		if (targetClass.isInstance(te)) {
-			return (T)te;
+			return (T) te;
 		} else {
 			return null;
 		}

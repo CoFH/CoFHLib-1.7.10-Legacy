@@ -1,8 +1,6 @@
 package cofh.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInput;
-import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.IOException;
 
@@ -11,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -179,7 +178,7 @@ public class FluidHelper {
 		} else {
 			byte[] abyte = new byte[length];
 			data.readFully(abyte);
-			return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.read(new DataInputStream(new ByteArrayInputStream(abyte))));
+			return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L)));
 		}
 	}
 

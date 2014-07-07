@@ -9,4 +9,5 @@ package cofh.api.tileentity;
 public interface IPlacedTile {
 
 	public void tilePlaced();
+
 }

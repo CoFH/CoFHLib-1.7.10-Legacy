@@ -196,7 +196,14 @@ public abstract class GuiBase extends GuiContainer {
 		mouseX += guiLeft;
 		mouseY += guiTop;
 
+		// TODO: Look into a better solution for this.
+		if (tab != null) {
+			xSize += tab.currentWidth;
+		}
 		super.mouseClicked(mouseX, mouseY, mouseButton);
+		if (tab != null) {
+			xSize -= tab.currentWidth;
+		}
 	}
 
 	@Override
