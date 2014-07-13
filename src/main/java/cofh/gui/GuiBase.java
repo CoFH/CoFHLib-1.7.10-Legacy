@@ -163,27 +163,32 @@ public abstract class GuiBase extends GuiContainer {
 					return;
 				}
 			}
+			TabBase tab = getTabAtPosition(mouseX, mouseY);
+
+			if (tab != null && tab.onMouseWheel(mouseX, mouseY, wheelMovement)) {
+				return;
+			}
 		}
 		super.handleMouseInput();
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+	protected void mouseClicked(int mX, int mY, int mouseButton) {
 
-		mouseX -= guiLeft;
-		mouseY -= guiTop;
+		mX -= guiLeft;
+		mY -= guiTop;
 
 		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
-			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
+			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mX, mY)) {
 				continue;
 			}
-			if (c.onMousePressed(mouseX, mouseY, mouseButton)) {
+			if (c.onMousePressed(mX, mY, mouseButton)) {
 				return;
 			}
 		}
-		TabBase tab = getTabAtPosition(mouseX, mouseY);
-		if (tab != null && !tab.onMousePressed(mouseX, mouseY, mouseButton)) {
+		TabBase tab = getTabAtPosition(mX, mY);
+		if (tab != null && !tab.onMousePressed(mX, mY, mouseButton)) {
 			for (int i = tabs.size(); i-- > 0;) {
 				TabBase other = tabs.get(i);
 				if (other != tab && other.open && other.side == tab.side) {
@@ -193,24 +198,24 @@ public abstract class GuiBase extends GuiContainer {
 			tab.toggleOpen();
 			return;
 		}
-		mouseX += guiLeft;
-		mouseY += guiTop;
+		mX += guiLeft;
+		mY += guiTop;
 
 		// TODO: Look into a better solution for this.
 		if (tab != null) {
 			xSize += tab.currentWidth;
 		}
-		super.mouseClicked(mouseX, mouseY, mouseButton);
+		super.mouseClicked(mX, mY, mouseButton);
 		if (tab != null) {
 			xSize -= tab.currentWidth;
 		}
 	}
 
 	@Override
-	protected void mouseMovedOrUp(int mouseX, int mouseY, int mouseButton) {
+	protected void mouseMovedOrUp(int mX, int mY, int mouseButton) {
 
-		mouseX -= guiLeft;
-		mouseY -= guiTop;
+		mX -= guiLeft;
+		mY -= guiTop;
 
 		if (mouseButton >= 0 && mouseButton <= 2) { // 0:left, 1:right, 2: middle
 			for (int i = elements.size(); i-- > 0;) {
@@ -218,13 +223,13 @@ public abstract class GuiBase extends GuiContainer {
 				if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
 					continue;
 				}
-				c.onMouseReleased(mouseX, mouseY);
+				c.onMouseReleased(mX, mY);
 			}
 		}
-		mouseX += guiLeft;
-		mouseY += guiTop;
+		mX += guiLeft;
+		mY += guiTop;
 
-		super.mouseMovedOrUp(mouseX, mouseY, mouseButton);
+		super.mouseMovedOrUp(mX, mY, mouseButton);
 	}
 
 	@Override
@@ -301,7 +306,7 @@ public abstract class GuiBase extends GuiContainer {
 				continue;
 			}
 			// TODO: convert these over to foreground/background (maybe logic for top/bottom tabs?)
-			if (tab.side == 0) {
+			if (tab.side == TabBase.LEFT) {
 				tab.draw(0, yPosLeft);
 				yPosLeft += tab.currentHeight;
 			} else {
@@ -352,7 +357,7 @@ public abstract class GuiBase extends GuiContainer {
 				yOffset += tabs.get(i).currentHeight;
 			}
 		}
-		tab.setPosition(tab.side == 0 ? 0 : xSize, yOffset);
+		tab.setPosition(tab.side == TabBase.LEFT ? 0 : xSize, yOffset);
 		tabs.add(tab);
 
 		if (TabTracker.getOpenedLeftTab() != null && tab.getClass().equals(TabTracker.getOpenedLeftTab())) {
@@ -381,7 +386,7 @@ public abstract class GuiBase extends GuiContainer {
 
 		for (int i = 0; i < tabs.size(); i++) {
 			TabBase tab = tabs.get(i);
-			if (!tab.isVisible() || tab.side == 1) {
+			if (!tab.isVisible() || tab.side == TabBase.RIGHT) {
 				continue;
 			}
 			tab.currentShiftX = xShift;
@@ -397,7 +402,7 @@ public abstract class GuiBase extends GuiContainer {
 
 		for (int i = 0; i < tabs.size(); i++) {
 			TabBase tab = tabs.get(i);
-			if (!tab.isVisible() || tab.side == 0) {
+			if (!tab.isVisible() || tab.side == TabBase.LEFT) {
 				continue;
 			}
 			tab.currentShiftX = xShift;
@@ -429,14 +434,13 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	/* HELPERS */
-
 	public void bindTexture(ResourceLocation texture) {
 
 		mc.renderEngine.bindTexture(texture);
 	}
 
 	/**
-	 * Abstract method to retrieve icons by name from a registry You must override this if you use any of the String methods below
+	 * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
 	 */
 	public IIcon getIcon(String name) {
 

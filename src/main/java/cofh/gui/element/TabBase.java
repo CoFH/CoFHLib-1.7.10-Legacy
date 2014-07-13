@@ -20,8 +20,11 @@ public abstract class TabBase extends ElementBase {
 
 	public static int tabExpandSpeed = 8;
 
+	public static int LEFT = 0;
+	public static int RIGHT = 1;
+
 	public boolean open;
-	public int side = 1;
+	public int side = RIGHT;
 
 	public int headerColor = 0xe1c92f;
 	public int subheaderColor = 0xaaafb8;
@@ -53,7 +56,7 @@ public abstract class TabBase extends ElementBase {
 		super(gui, 0, 0);
 		this.side = side;
 
-		if (side == 0) {
+		if (side == LEFT) {
 			texture = DEFAULT_TEXTURE_LEFT;
 		} else {
 			texture = DEFAULT_TEXTURE_RIGHT;
@@ -140,7 +143,7 @@ public abstract class TabBase extends ElementBase {
 	 */
 	protected int posX() {
 
-		if (side == 0) {
+		if (side == LEFT) {
 			return posX - currentWidth;
 		}
 		return posX;
@@ -156,12 +159,12 @@ public abstract class TabBase extends ElementBase {
 
 	protected int offset() {
 
-		return (side == 0 ? 4 : 2);
+		return (side == LEFT ? 4 : 2);
 	}
 
 	public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
 
-		if (side == 0) {
+		if (side == LEFT) {
 			if (mouseX <= shiftX && mouseX >= shiftX - currentWidth && mouseY >= shiftY && mouseY <= shiftY + currentHeight) {
 				return true;
 			}
@@ -187,14 +190,14 @@ public abstract class TabBase extends ElementBase {
 
 		if (open) {
 			open = false;
-			if (side == 0) {
+			if (side == LEFT) {
 				TabTracker.setOpenedLeftTab(null);
 			} else {
 				TabTracker.setOpenedRightTab(null);
 			}
 		} else {
 			open = true;
-			if (side == 0) {
+			if (side == LEFT) {
 				TabTracker.setOpenedLeftTab(this.getClass());
 			} else {
 				TabTracker.setOpenedRightTab(this.getClass());

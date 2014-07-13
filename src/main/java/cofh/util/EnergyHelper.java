@@ -51,7 +51,9 @@ public class EnergyHelper {
 
 	public static ItemStack setDefaultEnergyTag(ItemStack container, int energy) {
 
-		container.setTagCompound(new NBTTagCompound());
+		if (container.stackTagCompound == null) {
+			container.setTagCompound(new NBTTagCompound());
+		}
 		container.stackTagCompound.setInteger("Energy", energy);
 
 		return container;

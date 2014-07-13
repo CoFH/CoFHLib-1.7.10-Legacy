@@ -475,10 +475,8 @@ public final class ItemHelper {
 
 	public static void addInventoryInformation(ItemStack stack, List<String> list, int minSlot, int maxSlot) {
 
-		if (StringHelper.displayShiftForDetail && !StringHelper.isShiftKeyDown()) {
-			list.add(StringHelper.shiftForInfo());
-		}
-		if (!StringHelper.isShiftKeyDown()) {
+		if (stack.stackTagCompound == null) {
+			list.add(StringHelper.localize("info.cofh.empty"));
 			return;
 		}
 		if (stack.getItem() instanceof IInventoryContainerItem && stack.stackTagCompound.hasKey("Accessible")) {
