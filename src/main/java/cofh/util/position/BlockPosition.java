@@ -236,10 +236,9 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 	}
 
 	// so compiler will optimize
-	public boolean equals(BlockPosition obj) {
+	public boolean equals(BlockPosition bp) {
 
-		BlockPosition bp = obj;
-		return bp.x == x & bp.y == y & bp.z == z & bp.orientation == orientation;
+		return bp != null && bp.x == x & bp.y == y & bp.z == z & bp.orientation == orientation;
 	}
 
 	@Override
