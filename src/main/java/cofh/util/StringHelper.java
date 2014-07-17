@@ -65,6 +65,13 @@ public final class StringHelper {
 		return getFluidName(fluid.getFluid());
 	}
 
+	public static String getFluidName(FluidStack fluid, String def) {
+
+		if (fluid == null)
+			return def;
+		return getFluidName(fluid.getFluid());
+	}
+
 	public static String getFluidName(Fluid fluid) {
 
 		String name = "" + END;

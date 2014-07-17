@@ -518,7 +518,7 @@ public final class ItemHelper {
 		if (one == null || !oreNameExists(four)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(one, "ff", "ff", 'f', four, 1));
+		GameRegistry.addRecipe(new ShapedOreRecipe(one, "ff", "ff", 'f', four));
 		return true;
 	}
 	public static boolean addSmallStorageRecipe(ItemStack one, ItemStack four) {
