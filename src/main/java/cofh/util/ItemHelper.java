@@ -60,6 +60,16 @@ public final class ItemHelper {
 		return stack;
 	}
 
+	public static ItemStack cloneStack(Block item, int stackSize) {
+
+		if (item == null) {
+			return null;
+		}
+		ItemStack stack = new ItemStack(item, stackSize);
+
+		return stack;
+	}
+
 	public static ItemStack cloneStack(ItemStack stack, int stackSize) {
 
 		if (stack == null) {
@@ -337,6 +347,30 @@ public final class ItemHelper {
 		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
+	public static boolean addGearRecipe(ItemStack gear, String ingot, ItemStack center) {
+
+		if (gear == null | center == null || !oreNameExists(ingot)) {
+			return false;
+		}
+		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		return true;
+	}
+	public static boolean addGearRecipe(ItemStack gear, ItemStack ingot, String center) {
+
+		if (gear == null | ingot == null || !oreNameExists(center)) {
+			return false;
+		}
+		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		return true;
+	}
+	public static boolean addGearRecipe(ItemStack gear, ItemStack ingot, ItemStack center) {
+
+		if (gear == null | ingot == null | center == null) {
+			return false;
+		}
+		GameRegistry.addRecipe(cloneStack(gear), " X ", "XIX", " X ", 'X', cloneStack(ingot, 1), 'I', cloneStack(center, 1));
+		return true;
+	}
 	// rotated
 	public static boolean addRotatedGearRecipe(ItemStack gear, String ingot, String center) {
 
@@ -498,6 +532,22 @@ public final class ItemHelper {
 	//}
 	
 	//SMELTING{
+	public static boolean addSmelting(ItemStack out, Item in) {
+
+		if (out == null | in == null) {
+			return false;
+		}
+		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0);
+		return true;
+	}
+	public static boolean addSmelting(ItemStack out, Block in) {
+
+		if (out == null | in == null) {
+			return false;
+		}
+		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0);
+		return true;
+	}
 	public static boolean addSmelting(ItemStack out, ItemStack in) {
 
 		if (out == null | in == null) {
@@ -506,12 +556,44 @@ public final class ItemHelper {
 		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0);
 		return true;
 	}
+	public static boolean addSmelting(ItemStack out, Item in, float XP) {
+
+		if (out == null | in == null) {
+			return false;
+		}
+		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), XP);
+		return true;
+	}
+	public static boolean addSmelting(ItemStack out, Block in, float XP) {
+
+		if (out == null | in == null) {
+			return false;
+		}
+		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), XP);
+		return true;
+	}
 	public static boolean addSmelting(ItemStack out, ItemStack in, float XP) {
 
 		if (out == null | in == null) {
 			return false;
 		}
 		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), XP);
+		return true;
+	}
+	public static boolean addWeakSmelting(ItemStack out, Item in) {
+
+		if (out == null | in == null) {
+			return false;
+		}
+		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0.1f);
+		return true;
+	}
+	public static boolean addWeakSmelting(ItemStack out, Block in) {
+
+		if (out == null | in == null) {
+			return false;
+		}
+		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0.1f);
 		return true;
 	}
 	public static boolean addWeakSmelting(ItemStack out, ItemStack in) {
@@ -540,6 +622,11 @@ public final class ItemHelper {
 		GameRegistry.registerCustomItemStack(oreName, stack);
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", stack);
 	}
+	
+	public static void addRecipe(IRecipe recipe) { GameRegistry.addRecipe(recipe); }
+	public static void addRecipe(ItemStack out, Object... recipe) { GameRegistry.addRecipe(out, recipe); }
+	public static void addShapedRecipe(ItemStack out, Object... recipe) { GameRegistry.addRecipe(out, recipe); }
+	public static void addShapelessRecipe(ItemStack out, Object... recipe) { GameRegistry.addShapelessRecipe(out, recipe); }
 
 	/* EMPOWERED ITEM HELPERS */
 	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
