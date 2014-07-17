@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -108,10 +107,10 @@ public class RenderFluidOverlayItem implements IItemRenderer {
 			fluidMaxY = fluidIcon.getMinV();
 			fluidMinY = fluidIcon.getMaxV();
 		}
-		TextureUtil.func_152777_a(false, false, 1.0f);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		int texture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 
 		if (type == ItemRenderType.INVENTORY) {
 			GL11.glDisable(GL11.GL_LIGHTING);
@@ -207,9 +206,9 @@ public class RenderFluidOverlayItem implements IItemRenderer {
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		}
 
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		TextureUtil.func_147945_b();
 		GL11.glPopMatrix();
 	}
 
