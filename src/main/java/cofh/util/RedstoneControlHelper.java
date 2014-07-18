@@ -8,13 +8,13 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class RSControlHelper {
+public class RedstoneControlHelper {
 
-	private RSControlHelper() {
+	private RedstoneControlHelper() {
 
 	}
 
-	/* NBT TAG HELPER */
+	/* NBT TAG HELPERS */
 	public static NBTTagCompound setItemStackTagRS(NBTTagCompound tag, IRedstoneControl tile) {
 
 		if (tile == null) {
@@ -25,6 +25,11 @@ public class RSControlHelper {
 		}
 		tag.setByte("RSControl", (byte) tile.getControl().ordinal());
 		return tag;
+	}
+
+	public static ControlMode getControlFromNBT(NBTTagCompound tag) {
+
+		return tag == null ? ControlMode.DISABLED : ControlMode.values()[tag.getByte("RSControl")];
 	}
 
 	/**

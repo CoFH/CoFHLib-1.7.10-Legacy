@@ -1,15 +1,13 @@
 package cofh.api.tileentity;
 
-import cofh.api.block.IBlockInfo;
-
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.common.util.ForgeDirection;
 
 /**
- * Implement this interface on Tile Entities which can provide information about themselves. The containing block should be an instance of {@link IBlockInfo}
- * and defer the call to the tile.
+ * Implement this interface on Tile Entities which can provide information about themselves.
  * 
  * @author King Lemming
  * 
@@ -28,6 +26,6 @@ public interface ITileInfo {
 	 * @param debug
 	 *            If true, the tile should return "debug" information.
 	 */
-	void getTileInfo(List<String> info, ForgeDirection side, EntityPlayer player, boolean debug);
+	void getTileInfo(List<IChatComponent> info, ForgeDirection side, EntityPlayer player, boolean debug);
 
 }

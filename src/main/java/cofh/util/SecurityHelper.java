@@ -1,7 +1,7 @@
 package cofh.util;
 
-import cofh.api.core.ISecurable;
-import cofh.api.core.ISecurable.AccessMode;
+import cofh.api.tileentity.ISecurable;
+import cofh.api.tileentity.ISecurable.AccessMode;
 
 import java.util.List;
 
@@ -106,7 +106,7 @@ public class SecurityHelper {
 
 	public static String getOwnerName(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? null : stack.stackTagCompound.getString("Owner");
+		return stack.stackTagCompound == null ? "[None]" : stack.stackTagCompound.getString("Owner");
 	}
 
 }

@@ -5,6 +5,7 @@ import cofh.api.tileentity.ITileInfo;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -37,6 +38,6 @@ public interface IBlockInfo {
 	 * @param debug
 	 *            If true, the block should return "debug" information.
 	 */
-	void getBlockInfo(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player, List<String> info, boolean debug);
+	void getBlockInfo(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player, List<IChatComponent> info, boolean debug);
 
 }

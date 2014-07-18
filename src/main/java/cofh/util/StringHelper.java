@@ -23,6 +23,7 @@ public final class StringHelper {
 
 	}
 
+	/* KEY HELPERS */
 	public static boolean isAltKeyDown() {
 
 		return Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU);
@@ -38,6 +39,7 @@ public final class StringHelper {
 		return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
 	}
 
+	/* FORMAT HELPERS */
 	public static int getSplitStringHeight(FontRenderer fontRenderer, String input, int width) {
 
 		@SuppressWarnings("rawtypes")
@@ -65,10 +67,11 @@ public final class StringHelper {
 		return getFluidName(fluid.getFluid());
 	}
 
-	public static String getFluidName(FluidStack fluid, String def) {
+	public static String getFluidName(FluidStack fluid, String defaultName) {
 
-		if (fluid == null)
-			return def;
+		if (fluid == null) {
+			return defaultName;
+		}
 		return getFluidName(fluid.getFluid());
 	}
 
@@ -123,6 +126,7 @@ public final class StringHelper {
 		return numString;
 	}
 
+	/* ITEM TEXT HELPERS */
 	public static String getActivationText(String key) {
 
 		return BRIGHT_BLUE + ITALIC + localize(key) + END;
@@ -143,10 +147,41 @@ public final class StringHelper {
 		return WHITE + ITALIC + localize(key) + END;
 	}
 
-	public static String shiftForInfo() {
+	public static String shiftForDetails() {
 
-		return LIGHT_GRAY + localize("message.cofh.holdShift1") + " " + YELLOW + ITALIC + localize("message.cofh.holdShift2") + " " + END + LIGHT_GRAY
-				+ localize("message.cofh.holdShift3") + END;
+		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END + LIGHT_GRAY
+				+ localize("info.cofh.forDetails") + END;
+	}
+
+	/* TUTORIAL TAB HELPERS */
+	public static String tutorialTabAugment() {
+
+		return localize("info.cofh.tutorial.tabAugment");
+	}
+
+	public static String tutorialTabConfiguration() {
+
+		return localize("info.cofh.tutorial.tabConfiguration0");
+	}
+
+	public static String tutorialTabOperation() {
+
+		return localize("info.cofh.tutorial.tabConfiguration1");
+	}
+
+	public static String tutorialTabRedstone() {
+
+		return localize("info.cofh.tutorial.tabRedstone");
+	}
+
+	public static String tutorialTabSecurity() {
+
+		return localize("info.cofh.tutorial.tabSecurity");
+	}
+
+	public static String tutorialTabFluxRequired() {
+
+		return localize("info.cofh.tutorial.fluxRequired");
 	}
 
 	/** When formatting a string, always apply color before font modification. */

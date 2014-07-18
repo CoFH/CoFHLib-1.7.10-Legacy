@@ -1,7 +1,7 @@
-package cofh.api.core;
+package cofh.api.tileentity;
 
 /**
- * Implement this interface on Tile Entities which have access restrictions.
+ * Implement this interface on Tile Entities which can have access restrictions.
  * 
  * @author King Lemming
  * 
