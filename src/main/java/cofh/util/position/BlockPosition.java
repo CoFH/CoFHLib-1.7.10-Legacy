@@ -271,6 +271,11 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		return a;
 	}
 
+	public boolean blockExists(World world) {
+
+		return world.blockExists(x, y, z);
+	}
+
 	public TileEntity getTileEntity(World world) {
 
 		return world.getTileEntity(x, y, z);
@@ -287,10 +292,16 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		}
 	}
 
-	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection direction) {
+	public static boolean blockExists(TileEntity start, ForgeDirection dir) {
 
-		BlockPosition p = new BlockPosition(start).step(direction);
-		return start.getWorldObj().getTileEntity(p.x, p.y, p.z);
+		final int x = start.xCoord + dir.offsetX, y = start.yCoord + dir.offsetY, z = start.zCoord + dir.offsetZ;
+		return start.getWorldObj().blockExists(x, y, z);
+	}
+
+	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection dir) {
+
+		final int x = start.xCoord + dir.offsetX, y = start.yCoord + dir.offsetY, z = start.zCoord + dir.offsetZ;
+		return start.getWorldObj().getTileEntity(x, y, z);
 	}
 
 	@SuppressWarnings("unchecked")
