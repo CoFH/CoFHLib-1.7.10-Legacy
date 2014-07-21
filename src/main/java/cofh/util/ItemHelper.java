@@ -584,7 +584,7 @@ public final class ItemHelper {
 		if (one == null || !oreNameExists(four)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(one, "ff", "ff", 'f', four));
+		GameRegistry.addRecipe(new ShapedOreRecipe(one, "XX", "XX", 'X', four));
 		return true;
 	}
 
@@ -593,7 +593,7 @@ public final class ItemHelper {
 		if (one == null | four == null) {
 			return false;
 		}
-		GameRegistry.addRecipe(cloneStack(one), "ff", "ff", 'f', cloneStack(four, 1));
+		GameRegistry.addRecipe(cloneStack(one), "XX", "XX", 'X', cloneStack(four, 1));
 		return true;
 	}
 

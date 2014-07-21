@@ -129,12 +129,12 @@ public final class StringHelper {
 	/* ITEM TEXT HELPERS */
 	public static String getActivationText(String key) {
 
-		return BRIGHT_BLUE + ITALIC + localize(key) + END;
+		return BRIGHT_BLUE + localize(key) + END;
 	}
 
 	public static String getDeactivationText(String key) {
 
-		return YELLOW + ITALIC + localize(key) + END;
+		return YELLOW + localize(key) + END;
 	}
 
 	public static String getInfoText(String key) {
@@ -161,12 +161,12 @@ public final class StringHelper {
 
 	public static String tutorialTabConfiguration() {
 
-		return localize("info.cofh.tutorial.tabConfiguration0");
+		return localize("info.cofh.tutorial.tabConfiguration.0");
 	}
 
 	public static String tutorialTabOperation() {
 
-		return localize("info.cofh.tutorial.tabConfiguration1");
+		return localize("info.cofh.tutorial.tabConfiguration.1");
 	}
 
 	public static String tutorialTabRedstone() {
