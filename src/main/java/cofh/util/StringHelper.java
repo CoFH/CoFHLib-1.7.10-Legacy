@@ -62,20 +62,9 @@ public final class StringHelper {
 		return StatCollector.translateToLocal(key);
 	}
 
-	public static String getFluidName(FluidStack fluid) {
+	public static String getFluidName(FluidStack stack) {
 
-		return getFluidName(fluid.getFluid());
-	}
-
-	public static String getFluidName(FluidStack fluid, String defaultName) {
-
-		if (fluid == null) {
-			return defaultName;
-		}
-		return getFluidName(fluid.getFluid());
-	}
-
-	public static String getFluidName(Fluid fluid) {
+		Fluid fluid = stack.getFluid();
 
 		String name = "" + END;
 		if (fluid.getRarity() == EnumRarity.uncommon) {
@@ -85,38 +74,48 @@ public final class StringHelper {
 		} else if (fluid.getRarity() == EnumRarity.epic) {
 			name += PINK;
 		}
-		name += fluid.getLocalizedName() + END;
+		name += fluid.getLocalizedName(stack) + END;
 
 		return name;
 	}
 
-	public static String getItemName(ItemStack item) {
+	public static String getFluidName(FluidStack stack, String defaultName) {
+
+		if (stack == null) {
+			return defaultName;
+		}
+		return getFluidName(stack);
+	}
+
+	public static String getItemName(ItemStack stack) {
 
 		String name = "" + END;
-		if (item.getRarity() == EnumRarity.uncommon) {
+		if (stack.getRarity() == EnumRarity.uncommon) {
 			name += YELLOW;
-		} else if (item.getRarity() == EnumRarity.rare) {
+		} else if (stack.getRarity() == EnumRarity.rare) {
 			name += BRIGHT_BLUE;
-		} else if (item.getRarity() == EnumRarity.epic) {
+		} else if (stack.getRarity() == EnumRarity.epic) {
 			name += PINK;
 		}
-		name += item.getDisplayName() + END;
+		name += stack.getDisplayName() + END;
 
 		return name;
 	}
 
-	public static String getScaledNumber(int number) {
+	public static String getScaledNumber(long number) {
 
 		return getScaledNumber(number, 2);
 	}
 
-	public static String getScaledNumber(int number, int minDigits) {
+	public static String getScaledNumber(long number, int minDigits) {
 
 		String numString = "";
 
-		int numMod = 10 * minDigits;
+		int numMod = 10 ^ minDigits;
 
-		if (number > 100000 * numMod) {
+		if (number > 100000000 * numMod) {
+			numString += number / 1000000000 + "G";
+		} else if (number > 100000 * numMod) {
 			numString += number / 1000000 + "M";
 		} else if (number > 100 * numMod) {
 			numString += number / 1000 + "k";

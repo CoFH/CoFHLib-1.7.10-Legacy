@@ -2,7 +2,7 @@ package cofh.api.transport;
 
 interface IEnderAttuned {
 
-	public String getOwnerString();
+	public String getChannelString();
 
 	public int getFrequency();
 

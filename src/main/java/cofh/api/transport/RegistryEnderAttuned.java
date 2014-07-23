@@ -39,75 +39,75 @@ public final class RegistryEnderAttuned {
 
 	public static List<IEnderItemHandler> getLinkedItemInputs(IEnderItemHandler theAttuned) {
 
-		if (inputItem.get(theAttuned.getOwnerString()) == null) {
+		if (inputItem.get(theAttuned.getChannelString()) == null) {
 			return null;
 		}
-		return inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency());
 	}
 
 	public static List<IEnderItemHandler> getLinkedItemOutputs(IEnderItemHandler theAttuned) {
 
-		if (outputItem.get(theAttuned.getOwnerString()) == null) {
+		if (outputItem.get(theAttuned.getChannelString()) == null) {
 			return null;
 		}
-		return outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency());
 	}
 
 	public static List<IEnderFluidHandler> getLinkedFluidInputs(IEnderFluidHandler theAttuned) {
 
-		if (inputFluid.get(theAttuned.getOwnerString()) == null) {
+		if (inputFluid.get(theAttuned.getChannelString()) == null) {
 			return null;
 		}
-		return inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency());
 	}
 
 	public static List<IEnderFluidHandler> getLinkedFluidOutputs(IEnderFluidHandler theAttuned) {
 
-		if (outputFluid.get(theAttuned.getOwnerString()) == null) {
+		if (outputFluid.get(theAttuned.getChannelString()) == null) {
 			return null;
 		}
-		return outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency());
 	}
 
 	public static List<IEnderEnergyHandler> getLinkedEnergyInputs(IEnderEnergyHandler theAttuned) {
 
-		if (inputEnergy.get(theAttuned.getOwnerString()) == null) {
+		if (inputEnergy.get(theAttuned.getChannelString()) == null) {
 			return null;
 		}
-		return inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency());
 	}
 
 	public static List<IEnderEnergyHandler> getLinkedEnergyOutputs(IEnderEnergyHandler theAttuned) {
 
-		if (outputEnergy.get(theAttuned.getOwnerString()) == null) {
+		if (outputEnergy.get(theAttuned.getChannelString()) == null) {
 			return null;
 		}
-		return outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency());
 	}
 
 	/* HELPER FUNCTIONS */
 	public static void addItemHandler(IEnderItemHandler theAttuned) {
 
 		if (theAttuned.canSendItems()) {
-			if (inputItem.get(theAttuned.getOwnerString()) == null) {
-				inputItem.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderItemHandler>>());
+			if (inputItem.get(theAttuned.getChannelString()) == null) {
+				inputItem.put(theAttuned.getChannelString(), new HashMap<Integer, List<IEnderItemHandler>>());
 			}
-			if (inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				inputItem.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderItemHandler>());
+			if (inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) == null) {
+				inputItem.get(theAttuned.getChannelString()).put(theAttuned.getFrequency(), new ArrayList<IEnderItemHandler>());
 			}
-			if (!inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 		if (theAttuned.canReceiveItems()) {
-			if (outputItem.get(theAttuned.getOwnerString()) == null) {
-				outputItem.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderItemHandler>>());
+			if (outputItem.get(theAttuned.getChannelString()) == null) {
+				outputItem.put(theAttuned.getChannelString(), new HashMap<Integer, List<IEnderItemHandler>>());
 			}
-			if (outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				outputItem.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderItemHandler>());
+			if (outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) == null) {
+				outputItem.get(theAttuned.getChannelString()).put(theAttuned.getFrequency(), new ArrayList<IEnderItemHandler>());
 			}
-			if (!outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 	}
@@ -115,25 +115,25 @@ public final class RegistryEnderAttuned {
 	public static void addFluidHandler(IEnderFluidHandler theAttuned) {
 
 		if (theAttuned.canSendFluid()) {
-			if (inputFluid.get(theAttuned.getOwnerString()) == null) {
-				inputFluid.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderFluidHandler>>());
+			if (inputFluid.get(theAttuned.getChannelString()) == null) {
+				inputFluid.put(theAttuned.getChannelString(), new HashMap<Integer, List<IEnderFluidHandler>>());
 			}
-			if (inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				inputFluid.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderFluidHandler>());
+			if (inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) == null) {
+				inputFluid.get(theAttuned.getChannelString()).put(theAttuned.getFrequency(), new ArrayList<IEnderFluidHandler>());
 			}
-			if (!inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 		if (theAttuned.canReceiveFluid()) {
-			if (outputFluid.get(theAttuned.getOwnerString()) == null) {
-				outputFluid.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderFluidHandler>>());
+			if (outputFluid.get(theAttuned.getChannelString()) == null) {
+				outputFluid.put(theAttuned.getChannelString(), new HashMap<Integer, List<IEnderFluidHandler>>());
 			}
-			if (outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				outputFluid.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderFluidHandler>());
+			if (outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) == null) {
+				outputFluid.get(theAttuned.getChannelString()).put(theAttuned.getFrequency(), new ArrayList<IEnderFluidHandler>());
 			}
-			if (!outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 	}
@@ -141,44 +141,44 @@ public final class RegistryEnderAttuned {
 	public static void addEnergyHandler(IEnderEnergyHandler theAttuned) {
 
 		if (theAttuned.canSendEnergy()) {
-			if (inputEnergy.get(theAttuned.getOwnerString()) == null) {
-				inputEnergy.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderEnergyHandler>>());
+			if (inputEnergy.get(theAttuned.getChannelString()) == null) {
+				inputEnergy.put(theAttuned.getChannelString(), new HashMap<Integer, List<IEnderEnergyHandler>>());
 			}
-			if (inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				inputEnergy.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderEnergyHandler>());
+			if (inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) == null) {
+				inputEnergy.get(theAttuned.getChannelString()).put(theAttuned.getFrequency(), new ArrayList<IEnderEnergyHandler>());
 			}
-			if (!inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 		if (theAttuned.canReceiveEnergy()) {
-			if (outputEnergy.get(theAttuned.getOwnerString()) == null) {
-				outputEnergy.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderEnergyHandler>>());
+			if (outputEnergy.get(theAttuned.getChannelString()) == null) {
+				outputEnergy.put(theAttuned.getChannelString(), new HashMap<Integer, List<IEnderEnergyHandler>>());
 			}
-			if (outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				outputEnergy.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderEnergyHandler>());
+			if (outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) == null) {
+				outputEnergy.get(theAttuned.getChannelString()).put(theAttuned.getFrequency(), new ArrayList<IEnderEnergyHandler>());
 			}
-			if (!outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 	}
 
 	public static void removeItemHandler(IEnderItemHandler theAttuned) {
 
-		if (inputItem.get(theAttuned.getOwnerString()) != null) {
-			if (inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					inputItem.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (inputItem.get(theAttuned.getChannelString()) != null) {
+			if (inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) != null) {
+				inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (inputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).size() == 0) {
+					inputItem.get(theAttuned.getChannelString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
-		if (outputItem.get(theAttuned.getOwnerString()) != null) {
-			if (outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					outputItem.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (outputItem.get(theAttuned.getChannelString()) != null) {
+			if (outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) != null) {
+				outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (outputItem.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).size() == 0) {
+					outputItem.get(theAttuned.getChannelString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
@@ -186,19 +186,19 @@ public final class RegistryEnderAttuned {
 
 	public static void removeFluidHandler(IEnderFluidHandler theAttuned) {
 
-		if (inputFluid.get(theAttuned.getOwnerString()) != null) {
-			if (inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					inputFluid.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (inputFluid.get(theAttuned.getChannelString()) != null) {
+			if (inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) != null) {
+				inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (inputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).size() == 0) {
+					inputFluid.get(theAttuned.getChannelString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
-		if (outputFluid.get(theAttuned.getOwnerString()) != null) {
-			if (outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					outputFluid.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (outputFluid.get(theAttuned.getChannelString()) != null) {
+			if (outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) != null) {
+				outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (outputFluid.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).size() == 0) {
+					outputFluid.get(theAttuned.getChannelString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
@@ -206,19 +206,19 @@ public final class RegistryEnderAttuned {
 
 	public static void removeEnergyHandler(IEnderEnergyHandler theAttuned) {
 
-		if (inputEnergy.get(theAttuned.getOwnerString()) != null) {
-			if (inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					inputEnergy.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (inputEnergy.get(theAttuned.getChannelString()) != null) {
+			if (inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) != null) {
+				inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (inputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).size() == 0) {
+					inputEnergy.get(theAttuned.getChannelString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
-		if (outputEnergy.get(theAttuned.getOwnerString()) != null) {
-			if (outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					outputEnergy.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (outputEnergy.get(theAttuned.getChannelString()) != null) {
+			if (outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()) != null) {
+				outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (outputEnergy.get(theAttuned.getChannelString()).get(theAttuned.getFrequency()).size() == 0) {
+					outputEnergy.get(theAttuned.getChannelString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}

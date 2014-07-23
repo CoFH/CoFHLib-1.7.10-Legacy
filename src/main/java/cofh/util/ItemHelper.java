@@ -131,7 +131,7 @@ public final class ItemHelper {
 
 		nbt.setShort("id", (short) Item.getIdFromItem(stack.getItem()));
 		nbt.setInteger("Count", stack.stackSize);
-		nbt.setShort("Damage", (short) stack.getItemDamage());
+		nbt.setShort("Damage", (short) getItemDamage(stack));
 
 		if (stack.stackTagCompound != null) {
 			nbt.setTag("tag", stack.stackTagCompound);
@@ -143,7 +143,7 @@ public final class ItemHelper {
 
 		nbt.setShort("id", (short) Item.getIdFromItem(stack.getItem()));
 		nbt.setInteger("Count", amount);
-		nbt.setShort("Damage", (short) stack.getItemDamage());
+		nbt.setShort("Damage", (short) getItemDamage(stack));
 
 		if (stack.stackTagCompound != null) {
 			nbt.setTag("tag", stack.stackTagCompound);

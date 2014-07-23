@@ -1,5 +1,6 @@
 package cofh.render;
 
+import cofh.util.ItemHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -47,19 +48,19 @@ public class RenderFluidOverlayItem implements IItemRenderer {
 	}
 
 	@Override
-	public void renderItem(ItemRenderType type, ItemStack itemstack, Object... data) {
+	public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
 
-		Item item = itemstack.getItem();
+		Item item = stack.getItem();
 		FluidStack fluid = null;
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem fluidItem = (IFluidContainerItem) item;
-			fluid = fluidItem.getFluid(itemstack);
+			fluid = fluidItem.getFluid(stack);
 		} else if (item instanceof IFluidOverlayItem) {
-			if (item.getRenderPasses(itemstack.getItemDamage()) == 2) {
-				fluid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
+			if (item.getRenderPasses(ItemHelper.getItemDamage(stack)) == 2) {
+				fluid = FluidContainerRegistry.getFluidForFilledItem(stack);
 			}
 		}
-		doRenderItem(type, itemstack, item, fluid);
+		doRenderItem(type, stack, item, fluid);
 	}
 
 	protected void doRenderItem(ItemRenderType type, ItemStack item, Item iconItem, FluidStack fluid) {

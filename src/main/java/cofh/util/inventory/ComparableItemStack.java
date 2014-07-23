@@ -24,7 +24,7 @@ public class ComparableItemStack {
 
 		if (stack != null) {
 			item = stack.getItem();
-			metadata = stack.getItemDamage();
+			metadata = ItemHelper.getItemDamage(stack);
 			stackSize = stack.stackSize;
 			oreID = ItemHelper.oreProxy.getOreID(stack);
 		}
@@ -51,7 +51,7 @@ public class ComparableItemStack {
 		if (ItemHelper.oreNameExists(oreName)) {
 			ItemStack stack = ItemHelper.oreProxy.getOre(oreName);
 			item = stack.getItem();
-			metadata = stack.getItemDamage();
+			metadata = ItemHelper.getItemDamage(stack);
 			stackSize = 1;
 			oreID = ItemHelper.oreProxy.getOreID(stack);
 		}
@@ -61,7 +61,7 @@ public class ComparableItemStack {
 
 		if (stack != null) {
 			item = stack.getItem();
-			metadata = stack.getItemDamage();
+			metadata = ItemHelper.getItemDamage(stack);
 			stackSize = stack.stackSize;
 			oreID = ItemHelper.oreProxy.getOreID(stack);
 		} else {
