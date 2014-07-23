@@ -105,6 +105,19 @@ public class SoundBase implements ISound {
 		this.repeatDelay = repeatDelay;
 	}
 
+	public SoundBase(SoundBase other) {
+
+		this.attenuation = other.attenuation;
+		this.sound = other.sound;
+		this.volume = other.volume;
+		this.pitch = other.pitch;
+		this.x = other.x;
+		this.y = other.y;
+		this.z = other.z;
+		this.repeat = other.repeat;
+		this.repeatDelay = other.repeatDelay;
+	}
+
 	@Override
 	public AttenuationType getAttenuationType() {
 

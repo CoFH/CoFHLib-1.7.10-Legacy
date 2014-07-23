@@ -146,6 +146,18 @@ public final class StringHelper {
 		return WHITE + ITALIC + localize(key) + END;
 	}
 
+	public static String getRarity(int level) {
+
+		switch (level) {
+		case 2:
+			return StringHelper.YELLOW;
+		case 3:
+			return StringHelper.BRIGHT_BLUE;
+		default:
+			return StringHelper.LIGHT_GRAY;
+		}
+	}
+
 	public static String shiftForDetails() {
 
 		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END + LIGHT_GRAY
