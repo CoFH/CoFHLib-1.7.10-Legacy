@@ -1,5 +1,7 @@
 package cofh.util;
 
+import cofh.api.item.IAugmentItem;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -47,6 +49,11 @@ public class AugmentHelper {
 			}
 		}
 		stack.stackTagCompound.setTag("Augments", list);
+	}
+
+	public static boolean isAugmentItem(ItemStack stack) {
+
+		return stack != null && stack.getItem() instanceof IAugmentItem;
 	}
 
 }

@@ -56,22 +56,12 @@ public class ContainerInventoryItem extends Container {
 			ItemStack stackInSlot = slot.getStack();
 			stack = stackInSlot.copy();
 
-			if (slotIndex >= invFull) {
-				if (!this.mergeItemStack(stackInSlot, 0, invFull, true)) {
+			if (slotIndex < invFull) {
+				if (!this.mergeItemStack(stackInSlot, invFull, invTile, false)) {
 					return null;
 				}
-			} else {
-				if (!this.mergeItemStack(stackInSlot, invFull, invTile, true)) {
-					if (slotIndex >= invPlayer) {
-						if (!this.mergeItemStack(stackInSlot, 0, invPlayer, true)) {
-							return null;
-						}
-					} else {
-						if (!this.mergeItemStack(stackInSlot, invPlayer, invFull, false)) {
-							return null;
-						}
-					}
-				}
+			} else if (!this.mergeItemStack(stackInSlot, 0, invFull, true)) {
+				return null;
 			}
 			if (stackInSlot.stackSize <= 0) {
 				slot.putStack((ItemStack) null);
@@ -81,7 +71,6 @@ public class ContainerInventoryItem extends Container {
 			if (stackInSlot.stackSize == stack.stackSize) {
 				return null;
 			}
-			slot.onPickupFromSlot(player, stackInSlot);
 		}
 		return stack;
 	}
@@ -93,16 +82,16 @@ public class ContainerInventoryItem extends Container {
 	}
 
 	@Override
-	protected boolean mergeItemStack(ItemStack stack, int slotMin, int slotMax, boolean reverse) {
+	protected boolean mergeItemStack(ItemStack stack, int slotMin, int slotMax, boolean ascending) {
 
 		boolean slotFound = false;
-		int k = reverse ? slotMax - 1 : slotMin;
+		int k = ascending ? slotMax - 1 : slotMin;
 
 		Slot slot;
 		ItemStack stackInSlot;
 
 		if (stack.isStackable()) {
-			while (stack.stackSize > 0 && (!reverse && k < slotMax || reverse && k >= slotMin)) {
+			while (stack.stackSize > 0 && (!ascending && k < slotMax || ascending && k >= slotMin)) {
 				slot = (Slot) this.inventorySlots.get(k);
 				stackInSlot = slot.getStack();
 
@@ -122,13 +111,13 @@ public class ContainerInventoryItem extends Container {
 						slotFound = true;
 					}
 				}
-				k += reverse ? -1 : 1;
+				k += ascending ? -1 : 1;
 			}
 		}
 		if (stack.stackSize > 0) {
-			k = reverse ? slotMax - 1 : slotMin;
+			k = ascending ? slotMax - 1 : slotMin;
 
-			while (!reverse && k < slotMax || reverse && k >= slotMin) {
+			while (!ascending && k < slotMax || ascending && k >= slotMin) {
 				slot = (Slot) this.inventorySlots.get(k);
 				stackInSlot = slot.getStack();
 
@@ -142,7 +131,7 @@ public class ContainerInventoryItem extends Container {
 					}
 					break;
 				}
-				k += reverse ? -1 : 1;
+				k += ascending ? -1 : 1;
 			}
 		}
 		return slotFound;

@@ -11,6 +11,11 @@ import net.minecraft.inventory.Slot;
 public interface IAugmentableContainer {
 
 	/**
+	 * Used by a tab to set lock status so that new Augments cannot be added (there may be many reasons for this).
+	 */
+	void setAugmentLock(boolean lock);
+
+	/**
 	 * Returns the Augment slots.
 	 */
 	Slot[] getAugmentSlots();

@@ -24,6 +24,7 @@ public abstract class TabBase extends ElementBase {
 	public static int RIGHT = 1;
 
 	public boolean open;
+	public boolean fullyOpen;
 	public int side = RIGHT;
 
 	public int headerColor = 0xe1c92f;
@@ -108,7 +109,7 @@ public abstract class TabBase extends ElementBase {
 		} else if (currentHeight < minHeight) {
 			currentHeight = minHeight;
 		}
-		if (open && currentWidth == maxWidth && currentHeight == maxHeight) {
+		if (!fullyOpen && open && currentWidth == maxWidth && currentHeight == maxHeight) {
 			setFullyOpen();
 		}
 	}
@@ -176,7 +177,7 @@ public abstract class TabBase extends ElementBase {
 
 	public boolean isFullyOpened() {
 
-		return currentWidth >= maxWidth;
+		return fullyOpen;
 	}
 
 	public void setFullyOpen() {
@@ -184,6 +185,7 @@ public abstract class TabBase extends ElementBase {
 		open = true;
 		currentWidth = maxWidth;
 		currentHeight = maxHeight;
+		fullyOpen = true;
 	}
 
 	public void toggleOpen() {
@@ -195,6 +197,7 @@ public abstract class TabBase extends ElementBase {
 			} else {
 				TabTracker.setOpenedRightTab(null);
 			}
+			fullyOpen = false;
 		} else {
 			open = true;
 			if (side == LEFT) {

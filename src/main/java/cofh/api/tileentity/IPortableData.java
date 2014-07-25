@@ -14,11 +14,12 @@ import net.minecraft.nbt.NBTTagCompound;
 public interface IPortableData {
 
 	/**
-	 * Name of the Tile Entity/Block. Used for display as well as verification purposes.
+	 * Data identifier of the Tile Entity/Block. Used for display as well as verification purposes. Tiles with completely interchangeable data should return the
+	 * same type.
 	 * 
 	 * @return
 	 */
-	String getName();
+	String getDataType();
 
 	/**
 	 * Read the data from a tag. The player object exists because this should always be called via player interaction!
