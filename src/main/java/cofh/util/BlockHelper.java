@@ -240,6 +240,11 @@ public final class BlockHelper {
 		return new int[] { x + SIDE_COORD_MOD[side][0], y + SIDE_COORD_MOD[side][1], z + SIDE_COORD_MOD[side][2] };
 	}
 
+	public static AxisAlignedBB getAdjacentAABBForSide(MovingObjectPosition pos) {
+
+		return getAdjacentAABBForSide(pos.blockX, pos.blockY, pos.blockZ, pos.sideHit);
+	}
+
 	public static AxisAlignedBB getAdjacentAABBForSide(int x, int y, int z, int side) {
 
 		return AxisAlignedBB.getBoundingBox(x + SIDE_COORD_MOD[side][0], y + SIDE_COORD_MOD[side][1], z + SIDE_COORD_MOD[side][2],
@@ -272,7 +277,6 @@ public final class BlockHelper {
 	}
 
 	/* BLOCK ROTATION */
-
 	public static boolean canRotate(Block block) {
 
 		return rotateType[Block.getIdFromBlock(block)] != 0;
