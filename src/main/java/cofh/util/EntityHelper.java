@@ -78,7 +78,8 @@ public class EntityHelper {
 		WorldServer worldserver = manager.getServerInstance().worldServerForDimension(player.dimension);
 		player.dimension = dimension;
 		WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(player.dimension);
-		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.difficultySetting, player.worldObj.getWorldInfo().getTerrainType(), player.theItemInWorldManager.getGameType()));
+		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.difficultySetting, player.worldObj.getWorldInfo()
+				.getTerrainType(), player.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(player);
 		player.isDead = false;
 		transferEntityToWorld(player, worldserver, worldserver1);

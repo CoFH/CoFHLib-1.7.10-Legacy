@@ -3,7 +3,6 @@ package cofh.util;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -24,34 +23,40 @@ import net.minecraftforge.event.world.WorldEvent;
 public class RegistryUtils {
 
 	private RegistryUtils() {
+
 	}
+
 	private static class Repl {
 
 		private static IdentityHashMap<RegistryNamespaced, Multimap<String, Object>> replacements;
+
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private static void overwrite_do(RegistryNamespaced registry, String name, Object object, Object oldThing) {
-			
+
 			int id = registry.getIDForObject(oldThing);
 			BiMap map = ((BiMap) registry.registryObjects);
 			registry.underlyingIntegerMap.func_148746_a(object, id);
 			map.remove(name);
 			map.forcePut(name, object);
 		}
+
 		static {
 
 			replacements = new IdentityHashMap<RegistryNamespaced, Multimap<String, Object>>(2);
 			MinecraftForge.EVENT_BUS.register(new RegistryUtils());
 		}
 	}
-	@SubscribeEvent(priority=EventPriority.HIGHEST)
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void _(WorldEvent.Load event) {
 
-		if (Repl.replacements.size() < 1)
+		if (Repl.replacements.size() < 1) {
 			return;
+		}
 		for (Map.Entry<RegistryNamespaced, Multimap<String, Object>> entry : Repl.replacements.entrySet()) {
 			RegistryNamespaced reg = entry.getKey();
 			Multimap<String, Object> map = entry.getValue();
-			List<Object> c = (List<Object>)map.get(map.keySet().iterator().next());
+			List<Object> c = (List<Object>) map.get(map.keySet().iterator().next());
 			if (reg.getIDForObject(c.get(0)) != reg.getIDForObject(c.get(c.size() - 1))) {
 				for (Map.Entry<String, Object> e : map.entries()) {
 					Repl.overwrite_do(reg, e.getKey(), e.getValue(), reg.getObject(e.getKey()));
