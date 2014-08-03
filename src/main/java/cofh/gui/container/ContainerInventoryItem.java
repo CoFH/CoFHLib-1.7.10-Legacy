@@ -81,6 +81,9 @@ public class ContainerInventoryItem extends Container {
 	@Override
 	public ItemStack slotClick(int slotIndex, int p_75144_2_, int p_75144_3_, EntityPlayer player) {
 
+		if (p_75144_3_ == 2 && p_75144_2_ == containerIndex) {
+			return null;
+		}
 		ItemStack stack = null;
 		InventoryPlayer inventoryPlayer = player.inventory;
 		int i1;
