@@ -127,6 +127,44 @@ public final class BlockHelper {
 		rotateType[Block.getIdFromBlock(Blocks.jungle_stairs)] = RotationType.STAIRS;
 		rotateType[Block.getIdFromBlock(Blocks.quartz_stairs)] = RotationType.STAIRS;
 	}
+	
+	public static int getHighestY(World world, int x, int z) {
+		
+		return world.getChunkFromBlockCoords(x, z).getTopFilledSegment() + 16;
+	}
+	
+	public static int getSurfaceBlockY(World world, int x, int z) {
+
+		int y = world.getChunkFromBlockCoords(x, z).getTopFilledSegment() + 16;
+
+		Block block;
+		do {
+			if (--y <= 0)
+			{
+				break;
+			}
+			block = world.getBlock(x, y, z);
+		} while (block.isAir(world, x, y, z) ||
+				block.isLeaves(world, x, y, z) ||
+				block.isReplaceable(world, x, y, z) ||
+				block.canBeReplacedByLeaves(world, x, y, z));
+		return y;
+	}
+	
+	public static int getTopBlockY(World world, int x, int z) {
+
+		int y = world.getChunkFromBlockCoords(x, z).getTopFilledSegment() + 16;
+
+		Block block;
+		do {
+			if (--y <= 0)
+			{
+				break;
+			}
+			block = world.getBlock(x, y, z);
+		} while (block.isAir(world, x, y, z));
+		return y;
+	}
 
 	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, double distance) {
 
