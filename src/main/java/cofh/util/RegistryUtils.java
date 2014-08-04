@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import java.awt.image.BufferedImage;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
@@ -56,10 +57,18 @@ public class RegistryUtils {
 		for (Map.Entry<RegistryNamespaced, Multimap<String, Object>> entry : Repl.replacements.entrySet()) {
 			RegistryNamespaced reg = entry.getKey();
 			Multimap<String, Object> map = entry.getValue();
-			List<Object> c = (List<Object>) map.get(map.keySet().iterator().next());
-			if (reg.getIDForObject(c.get(0)) != reg.getIDForObject(c.get(c.size() - 1))) {
-				for (Map.Entry<String, Object> e : map.entries()) {
-					Repl.overwrite_do(reg, e.getKey(), e.getValue(), reg.getObject(e.getKey()));
+			Iterator<String> v = map.keySet().iterator();
+			while (v.hasNext()) {
+				String id = v.next();
+				List<Object> c = (List<Object>) map.get(id);
+				int i = 0, e = c.size() - 1;
+				Object end = c.get(e);
+				if (reg.getIDForObject(c.get(0)) != reg.getIDForObject(end)) {
+					for (; i <= e; ++i) {
+						Object t = c.get(i);
+						Repl.overwrite_do(reg, id, t, reg.getObject(id));
+						// TODO: waiting on forge to update fml to use delegates
+					}
 				}
 			}
 		}
