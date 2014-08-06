@@ -1,9 +1,12 @@
 package cofh.util;
 
+import java.util.List;
+
 import cofh.api.transport.IItemDuct;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -83,7 +86,7 @@ public class InventoryHelper {
 
 	// IInventoryHandler is not currently implemented or used. Possibly in the future.
 
-	/* IIInventory Interaction */
+	/* IInventory Interaction */
 	public static ItemStack extractItemStackFromInventory(IInventory inventory, int side) {
 
 		ItemStack retStack = null;
@@ -239,6 +242,72 @@ public class InventoryHelper {
 			return stack;
 		}
 		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+	}
+
+	public static boolean mergeItemStack(List<Slot> slots, ItemStack stack, int start, int length, boolean reverse) {
+
+		return mergeItemStack(slots, stack, start, length, reverse, true);
+	}
+
+	public static boolean mergeItemStack(List<Slot> slots, ItemStack stack, int start, int length, boolean r, boolean limit) {
+
+		boolean successful = false;
+		int i = !r ? start : length - 1;
+		int iterOrder = !r ? 1 : -1;
+
+		Slot slot;
+		ItemStack existingStack;
+
+		if (stack.isStackable()) {
+			while (stack.stackSize > 0 && (!r && i < length || r && i >= start)) {
+				slot = slots.get(i);
+				existingStack = slot.getStack();
+
+				if (slot.isItemValid(stack) && existingStack != null &&
+						existingStack.getItem().equals(stack.getItem()) &&
+						(!stack.getHasSubtypes() ||
+								stack.getItemDamage() == existingStack.getItemDamage()) &&
+								ItemStack.areItemStackTagsEqual(stack, existingStack)) {
+					int existingSize = existingStack.stackSize + stack.stackSize;
+					int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+
+					if (existingSize <= maxStack) {
+						stack.stackSize = 0;
+						existingStack.stackSize = existingSize;
+						slot.onSlotChanged();
+						successful = true;
+					} else if (existingStack.stackSize < maxStack) {
+						stack.stackSize -= maxStack - existingStack.stackSize;
+						existingStack.stackSize = maxStack;
+						slot.onSlotChanged();
+						successful = true;
+					}
+				}
+
+				i += iterOrder;
+			}
+		}
+
+		if (stack.stackSize > 0) {
+			i = r ? start : length - 1;
+
+			while (stack.stackSize > 0 && (!r && i < length || r && i >= start)) {
+				slot = slots.get(i);
+				existingStack = slot.getStack();
+
+				if (slot.isItemValid(stack) && existingStack == null) {
+					int maxStack = limit ? Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit()) : slot.getSlotStackLimit();
+					existingStack = stack.splitStack(Math.min(stack.stackSize, maxStack));
+					slot.putStack(existingStack);
+					slot.onSlotChanged();
+					successful = true;
+				}
+
+				i += iterOrder;
+			}
+		}
+
+		return successful;
 	}
 
 	/* HELPERS */
