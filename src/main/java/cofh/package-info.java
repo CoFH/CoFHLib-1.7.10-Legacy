@@ -5,6 +5,6 @@
 @API(apiVersion = CoFHLibProps.VERSION, owner = "CoFHCore", provides = "CoFHLib")
 package cofh;
 
-import cofh.core.CoFHLibProps;
+import cofh.lib.CoFHLibProps;
 import cpw.mods.fml.common.API;
 
