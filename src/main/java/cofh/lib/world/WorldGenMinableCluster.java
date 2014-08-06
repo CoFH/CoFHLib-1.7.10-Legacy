@@ -99,7 +99,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 								double d14 = (i3 + 0.5D - d8) / (d10 / 2.0D);
 								Block block = world.getBlock(k2, l2, i3);
 
-								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && block != null && block.isReplaceableOreGen(world, k2, l2, i3, genBlock)) {
+								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && block.isReplaceableOreGen(world, k2, l2, i3, genBlock)) {
 									WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
 									world.setBlock(k2, l2, i3, ore.block, ore.metadata, 2);
 								}
@@ -115,11 +115,14 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	public boolean generateTiny(World world, Random random, int x, int y, int z) {
 
 		for (int i = 0; i < genClusterSize; i++) {
-			Block block = world.getBlock(x + random.nextInt(2), y + random.nextInt(2), z + random.nextInt(2));
+			int d0 = x + random.nextInt(2);
+			int d1 = y + random.nextInt(2);
+			int d2 = z + random.nextInt(2);
+			Block block = world.getBlock(d0, d1, d2);
 
-			if (block != null && block.isReplaceableOreGen(world, x, y, z, genBlock)) {
+			if (block.isReplaceableOreGen(world, d0, d1, d2, genBlock)) {
 				WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
-				world.setBlock(x, y, z, ore.block, ore.metadata, 2);
+				world.setBlock(d0, d1, d2, ore.block, ore.metadata, 2);
 			}
 		}
 		return true;
