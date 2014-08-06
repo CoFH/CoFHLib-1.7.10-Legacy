@@ -287,7 +287,7 @@ public class InventoryHelper {
 		}
 
 		if (stack.stackSize > 0) {
-			i = r ? start : length - 1;
+			i = !r ? start : length - 1;
 
 			while (stack.stackSize > 0 && (!r && i < length || r && i >= start)) {
 				slot = slots.get(i);
