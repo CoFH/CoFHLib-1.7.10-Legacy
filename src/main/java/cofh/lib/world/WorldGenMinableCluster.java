@@ -23,9 +23,16 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		return list;
 	}
 
+	public static final List<Block> fabricateList(Block resource) {
+
+		List<Block> list = new ArrayList<Block>();
+		list.add(resource);
+		return list;
+	}
+
 	private final List<WeightedRandomBlock> cluster;
 	private final int genClusterSize;
-	private final Block genBlock;
+	private final Block[] genBlock;
 
 	public WorldGenMinableCluster(ItemStack ore, int clusterSize) {
 
@@ -54,9 +61,14 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, Block block) {
 
+		this(resource, clusterSize, fabricateList(block));
+	}
+
+	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<Block> block) {
+
 		cluster = resource;
 		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
-		genBlock = block;
+		genBlock = block.toArray(new Block[block.size()]);
 	}
 
 	@Override
@@ -99,9 +111,16 @@ public class WorldGenMinableCluster extends WorldGenerator {
 								double d14 = (i3 + 0.5D - d8) / (d10 / 2.0D);
 								Block block = world.getBlock(k2, l2, i3);
 
-								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && block.isReplaceableOreGen(world, k2, l2, i3, genBlock)) {
-									WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
-									world.setBlock(k2, l2, i3, ore.block, ore.metadata, 2);
+								if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D) {
+
+									l: for (int j = 0, e = genBlock.length; j < e; ++j) {
+										Block genBlock = this.genBlock[j];
+										if (block.isReplaceableOreGen(world, k2, l2, i3, genBlock)) {
+											WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
+											world.setBlock(k2, l2, i3, ore.block, ore.metadata, 2);
+											break l;
+										}
+									}
 								}
 							}
 						}
@@ -120,9 +139,13 @@ public class WorldGenMinableCluster extends WorldGenerator {
 			int d2 = z + random.nextInt(2);
 			Block block = world.getBlock(d0, d1, d2);
 
-			if (block.isReplaceableOreGen(world, d0, d1, d2, genBlock)) {
-				WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
-				world.setBlock(d0, d1, d2, ore.block, ore.metadata, 2);
+			l: for (int j = 0, e = genBlock.length; j < e; ++j) {
+				Block genBlock = this.genBlock[j];
+				if (block.isReplaceableOreGen(world, d0, d1, d2, genBlock)) {
+					WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
+					world.setBlock(d0, d1, d2, ore.block, ore.metadata, 2);
+					break l;
+				}
 			}
 		}
 		return true;

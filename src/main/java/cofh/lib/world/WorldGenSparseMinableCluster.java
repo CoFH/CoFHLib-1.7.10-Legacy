@@ -18,8 +18,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
-	private final int genCusterSize;
-	private final Block genBlock;
+	private final int genClusterSize;
+	private final Block[] genBlock;
 
 	public WorldGenSparseMinableCluster(ItemStack ore, int clusterSize) {
 
@@ -48,15 +48,20 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, Block block) {
 
+		this(resource, clusterSize, fabricateList(block));
+	}
+
+	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<Block> block) {
+
 		cluster = resource;
-		genCusterSize = clusterSize > 32 ? 32 : clusterSize;
-		genBlock = block;
+		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
+		genBlock = block.toArray(new Block[block.size()]);
 	}
 
 	@Override
 	public boolean generate(World world, Random rand, int chunkX, int y, int chunkZ) {
 
-		int blocks = genCusterSize;
+		int blocks = genClusterSize;
 		float f = rand.nextFloat() * (float)Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
 		float yMin = (y + rand.nextInt(3)) - 2;
@@ -114,9 +119,13 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 						if (zDistSq + xyDistSq >= 1f) continue;
 
 						Block block = world.getBlock(blockX, blockY, blockZ);
-						if (block.isReplaceableOreGen(world, blockX, blockY, blockZ, genBlock)) {
-							WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
-							world.setBlock(blockX, blockY, blockZ, ore.block, ore.metadata, 2);
+						l: for (int j = 0, e = genBlock.length; j < e; ++j) {
+							Block genBlock = this.genBlock[j];
+							if (block.isReplaceableOreGen(world, blockX, blockY, blockZ, genBlock)) {
+								WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
+								world.setBlock(blockX, blockY, blockZ, ore.block, ore.metadata, 2);
+								break l;
+							}
 						}
 					}
 				}
