@@ -836,6 +836,15 @@ public final class ItemHelper {
 		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
+	public static boolean itemsIdentical(ItemStack stackA, ItemStack stackB) {
+
+		if (stackA == stackB) {
+			return true;
+		}
+		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getItemDamage() == stackB.getItemDamage())
+				&& doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound);
+	}
+
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
 		if (nbtA == nbtB) {
