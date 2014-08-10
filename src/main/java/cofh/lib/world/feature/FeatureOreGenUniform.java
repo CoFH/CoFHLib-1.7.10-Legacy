@@ -3,6 +3,7 @@ package cofh.lib.world.feature;
 import java.util.Random;
 
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class FeatureOreGenUniform extends FeatureBase {
@@ -37,18 +38,21 @@ public class FeatureOreGenUniform extends FeatureBase {
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
 
-		if (biomeRestriction != GenRestriction.NONE) {
-			if (biomeRestriction == GenRestriction.BLACKLIST == biomes.contains(world.getBiomeGenForCoords(chunkX, chunkZ).biomeName.toLowerCase())) {
-				return false;
-			}
-		}
+		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
 			int y = minY + random.nextInt(maxY - minY);
 			int z = blockZ + random.nextInt(16);
-			worldGen.generate(world, random, x, y, z);
+
+			if (biomeRestriction != GenRestriction.NONE) {
+				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+				if (biomeRestriction == GenRestriction.BLACKLIST == (biome != null && biomes.contains(biome.biomeName))) {
+					continue;
+				}
+			}
+			generated |= worldGen.generate(world, random, x, y, z);
 		}
-		return true;
+		return generated;
 	}
 
 }
