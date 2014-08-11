@@ -62,16 +62,20 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 	public boolean generate(World world, Random rand, int chunkX, int y, int chunkZ) {
 
 		int blocks = genClusterSize;
-		float f = rand.nextFloat() * (float)Math.PI;
+		float f = rand.nextFloat() * (float) Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
 		float yMin = (y + rand.nextInt(3)) - 2;
 		float yMax = (y + rand.nextInt(3)) - 2;
-		//{ HACK: at 1 and 2 no ores are ever generated. by doing it this way,
+		// { HACK: at 1 and 2 no ores are ever generated. by doing it this way,
 		// 3 = 1/3rd clusters gen, 2 = 1/6, 1 = 1/12 allowing for much finer
 		// grained rarity than the non-sparse version
-		if (blocks == 1 && yMin > yMax) ++blocks;
-		if (blocks == 2 && f > (float)Math.PI * 0.5f) ++blocks;
-		//}
+		if (blocks == 1 && yMin > yMax) {
+			++blocks;
+		}
+		if (blocks == 2 && f > (float) Math.PI * 0.5f) {
+			++blocks;
+		}
+		// }
 		float xMin = chunkX + 8 + (MathHelper.sin(f) * blocks) / 8F;
 		float xMax = chunkX + 8 - (MathHelper.sin(f) * blocks) / 8F;
 		float zMin = chunkZ + 8 + (MathHelper.cos(f) * blocks) / 8F;
@@ -89,10 +93,10 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 			float zCenter = zMin + (zMax * i) / blocks;
 
 			// preserved as nextDouble to ensure the rand gets ticked the same amount
-			float size = ((float)rand.nextDouble() * blocks) / 16f;
+			float size = ((float) rand.nextDouble() * blocks) / 16f;
 
-			float hMod = ((MathHelper.sin((i * (float)Math.PI) / blocks) + 1f) * size + 1f) * .5f;
-			float vMod = ((MathHelper.sin((i * (float)Math.PI) / blocks) + 1f) * size + 1f) * .5f;
+			float hMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
+			float vMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
 
 			int xStart = MathHelper.floor_float(xCenter - hMod);
 			int yStart = MathHelper.floor_float(yCenter - vMod);
@@ -105,18 +109,24 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 			for (int blockX = xStart; blockX <= xStop; blockX++) {
 				float xDistSq = ((blockX + .5f) - xCenter) / hMod;
 				xDistSq *= xDistSq;
-				if (xDistSq >= 1f) continue;
+				if (xDistSq >= 1f) {
+					continue;
+				}
 
 				for (int blockY = yStart; blockY <= yStop; blockY++) {
 					float yDistSq = ((blockY + .5f) - yCenter) / vMod;
 					yDistSq *= yDistSq;
 					float xyDistSq = yDistSq + xDistSq;
-					if (xyDistSq >= 1f) continue;
+					if (xyDistSq >= 1f) {
+						continue;
+					}
 
 					for (int blockZ = zStart; blockZ <= zStop; blockZ++) {
 						float zDistSq = ((blockZ + .5f) - zCenter) / hMod;
 						xDistSq *= zDistSq;
-						if (zDistSq + xyDistSq >= 1f) continue;
+						if (zDistSq + xyDistSq >= 1f) {
+							continue;
+						}
 
 						Block block = world.getBlock(blockX, blockY, blockZ);
 						l: for (int j = 0, e = genBlock.length; j < e; ++j) {
