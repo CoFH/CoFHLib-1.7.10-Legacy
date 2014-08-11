@@ -1,6 +1,7 @@
 package cofh.lib.world;
 
 import static cofh.lib.world.WorldGenMinableCluster.fabricateList;
+import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 
 import cofh.lib.util.WeightedRandomBlock;
 
@@ -11,7 +12,6 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -19,7 +19,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
 	private final int genClusterSize;
-	private final Block[] genBlock;
+	private final WeightedRandomBlock[] genBlock;
 
 	public WorldGenSparseMinableCluster(ItemStack ore, int clusterSize) {
 
@@ -51,11 +51,11 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 		this(resource, clusterSize, fabricateList(block));
 	}
 
-	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<Block> block) {
+	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
 		cluster = resource;
 		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
-		genBlock = block.toArray(new Block[block.size()]);
+		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 	}
 
 	@Override
@@ -128,15 +128,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 							continue;
 						}
 
-						Block block = world.getBlock(blockX, blockY, blockZ);
-						l: for (int j = 0, e = genBlock.length; j < e; ++j) {
-							Block genBlock = this.genBlock[j];
-							if (block.isReplaceableOreGen(world, blockX, blockY, blockZ, genBlock)) {
-								WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, cluster);
-								world.setBlock(blockX, blockY, blockZ, ore.block, ore.metadata, 2);
-								break l;
-							}
-						}
+						generateBlock(world, blockX, blockY, blockZ, genBlock, cluster);
 					}
 				}
 			}
