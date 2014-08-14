@@ -48,8 +48,8 @@ public final class ChunkCoord implements Comparable<ChunkCoord>, Serializable {
 
 	public void step(int dir) {
 
-		chunkX = BlockHelper.SIDE_COORD_MOD[dir][0];
-		chunkZ = BlockHelper.SIDE_COORD_MOD[dir][2];
+		chunkX += BlockHelper.SIDE_COORD_MOD[dir][0];
+		chunkZ += BlockHelper.SIDE_COORD_MOD[dir][2];
 	}
 
 	public void step(int dir, int dist) {
