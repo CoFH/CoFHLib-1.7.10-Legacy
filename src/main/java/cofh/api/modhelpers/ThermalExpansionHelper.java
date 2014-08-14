@@ -40,7 +40,7 @@ public class ThermalExpansionHelper {
 
 	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
-		if (input == null || primaryOutput == null || secondaryOutput == null) {
+		if (input == null || primaryOutput == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -48,12 +48,18 @@ public class ThermalExpansionHelper {
 		toSend.setInteger("energy", energy);
 		toSend.setTag("input", new NBTTagCompound());
 		toSend.setTag("primaryOutput", new NBTTagCompound());
-		toSend.setTag("secondaryOutput", new NBTTagCompound());
+
+		if (secondaryOutput != null) {
+			toSend.setTag("secondaryOutput", new NBTTagCompound());
+		}
 
 		input.writeToNBT(toSend.getCompoundTag("input"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
-		secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-		toSend.setInteger("secondaryChance", secondaryChance);
+
+		if (secondaryOutput != null) {
+			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
+			toSend.setInteger("secondaryChance", secondaryChance);
+		}
 
 		FMLInterModComms.sendMessage("ThermalExpansion", "PulverizerRecipe", toSend);
 	}
@@ -70,7 +76,7 @@ public class ThermalExpansionHelper {
 
 	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
-		if (input == null || primaryOutput == null || secondaryOutput == null) {
+		if (input == null || primaryOutput == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -78,12 +84,18 @@ public class ThermalExpansionHelper {
 		toSend.setInteger("energy", energy);
 		toSend.setTag("input", new NBTTagCompound());
 		toSend.setTag("primaryOutput", new NBTTagCompound());
-		toSend.setTag("secondaryOutput", new NBTTagCompound());
+
+		if (secondaryOutput != null) {
+			toSend.setTag("secondaryOutput", new NBTTagCompound());
+		}
 
 		input.writeToNBT(toSend.getCompoundTag("input"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
-		secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-		toSend.setInteger("secondaryChance", secondaryChance);
+
+		if (secondaryOutput != null) {
+			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
+			toSend.setInteger("secondaryChance", secondaryChance);
+		}
 
 		FMLInterModComms.sendMessage("ThermalExpansion", "SawmillRecipe", toSend);
 	}
@@ -101,7 +113,7 @@ public class ThermalExpansionHelper {
 	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput,
 			int secondaryChance) {
 
-		if (primaryInput == null || secondaryInput == null || primaryOutput == null || secondaryOutput == null) {
+		if (primaryInput == null || secondaryInput == null || primaryOutput == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -110,13 +122,19 @@ public class ThermalExpansionHelper {
 		toSend.setTag("primaryInput", new NBTTagCompound());
 		toSend.setTag("secondaryInput", new NBTTagCompound());
 		toSend.setTag("primaryOutput", new NBTTagCompound());
-		toSend.setTag("secondaryOutput", new NBTTagCompound());
+
+		if (secondaryOutput != null) {
+			toSend.setTag("secondaryOutput", new NBTTagCompound());
+		}
 
 		primaryInput.writeToNBT(toSend.getCompoundTag("primaryInput"));
 		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
-		secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-		toSend.setInteger("secondaryChance", secondaryChance);
+
+		if (secondaryOutput != null) {
+			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
+			toSend.setInteger("secondaryChance", secondaryChance);
+		}
 
 		FMLInterModComms.sendMessage("ThermalExpansion", "SmelterRecipe", toSend);
 	}
