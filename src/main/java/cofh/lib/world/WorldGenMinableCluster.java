@@ -142,7 +142,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		Block block = world.getBlock(x, y, z);
 		l: for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
-			if (world.getBlockMetadata(x, y, z) == genBlock.metadata &&
+			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) &&
 					block.isReplaceableOreGen(world, x, y, z, genBlock.block)) {
 				WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
 				r |= world.setBlock(x, y, z, ore.block, ore.metadata, 2);
