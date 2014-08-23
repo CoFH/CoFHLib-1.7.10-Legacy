@@ -14,8 +14,7 @@ public class FeatureOreGenSurface extends FeatureBase {
 	final int count;
 	final int chance;
 
-	public FeatureOreGenSurface(String name, WorldGenerator worldGen, int count, int chance, GenRestriction biomeRes, boolean regen,
-			GenRestriction dimRes) {
+	public FeatureOreGenSurface(String name, WorldGenerator worldGen, int count, int chance, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;

@@ -131,19 +131,19 @@ public class WorldGenMinableCluster extends WorldGenerator {
 			int d0 = x + random.nextInt(2);
 			int d1 = y + random.nextInt(2);
 			int d2 = z + random.nextInt(2);
-			
+
 			r |= generateBlock(world, d0, d1, d2, genBlock, cluster);
 		}
 		return r;
 	}
-	
+
 	public static boolean generateBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat, List<WeightedRandomBlock> o) {
+
 		boolean r = false;
 		Block block = world.getBlock(x, y, z);
 		l: for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
-			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) &&
-					block.isReplaceableOreGen(world, x, y, z, genBlock.block)) {
+			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) && block.isReplaceableOreGen(world, x, y, z, genBlock.block)) {
 				WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
 				r |= world.setBlock(x, y, z, ore.block, ore.metadata, 2);
 				break l;
