@@ -22,9 +22,24 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 
 	public WeightedRandomBlock(ItemStack ore, int weight) {
 
+		this(Block.getBlockFromItem(ore.getItem()), ore.getItemDamage(), weight);
+	}
+
+	public WeightedRandomBlock(Block ore) {
+
+		this(ore, 0, 100); // some blocks do not have associated items
+	}
+
+	public WeightedRandomBlock(Block ore, int metadata) {
+
+		this(ore, metadata, 100);
+	}
+
+	public WeightedRandomBlock(Block ore, int metadata, int weight) {
+
 		super(weight);
-		this.block = Block.getBlockFromItem(ore.getItem());
-		this.metadata = ore.getItemDamage();
+		this.block = ore;
+		this.metadata = metadata;
 	}
 
 }
