@@ -301,7 +301,7 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection dir) {
 
 		final int x = start.xCoord + dir.offsetX, y = start.yCoord + dir.offsetY, z = start.zCoord + dir.offsetZ;
-		return start.getWorldObj().getTileEntity(x, y, z);
+		return start.getWorldObj().getChunkFromBlockCoords(x, z).getTileEntityUnsafe(x & 15, y, z & 15);
 	}
 
 	@SuppressWarnings("unchecked")
