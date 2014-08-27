@@ -18,6 +18,10 @@ public class InventoryContainerItemWrapper implements IInventory {
 		container = gui;
 		inventory = stack;
 		inventoryItem = (IInventoryContainerItem) stack.getItem();
+
+		if (inventory.stackTagCompound == null) {
+			inventory.setTagCompound(new NBTTagCompound());
+		}
 	}
 
 	public ItemStack getContainerStack() {
