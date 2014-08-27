@@ -56,7 +56,7 @@ public class FeatureOreGenSurface extends FeatureBase {
 				continue;
 			}
 
-			generated |= worldGen.generate(world, random, x, y, z);
+			generated |= worldGen.generate(world, random, x, y + 1, z);
 		}
 		return generated;
 	}
