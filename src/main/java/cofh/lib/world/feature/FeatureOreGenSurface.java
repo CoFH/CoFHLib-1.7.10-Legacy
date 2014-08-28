@@ -1,9 +1,12 @@
 package cofh.lib.world.feature;
 
+import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.BlockHelper;
 
+import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -13,13 +16,15 @@ public class FeatureOreGenSurface extends FeatureBase {
 	final WorldGenerator worldGen;
 	final int count;
 	final int chance;
+	final List<WeightedRandomBlock> matList;
 
-	public FeatureOreGenSurface(String name, WorldGenerator worldGen, int count, int chance, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+	public FeatureOreGenSurface(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, int chance, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
 		this.chance = chance;
+		this.matList = matList;
 	}
 
 	/* IFeatureGenerator */
@@ -52,7 +57,16 @@ public class FeatureOreGenSurface extends FeatureBase {
 			}
 
 			int y = BlockHelper.getSurfaceBlockY(world, x, z);
-			if (world.getBlock(x, y, z).isAir(world, x, y, z)) {
+			l: {
+				Block block = world.getBlock(x, y, z);
+				if (!block.isAir(world, x, y, z)) {
+
+					for (WeightedRandomBlock mat : matList) {
+						if (block.isReplaceableOreGen(world, x, y, z, mat.block)) {
+							break l;
+						}
+					}
+				}
 				continue;
 			}
 
