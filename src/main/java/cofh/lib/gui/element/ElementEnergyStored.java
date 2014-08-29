@@ -33,10 +33,11 @@ public class ElementEnergyStored extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
+		int amount = getScaled();
+
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
-		int qty = getScaled();
-		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - qty, 16, DEFAULT_SCALE - qty, sizeX, qty);
+		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - amount, 16, DEFAULT_SCALE - amount, sizeX, amount);
 	}
 
 	@Override
@@ -54,9 +55,9 @@ public class ElementEnergyStored extends ElementBase {
 		}
 	}
 
-	int getScaled() {
+	protected int getScaled() {
 
-		if (storage.getMaxEnergyStored() < 0) {
+		if (storage.getMaxEnergyStored() <= 0) {
 			return sizeY;
 		}
 		return MathHelper.round(storage.getEnergyStored() * sizeY / storage.getMaxEnergyStored());

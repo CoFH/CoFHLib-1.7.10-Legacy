@@ -74,8 +74,11 @@ public class ElementFluidTank extends ElementBase {
 		list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
 	}
 
-	int getScaled() {
+	protected int getScaled() {
 
+		if (tank.getCapacity() <= 0) {
+			return sizeY;
+		}
 		return tank.getFluidAmount() * sizeY / tank.getCapacity();
 	}
 
