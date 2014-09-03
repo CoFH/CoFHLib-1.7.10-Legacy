@@ -29,9 +29,14 @@ import net.minecraftforge.fluids.IFluidHandler;
  * 
  */
 public class FluidHelper {
+	
+	public static final int BUCKET_VOLUME = FluidContainerRegistry.BUCKET_VOLUME;
 
-	public static final FluidStack WATER = new FluidStack(FluidRegistry.WATER, FluidContainerRegistry.BUCKET_VOLUME);
-	public static final FluidStack LAVA = new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME);
+	public static final Fluid WATER_FLUID = FluidRegistry.WATER;
+	public static final Fluid LAVA_FLUID = FluidRegistry.LAVA;
+
+	public static final FluidStack WATER = new FluidStack(WATER_FLUID, BUCKET_VOLUME);
+	public static final FluidStack LAVA = new FluidStack(LAVA_FLUID, BUCKET_VOLUME);
 
 	private FluidHelper() {
 
@@ -225,10 +230,10 @@ public class FluidHelper {
 	public static Fluid lookupFluidForBlock(Block block) {
 
 		if (block == Blocks.flowing_water) {
-			return FluidRegistry.WATER;
+			return WATER_FLUID;
 		}
 		if (block == Blocks.flowing_lava) {
-			return FluidRegistry.LAVA;
+			return LAVA_FLUID;
 		}
 		return FluidRegistry.lookupFluidForBlock(block);
 	}

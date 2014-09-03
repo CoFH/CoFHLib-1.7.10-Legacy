@@ -6,14 +6,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class FeatureOreGenUniform extends FeatureBase {
+public class FeatureGenUniform extends FeatureBase {
 
 	final WorldGenerator worldGen;
 	final int count;
 	final int minY;
 	final int maxY;
 
-	public FeatureOreGenUniform(String name, WorldGenerator worldGen, int count, int minY, int maxY, GenRestriction biomeRes, boolean regen,
+	public FeatureGenUniform(String name, WorldGenerator worldGen, int count, int minY, int maxY, GenRestriction biomeRes, boolean regen,
 			GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
