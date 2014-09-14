@@ -3,7 +3,6 @@ package cofh.lib.world.feature;
 import java.util.Random;
 
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class FeatureGenUniform extends FeatureBase {
@@ -23,18 +22,9 @@ public class FeatureGenUniform extends FeatureBase {
 		this.maxY = maxY;
 	}
 
-	/* IFeatureGenerator */
 	@Override
-	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
 
-		if (!newGen && !regen) {
-			return false;
-		}
-		if (dimensionRestriction != GenRestriction.NONE) {
-			if (dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.dimensionId)) {
-				return false;
-			}
-		}
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
 
@@ -43,13 +33,9 @@ public class FeatureGenUniform extends FeatureBase {
 			int x = blockX + random.nextInt(16);
 			int y = minY + random.nextInt(maxY - minY);
 			int z = blockZ + random.nextInt(16);
+			if (!canGenerateInBiome(world, x, z))
+				continue;
 
-			if (biomeRestriction != GenRestriction.NONE) {
-				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-				if (biomeRestriction == GenRestriction.BLACKLIST == (biome != null && biomes.contains(biome.biomeName))) {
-					continue;
-				}
-			}
 			generated |= worldGen.generate(world, random, x, y, z);
 		}
 		return generated;

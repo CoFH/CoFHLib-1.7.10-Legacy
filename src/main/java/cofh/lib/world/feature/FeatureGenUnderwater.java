@@ -9,7 +9,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class FeatureGenUnderwater extends FeatureBase {
@@ -28,18 +27,9 @@ public class FeatureGenUnderwater extends FeatureBase {
 		this.matList = matList;
 	}
 
-	/* IFeatureGenerator */
 	@Override
-	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
 
-		if (!newGen && !regen) {
-			return false;
-		}
-		if (dimensionRestriction != GenRestriction.NONE) {
-			if (dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.dimensionId)) {
-				return false;
-			}
-		}
 		if (chance > 1 && random.nextInt(chance) != 0) {
 			return false;
 		}
@@ -50,12 +40,8 @@ public class FeatureGenUnderwater extends FeatureBase {
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
 			int z = blockZ + random.nextInt(16);
-			if (biomeRestriction != GenRestriction.NONE) {
-				BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-				if (biomeRestriction == GenRestriction.BLACKLIST == (biome != null && biomes.contains(biome.biomeName))) {
-					continue;
-				}
-			}
+			if (!canGenerateInBiome(world, x, z))
+				continue;
 
 			int y = BlockHelper.getSurfaceBlockY(world, x, z);
 			l: {

@@ -1,6 +1,8 @@
 package cofh.lib.world.feature;
 
 import cofh.api.world.IFeatureGenerator;
+import cofh.lib.world.biome.BiomeInfo;
+import cofh.lib.world.biome.BiomeInfoSet;
 
 import gnu.trove.set.hash.THashSet;
 
@@ -8,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public abstract class FeatureBase implements IFeatureGenerator {
 
@@ -19,7 +22,7 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	public final GenRestriction biomeRestriction;
 	public final GenRestriction dimensionRestriction;
 	public final boolean regen;
-	protected final Set<String> biomes = new THashSet<String>();
+	protected final Set<BiomeInfo> biomes = new BiomeInfoSet(1);
 	protected final Set<Integer> dimensions = new THashSet<Integer>();
 
 	/**
@@ -54,9 +57,15 @@ public abstract class FeatureBase implements IFeatureGenerator {
 		this.regen = regen;
 	}
 
-	public FeatureBase addBiome(String biomeName) {
+	public FeatureBase addBiome(BiomeInfo biome) {
 
-		biomes.add(biomeName);
+		biomes.add(biome);
+		return this;
+	}
+
+	public FeatureBase addBiomes(BiomeInfoSet biomes) {
+
+		this.biomes.addAll(biomes);
 		return this;
 	}
 
@@ -74,6 +83,29 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	}
 
 	@Override
-	public abstract boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen);
+	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+
+		if (!newGen && !regen) {
+			return false;
+		}
+		if (dimensionRestriction != GenRestriction.NONE) {
+			if (dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.dimensionId)) {
+				return false;
+			}
+		}
+
+		return generateFeature(random, chunkX, chunkZ, world);
+	}
+	
+	protected abstract boolean generateFeature(Random random, int chunkX, int chunkZ, World world);
+	
+	protected boolean canGenerateInBiome(World world, int x, int z) {
+
+		if (biomeRestriction != GenRestriction.NONE) {
+			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+			return !(biomeRestriction == GenRestriction.BLACKLIST == (biome != null && biomes.contains(biome)));
+		}
+		return true;
+	}
 
 }
