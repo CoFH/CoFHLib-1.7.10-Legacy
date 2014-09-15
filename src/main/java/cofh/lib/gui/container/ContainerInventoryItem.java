@@ -117,10 +117,10 @@ public class ContainerInventoryItem extends Container {
 				if (!this.field_94537_h.isEmpty()) {
 					itemstack3 = inventoryPlayer.getItemStack().copy();
 					i1 = inventoryPlayer.getItemStack().stackSize;
-					Iterator iterator = this.field_94537_h.iterator();
+					Iterator<Slot> iterator = this.field_94537_h.iterator();
 
 					while (iterator.hasNext()) {
-						Slot slot1 = (Slot) iterator.next();
+						Slot slot1 = iterator.next();
 
 						if (slot1 != null && func_94527_a(slot1, inventoryPlayer.getItemStack(), true) && slot1.isItemValid(inventoryPlayer.getItemStack())
 								&& inventoryPlayer.getItemStack().stackSize >= this.field_94537_h.size() && this.canDragIntoSlot(slot1)) {

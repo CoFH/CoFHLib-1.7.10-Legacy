@@ -1,15 +1,17 @@
 package cofh.lib.world.biome;
 
+import java.util.Random;
+
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
-public final class BiomeInfo {
+public class BiomeInfo {
 
+	private final Object data;
 	private final boolean whitelist;
 	private final int type;
 	private final int hash;
-	private final Object data;
 
 	public BiomeInfo(String name) {
 		data = name;
@@ -25,7 +27,7 @@ public final class BiomeInfo {
 		type = t;
 	}
 
-	public final boolean isBiomeEqual(BiomeGenBase biome) {
+	public boolean isBiomeEqual(BiomeGenBase biome, Random rand) {
 		if (biome != null)
 			switch (type) {
 			default:break;

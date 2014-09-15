@@ -33,7 +33,7 @@ public class FeatureGenNormal extends FeatureBase {
 			int x = blockX + random.nextInt(16);
 			int y = random.nextInt(maxVar) + random.nextInt(maxVar) + meanY - maxVar;
 			int z = blockZ + random.nextInt(16);
-			if (!canGenerateInBiome(world, x, z))
+			if (!canGenerateInBiome(world, x, z, random))
 				continue;
 
 			generated |= worldGen.generate(world, random, x, y, z);

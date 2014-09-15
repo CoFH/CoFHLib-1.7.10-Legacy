@@ -22,7 +22,7 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	public final GenRestriction biomeRestriction;
 	public final GenRestriction dimensionRestriction;
 	public final boolean regen;
-	protected final Set<BiomeInfo> biomes = new BiomeInfoSet(1);
+	protected final BiomeInfoSet biomes = new BiomeInfoSet(1);
 	protected final Set<Integer> dimensions = new THashSet<Integer>();
 
 	/**
@@ -98,12 +98,12 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	}
 	
 	protected abstract boolean generateFeature(Random random, int chunkX, int chunkZ, World world);
-	
-	protected boolean canGenerateInBiome(World world, int x, int z) {
+
+	protected boolean canGenerateInBiome(World world, int x, int z, Random rand) {
 
 		if (biomeRestriction != GenRestriction.NONE) {
 			BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
-			return !(biomeRestriction == GenRestriction.BLACKLIST == (biome != null && biomes.contains(biome)));
+			return !(biomeRestriction == GenRestriction.BLACKLIST == biomes.contains(biome, rand));
 		}
 		return true;
 	}

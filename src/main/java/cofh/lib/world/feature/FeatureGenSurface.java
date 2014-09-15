@@ -39,7 +39,7 @@ public class FeatureGenSurface extends FeatureBase {
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
 			int z = blockZ + random.nextInt(16);
-			if (!canGenerateInBiome(world, x, z))
+			if (!canGenerateInBiome(world, x, z, random))
 				continue;
 
 			int y = BlockHelper.getSurfaceBlockY(world, x, z);

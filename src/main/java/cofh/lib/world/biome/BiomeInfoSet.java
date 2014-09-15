@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.world.biome.BiomeGenBase;
@@ -53,7 +54,7 @@ public class BiomeInfoSet implements Set<BiomeInfo> {
 		if (o instanceof BiomeGenBase) {
 			BiomeGenBase bgb = (BiomeGenBase)o;
 			for (int i = 0, e = size; i < e; ++i)
-				if (oldData[i] != null && oldData[i].isBiomeEqual(bgb))
+				if (oldData[i] != null && oldData[i].isBiomeEqual(bgb, null))
 					return true;
 			return false;
 		}
@@ -61,6 +62,21 @@ public class BiomeInfoSet implements Set<BiomeInfo> {
 			if (oldData[i] == o || (oldData[i] != null && o != null && oldData[i].equals(o)))
 				return true;
 		return false;
+	}
+
+	public boolean contains(BiomeGenBase bgb, Random rand) {
+		BiomeInfo[] oldData = elementData;
+		for (int i = 0, e = size; i < e; ++i)
+			if (oldData[i] != null && oldData[i].isBiomeEqual(bgb, rand))
+				return true;
+		return false;
+	}
+
+
+	public BiomeInfo get(int i) {
+		if ((i < 0) | i >= size)
+			throw new IndexOutOfBoundsException();
+		return elementData[i];
 	}
 
 	@Override
