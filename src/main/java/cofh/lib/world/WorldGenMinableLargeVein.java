@@ -18,6 +18,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
 	private final int genVeinSize;
+	private final boolean sparse;
 
 	public WorldGenMinableLargeVein(ItemStack ore, int clusterSize) {
 
@@ -51,9 +52,15 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
+		this(resource, clusterSize, block, true);
+	}
+
+	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block, boolean sparze) {
+
 		cluster = resource;
 		genVeinSize = clusterSize;
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
+		sparse = sparze;
 	}
 
 	@Override
@@ -74,7 +81,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 			int directionX = rand.nextInt(2);
 			int directionY = rand.nextInt(2);
 			int directionZ = rand.nextInt(2);
-			{ // random code block to circumvent eclipse freaking out on auto-indent with unsigned right shift 
+			{ // random code block to circumvent eclipse freaking out on auto-indent with unsigned right shift
 				directionX += ~directionX >>> 31;
 		directionX += ~directionY >>> 31;
 		directionX += ~directionZ >>> 31;
@@ -120,21 +127,23 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 						r |= generateBlock(world, posX2, posY2, posZ2, genBlock, cluster);
 
-						blocksVein++;
-						blocksBranch++;
+						if (sparse) {
+							blocksVein++;
+							blocksBranch++;
+						}
 						blocksSubBranch++;
 					}
 				}
 
 				r |= generateBlock(world, posX, posY, posZ, genBlock, cluster);
 
-				blocksVein++;
 				blocksBranch++;
 			}
 
 			x = x + (rand.nextInt(3) - 1);
 			y = y + (rand.nextInt(3) - 1);
 			z = z + (rand.nextInt(3) - 1);
+			blocksVein++;
 		}
 
 		return r;
