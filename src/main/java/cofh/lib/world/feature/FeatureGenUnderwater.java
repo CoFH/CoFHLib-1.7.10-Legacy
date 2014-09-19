@@ -18,7 +18,8 @@ public class FeatureGenUnderwater extends FeatureBase {
 	final int chance;
 	final List<WeightedRandomBlock> matList;
 
-	public FeatureGenUnderwater(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, int chance, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+	public FeatureGenUnderwater(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, int chance, GenRestriction biomeRes,
+			boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;

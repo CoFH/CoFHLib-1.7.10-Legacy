@@ -12,8 +12,7 @@ public class FeatureGenUniform extends FeatureBase {
 	final int minY;
 	final int maxY;
 
-	public FeatureGenUniform(String name, WorldGenerator worldGen, int count, int minY, int maxY, GenRestriction biomeRes, boolean regen,
-			GenRestriction dimRes) {
+	public FeatureGenUniform(String name, WorldGenerator worldGen, int count, int minY, int maxY, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;

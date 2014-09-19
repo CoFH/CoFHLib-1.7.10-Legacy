@@ -29,7 +29,7 @@ import net.minecraftforge.fluids.IFluidHandler;
  * 
  */
 public class FluidHelper {
-	
+
 	public static final int BUCKET_VOLUME = FluidContainerRegistry.BUCKET_VOLUME;
 
 	public static final Fluid WATER_FLUID = FluidRegistry.WATER;
