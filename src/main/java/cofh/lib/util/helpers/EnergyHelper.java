@@ -11,9 +11,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * This class contains helper functions related to Redstone Flux, the basis of the CoFH Energy System.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class EnergyHelper {
 
@@ -25,6 +25,16 @@ public class EnergyHelper {
 	}
 
 	/* IEnergyContainer Interaction */
+	public static int extractEnergyFromContainer(ItemStack container, int maxExtract, boolean simulate) {
+
+		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
+	}
+
+	public static int insertEnergyIntoContainer(ItemStack container, int maxReceive, boolean simulate) {
+
+		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
+	}
+
 	public static int extractEnergyFromHeldContainer(EntityPlayer player, int maxExtract, boolean simulate) {
 
 		ItemStack container = player.getCurrentEquippedItem();
