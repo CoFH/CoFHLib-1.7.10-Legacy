@@ -18,15 +18,16 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 
 /**
  * Contains various helper functions to assist with {@link Fluid} and Fluid-related manipulation and interaction.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class FluidHelper {
 
@@ -37,6 +38,8 @@ public class FluidHelper {
 
 	public static final FluidStack WATER = new FluidStack(WATER_FLUID, BUCKET_VOLUME);
 	public static final FluidStack LAVA = new FluidStack(LAVA_FLUID, BUCKET_VOLUME);
+
+	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[]{};
 
 	private FluidHelper() {
 
