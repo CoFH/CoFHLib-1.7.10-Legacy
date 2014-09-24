@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -279,6 +280,11 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 	public TileEntity getTileEntity(World world) {
 
 		return world.getTileEntity(x, y, z);
+	}
+
+	public Block getBlock(World world) {
+
+		return world.getBlock(x, y, z);
 	}
 
 	@SuppressWarnings("unchecked")
