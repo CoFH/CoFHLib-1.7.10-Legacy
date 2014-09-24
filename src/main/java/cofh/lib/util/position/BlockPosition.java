@@ -292,6 +292,32 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		}
 	}
 
+	public static ForgeDirection getDirection(int xS, int yS, int zS, int x, int y, int z) {
+
+		int dir = 0;
+		if (y < yS)
+			dir |= 1;
+		else if (y != yS)
+			dir |= 2;
+		if (z < zS)
+			dir |= 4;
+		else if (z != zS)
+			dir |= 8;
+		if (x < xS)
+			dir |= 16;
+		else if (x != xS)
+			dir |= 32;
+		switch (dir) {
+		case 2: return ForgeDirection.UP;
+		case 1: return ForgeDirection.DOWN;
+		case 4: return ForgeDirection.WEST;
+		case 8: return ForgeDirection.EAST;
+		case 16: return ForgeDirection.NORTH;
+		case 32: return ForgeDirection.SOUTH;
+		default: return ForgeDirection.UNKNOWN;
+		}
+	}
+
 	public static TileEntity getTileEntityRaw(World world, int x, int y, int z) {
 
 		if (!world.blockExists(x,  y, z))
