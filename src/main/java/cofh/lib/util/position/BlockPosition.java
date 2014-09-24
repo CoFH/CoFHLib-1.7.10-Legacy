@@ -292,6 +292,24 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		}
 	}
 
+	public static TileEntity getTileEntityRaw(World world, int x, int y, int z) {
+
+		if (!world.blockExists(x,  y, z))
+			return null;
+		return world.getChunkFromBlockCoords(x, z).getTileEntityUnsafe(x & 15, y, z & 15);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T getTileEntityRaw(World world, int x, int y, int z, Class<T> targetClass) {
+
+		TileEntity te = getTileEntityRaw(world, x, y, z);
+		if (targetClass.isInstance(te)) {
+			return (T) te;
+		} else {
+			return null;
+		}
+	}
+
 	public static boolean blockExists(TileEntity start, ForgeDirection dir) {
 
 		final int x = start.xCoord + dir.offsetX, y = start.yCoord + dir.offsetY, z = start.zCoord + dir.offsetZ;
@@ -301,7 +319,7 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 	public static TileEntity getAdjacentTileEntity(TileEntity start, ForgeDirection dir) {
 
 		final int x = start.xCoord + dir.offsetX, y = start.yCoord + dir.offsetY, z = start.zCoord + dir.offsetZ;
-		return start.getWorldObj().getChunkFromBlockCoords(x, z).getTileEntityUnsafe(x & 15, y, z & 15);
+		return getTileEntityRaw(start.getWorldObj(), x, y, z);
 	}
 
 	@SuppressWarnings("unchecked")
