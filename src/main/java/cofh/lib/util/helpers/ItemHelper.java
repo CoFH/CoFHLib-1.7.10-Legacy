@@ -31,9 +31,9 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class ItemHelper {
 
@@ -597,6 +597,25 @@ public final class ItemHelper {
 		return true;
 	}
 
+	public static boolean addTwoWayStorageRecipe(ItemStack one, ItemStack nine) {
+
+		return addStorageRecipe(one, nine) && addReverseStorageRecipe(nine, one);
+	}
+
+	public static boolean addTwoWayStorageRecipe(ItemStack one, String one_ore, ItemStack nine, String nine_ore) {
+
+		return addStorageRecipe(one, nine_ore) && addReverseStorageRecipe(nine, one_ore);
+	}
+
+	public static boolean addSmallTwoWayStorageRecipe(ItemStack one, ItemStack four) {
+
+		return addSmallStorageRecipe(one, four) && addSmallReverseStorageRecipe(four, one);
+	}
+
+	public static boolean addSmallTwoWayStorageRecipe(ItemStack one, String one_ore, ItemStack four, String four_ore) {
+
+		return addSmallStorageRecipe(one, four_ore) && addSmallReverseStorageRecipe(four, one_ore);
+	}
 	// }
 
 	// SMELTING{

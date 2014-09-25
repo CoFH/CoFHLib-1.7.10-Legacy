@@ -20,9 +20,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Contains various helper functions to assist with {@link Block} and Block-related manipulation and interaction.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class BlockHelper {
 
@@ -143,8 +143,8 @@ public final class BlockHelper {
 				break;
 			}
 			block = world.getBlock(x, y, z);
-		} while (block.isAir(world, x, y, z) || block.isLeaves(world, x, y, z) || block.isReplaceable(world, x, y, z)
-				|| block.canBeReplacedByLeaves(world, x, y, z));
+		} while (block.isAir(world, x, y, z) || block.isReplaceable(world, x, y, z) || block.isLeaves(world, x, y, z)
+				|| block.isFoliage(world, x, y, z) || block.canBeReplacedByLeaves(world, x, y, z));
 		return y;
 	}
 
