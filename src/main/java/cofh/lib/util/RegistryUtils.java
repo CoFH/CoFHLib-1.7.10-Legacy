@@ -1,10 +1,13 @@
 package cofh.lib.util;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Multimap;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.RegistryDelegate;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -16,6 +19,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,6 +34,7 @@ public class RegistryUtils {
 	private static class Repl {
 
 		private static IdentityHashMap<RegistryNamespaced, Multimap<String, Object>> replacements;
+		private static Class<RegistryDelegate<?>> DelegateClass;
 
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		private static void overwrite_do(RegistryNamespaced registry, String name, Object object, Object oldThing) {
@@ -41,10 +46,35 @@ public class RegistryUtils {
 			map.forcePut(name, object);
 		}
 
+		private static void alterDelegateChain(RegistryNamespaced registry, String id, Object object) {
+
+			Multimap<String, Object> map = replacements.get(registry);
+			List<Object> c = (List<Object>) map.get(id);
+			int i = 0, e = c.size() - 1;
+			Object end = c.get(e);
+			for (; i <= e; ++i) {
+				Object t = c.get(i);
+				Repl.alterDelegate(t, end);
+			}
+		}
+
+		private static void alterDelegate(Object obj, Object repl) {
+
+			if (obj instanceof Item) {
+				RegistryDelegate<Item> delegate = ((Item)obj).delegate;
+				ReflectionHelper.setPrivateValue(DelegateClass, delegate, repl, "referant");
+			}
+		}
+
 		static {
 
 			replacements = new IdentityHashMap<RegistryNamespaced, Multimap<String, Object>>(2);
 			MinecraftForge.EVENT_BUS.register(new RegistryUtils());
+			try {
+				DelegateClass = (Class<RegistryDelegate<?>>) Class.forName("cpw.mods.fml.common.registry.RegistryDelegate$Delegate");
+			} catch (Throwable e) {
+				Throwables.propagate(e);
+			}
 		}
 	}
 
@@ -66,14 +96,16 @@ public class RegistryUtils {
 				if (reg.getIDForObject(c.get(0)) != reg.getIDForObject(end)) {
 					for (; i <= e; ++i) {
 						Object t = c.get(i);
-						Repl.overwrite_do(reg, id, t, reg.getObject(id));
-						// TODO: waiting on forge to update fml to use delegates
+						Object oldThing = reg.getObject(id);
+						Repl.overwrite_do(reg, id, t, oldThing);
+						Repl.alterDelegate(oldThing, end);
 					}
 				}
 			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void overwriteEntry(RegistryNamespaced registry, String name, Object object) {
 
 		Object oldThing = registry.getObject(name);
@@ -86,6 +118,7 @@ public class RegistryUtils {
 			reg.put(name, oldThing);
 		}
 		reg.put(name, object);
+		Repl.alterDelegateChain(registry, name, object);
 	}
 
 	@SideOnly(Side.CLIENT)
