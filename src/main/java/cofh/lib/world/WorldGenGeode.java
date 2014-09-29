@@ -16,6 +16,7 @@ public class WorldGenGeode extends WorldGenerator
 	private final List<WeightedRandomBlock> cluster;
 	private final List<WeightedRandomBlock> outline;
 	private final WeightedRandomBlock[] genBlock;
+	public boolean hollow = false;
 
 	public WorldGenGeode(List<WeightedRandomBlock> resource,
 			List<WeightedRandomBlock> material, List<WeightedRandomBlock> cover) {
@@ -31,8 +32,6 @@ public class WorldGenGeode extends WorldGenerator
 		xStart -= 8;
 		zStart -= 8;
 
-		while (yStart > 5 && world.isAirBlock(xStart, yStart, zStart))
-			--yStart;
 		if (yStart <= 5)
 			return false;
 
@@ -46,6 +45,7 @@ public class WorldGenGeode extends WorldGenerator
 			double xCenter = rand.nextDouble() * (16.0D - xSize - 2.0D) + 1.0D + xSize / 2.0D;
 			double yCenter = rand.nextDouble() * (8.0D - ySize - 4.0D) + 2.0D + ySize / 2.0D;
 			double zCenter = rand.nextDouble() * (16.0D - zSize - 2.0D) + 1.0D + zSize / 2.0D;
+			double minDist = hollow ? rand.nextGaussian() * 0.15 + 0.4 : 0;
 
 			for (int x = 1; x < 15; ++x) {
 				for (int z = 1; z < 15; ++z) {
@@ -56,7 +56,7 @@ public class WorldGenGeode extends WorldGenerator
 						double dist = xDist * xDist + yDist * yDist + zDist * zDist;
 
 						if (dist < 1.0D)
-							spawnBlock[(x * 16 + z) * 8 + y] = true;
+							spawnBlock[(x * 16 + z) * 8 + y] = hollow ? dist > minDist : true;
 					}
 				}
 			}
