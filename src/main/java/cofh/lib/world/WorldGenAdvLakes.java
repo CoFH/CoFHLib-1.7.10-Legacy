@@ -24,7 +24,10 @@ public class WorldGenAdvLakes extends WorldGenerator
 	public WorldGenAdvLakes(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> block) {
 
 		cluster = resource;
-		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
+		if (block == null)
+			genBlock = null;
+		else
+			genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 	}
 
 	@Override
