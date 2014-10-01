@@ -146,7 +146,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 								(y < H && spawnBlock[(x * width + z) * height + (y + 1)]) ||
 								(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
-						if (flag && (y < 4 || rand.nextInt(2) != 0) &&
+						if (flag && (y < heightOff || rand.nextInt(2) != 0) &&
 								world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial().isSolid()) {
 							world.setBlock(xStart + x, yStart + y, zStart + z, Blocks.stone, 0, 2);
 						}
