@@ -91,7 +91,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 							(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
 					if (flag) {
-						if (y >= 4) {
+						if (y >= heightOff) {
 							Material material = world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial();
 							if (material.isLiquid())
 								return false;
@@ -109,7 +109,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
 					if (spawnBlock[(x * width + z) * height + y]) {
-						if (y < 4)
+						if (y < heightOff)
 							generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
 						else
 							world.setBlock(xStart + x, yStart + y, zStart + z, Blocks.air, 0, 2);
