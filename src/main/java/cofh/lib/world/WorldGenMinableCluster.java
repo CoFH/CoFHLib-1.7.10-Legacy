@@ -160,6 +160,9 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public static boolean canGenerateInBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat) {
 
+		if (mat == null || mat.length == 0)
+			return true;
+
 		Block block = world.getBlock(x, y, z);
 		for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
