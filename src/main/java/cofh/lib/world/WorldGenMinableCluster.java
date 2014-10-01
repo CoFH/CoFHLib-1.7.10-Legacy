@@ -166,7 +166,8 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		Block block = world.getBlock(x, y, z);
 		for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
-			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) && block.isReplaceableOreGen(world, x, y, z, genBlock.block)) {
+			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) &&
+					(block.isReplaceableOreGen(world, x, y, z, genBlock.block) || block.isAssociatedBlock(genBlock.block))) {
 				return true;
 			}
 		}
