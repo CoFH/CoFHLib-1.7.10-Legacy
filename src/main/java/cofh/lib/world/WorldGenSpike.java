@@ -42,10 +42,12 @@ public class WorldGenSpike extends WorldGenerator {
 			height += 10 + rand.nextInt(30);
 		}
 
+		int offsetHeight = height - originalHeight;
+
 		for (int y = 0; y < height; ++y) {
 			float layerSize;
-			if (y > height - originalHeight)
-				layerSize = (1.0F - (float)(y - (height - originalHeight)) / (float)originalHeight) * size;
+			if (y > offsetHeight)
+				layerSize = (1.0F - (float)(y - offsetHeight) / (float)originalHeight) * size;
 			else
 				layerSize = 1;
 			int width = MathHelper.ceiling_float_int(layerSize);
@@ -62,7 +64,7 @@ public class WorldGenSpike extends WorldGenerator {
 						generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
 
 						if (y != 0 && width > 1)
-							generateBlock(world, xStart + x, yStart - y, zStart + z, genBlock, cluster);
+							generateBlock(world, xStart + x, yStart - y + offsetHeight, zStart + z, genBlock, cluster);
 					}
 				}
 			}
