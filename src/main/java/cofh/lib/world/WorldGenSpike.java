@@ -1,0 +1,73 @@
+package cofh.lib.world;
+
+import static cofh.lib.world.WorldGenMinableCluster.*;
+
+import cofh.lib.util.WeightedRandomBlock;
+
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+
+public class WorldGenSpike extends WorldGenerator {
+
+	private final List<WeightedRandomBlock> cluster;
+	private final WeightedRandomBlock[] genBlock;
+	public boolean largeSpikes = true;
+
+	public WorldGenSpike(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> block) {
+
+		cluster = resource;
+		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
+	}
+
+	@Override
+	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
+
+		while (world.isAirBlock(xStart, yStart, zStart) && yStart > 2) {
+			--yStart;
+		}
+
+		if (!canGenerateInBlock(world, xStart, yStart, zStart, genBlock)) {
+			return false;
+		}
+
+		yStart += rand.nextInt(4);
+		int height = rand.nextInt(4) + 7, originalHeight = height;
+		int size = height / 4 + rand.nextInt(2);
+
+		if (largeSpikes && size > 1 && rand.nextInt(60) == 0) {
+			height += 10 + rand.nextInt(30);
+		}
+
+		for (int y = 0; y < height; ++y) {
+			float layerSize;
+			if (y > height - originalHeight)
+				layerSize = (1.0F - (float)(y - (height - originalHeight)) / (float)originalHeight) * size;
+			else
+				layerSize = 1;
+			int width = MathHelper.ceiling_float_int(layerSize);
+
+			for (int x = -width; x <= width; ++x) {
+				float xDist = MathHelper.abs_int(x) - 0.25F;
+
+				for (int z = -width; z <= width; ++z) {
+					float zDist = MathHelper.abs_int(z) - 0.25F;
+
+					if ((x == 0 && z == 0 || xDist * xDist + zDist * zDist <= layerSize * layerSize) &&
+							(x != -width && x != width && z != -width && z != width || rand.nextFloat() <= 0.75F)) {
+
+						generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
+
+						if (y != 0 && width > 1)
+							generateBlock(world, xStart + x, yStart - y, zStart + z, genBlock, cluster);
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+}
