@@ -32,7 +32,7 @@ public class WorldGenDungeon extends WorldGenerator
 	public int minHoles = 1, maxHoles = 5;
 	public int maxChests = 2;
 	public List<DungeonMob> lootTables = Arrays.asList(new DungeonMob(100, ChestGenHooks.DUNGEON_CHEST));
-	private List<WeightedRandomBlock> floor;
+	public List<WeightedRandomBlock> floor;
 
 	public WorldGenDungeon(List<WeightedRandomBlock> blocks, List<WeightedRandomBlock> material, List<WeightedRandomNBTTag> mobs) {
 
