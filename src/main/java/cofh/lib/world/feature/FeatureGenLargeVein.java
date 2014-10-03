@@ -10,19 +10,17 @@ public class FeatureGenLargeVein extends FeatureBase {
 	final WorldGenerator worldGen;
 	final int count;
 	final int minY;
-	final int globalRarity;
 	private int veinHeight, veinDiameter;
 	private int verticalDensity;
 	private int horizontalDensity;
 
-	public FeatureGenLargeVein(String name, WorldGenerator worldGen, int count, int minY, int rarity, GenRestriction biomeRes,
+	public FeatureGenLargeVein(String name, WorldGenerator worldGen, int count, int minY, GenRestriction biomeRes,
 			boolean regen, GenRestriction dimRes, int height, int diameter, int vDensity, int hDensity) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
 		this.minY = minY;
-		this.globalRarity = rarity;
 		this.veinHeight = height;
 		this.veinDiameter = diameter;
 		this.verticalDensity = vDensity;
@@ -43,10 +41,6 @@ public class FeatureGenLargeVein extends FeatureBase {
 
 	@Override
 	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
-		
-		if (random.nextInt(globalRarity) != 0) {
-			return false;
-		}
 
 		int blockX = chunkX * 16;
 		int blockY = minY;

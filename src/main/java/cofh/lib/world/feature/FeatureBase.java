@@ -22,6 +22,7 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	public final GenRestriction biomeRestriction;
 	public final GenRestriction dimensionRestriction;
 	public final boolean regen;
+	protected int rarity;
 	protected final BiomeInfoSet biomes = new BiomeInfoSet(1);
 	protected final Set<Integer> dimensions = new THashSet<Integer>();
 
@@ -55,6 +56,10 @@ public abstract class FeatureBase implements IFeatureGenerator {
 		this.biomeRestriction = biomeRes;
 		this.dimensionRestriction = dimRes;
 		this.regen = regen;
+	}
+
+	public void setRarity(int rarity) {
+		this.rarity = rarity;
 	}
 
 	public FeatureBase addBiome(BiomeInfo biome) {
@@ -93,10 +98,13 @@ public abstract class FeatureBase implements IFeatureGenerator {
 				return false;
 			}
 		}
+		if (rarity > 1 && random.nextInt(rarity) != 0) {
+			return false;
+		}
 
 		return generateFeature(random, chunkX, chunkZ, world);
 	}
-	
+
 	protected abstract boolean generateFeature(Random random, int chunkX, int chunkZ, World world);
 
 	protected boolean canGenerateInBiome(World world, int x, int z, Random rand) {

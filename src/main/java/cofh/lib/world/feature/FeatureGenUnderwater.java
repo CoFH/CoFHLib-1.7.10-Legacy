@@ -15,25 +15,20 @@ public class FeatureGenUnderwater extends FeatureBase {
 
 	final WorldGenerator worldGen;
 	final int count;
-	final int chance;
 	final List<WeightedRandomBlock> matList;
 
-	public FeatureGenUnderwater(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, int chance, GenRestriction biomeRes,
+	public FeatureGenUnderwater(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes,
 			boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
-		this.chance = chance;
 		this.matList = matList;
 	}
 
 	@Override
 	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
 
-		if (chance > 1 && random.nextInt(chance) != 0) {
-			return false;
-		}
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
 
