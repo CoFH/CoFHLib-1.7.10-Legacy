@@ -5,7 +5,7 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class FeatureGenRare extends FeatureBase {
+public class FeatureGenLargeVein extends FeatureBase {
 
 	final WorldGenerator worldGen;
 	final int count;
@@ -15,7 +15,7 @@ public class FeatureGenRare extends FeatureBase {
 	private int verticalDensity;
 	private int horizontalDensity;
 
-	public FeatureGenRare(String name, WorldGenerator worldGen, int count, int minY, int rarity, GenRestriction biomeRes,
+	public FeatureGenLargeVein(String name, WorldGenerator worldGen, int count, int minY, int rarity, GenRestriction biomeRes,
 			boolean regen, GenRestriction dimRes, int height, int diameter, int vDensity, int hDensity) {
 
 		super(name, biomeRes, regen, dimRes);
