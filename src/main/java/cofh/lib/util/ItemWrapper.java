@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Wrapper for an Item/Metadata combination post 1.7. Quick and dirty, allows for Integer-based Hashes without collisions.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class ItemWrapper {
 
@@ -45,9 +45,26 @@ public final class ItemWrapper {
 		return this;
 	}
 
+	// '0' is null. '-1' is an unmapped item (missing in this World)
+	private int getId() {
+
+		return Item.getIdFromItem(item);
+	}
+
 	public boolean isEqual(ItemWrapper other) {
 
-		return other != null && item == other.item && metadata == other.metadata;
+		if (other == null) {
+			return false;
+		}
+		if (metadata == other.metadata) {
+			if (item == other.item) {
+				return true;
+			}
+			if (item != null && other.item != null) {
+				return item.delegate.get() == item.delegate.get();
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -62,7 +79,18 @@ public final class ItemWrapper {
 	@Override
 	public int hashCode() {
 
-		return metadata | Item.getIdFromItem(item) << 16;
+		return (metadata & 65535) | getId() << 16;
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder b = new StringBuilder(getClass().getName());
+		b.append('@').append(System.identityHashCode(this)).append('{');
+		b.append("m:").append(metadata).append(", i:").append(item == null ? null : item.getClass().getName());
+		b.append('@').append(System.identityHashCode(item)).append(", v:");
+		b.append(getId()).append('}');
+		return b.toString();
 	}
 
 }
