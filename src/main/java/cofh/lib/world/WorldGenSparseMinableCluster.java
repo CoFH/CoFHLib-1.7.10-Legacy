@@ -1,7 +1,6 @@
 package cofh.lib.world;
 
-import static cofh.lib.world.WorldGenMinableCluster.fabricateList;
-import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
+import static cofh.lib.world.WorldGenMinableCluster.*;
 
 import cofh.lib.util.WeightedRandomBlock;
 
@@ -124,7 +123,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 					for (int blockZ = zStart; blockZ <= zStop; blockZ++) {
 						float zDistSq = ((blockZ + .5f) - zCenter) / hMod;
-						xDistSq *= zDistSq;
+						zDistSq *= zDistSq;
 						if (zDistSq + xyDistSq >= 1f) {
 							continue;
 						}
