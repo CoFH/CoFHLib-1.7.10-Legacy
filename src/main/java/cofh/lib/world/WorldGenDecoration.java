@@ -16,7 +16,7 @@ public class WorldGenDecoration extends WorldGenerator {
 	private final WeightedRandomBlock[] genBlock;
 	private final WeightedRandomBlock[] onBlock;
 	private final int clusterSize;
-	private final boolean seeSky;
+	public boolean seeSky = true;
 	public boolean checkStay = true;
 	public int stackHeight = 1;
 	public int xVar = 8;
@@ -24,13 +24,12 @@ public class WorldGenDecoration extends WorldGenerator {
 	public int zVar = 8;
 
 	public WorldGenDecoration(List<WeightedRandomBlock> blocks, int count, List<WeightedRandomBlock> material,
-			List<WeightedRandomBlock> on, boolean needsSky) {
+			List<WeightedRandomBlock> on) {
 
 		cluster = blocks;
 		clusterSize = count;
 		genBlock = material == null ? null : material.toArray(new WeightedRandomBlock[material.size()]);
 		onBlock = on == null ? null : on.toArray(new WeightedRandomBlock[on.size()]);
-		seeSky = needsSky;
 	}
 
 	@Override
