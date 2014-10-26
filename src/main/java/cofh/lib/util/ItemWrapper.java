@@ -61,7 +61,7 @@ public final class ItemWrapper {
 				return true;
 			}
 			if (item != null && other.item != null) {
-				return item.delegate.get() == item.delegate.get();
+				return item.delegate.get() == other.item.delegate.get();
 			}
 		}
 		return false;
