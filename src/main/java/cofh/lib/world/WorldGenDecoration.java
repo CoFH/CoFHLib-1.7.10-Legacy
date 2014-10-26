@@ -39,7 +39,7 @@ public class WorldGenDecoration extends WorldGenerator {
 		boolean r = false;
         for (int l = clusterSize; l --> 0; ) {
             int x = xStart + rand.nextInt(xVar) - rand.nextInt(xVar);
-            int y = yStart + rand.nextInt(yVar) - rand.nextInt(yVar);
+            int y = yStart + (yVar > 1 ? rand.nextInt(yVar) - rand.nextInt(yVar) : 0);
             int z = zStart + rand.nextInt(zVar) - rand.nextInt(zVar);
 
             if ((!seeSky || world.canBlockSeeTheSky(x, y, z)) &&
