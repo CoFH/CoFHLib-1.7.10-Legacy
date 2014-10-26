@@ -191,4 +191,9 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		return world.setBlock(x, y, z, ore.block, ore.metadata, 2);
 	}
 
+	public static WeightedRandomBlock selectBlock(World world, List<WeightedRandomBlock> o) {
+
+		return (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+	}
+
 }
