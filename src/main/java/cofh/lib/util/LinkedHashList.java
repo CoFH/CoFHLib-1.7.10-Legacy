@@ -35,6 +35,7 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 
 	public LinkedHashList() {
 
+		hashTable = new Entry[8];
 	}
 
 	public boolean push(E obj) {
