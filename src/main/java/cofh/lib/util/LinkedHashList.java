@@ -3,39 +3,83 @@ package cofh.lib.util;
 import com.google.common.base.Objects;
 import com.google.common.primitives.Ints;
 
+import java.util.AbstractCollection;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+
 @SuppressWarnings("unchecked")
-public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deque<E>, Cloneable, java.io.Serializable
+public class LinkedHashList<E extends Object> extends AbstractCollection<E> implements Cloneable {
+	// TODO: implements List<E>, java.io.Serializable
 
-	private static final class Entry {
-		Entry next;
-		Entry prev;
-		final Object key;
-		final int hash;
-		Entry nextInBucket;
+	protected static final class Entry {
 
-		Entry(Object key, int keyHash) {
+		protected Entry next;
+		protected Entry prev;
+		protected final Object key;
+		protected final int hash;
+		protected Entry nextInBucket;
+
+		protected Entry(Object key, int keyHash) {
 
 			this.key = key;
 			this.hash = keyHash;
 		}
 	}
 
-	private static int hash(Object n) {
+	protected static int hash(Object n) {
 
 		int h = n.hashCode();
 		h ^= (h >>> 20) ^ (h >>> 12);
 		return h ^ (h >>> 7) ^ (h >>> 4);
 	}
 
-	Entry head;
-	Entry tail;
-	private int size;
-	private int mask;
-	private Entry[] hashTable;
+	private static int roundUpToPowerOf2(int number) {
+
+		return number >= Ints.MAX_POWER_OF_TWO
+				? Ints.MAX_POWER_OF_TWO
+						: (number > 2) ? Integer.highestOneBit((number - 1) << 1) : 2;
+	}
+
+	protected transient Entry head;
+	protected transient Entry tail;
+	protected transient int size;
+	protected transient int mask;
+	protected transient Entry[] hashTable;
+	protected transient int modCount;
 
 	public LinkedHashList() {
 
 		hashTable = new Entry[8];
+		mask = 7;
+	}
+
+	public LinkedHashList(Collection<E> col) {
+
+		int size = roundUpToPowerOf2(col.size());
+		hashTable = new Entry[size];
+		mask = size - 1;
+		addAll(col);
+	}
+
+	@Override
+	public int size() {
+
+		return size;
+	}
+
+	@Override
+	public boolean add(E e) {
+
+		return push(e);
+	}
+
+	public E get(int index) {
+
+		checkElementIndex(index);
+		return (E) index(index).key;
 	}
 
 	public boolean push(E obj) {
@@ -45,6 +89,7 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 			return false;
 
 		Entry e;
+		++modCount;
 		insert(e = new Entry(obj, hash));
 		rehashIfNecessary();
 		e.prev = tail;
@@ -61,6 +106,7 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 
 		Entry e = tail;
 		if (e != null) {
+			++modCount;
 			delete(e);
 			tail = e.prev;
 			e.prev = null;
@@ -90,6 +136,7 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 			return false;
 
 		Entry e;
+		++modCount;
 		insert(e = new Entry(obj, hash));
 		rehashIfNecessary();
 		e.next = head;
@@ -106,6 +153,7 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 
 		Entry e = head;
 		if (e != null) {
+			++modCount;
 			delete(e);
 			head = e.next;
 			e.next = null;
@@ -118,16 +166,39 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 		return null;
 	}
 
-	public int size() {
-		return size;
-	}
-
-	public boolean contains(E obj) {
+	@Override
+	public boolean contains(Object obj) {
 
 		return seek(obj, hash(obj)) != null;
 	}
 
-	private Entry seek(E obj, int hash) {
+	@Override
+	public boolean remove(Object obj) {
+
+		Entry e = seek(obj, hash(obj));
+		if (e == null)
+			return false;
+
+		unlink(e);
+		return true;
+	}
+
+	protected Entry index(int index) {
+
+		Entry x;
+		if (index < (size >> 1)) {
+			x = head;
+			for (int i = index; i --> 0; )
+				x = x.next;
+		} else {
+			x = tail;
+			for (int i = size; i --> index; )
+				x = x.prev;
+		}
+		return x;
+	}
+
+	protected Entry seek(Object obj, int hash) {
 
 		for (Entry entry = hashTable[hash & mask];
 				entry != null;
@@ -138,7 +209,7 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 		return null;
 	}
 
-	private void insert(Entry entry) {
+	protected void insert(Entry entry) {
 
 		int bucket = entry.hash & mask;
 		entry.nextInBucket = hashTable[bucket];
@@ -146,7 +217,28 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 		++size;
 	}
 
-	private void delete(Entry entry) {
+	protected boolean linkBefore(E obj, Entry succ) {
+
+		int hash = hash(obj);
+		if (seek(obj, hash) != null)
+			return false;
+
+		final Entry pred = succ.prev;
+		final Entry newNode = new Entry(obj, hash);
+		modCount++;
+		insert(newNode);
+		rehashIfNecessary();
+		newNode.next = succ;
+		newNode.prev = pred;
+		succ.prev = newNode;
+		if (pred == null)
+			head = newNode;
+		else
+			pred.next = newNode;
+		return true;
+	}
+
+	protected void delete(Entry entry) {
 
 		int bucket = entry.hash & mask;
 		Entry prev = null, cur = hashTable[bucket];
@@ -163,7 +255,32 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 		--size;
 	}
 
-	private void rehashIfNecessary() {
+	protected E unlink(Entry x) {
+
+		final E element = (E) x.key;
+		final Entry next = x.next;
+		final Entry prev = x.prev;
+
+		if (prev == null) {
+			head = next;
+		} else {
+			prev.next = next;
+			x.prev = null;
+		}
+
+		if (next == null) {
+			tail = prev;
+		} else {
+			next.prev = prev;
+			x.next = null;
+		}
+
+		delete(x);
+		modCount++;
+		return element;
+	}
+
+	protected void rehashIfNecessary() {
 
 		Entry[] old = hashTable, newTable;
 		if (size > old.length * 2 && old.length < Ints.MAX_POWER_OF_TWO) {
@@ -183,4 +300,195 @@ public class LinkedHashList<E extends Object> { // TODO: implements List<E>, Deq
 			}
 		}
 	}
+
+	@Override
+	public LinkedHashList<E> clone() {
+
+		return new LinkedHashList<E>(this);
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+
+		return listIterator();
+	}
+
+	public ListIterator<E> listIterator() {
+
+		return listIterator(0);
+	}
+
+	public ListIterator<E> listIterator(int index) {
+
+		checkPositionIndex(index);
+		return new ListItr(index);
+	}
+
+	public Iterator<E> descendingIterator() {
+
+		return new DescendingIterator();
+	}
+
+	protected boolean isElementIndex(int index) {
+
+		return index >= 0 && index < size;
+	}
+
+	protected boolean isPositionIndex(int index) {
+
+		return index >= 0 && index <= size;
+	}
+
+	protected String outOfBoundsMsg(int index) {
+
+		return "Index: "+index+", Size: "+size;
+	}
+
+	protected void checkElementIndex(int index) {
+
+		if (!isElementIndex(index))
+			throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+	}
+
+	protected void checkPositionIndex(int index) {
+
+		if (!isPositionIndex(index))
+			throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+	}
+
+	protected class ListItr implements ListIterator<E> {
+
+		protected Entry lastReturned = null;
+		protected Entry next;
+		protected int nextIndex;
+		protected int expectedModCount = modCount;
+
+		protected ListItr(int index) {
+
+			next = (index == size) ? null : index(index);
+			nextIndex = index;
+		}
+
+		@Override
+		public boolean hasNext() {
+
+			return nextIndex < size;
+		}
+
+		@Override
+		public E next() {
+
+			checkForComodification();
+			if (!hasNext())
+				throw new NoSuchElementException();
+
+			lastReturned = next;
+			next = next.next;
+			nextIndex++;
+			return (E) lastReturned.key;
+		}
+
+		@Override
+		public boolean hasPrevious() {
+
+			return nextIndex > 0;
+		}
+
+		@Override
+		public E previous() {
+
+			checkForComodification();
+			if (!hasPrevious())
+				throw new NoSuchElementException();
+
+			lastReturned = next = (next == null) ? tail : next.prev;
+			nextIndex--;
+			return (E) lastReturned.key;
+		}
+
+		@Override
+		public int nextIndex() {
+
+			return nextIndex;
+		}
+
+		@Override
+		public int previousIndex() {
+
+			return nextIndex - 1;
+		}
+
+		@Override
+		public void remove() {
+
+			checkForComodification();
+			if (lastReturned == null)
+				throw new IllegalStateException();
+
+			Entry lastNext = lastReturned.next;
+			unlink(lastReturned);
+			if (next == lastReturned)
+				next = lastNext;
+			else
+				nextIndex--;
+			lastReturned = null;
+			expectedModCount++;
+		}
+
+		@Override
+		public void set(E e) {
+
+			if (lastReturned == null)
+				throw new IllegalStateException();
+			checkForComodification();
+			linkBefore(e, lastReturned);
+			delete(lastReturned);
+			expectedModCount += 2;
+		}
+
+		@Override
+		public void add(E e) {
+
+			checkForComodification();
+			lastReturned = null;
+			if (next == null)
+				push(e);
+			else
+				linkBefore(e, next);
+			nextIndex++;
+			expectedModCount++;
+		}
+
+		protected final void checkForComodification() {
+
+			if (modCount != expectedModCount)
+				throw new ConcurrentModificationException();
+		}
+
+	}
+
+	protected class DescendingIterator implements Iterator<E> {
+
+		protected final ListItr itr = new ListItr(size());
+
+		@Override
+		public boolean hasNext() {
+
+			return itr.hasPrevious();
+		}
+
+		@Override
+		public E next() {
+
+			return itr.previous();
+		}
+
+		@Override
+		public void remove() {
+
+			itr.remove();
+		}
+
+	}
+
 }
