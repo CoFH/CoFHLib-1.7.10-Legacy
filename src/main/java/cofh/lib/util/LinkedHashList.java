@@ -438,11 +438,13 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		@Override
 		public void set(E e) {
 
+			checkForComodification();
 			if (lastReturned == null)
 				throw new IllegalStateException();
-			checkForComodification();
+
 			linkBefore(e, lastReturned);
-			delete(lastReturned);
+			unlink(lastReturned);
+			lastReturned = (next == null) ? tail : next.prev;
 			expectedModCount += 2;
 		}
 
