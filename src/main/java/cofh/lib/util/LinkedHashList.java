@@ -31,7 +31,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 	protected static int hash(Object n) {
 
-		int h = n.hashCode();
+		int h = n == null ? 0 : n.hashCode();
 		h ^= (h >>> 20) ^ (h >>> 12);
 		return h ^ (h >>> 7) ^ (h >>> 4);
 	}
