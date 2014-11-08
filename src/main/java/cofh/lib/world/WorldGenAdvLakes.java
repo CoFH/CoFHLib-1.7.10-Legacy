@@ -16,9 +16,11 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenAdvLakes extends WorldGenerator
 {
+	private static final WeightedRandomBlock GAP_BLOCK = new WeightedRandomBlock(Blocks.air, 0);
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
-	public boolean outlineInStone = false;
+	public WeightedRandomBlock outlineBlock = null;
+	public WeightedRandomBlock gapBlock = GAP_BLOCK;
 	public boolean lineWithFiller = false;
 	public int width = 16;
 	public int height = 8;
@@ -111,8 +113,8 @@ public class WorldGenAdvLakes extends WorldGenerator
 					if (spawnBlock[(x * width + z) * height + y]) {
 						if (y < heightOff)
 							generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
-						else
-							world.setBlock(xStart + x, yStart + y, zStart + z, Blocks.air, 0, 2);
+						else if (canGenerateInBlock(world, xStart + x, yStart + y, zStart + z, genBlock))
+							world.setBlock(xStart + x, yStart + y, zStart + z, gapBlock.block, gapBlock.metadata, 2);
 					}
 				}
 			}
@@ -134,7 +136,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 			}
 		}
 
-		if (outlineInStone) {
+		if (outlineBlock != null) {
 			for (x = 0; x < width; ++x) {
 				for (z = 0; z < width; ++z) {
 					for (y = 0; y < height; ++y) {
@@ -148,7 +150,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 
 						if (flag && (y < heightOff || rand.nextInt(2) != 0) &&
 								world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial().isSolid()) {
-							world.setBlock(xStart + x, yStart + y, zStart + z, Blocks.stone, 0, 2);
+							world.setBlock(xStart + x, yStart + y, zStart + z, outlineBlock.block, outlineBlock.metadata, 2);
 						}
 					}
 				}
