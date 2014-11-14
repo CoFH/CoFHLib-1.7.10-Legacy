@@ -56,6 +56,13 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		mask = 7;
 	}
 
+	public LinkedHashList(int size) {
+
+		size = roundUpToPowerOf2(size);
+		hashTable = new Entry[size];
+		mask = size - 1;
+	}
+
 	public LinkedHashList(Collection<E> col) {
 
 		int size = roundUpToPowerOf2(col.size());
@@ -192,7 +199,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 				x = x.next;
 		} else {
 			x = tail;
-			for (int i = size; i --> index; )
+			for (int i = size - 1; i --> index; )
 				x = x.prev;
 		}
 		return x;
