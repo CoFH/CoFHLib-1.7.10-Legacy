@@ -78,9 +78,9 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 			int directionChange = rand.nextInt(6);
 
-			int directionX = rand.nextInt(2);
-			int directionY = rand.nextInt(2);
-			int directionZ = rand.nextInt(2);
+			int directionX = -rand.nextInt(2);
+			int directionY = -rand.nextInt(2);
+			int directionZ = -rand.nextInt(2);
 			{ // random code block to circumvent eclipse freaking out on auto-indent with unsigned right shift
 				directionX += ~directionX >>> 31;
 		directionX += ~directionY >>> 31;
