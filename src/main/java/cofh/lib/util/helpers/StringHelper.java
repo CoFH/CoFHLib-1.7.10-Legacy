@@ -13,9 +13,9 @@ import org.lwjgl.input.Keyboard;
 
 /**
  * Contains various helper functions to assist with String manipulation.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class StringHelper {
 
@@ -104,25 +104,21 @@ public final class StringHelper {
 
 	public static String getScaledNumber(long number) {
 
-		return getScaledNumber(number, 2);
+		if (number >= 1000000000) {
+			return number / 1000000000 + "." + (number % 1000000000 / 10000000) + "G";
+		} else if (number >= 1000000) {
+			return number / 1000000 + "." + (number % 1000000 / 10000) + "M";
+		} else if (number >= 1000) {
+			return number / 1000 + "." + (number % 1000 / 10) + "k";
+		} else {
+			return String.valueOf(number);
+		}
 	}
 
+	@Deprecated
 	public static String getScaledNumber(long number, int minDigits) {
 
-		String numString = "";
-
-		int numMod = 10 ^ minDigits;
-
-		if (number > 100000000 * numMod) {
-			numString += number / 1000000000 + "G";
-		} else if (number > 100000 * numMod) {
-			numString += number / 1000000 + "M";
-		} else if (number > 100 * numMod) {
-			numString += number / 1000 + "k";
-		} else {
-			numString += number;
-		}
-		return numString;
+		return getScaledNumber(number);
 	}
 
 	/* ITEM TEXT HELPERS */
