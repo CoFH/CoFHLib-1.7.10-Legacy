@@ -359,6 +359,21 @@ public final class ItemHelper {
 		return new ShapedOreRecipe(result, recipe);
 	}
 
+	public static final IRecipe ShapedRecipe(Block result, int s, Object... recipe) {
+
+		return new ShapedOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapedRecipe(Item result, int s, Object... recipe) {
+
+		return new ShapedOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapedRecipe(ItemStack result, int s, Object... recipe) {
+
+		return new ShapedOreRecipe(cloneStack(result, s), recipe);
+	}
+
 	public static final IRecipe ShapelessRecipe(Block result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
@@ -372,6 +387,21 @@ public final class ItemHelper {
 	public static final IRecipe ShapelessRecipe(ItemStack result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
+	}
+
+	public static final IRecipe ShapelessRecipe(Block result, int s, Object... recipe) {
+
+		return new ShapelessOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapelessRecipe(Item result, int s, Object... recipe) {
+
+		return new ShapelessOreRecipe(stack(result, s), recipe);
+	}
+
+	public static final IRecipe ShapelessRecipe(ItemStack result, int s, Object... recipe) {
+
+		return new ShapelessOreRecipe(cloneStack(result, s), recipe);
 	}
 
 	/* CRAFTING HELPER FUNCTIONS */
