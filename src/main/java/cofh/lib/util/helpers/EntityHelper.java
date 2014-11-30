@@ -18,9 +18,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * This class contains various helper functions related to Entities.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class EntityHelper {
 
@@ -47,6 +47,26 @@ public class EntityHelper {
 	public static ForgeDirection getEntityFacingForgeDirection(EntityLivingBase living) {
 
 		return ForgeDirection.VALID_DIRECTIONS[getEntityFacingCardinal(living)];
+	}
+
+	public static void transferEntityToDimension(Entity entity, int dimension, ServerConfigurationManager manager) {
+
+		if (entity instanceof EntityPlayerMP) {
+			transferPlayerToDimension((EntityPlayerMP)entity, dimension, manager);
+			return;
+		}
+		WorldServer worldserver = manager.getServerInstance().worldServerForDimension(entity.dimension);
+		entity.dimension = dimension;
+		WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(entity.dimension);
+		worldserver.removePlayerEntityDangerously(entity);
+        if (entity.riddenByEntity != null) {
+        	entity.riddenByEntity.mountEntity(null);
+        }
+        if (entity.ridingEntity != null) {
+        	entity.mountEntity(null);
+        }
+        entity.isDead = false;
+		transferEntityToWorld(entity, worldserver, worldserver1);
 	}
 
 	public static void transferEntityToWorld(Entity entity, WorldServer oldWorld, WorldServer newWorld) {
@@ -81,6 +101,12 @@ public class EntityHelper {
 		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.difficultySetting, player.worldObj.getWorldInfo()
 				.getTerrainType(), player.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(player);
+        if (player.riddenByEntity != null) {
+        	player.riddenByEntity.mountEntity(null);
+        }
+        if (player.ridingEntity != null) {
+        	player.mountEntity(null);
+        }
 		player.isDead = false;
 		transferEntityToWorld(player, worldserver, worldserver1);
 		manager.func_72375_a(player, worldserver);
