@@ -128,6 +128,57 @@ public final class BlockHelper {
 		rotateType[Block.getIdFromBlock(Blocks.quartz_stairs)] = RotationType.STAIRS;
 	}
 
+	public static int getMicroBlockAngle(int side, float hitX, float hitY, float hitZ) {
+
+		int direction = side ^ 1;
+		float degreeCenter = 0.32f / 2;
+
+		float x = 0, y = 0;
+		switch (side >> 1) {
+		case 0:
+			x = hitX;
+			y = hitZ;
+			break;
+		case 1:
+			x = hitX;
+			y = hitY;
+			break;
+		case 2:
+			x = hitY;
+			y = hitZ;
+			break;
+		}
+
+		if (x * x + y * y > degreeCenter * degreeCenter) {
+
+			int a = (int) ((Math.atan2(x,  y) + Math.PI) * 4 / Math.PI);
+			a = ++a & 7;
+			switch (a >> 1) {
+			case 0:
+			case 4:
+				direction = 2;
+				break;
+			case 1:
+				direction = 4;
+				break;
+			case 2:
+				direction = 3;
+				break;
+			case 3:
+				direction = 5;
+				break;
+			}
+
+		}
+
+		return direction;
+	}
+
+	public static ForgeDirection getMicroBlockAngle(ForgeDirection side, float hitX, float hitY, float hitZ) {
+
+		return ForgeDirection.VALID_DIRECTIONS[getMicroBlockAngle(side.ordinal(), hitX, hitY, hitZ)];
+	}
+
 	public static int getHighestY(World world, int x, int z) {
 
 		return world.getChunkFromBlockCoords(x, z).getTopFilledSegment() + 16;
