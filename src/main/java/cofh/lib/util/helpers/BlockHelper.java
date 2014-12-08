@@ -153,7 +153,7 @@ public final class BlockHelper {
 
 		if (x * x + y * y > degreeCenter * degreeCenter) {
 
-			int a = (int) ((Math.atan2(x - 0.5,  y - 0.5) + Math.PI) * 4 / Math.PI);
+			int a = (int) ((Math.atan2(x,  y) + Math.PI) * 4 / Math.PI);
 			a = ++a & 7;
 			switch (a >> 1) {
 			case 0:
