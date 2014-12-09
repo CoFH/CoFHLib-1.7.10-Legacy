@@ -7,10 +7,11 @@ import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Don't instantiate this or call these methods in any way. Use the methods in {@link ItemHelper}.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
+@SuppressWarnings("deprecation")
 public class OreDictionaryProxy {
 
 	public ItemStack getOre(String oreName) {
