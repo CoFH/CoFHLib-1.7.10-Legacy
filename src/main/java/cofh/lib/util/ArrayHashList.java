@@ -231,6 +231,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 	// { following methods (until the next }) copied mostly verbatim from ArrayList
 	@Override
 	public void clear() {
+
 		modCount++;
 
 		// clear to let GC do its work
