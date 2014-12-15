@@ -16,6 +16,7 @@ public class WorldGenGeode extends WorldGenerator
 	private final List<WeightedRandomBlock> outline;
 	private final WeightedRandomBlock[] genBlock;
 	public boolean hollow = false;
+	public List<WeightedRandomBlock> fillBlock = null;
 	public int width = 16;
 	public int height = 8;
 
@@ -28,8 +29,8 @@ public class WorldGenGeode extends WorldGenerator
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart)
-	{
+	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
+
 		int heightOff = height / 2;
 		int widthOff = width / 2;
 		xStart -= widthOff;
@@ -40,6 +41,7 @@ public class WorldGenGeode extends WorldGenerator
 
 		yStart -= heightOff;
 		boolean[] spawnBlock = new boolean[width * width * height];
+		boolean[] hollowBlock = new boolean[width * width * height];
 
 		int W = width - 1, H = height - 1;
 
@@ -62,6 +64,8 @@ public class WorldGenGeode extends WorldGenerator
 
 						if (dist < 1.0D)
 							spawnBlock[(x * width + z) * height + y] = hollow ? dist > minDist : true;
+						if (hollow)
+							hollowBlock[(x * width + z) * height + y] = dist <= minDist;
 					}
 				}
 			}
@@ -93,11 +97,13 @@ public class WorldGenGeode extends WorldGenerator
 		for (x = 0; x < width; ++x) {
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
-					if (spawnBlock[(x * width + z) * height + y])
-						if (!generateBlock(world, x, y, z, cluster)) {
+					if (spawnBlock[(x * width + z) * height + y]) {
+						boolean t = generateBlock(world, x, y, z, cluster);
+						r |= t;
+						if (!t) {
 							spawnBlock[(x * width + z) * height + y] = false;
-						} else
-							r = true;
+						}
+					}
 				}
 			}
 		}
@@ -105,16 +111,21 @@ public class WorldGenGeode extends WorldGenerator
 		for (x = 0; x < width; ++x) {
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
-					boolean flag = !spawnBlock[(x * width + z) * height + y] && (
-							(x < W && spawnBlock[((x + 1) * width + z) * height + y]) ||
-							(x > 0 && spawnBlock[((x - 1) * width + z) * height + y]) ||
-							(z < W && spawnBlock[(x * width + (z + 1)) * height + y]) ||
-							(z > 0 && spawnBlock[(x * width + (z - 1)) * height + y]) ||
-							(y < H && spawnBlock[(x * width + z) * height + (y + 1)]) ||
-							(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
+					if (fillBlock != null && hollowBlock[(x * width + z) * height + y]) {
+						r |= generateBlock(world, x, y, z, fillBlock);
+					} else {
+						boolean flag = !spawnBlock[(x * width + z) * height + y] && (
+								(x < W && spawnBlock[((x + 1) * width + z) * height + y]) ||
+								(x > 0 && spawnBlock[((x - 1) * width + z) * height + y]) ||
+								(z < W && spawnBlock[(x * width + (z + 1)) * height + y]) ||
+								(z > 0 && spawnBlock[(x * width + (z - 1)) * height + y]) ||
+								(y < H && spawnBlock[(x * width + z) * height + (y + 1)]) ||
+								(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
-					if (flag) {
-						r |= generateBlock(world, x, y, z, outline);
+
+						if (flag) {
+							r |= generateBlock(world, x, y, z, outline);
+						}
 					}
 				}
 			}
