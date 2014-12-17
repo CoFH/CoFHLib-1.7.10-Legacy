@@ -249,15 +249,18 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 		int bucket = entry.hash & mask;
 		Entry prev = null, cur = hashTable[bucket];
-		l: {
-			if (cur != entry) for (; true; cur = cur.nextInBucket) {
+		l: synchronized (hashTable) {
+			if (cur == entry) {
+				hashTable[bucket] = cur.nextInBucket;
+				break l;
+			}
+			for (; true; cur = cur.nextInBucket) {
 				if (cur == entry) {
 					prev.nextInBucket = entry.nextInBucket;
 					break l;
 				}
 				prev = cur;
 			}
-			hashTable[bucket] = cur.nextInBucket;
 		}
 		--size;
 	}
@@ -290,22 +293,23 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 	protected void rehashIfNecessary() {
 
 		Entry[] old = hashTable, newTable;
-		if (size > old.length * 2 && old.length < Ints.MAX_POWER_OF_TWO) {
-			int newTableSize = old.length * 2, newMask = newTableSize - 1;
-			newTable = hashTable = new Entry[newTableSize];
-			mask = newMask;
+		if (size > old.length * 2 && old.length < Ints.MAX_POWER_OF_TWO)
+			synchronized (hashTable) {
+				int newTableSize = old.length * 2, newMask = newTableSize - 1;
+				newTable = hashTable = new Entry[newTableSize];
+				mask = newMask;
 
-			for (int bucket = old.length; bucket --> 0 ; ) {
-				Entry entry = old[bucket];
-				while (entry != null) {
-					Entry nextEntry = entry.nextInBucket;
-					int keyBucket = entry.hash & newMask;
-					entry.nextInBucket = newTable[keyBucket];
-					newTable[keyBucket] = entry;
-					entry = nextEntry;
+				for (int bucket = old.length; bucket --> 0 ; ) {
+					Entry entry = old[bucket];
+					while (entry != null) {
+						Entry nextEntry = entry.nextInBucket;
+						int keyBucket = entry.hash & newMask;
+						entry.nextInBucket = newTable[keyBucket];
+						newTable[keyBucket] = entry;
+						entry = nextEntry;
+					}
 				}
 			}
-		}
 	}
 
 	@Override
