@@ -247,9 +247,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 	protected void delete(Entry entry) {
 
-		int bucket = entry.hash & mask;
-		Entry prev = null, cur = hashTable[bucket];
 		l: synchronized (hashTable) {
+			int bucket = entry.hash & mask;
+			Entry prev = null, cur = hashTable[bucket];
 			if (cur == entry) {
 				hashTable[bucket] = cur.nextInBucket;
 				break l;

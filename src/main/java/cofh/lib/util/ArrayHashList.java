@@ -382,9 +382,9 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 
 	protected void delete(Entry entry) {
 
-		int bucket = entry.hash & mask;
-		Entry prev = null, cur = hashTable[bucket];
 		l: synchronized (hashTable) {
+			int bucket = entry.hash & mask;
+			Entry prev = null, cur = hashTable[bucket];
 			if (cur == entry) {
 				hashTable[bucket] = cur.nextInBucket;
 				break l;
