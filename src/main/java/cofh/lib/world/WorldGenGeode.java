@@ -15,8 +15,8 @@ public class WorldGenGeode extends WorldGenerator
 	private final List<WeightedRandomBlock> cluster;
 	private final List<WeightedRandomBlock> outline;
 	private final WeightedRandomBlock[] genBlock;
-	public boolean hollow = false;
 	public List<WeightedRandomBlock> fillBlock = null;
+	public boolean hollow = false;
 	public int width = 16;
 	public int height = 8;
 
@@ -78,7 +78,9 @@ public class WorldGenGeode extends WorldGenerator
 		for (x = 0; x < width; ++x) {
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
-					boolean flag = spawnBlock[(x * width + z) * height + y] || (
+					boolean flag = (fillBlock != null &&
+							hollowBlock[(x * width + z) * height + y]) ||
+							spawnBlock[(x * width + z) * height + y] || (
 							(x < W && spawnBlock[((x + 1) * width + z) * height + y]) ||
 							(x > 0 && spawnBlock[((x - 1) * width + z) * height + y]) ||
 							(z < W && spawnBlock[(x * width + (z + 1)) * height + y]) ||
@@ -98,7 +100,7 @@ public class WorldGenGeode extends WorldGenerator
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
 					if (spawnBlock[(x * width + z) * height + y]) {
-						boolean t = generateBlock(world, x, y, z, cluster);
+						boolean t = generateBlock(world, xStart + x, yStart + y, zStart + z, cluster);
 						r |= t;
 						if (!t) {
 							spawnBlock[(x * width + z) * height + y] = false;
@@ -112,7 +114,7 @@ public class WorldGenGeode extends WorldGenerator
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
 					if (fillBlock != null && hollowBlock[(x * width + z) * height + y]) {
-						r |= generateBlock(world, x, y, z, fillBlock);
+						r |= generateBlock(world, xStart + x, yStart + y, zStart + z, fillBlock);
 					} else {
 						boolean flag = !spawnBlock[(x * width + z) * height + y] && (
 								(x < W && spawnBlock[((x + 1) * width + z) * height + y]) ||
@@ -124,7 +126,7 @@ public class WorldGenGeode extends WorldGenerator
 
 
 						if (flag) {
-							r |= generateBlock(world, x, y, z, outline);
+							r |= generateBlock(world, xStart + x, yStart + y, zStart + z, outline);
 						}
 					}
 				}
