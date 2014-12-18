@@ -34,9 +34,11 @@ public class WorldGenSpike extends WorldGenerator {
 			return false;
 		}
 
-		yStart += rand.nextInt(4);
 		int height = rand.nextInt(4) + 7, originalHeight = height;
 		int size = height / 4 + rand.nextInt(2);
+		if (size > 1) {
+			yStart += rand.nextInt(4) - 1;
+		}
 
 		if (largeSpikes && size > 1 && rand.nextInt(60) == 0) {
 			height += 10 + rand.nextInt(30);
