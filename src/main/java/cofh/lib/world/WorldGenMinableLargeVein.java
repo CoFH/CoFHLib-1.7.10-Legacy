@@ -78,24 +78,24 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 			int directionChange = rand.nextInt(6);
 
-			int directionX = -rand.nextInt(2);
-			int directionY = -rand.nextInt(2);
-			int directionZ = -rand.nextInt(2);
+			int directionX1 = -rand.nextInt(2);
+			int directionY1 = -rand.nextInt(2);
+			int directionZ1 = -rand.nextInt(2);
 			{ // random code block to circumvent eclipse freaking out on auto-indent with unsigned right shift
-				directionX += ~directionX >>> 31;
-		directionX += ~directionY >>> 31;
-		directionX += ~directionZ >>> 31;
+				directionX1 += ~directionX1 >>> 31;
+				directionY1 += ~directionY1 >>> 31;
+				directionZ1 += ~directionZ1 >>> 31;
 			}
 
 			for (int blocksBranch = 0; blocksBranch <= branchSize;) {
 				if (directionChange != 1) {
-					posX += rand.nextInt(2) * directionX;
+					posX += rand.nextInt(2) * directionX1;
 				}
 				if (directionChange != 2) {
-					posY += rand.nextInt(2) * directionY;
+					posY += rand.nextInt(2) * directionY1;
 				}
 				if (directionChange != 3) {
-					posZ += rand.nextInt(2) * directionZ;
+					posZ += rand.nextInt(2) * directionZ1;
 				}
 
 				if (rand.nextInt(3) == 0) {
@@ -110,8 +110,8 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 					int directionZ2 = -rand.nextInt(2);
 					{ // freaking out does not occur here, for some reason. the number at the end of the variable?
 						directionX2 += ~directionX2 >>> 31;
-						directionX2 += ~directionY2 >>> 31;
-						directionX2 += ~directionZ2 >>> 31;
+						directionY2 += ~directionY2 >>> 31;
+						directionZ2 += ~directionZ2 >>> 31;
 					}
 
 					for (int blocksSubBranch = 0; blocksSubBranch <= subBranchSize;) {
