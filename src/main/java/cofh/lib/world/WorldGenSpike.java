@@ -16,6 +16,14 @@ public class WorldGenSpike extends WorldGenerator {
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
 	public boolean largeSpikes = true;
+	public int largeSpikeChance = 60;
+	public int minHeight = 7;
+	public int heightVariance = 4;
+	public int sizeVariance = 2;
+	public int positionVariance = 4;
+	public int minLargeSpikeHeightGain = 10;
+	public int largeSpikeHeightVariance = 30;
+	public int largeSpikeFillerSize = 1;
 
 	public WorldGenSpike(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> block) {
 
@@ -34,24 +42,24 @@ public class WorldGenSpike extends WorldGenerator {
 			return false;
 		}
 
-		int height = rand.nextInt(4) + 7, originalHeight = height;
-		int size = height / 4 + rand.nextInt(2);
+		int height = rand.nextInt(heightVariance) + minHeight, originalHeight = height;
+		int size = height / (minHeight / 2) + rand.nextInt(sizeVariance);
 		if (size > 1) {
-			yStart += rand.nextInt(4) - 1;
+			yStart += rand.nextInt(positionVariance) - 1;
 		}
 
-		if (largeSpikes && size > 1 && rand.nextInt(60) == 0) {
-			height += 10 + rand.nextInt(30);
+		if (largeSpikes && size > 1 && (largeSpikeChance <= 0 || rand.nextInt(largeSpikeChance) == 0)) {
+			height += minLargeSpikeHeightGain + rand.nextInt(largeSpikeHeightVariance);
 		}
 
 		int offsetHeight = height - originalHeight;
 
 		for (int y = 0; y < height; ++y) {
 			float layerSize;
-			if (y > offsetHeight)
+			if (y >= offsetHeight)
 				layerSize = (1.0F - (float)(y - offsetHeight) / (float)originalHeight) * size;
 			else
-				layerSize = 1;
+				layerSize = largeSpikeFillerSize;
 			int width = MathHelper.ceiling_float_int(layerSize);
 
 			for (int x = -width; x <= width; ++x) {
