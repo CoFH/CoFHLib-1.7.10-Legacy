@@ -43,7 +43,7 @@ public class WorldGenStalagmite extends WorldGenerator {
 			return (int)Math.round(height * (fat ? Math.sin(r) / r : Math.sin(r=r*pi) / r));
 		} else {
 			int absx = x < 0 ? -x : x, absz = (z < 0 ? -z : z);
-			int dist = !fat ? (absx < absz ? absz + absx / 2 : absx + absz / 2) : absx + absz;
+			int dist = fat ? (absx < absz ? absz + absx / 2 : absx + absz / 2) : absx + absz;
 			if (dist == 0) return height;
 			return rand.nextInt(height / dist);
 		}
