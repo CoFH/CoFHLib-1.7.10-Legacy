@@ -41,7 +41,8 @@ public class WorldGenStalagmite extends WorldGenerator {
 		} else {
 			int absx = x < 0 ? -x : x, absz = (z < 0 ? -z : z);
 			int dist = !fat ? (absx < absz ? absz + absx / 2 : absx + absz / 2) : absx + absz;
-			return rand.nextInt(height / (dist + 1));
+			if (dist == 0) return height;
+			return rand.nextInt(height / dist);
 		}
 	}
 
