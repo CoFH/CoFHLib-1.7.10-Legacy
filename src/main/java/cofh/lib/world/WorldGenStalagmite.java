@@ -30,12 +30,15 @@ public class WorldGenStalagmite extends WorldGenerator {
 		genBlock = gblock.toArray(new WeightedRandomBlock[gblock.size()]);
 	}
 
-	protected int getHeight(int x, int z, Random rand, int height) {
+	protected int getHeight(int x, int z, int size, Random rand, int height) {
 
 		if (smooth) {
+			if ((x*x + z*z) * 4 >= size * size * 5) return 0;
+
+			final double lim = (fat ? 1 : .5f) * 400f / size;
 			final double pi = Math.PI;
 			double r;
-			r = Math.sqrt((r=(x/pi))*r + (r=(z/pi))*r) * pi/180;
+			r = Math.sqrt((r=((x*lim)/pi))*r + (r=((z*lim)/pi))*r) * pi/180;
 			if (r == 0) return height;
 			return (int)Math.round(height * (fat ? Math.sin(r) / r : Math.sin(r=r*pi) / r));
 		} else {
@@ -66,7 +69,7 @@ public class WorldGenStalagmite extends WorldGenerator {
 				if (!canGenerateInBlock(world, xStart + x, yStart - 1, zStart + z, baseBlock)) {
 					continue;
 				}
-				int height = getHeight(x, z, rand, maxHeight);
+				int height = getHeight(x, z, size, rand, maxHeight);
 				for (int y = 0; y < height; ++y) {
 					r |= generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
 				}

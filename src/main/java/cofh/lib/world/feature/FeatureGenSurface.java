@@ -1,5 +1,7 @@
 package cofh.lib.world.feature;
 
+import static cofh.lib.world.WorldGenMinableCluster.canGenerateInBlock;
+
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.BlockHelper;
 
@@ -14,7 +16,7 @@ public class FeatureGenSurface extends FeatureBase {
 
 	final WorldGenerator worldGen;
 	final int count;
-	final List<WeightedRandomBlock> matList;
+	final WeightedRandomBlock[] matList;
 
 	public FeatureGenSurface(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes,
 			boolean regen, GenRestriction dimRes) {
@@ -22,7 +24,7 @@ public class FeatureGenSurface extends FeatureBase {
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
-		this.matList = matList;
+		this.matList = matList.toArray(new WeightedRandomBlock[matList.size()]);
 	}
 
 	@Override
@@ -43,10 +45,8 @@ public class FeatureGenSurface extends FeatureBase {
 				Block block = world.getBlock(x, y, z);
 				if (!block.isAir(world, x, y, z)) {
 
-					for (WeightedRandomBlock mat : matList) {
-						if (block.isReplaceableOreGen(world, x, y, z, mat.block)) {
-							break l;
-						}
+					if (canGenerateInBlock(world, x, y, z, matList)) {
+						break l;
 					}
 				}
 				continue;

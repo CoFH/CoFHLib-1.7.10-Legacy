@@ -36,7 +36,7 @@ public class WorldGenStalactite extends WorldGenStalagmite {
 				if (!canGenerateInBlock(world, xStart + x, yStart+ 1, zStart + z, baseBlock)) {
 					continue;
 				}
-				int height = getHeight(x, z, rand, maxHeight);
+				int height = getHeight(x, z, size, rand, maxHeight);
 				for (int y = 0; y < height; ++y) {
 					r |= generateBlock(world, xStart + x, yStart - y, zStart + z, genBlock, cluster);
 				}
