@@ -62,7 +62,7 @@ public class WorldGenStalagmite extends WorldGenerator {
 
 		int maxHeight = rand.nextInt(heightVariance) + minHeight;
 
-		int size = genSize > 0 ? genSize : maxHeight / heightMod + rand.nextInt(sizeVariance);
+		int size = (genSize > 0 ? genSize : maxHeight / heightMod) + rand.nextInt(sizeVariance);
 		boolean r = false;
 		for (int x = -size; x <= size; ++x) {
 			for (int z = -size; z <= size; ++z) {
