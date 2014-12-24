@@ -187,13 +187,20 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public static boolean generateBlock(World world, int x, int y, int z, List<WeightedRandomBlock> o) {
 
-		WeightedRandomBlock ore = (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+		WeightedRandomBlock ore = selectBlock(world, o);
+		if (ore == null)
+			return false;
 		return world.setBlock(x, y, z, ore.block, ore.metadata, 2);
 	}
 
 	public static WeightedRandomBlock selectBlock(World world, List<WeightedRandomBlock> o) {
 
-		return (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+		int size = o.size();
+		if (size == 0)
+			return null;
+		if (size > 1)
+			return (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+		return o.get(0);
 	}
 
 }

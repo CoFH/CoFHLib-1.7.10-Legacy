@@ -192,7 +192,7 @@ public final class BlockHelper {
 
 		Block block;
 		do {
-			if (--y <= 0) {
+			if (--y < 0) {
 				break;
 			}
 			block = world.getBlock(x, y, z);
@@ -207,7 +207,7 @@ public final class BlockHelper {
 
 		Block block;
 		do {
-			if (--y <= 0) {
+			if (--y < 0) {
 				break;
 			}
 			block = world.getBlock(x, y, z);
