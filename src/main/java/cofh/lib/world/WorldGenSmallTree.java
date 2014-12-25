@@ -43,7 +43,7 @@ public class WorldGenSmallTree extends WorldGenerator {
 			int yOffset;
 			int zOffset;
 
-			if (genSurface != null && !canGenerateInBlock(world, x, y - 1, z, genSurface))
+			if (!canGenerateInBlock(world, x, y - 1, z, genSurface))
 				return false;
 
 			if (y < worldHeight - treeHeight - 1) {
