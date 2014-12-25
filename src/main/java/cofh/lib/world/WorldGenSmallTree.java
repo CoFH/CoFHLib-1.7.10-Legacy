@@ -123,7 +123,7 @@ public class WorldGenSmallTree extends WorldGenerator {
 									(!treeChecks || block.isLeaves(world, xOffset, yOffset, zOffset) ||
 											block.isAir(world, xOffset, yOffset, zOffset) ||
 											block.canBeReplacedByLeaves(world, xOffset, yOffset, zOffset))) {
-								r |= generateBlock(world, xOffset + x, yOffset + y, zOffset + z, genBlock, leaves);
+								r |= generateBlock(world, xOffset, yOffset, zOffset, genBlock, leaves);
 							}
 						}
 					}
