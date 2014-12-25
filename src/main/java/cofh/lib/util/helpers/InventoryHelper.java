@@ -238,7 +238,7 @@ public class InventoryHelper {
 		if (!inventory.isItemValidForSlot(slot, stack)) {
 			return stack;
 		}
-		int stackLimit = inventory.getInventoryStackLimit();
+		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
 	}
 
