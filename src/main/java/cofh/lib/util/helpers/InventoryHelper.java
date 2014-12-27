@@ -81,7 +81,7 @@ public class InventoryHelper {
 	 */
 	public static boolean addItemStackToInventory(ItemStack[] inventory, ItemStack stack, int startIndex) {
 
-		return addItemStackToInventory(inventory, stack, 0, inventory.length - 1);
+		return addItemStackToInventory(inventory, stack, startIndex, inventory.length - 1);
 	}
 
 	/**
