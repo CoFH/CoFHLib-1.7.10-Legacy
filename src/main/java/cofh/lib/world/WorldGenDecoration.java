@@ -49,7 +49,10 @@ public class WorldGenDecoration extends WorldGenerator {
 				do {
 					if (!checkStay || block.block.canBlockStay(world, x, y, z))
 						r |= world.setBlock(x, y, z, block.block, block.metadata, 2);
+					else break;
 					++y;
+					if (!canGenerateInBlock(world, x, y, z, genBlock))
+						break;
 				} while (stack --> 0);
 			}
 		}
