@@ -161,6 +161,9 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack) {
 
+		if (stack == null)
+			return null;
+
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
@@ -181,6 +184,61 @@ public final class ItemHelper {
 			return ret;
 		}
 		return largerStack ? stack : null;
+	}
+
+	public static ItemStack consumeItem(ItemStack stack, EntityPlayer player) {
+
+		if (stack == null)
+			return null;
+
+		Item item = stack.getItem();
+		boolean largerStack = stack.stackSize > 1;
+		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
+
+		if (largerStack) {
+			stack.stackSize -= 1;
+		}
+
+		if (item.hasContainerItem(stack)) {
+			ItemStack ret = item.getContainerItem(stack);
+
+			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage()))
+				ret = null;
+
+			if (stack.stackSize < 1)
+				return ret;
+
+			if (ret != null && !player.inventory.addItemStackToInventory(ret))
+				player.func_146097_a(ret, false, true);
+		}
+
+		if (stack.stackSize > 0)
+			return stack;
+		return null;
+	}
+
+	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop) {
+
+		return disposePlayerItem(stack, dropStack, entityplayer, allowDrop, true);
+	}
+
+	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack,
+			EntityPlayer entityplayer, boolean allowDrop, boolean allowReplace) {
+
+		if (entityplayer == null || entityplayer.capabilities.isCreativeMode)
+			return true;
+		if (allowReplace && stack.stackSize <= 1) {
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, dropStack);
+			return true;
+		}
+		else if (allowDrop) {
+			stack.stackSize -= 1;
+			if (dropStack != null && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
+				entityplayer.func_146097_a(dropStack, false, true);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
