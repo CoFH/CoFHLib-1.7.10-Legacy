@@ -4,6 +4,7 @@ import static cofh.lib.world.WorldGenMinableCluster.*;
 
 import cofh.lib.util.WeightedRandomBlock;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -16,13 +17,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenAdvLakes extends WorldGenerator
 {
-	private static final WeightedRandomBlock GAP_BLOCK = new WeightedRandomBlock(Blocks.air, 0);
+	private static final List<WeightedRandomBlock> GAP_BLOCK = Arrays.asList(new WeightedRandomBlock(Blocks.air, 0));
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
-	public WeightedRandomBlock outlineBlock = null;
-	public WeightedRandomBlock gapBlock = GAP_BLOCK;
-	@Deprecated
-	public boolean lineWithFiller = false;
+	public List<WeightedRandomBlock> outlineBlock = null;
+	public List<WeightedRandomBlock> gapBlock = GAP_BLOCK;
+	public boolean solidOutline = false;
+	public boolean totalOutline = false;
 	public int width = 16;
 	public int height = 8;
 
@@ -115,7 +116,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 						if (y < heightOff)
 							generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
 						else if (canGenerateInBlock(world, xStart + x, yStart + y, zStart + z, genBlock))
-							world.setBlock(xStart + x, yStart + y, zStart + z, gapBlock.block, gapBlock.metadata, 2);
+							generateBlock(world, xStart + x, yStart + y, zStart + z, gapBlock);
 					}
 				}
 			}
@@ -146,9 +147,9 @@ public class WorldGenAdvLakes extends WorldGenerator
 								(y < H && spawnBlock[(x * width + z) * height + (y + 1)]) ||
 								(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
-						if (flag && (y < heightOff || rand.nextInt(2) != 0) &&
-								world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial().isSolid()) {
-							world.setBlock(xStart + x, yStart + y, zStart + z, outlineBlock.block, outlineBlock.metadata, 2);
+						if (flag && (solidOutline | y < heightOff || rand.nextInt(2) != 0) &&
+								(totalOutline || world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial().isSolid())) {
+							generateBlock(world, xStart + x, yStart + y, zStart + z, outlineBlock);
 						}
 					}
 				}
