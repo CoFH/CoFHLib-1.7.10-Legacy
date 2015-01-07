@@ -21,6 +21,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 	private final WeightedRandomBlock[] genBlock;
 	public WeightedRandomBlock outlineBlock = null;
 	public WeightedRandomBlock gapBlock = GAP_BLOCK;
+	@Deprecated
 	public boolean lineWithFiller = false;
 	public int width = 16;
 	public int height = 8;
@@ -127,10 +128,7 @@ public class WorldGenAdvLakes extends WorldGenerator
 							world.getBlock(xStart + x, yStart + y - 1, zStart + z).equals(Blocks.dirt)
 							&& world.getSavedLightValue(EnumSkyBlock.Sky, xStart + x, yStart + y, zStart + z) > 0) {
 						BiomeGenBase bgb = world.getBiomeGenForCoords(xStart + x, zStart + z);
-						if (lineWithFiller)
-							world.setBlock(xStart + x, yStart + y - 1, zStart + z, bgb.fillerBlock, 0, 2);
-						else
-							world.setBlock(xStart + x, yStart + y - 1, zStart + z, bgb.topBlock, bgb.field_150604_aj, 2);
+						world.setBlock(xStart + x, yStart + y - 1, zStart + z, bgb.topBlock, bgb.field_150604_aj, 2);
 					}
 				}
 			}
