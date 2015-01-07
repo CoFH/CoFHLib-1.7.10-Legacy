@@ -17,6 +17,7 @@ public class WorldGenBoulder extends WorldGenerator
 	private final int size;
 	public int sizeVariance = 2;
 	public int clusters = 3;
+	public int clusterVariance = 0;
 
 	public WorldGenBoulder(List<WeightedRandomBlock> resource, int minSize, List<WeightedRandomBlock> block) {
 
@@ -30,7 +31,8 @@ public class WorldGenBoulder extends WorldGenerator
 
 		final int minSize = size, var = sizeVariance;
 		boolean r = false;
-		for (int i = clusters; i --> 0; ) {
+		int i = clusterVariance > 0 ? clusters + rand.nextInt(clusterVariance + 1) : clusters;
+		while (i --> 0) {
 
 			while (yCenter > minSize && world.isAirBlock(xCenter, yCenter - 1, zCenter)) {
 				--yCenter;
