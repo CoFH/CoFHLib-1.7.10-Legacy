@@ -1,7 +1,9 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
+import cofh.lib.util.helpers.FluidHelper;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ElementFluid extends ElementBase {
@@ -13,9 +15,15 @@ public class ElementFluid extends ElementBase {
 		super(gui, posX, posY);
 	}
 
-	public ElementFluid setFluid(FluidStack fluid) {
+	public ElementFluid setFluid(FluidStack stack) {
 
-		this.fluid = fluid;
+		this.fluid = stack;
+		return this;
+	}
+
+	public ElementFluid setFluid(Fluid fluid) {
+
+		this.fluid = new FluidStack(fluid, FluidHelper.BUCKET_VOLUME);
 		return this;
 	}
 

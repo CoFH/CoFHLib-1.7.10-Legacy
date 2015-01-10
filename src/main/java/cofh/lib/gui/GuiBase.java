@@ -31,7 +31,7 @@ import org.lwjgl.opengl.GL12;
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
- * 
+ *
  * @author King Lemming
  */
 public abstract class GuiBase extends GuiContainer {
