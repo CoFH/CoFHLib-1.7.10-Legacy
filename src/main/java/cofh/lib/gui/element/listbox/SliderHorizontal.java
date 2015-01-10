@@ -21,7 +21,8 @@ public abstract class SliderHorizontal extends ElementSlider {
 	public int getSliderX() {
 
 		int dist = _valueMax - _valueMin;
-		return Math.min(dist == 0 ? 0 : (sizeX - _sliderWidth) * (_value - _valueMin) / dist, sizeX - _sliderWidth);
+		int maxPos = sizeX - _sliderWidth + 1;
+		return Math.min(dist == 0 ? 0 : maxPos * (_value - _valueMin) / dist, maxPos);
 	}
 
 	@Override

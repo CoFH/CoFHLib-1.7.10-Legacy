@@ -14,14 +14,15 @@ public abstract class SliderVertical extends ElementSlider {
 
 		super(containerScreen, x, y, width, height, maxValue, minValue);
 		int dist = maxValue - minValue;
-		setSliderSize(dist <= 0 ? width : Math.max(width / dist, 9), height);
+		setSliderSize(width, dist <= 0 ? height : Math.max(height / dist, 9));
 	}
 
 	@Override
 	public int getSliderY() {
 
 		int dist = _valueMax - _valueMin;
-		return Math.min(dist == 0 ? 0 : (sizeY - _sliderHeight) * (_value - _valueMin) / dist, sizeY - _sliderHeight);
+		int maxPos = sizeY - _sliderHeight + 1;
+		return Math.min(dist == 0 ? 0 : maxPos * (_value - _valueMin) / dist, maxPos);
 	}
 
 	@Override
