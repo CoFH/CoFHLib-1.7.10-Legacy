@@ -1,8 +1,6 @@
 package cofh.lib.gui.element;
 
-import static cofh.lib.gui.element.ElementButtonManaged.DISABLED;
-import static cofh.lib.gui.element.ElementButtonManaged.ENABLED;
-import static cofh.lib.gui.element.ElementButtonManaged.HOVER;
+import static cofh.lib.gui.element.ElementButtonManaged.*;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
@@ -12,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class ElementSlider extends ElementBase {
 
 	protected int _value;
+	protected int _valueMin;
 	protected int _valueMax;
 	protected int _sliderWidth;
 	protected int _sliderHeight;
@@ -23,8 +22,14 @@ public abstract class ElementSlider extends ElementBase {
 
 	protected ElementSlider(GuiBase containerScreen, int x, int y, int width, int height, int maxValue) {
 
+		this(containerScreen, x, y, width, height, maxValue, 0);
+	}
+
+	protected ElementSlider(GuiBase containerScreen, int x, int y, int width, int height, int maxValue, int minValue) {
+
 		super(containerScreen, x, y, width, height);
 		_valueMax = maxValue;
+		_valueMin = minValue;
 	}
 
 	public ElementSlider setColor(int backgroundColor, int borderColor) {
@@ -43,7 +48,7 @@ public abstract class ElementSlider extends ElementBase {
 
 	public void setValue(int value) {
 
-		if (value != _value && value >= 0 && value <= _valueMax) {
+		if (value != _value && value >= _valueMin && value <= _valueMax) {
 			_value = value;
 			onValueChanged(_value);
 		}
@@ -128,5 +133,8 @@ public abstract class ElementSlider extends ElementBase {
 		return true;
 	}
 
-	public abstract void onValueChanged(int value);
+	public void onValueChanged(int value) {
+
+		return;
+	}
 }

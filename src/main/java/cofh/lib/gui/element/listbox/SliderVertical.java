@@ -5,22 +5,29 @@ import cofh.lib.gui.element.ElementSlider;
 
 public abstract class SliderVertical extends ElementSlider {
 
-	protected SliderVertical(GuiBase containerScreen, int x, int y, int width, int height, int maxValue) {
+	public SliderVertical(GuiBase containerScreen, int x, int y, int width, int height, int maxValue) {
 
-		super(containerScreen, x, y, width, height, maxValue);
-		setSliderSize(width, maxValue == 0 ? height : Math.max(height / maxValue, 9));
+		this(containerScreen, x, y, width, height, maxValue, 0);
+	}
+
+	public SliderVertical(GuiBase containerScreen, int x, int y, int width, int height, int maxValue, int minValue) {
+
+		super(containerScreen, x, y, width, height, maxValue, minValue);
+		int dist = maxValue - minValue;
+		setSliderSize(dist <= 0 ? width : Math.max(width / dist, 9), height);
 	}
 
 	@Override
 	public int getSliderY() {
 
-		return Math.min(_valueMax == 0 ? 0 : (sizeY - _sliderHeight) * _value / _valueMax, sizeY - _sliderHeight);
+		int dist = _valueMax - _valueMin;
+		return Math.min(dist == 0 ? 0 : (sizeY - _sliderHeight) * (_value - _valueMin) / dist, sizeY - _sliderHeight);
 	}
 
 	@Override
 	public void dragSlider(int x, int v) {
 
 		v += Math.round(_sliderHeight * (v / (float) sizeY - 0.5f));
-		setValue(_valueMax * v / sizeY);
+		setValue(_valueMin + ((_valueMax - _valueMin) * v / sizeY));
 	}
 }
