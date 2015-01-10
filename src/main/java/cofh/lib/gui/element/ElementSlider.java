@@ -48,7 +48,8 @@ public abstract class ElementSlider extends ElementBase {
 
 	public void setValue(int value) {
 
-		if (value != _value && value >= _valueMin && value <= _valueMax) {
+		value = Math.max(_valueMin, Math.min(_valueMax, value));
+		if (value != _value) {
 			_value = value;
 			onValueChanged(_value);
 		}
