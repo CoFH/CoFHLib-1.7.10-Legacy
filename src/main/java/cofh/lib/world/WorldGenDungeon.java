@@ -113,7 +113,7 @@ public class WorldGenDungeon extends WorldGenerator
 					if (isWall(world, x + 1, yStart, z))
 						++walls;
 
-					if (isWall(world, x, yStart, z + 1))
+					if (isWall(world, x, yStart, z - 1))
 						++walls;
 
 					if (isWall(world, x, yStart, z + 1))
