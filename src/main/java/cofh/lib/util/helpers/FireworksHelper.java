@@ -2,8 +2,8 @@ package cofh.lib.util.helpers;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Random;
 
+import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,9 +11,9 @@ import net.minecraft.nbt.NBTTagList;
 
 /**
  * Contains helper functions to assist with creating {@link EntityFireworkRocket} instances.
- * 
+ *
  * @author Tonius
- * 
+ *
  */
 public class FireworksHelper {
 
@@ -22,7 +22,7 @@ public class FireworksHelper {
 	}
 
 	/**
-	 * Represents a single firework rocket and its properties. 
+	 * Represents a single firework rocket and its properties.
 	 * Can be used for manual fireworks creation.
 	 */
 	public static class Firework {
@@ -35,7 +35,7 @@ public class FireworksHelper {
 
 		/**
 		 * Sets how long the fireworks will fly upwards before exploding.
-		 * 
+		 *
 		 * @param duration Duration before exploding in seconds (0 - 3)
 		 * @return The current Firework instance
 		 */
@@ -47,7 +47,7 @@ public class FireworksHelper {
 
 		/**
 		 * Sets whether the fireworks should have the 'flicker' effect when exploding.
-		 * 
+		 *
 		 * @param flicker Whether to have the 'flicker' effect
 		 * @return The current Firework instance
 		 */
@@ -59,7 +59,7 @@ public class FireworksHelper {
 
 		/**
 		 * Sets whether the fireworks should have the 'trail' effect when exploding.
-		 * 
+		 *
 		 * @param trail Whether to have the 'trail' effect
 		 * @return The current Firework instance
 		 */
@@ -71,7 +71,7 @@ public class FireworksHelper {
 
 		/**
 		 * Sets the explosion type of the fireworks.
-		 * 
+		 *
 		 * @param type The explosion type
 		 * @return The current Firework instance
 		 */
@@ -83,7 +83,7 @@ public class FireworksHelper {
 
 		/**
 		 * Sets the explosion type of the fireworks.
-		 * 
+		 *
 		 * @param type The explosion type as an int
 		 * @return The current Firework instance
 		 */
@@ -96,7 +96,7 @@ public class FireworksHelper {
 
 		/**
 		 * Adds an RGB color to the explosion of the fireworks.
-		 * 
+		 *
 		 * @param red The RGB red value of the color to add (0 - 255)
 		 * @param green The RGB green value of the color to add (0 - 255)
 		 * @param blue The RGB blue value of the color to add (0 - 255)
@@ -144,10 +144,10 @@ public class FireworksHelper {
 	}
 
 	/**
-	 * Generates a Firework instance with a random explosion type, 
+	 * Generates a Firework instance with a random explosion type,
 	 * a chance to have the 'flicker' and/or 'trail' effects, and up to 3 random colors.
-	 * 
-	 * @return A Firework instance with randomized values. Can still be manipulated further 
+	 *
+	 * @return A Firework instance with randomized values. Can still be manipulated further
 	 * to set things like the flight duration.
 	 */
 	public static Firework getRandomFirework() {
