@@ -30,7 +30,7 @@ public interface IBlockAppearance {
      * @param z     Z coordinate of the block.
      * @param side  The side of the block.
      */
-    public Block getVisualMeta(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    public int getVisualMeta(IBlockAccess world, int x, int y, int z, ForgeDirection side);
 
     /**
      * This function returns whether the block's renderer will visually connect to other blocks
