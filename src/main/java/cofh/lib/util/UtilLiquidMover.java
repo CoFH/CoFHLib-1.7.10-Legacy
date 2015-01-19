@@ -42,7 +42,7 @@ public class UtilLiquidMover {
 					} else
 						player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemHelper.consumeItem(ci, player));
 
-					if (player.worldObj.isRemote) {
+					if (!player.worldObj.isRemote) {
 						player.openContainer.detectAndSendChanges();
 						((EntityPlayerMP)player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 					}
@@ -67,7 +67,7 @@ public class UtilLiquidMover {
 					}
 					ItemHelper.disposePlayerItem(ci, drop, player, true);
 
-					if (player.worldObj.isRemote) {
+					if (!player.worldObj.isRemote) {
 						player.openContainer.detectAndSendChanges();
 						((EntityPlayerMP)player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 					}
@@ -120,7 +120,7 @@ public class UtilLiquidMover {
 				}
 				if (filledBucket != null) {
 					if (ItemHelper.disposePlayerItem(ci, filledBucket, player, true)) {
-						if (player.worldObj.isRemote) {
+						if (!player.worldObj.isRemote) {
 							player.openContainer.detectAndSendChanges();
 							((EntityPlayerMP)player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 						}
