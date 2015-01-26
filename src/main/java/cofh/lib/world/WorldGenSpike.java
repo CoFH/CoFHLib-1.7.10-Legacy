@@ -20,7 +20,7 @@ public class WorldGenSpike extends WorldGenerator {
 	public int minHeight = 7;
 	public int heightVariance = 4;
 	public int sizeVariance = 2;
-	public int positionVariance = 4;
+	public int positionVariance = 3;
 	public int minLargeSpikeHeightGain = 10;
 	public int largeSpikeHeightVariance = 30;
 	public int largeSpikeFillerSize = 1;
@@ -44,8 +44,8 @@ public class WorldGenSpike extends WorldGenerator {
 
 		int height = rand.nextInt(heightVariance) + minHeight, originalHeight = height;
 		int size = height / (minHeight / 2) + rand.nextInt(sizeVariance);
-		if (size > 1) {
-			yStart += rand.nextInt(positionVariance) - 1;
+		if (size > 1 && positionVariance > 0) {
+			yStart += rand.nextInt(positionVariance + 1) - 1;
 		}
 
 		if (largeSpikes && size > 1 && (largeSpikeChance <= 0 || rand.nextInt(largeSpikeChance) == 0)) {
