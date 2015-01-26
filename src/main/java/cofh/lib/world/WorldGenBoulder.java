@@ -18,6 +18,9 @@ public class WorldGenBoulder extends WorldGenerator
 	public int sizeVariance = 2;
 	public int clusters = 3;
 	public int clusterVariance = 0;
+	public boolean hollow = false;
+	public float hollowAmt = 0.1665f;
+	public float hollowVar = 0;
 
 	public WorldGenBoulder(List<WeightedRandomBlock> resource, int minSize, List<WeightedRandomBlock> block) {
 
@@ -43,11 +46,13 @@ public class WorldGenBoulder extends WorldGenerator
 
 			if (canGenerateInBlock(world, xCenter, yCenter - 1, zCenter, genBlock)) {
 
-				int xWidth = minSize + rand.nextInt(var);
-				int yWidth = minSize + rand.nextInt(var);
-				int zWidth = minSize + rand.nextInt(var);
+				int xWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
+				int yWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
+				int zWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
 				float maxDist = (xWidth + yWidth + zWidth) * 0.333F + 0.5F;
 				maxDist *= maxDist;
+				float minDist = hollow ? (xWidth + yWidth + zWidth) * (hollowAmt * (1 - rand.nextFloat() * hollowVar)) : 0;
+				minDist *= minDist;
 
 				for (int x = -xWidth; x <= xWidth; ++x) {
 					final int xDist = x * x;
@@ -56,9 +61,13 @@ public class WorldGenBoulder extends WorldGenerator
 						final int xzDist = xDist + z * z;
 
 						for (int y = -yWidth; y <= yWidth; ++y) {
+							final int dist = xzDist + y * y;
 
-							if (xzDist + y * y <= maxDist) {
-								r |= generateBlock(world, xCenter + x, yCenter + y, zCenter + z, cluster);
+							if (dist <= maxDist) {
+								if (dist >= minDist)
+									r |= generateBlock(world, xCenter + x, yCenter + y, zCenter + z, cluster);
+								else
+									r |= world.setBlockToAir(xCenter + x, yCenter + y, zCenter + z);
 							}
 						}
 					}
@@ -67,7 +76,7 @@ public class WorldGenBoulder extends WorldGenerator
 
 			xCenter += rand.nextInt(var + minSize * 2) - (minSize + var/2);
 			zCenter += rand.nextInt(var + minSize * 2) - (minSize + var/2);
-			yCenter += rand.nextInt(var * 3) - var;
+			yCenter += rand.nextInt((var+1) * 3) - (var+1);
 		}
 
 		return r;
