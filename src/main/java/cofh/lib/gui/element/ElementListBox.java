@@ -1,24 +1,6 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.GL_ALWAYS;
-import static org.lwjgl.opengl.GL11.GL_EQUAL;
-import static org.lwjgl.opengl.GL11.GL_KEEP;
-import static org.lwjgl.opengl.GL11.GL_LIGHTING;
-import static org.lwjgl.opengl.GL11.GL_REPLACE;
-import static org.lwjgl.opengl.GL11.GL_STENCIL_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_STENCIL_TEST;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glColorMask;
-import static org.lwjgl.opengl.GL11.glDepthMask;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
-import static org.lwjgl.opengl.GL11.glPushMatrix;
-import static org.lwjgl.opengl.GL11.glStencilFunc;
-import static org.lwjgl.opengl.GL11.glStencilMask;
-import static org.lwjgl.opengl.GL11.glStencilOp;
-import static org.lwjgl.opengl.GL11.glTranslated;
+import static org.lwjgl.opengl.GL11.*;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
@@ -270,7 +252,7 @@ public abstract class ElementListBox extends ElementBase {
 
 	public int getLastScrollPositionH() {
 
-		return Math.max(getInternalWidth() - getContentWidth(), 0);
+		return Math.max(getInternalWidth() - getContentWidth() - 1, 0);
 	}
 
 	public int getSelectedIndex() {
@@ -320,7 +302,7 @@ public abstract class ElementListBox extends ElementBase {
 
 	public void scrollToH(int index) {
 
-		if (index >= 0 && index < getLastScrollPositionH()) {
+		if (index >= 0 && index <= getLastScrollPositionH()) {
 			scrollHoriz = index;
 		}
 	}
