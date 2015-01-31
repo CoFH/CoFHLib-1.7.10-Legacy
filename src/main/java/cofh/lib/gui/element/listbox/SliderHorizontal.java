@@ -14,7 +14,7 @@ public abstract class SliderHorizontal extends ElementSlider {
 
 		super(containerScreen, x, y, width, height, maxValue, minValue);
 		int dist = maxValue - minValue;
-		setSliderSize(dist <= 0 ? width : Math.max(width / dist, 9), height);
+		setSliderSize(dist <= 0 ? width : Math.max(width / ++dist, 9), height);
 	}
 
 	@Override
