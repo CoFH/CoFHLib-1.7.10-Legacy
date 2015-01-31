@@ -9,9 +9,9 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public abstract class ElementBase {
 
@@ -158,6 +158,11 @@ public abstract class ElementBase {
 		return false;
 	}
 
+	public FontRenderer getFontRenderer() {
+
+		return gui.getFontRenderer();
+	}
+
 	public final String getName() {
 
 		return name;
@@ -166,11 +171,6 @@ public abstract class ElementBase {
 	public final GuiBase getContainerScreen() {
 
 		return gui;
-	}
-
-	public final FontRenderer getFontRenderer() {
-
-		return gui.getFontRenderer();
 	}
 
 	/**
