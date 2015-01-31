@@ -252,7 +252,7 @@ public abstract class ElementListBox extends ElementBase {
 
 	public int getLastScrollPositionH() {
 
-		return Math.max(getInternalWidth() - getContentWidth() - 1, 0);
+		return Math.max(getInternalWidth() - getContentWidth(), 0);
 	}
 
 	public int getSelectedIndex() {
@@ -309,16 +309,18 @@ public abstract class ElementListBox extends ElementBase {
 
 	protected void onElementClicked(IListBoxElement element) {
 
-	};
+	}
 
 	protected void onScrollV(int newStartIndex) {
 
-	};
+	}
 
 	protected void onScrollH(int newStartIndex) {
 
-	};
+	}
 
-	protected abstract void onSelectionChanged(int newIndex, IListBoxElement newElement);
+	protected void onSelectionChanged(int newIndex, IListBoxElement newElement) {
+
+	}
 
 }
