@@ -1,6 +1,7 @@
 package cofh.api.modhelpers;
 
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.ModAPIManager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -26,7 +27,9 @@ public class ThaumcraftHelper {
 	private static boolean works = false;
 
 	static {
-		try {
+		l: try {
+			if (!ModAPIManager.INSTANCE.hasAPI("Thaumcraft|API"))
+				break l;
 			Class<?> Aspect = Class.forName("thaumcraft.api.aspects.Aspect");
 			aspects = (Map<String, ? extends Object>)Aspect.getDeclaredField("aspects").get(null);
 			Class<?> ThaumcraftApi = Class.forName("thaumcraft.api.ThaumcraftApi");
