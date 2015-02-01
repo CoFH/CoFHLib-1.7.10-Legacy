@@ -233,9 +233,12 @@ public class ElementTextField extends ElementBase {
 				if (!GuiScreen.isShiftKeyDown()) {
 					if (selectionStart != selectionEnd)
 						clearSelection();
-					else if (GuiScreen.isCtrlKeyDown())
-						;//deleteWords(1);
-					else {
+					else if (GuiScreen.isCtrlKeyDown()) {
+						int size = seekNextCaretLocation(caret, true) - caret;
+						selectionStart = caret;
+						selectionEnd = caret + size;
+						clearSelection();
+					} else {
 						if (caret < textLength && textLength > 0) {
 							--textLength;
 							System.arraycopy(text, caret + 1, text, caret, textLength - caret);
@@ -251,9 +254,12 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_BACK: // backspace
 				if (selectionStart != selectionEnd)
 					clearSelection();
-				else if (GuiScreen.isCtrlKeyDown())
-					;// deleteWords(-1);
-				else {
+				else if (GuiScreen.isCtrlKeyDown()) {
+					int size = seekNextCaretLocation(caret, false) - caret;
+					selectionStart = caret + size;
+					selectionEnd = caret;
+					clearSelection();
+				} else {
 					if (caret > 0 && textLength > 0) {
 						--caret;
 						System.arraycopy(text, caret + 1, text, caret, textLength - caret);
