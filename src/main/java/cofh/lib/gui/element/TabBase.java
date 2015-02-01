@@ -12,16 +12,16 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public abstract class TabBase extends ElementBase {
 
 	public static int tabExpandSpeed = 8;
 
-	public static int LEFT = 0;
-	public static int RIGHT = 1;
+	public static final int LEFT = 0;
+	public static final int RIGHT = 1;
 
 	public boolean open;
 	public boolean fullyOpen;
