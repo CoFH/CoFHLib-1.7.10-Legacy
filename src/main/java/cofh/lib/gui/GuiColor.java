@@ -1,7 +1,8 @@
 package cofh.lib.gui;
 
-public class GuiColor {
+public class GuiColor extends Number {
 
+	private static final long serialVersionUID = 7024827242888861187L;
 	private final int _color;
 
 	public GuiColor(int color) {
@@ -62,6 +63,30 @@ public class GuiColor {
 	public float getFloatA() {
 
 		return ((_color >> 24) & 0xFF) / 0xFF;
+	}
+
+	@Override
+	public int intValue() {
+
+		return getColor();
+	}
+
+	@Override
+	public long longValue() {
+
+		return getColor();
+	}
+
+	@Override
+	public float floatValue() {
+
+		return getColor();
+	}
+
+	@Override
+	public double doubleValue() {
+
+		return getColor();
 	}
 
 }
