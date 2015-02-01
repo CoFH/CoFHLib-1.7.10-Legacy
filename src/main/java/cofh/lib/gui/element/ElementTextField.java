@@ -24,7 +24,7 @@ public class ElementTextField extends ElementBase {
 	public int selectedTextColor = new GuiColor(224, 224, 224).getColor();
 	public int defaultCaretColor = new GuiColor(255, 255, 255).getColor();
 
-	protected final char[] text;
+	protected char[] text;
 	protected int textLength;
 	protected int selectionStart, selectionEnd;
 	protected int renderStart, caret;
@@ -46,7 +46,36 @@ public class ElementTextField extends ElementBase {
 	public ElementTextField(GuiBase gui, int posX, int posY, int width, int height, short limit) {
 
 		super(gui, posX, posY, width, height);
-		text = new char[limit];
+		setMaxLength(limit);
+	}
+
+	public ElementTextField setTextColor(Number textColor, Number selectedTextColor) {
+
+		if (textColor != null)
+			this.textColor = textColor.intValue();
+		if (selectedTextColor != null)
+			this.selectedTextColor = selectedTextColor.intValue();
+		return this;
+	}
+
+	public ElementTextField setSelectionColor(Number selectedLineColor, Number defaultCaretColor) {
+
+		if (selectedLineColor != null)
+			this.selectedLineColor = selectedLineColor.intValue();
+		if (defaultCaretColor != null)
+			this.defaultCaretColor = defaultCaretColor.intValue();
+		return this;
+	}
+
+	public ElementTextField setBackgroundColor(Number backgroundColor, Number disabledColor, Number borderColor) {
+
+		if (backgroundColor != null)
+			this.backgroundColor = backgroundColor.intValue();
+		if (disabledColor != null)
+			this.disabledColor = disabledColor.intValue();
+		if (borderColor != null)
+			this.borderColor = borderColor.intValue();
+		return this;
 	}
 
 	public ElementTextField setFocusable(boolean focusable) {
@@ -64,9 +93,38 @@ public class ElementTextField extends ElementBase {
 		return this;
 	}
 
+	public ElementTextField setText(String text) {
+
+		selectionStart = 0;
+		selectionEnd = textLength;
+		writeText(text);
+		return this;
+	}
+
+	public ElementTextField setMaxLength(short limit) {
+
+		char[] oldText = text;
+		text = new char[limit];
+		textLength = Math.min(limit, textLength);
+		if (oldText != null)
+			System.arraycopy(oldText, 0, text, 0, textLength);
+		findRenderStart();
+		return this;
+	}
+
+	public int getMaxStringLength() {
+
+		return text.length;
+	}
+
 	public boolean isFocused() {
 
 		return isEnabled() && isFocused;
+	}
+
+	public boolean isFocusable() {
+
+		return canFocusChange;
 	}
 
 	public String getText() {
