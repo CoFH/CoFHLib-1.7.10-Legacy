@@ -69,12 +69,56 @@ public class ElementTextField extends ElementBase {
 		return isEnabled() && isFocused;
 	}
 
+	public String getText() {
+
+		return new String(text, 0, textLength);
+	}
+
 	public String getSelectedText() {
 
 		if (selectionStart != selectionEnd) {
 			return new String(text, selectionStart, selectionEnd);
 		}
-		return new String(text, 0, textLength);
+		return getText();
+	}
+
+	public void writeText(String text) {
+
+		for (int i = 0, e = text.length(); i < e; ++i)
+			if (!insertCharacter(text.charAt(i)))
+				break;
+		clearSelection();
+		findRenderStart();
+	}
+
+	protected boolean isAllowedCharacter(char charTyped) {
+
+		return ChatAllowedCharacters.isAllowedCharacter(charTyped);
+	}
+
+	protected boolean insertCharacter(char charTyped) {
+
+		if (isAllowedCharacter(charTyped)) {
+
+			if (selectionStart != selectionEnd) {
+				if (caret == selectionStart)
+					++caret;
+				text[selectionStart++] = charTyped;
+				return true;
+			}
+
+			if ((caretInsert && caret == text.length) || textLength == text.length)
+				return false;
+
+			if (!caretInsert) {
+				if (caret < textLength)
+					System.arraycopy(text, caret, text, caret + 1, textLength - caret);
+				++textLength;
+			}
+			text[caret++] = charTyped;
+			return true;
+		} else
+			return true;
 	}
 
 	protected void findRenderStart() {
@@ -86,11 +130,11 @@ public class ElementTextField extends ElementBase {
 		}
 
 		FontRenderer font = getFontRenderer();
-		int endX = sizeX - 1;
+		int endX = sizeX - 2;
 
 		for (int i = renderStart, width = 0; i < caret; ++i) {
 			width += font.getCharWidth(text[i]);
-			while (width > endX) {
+			while (width >= endX) {
 				width -= font.getCharWidth(text[renderStart++]);
 				if (renderStart >= textLength)
 					return;
@@ -121,7 +165,7 @@ public class ElementTextField extends ElementBase {
 		int e = forward ? textLength : 0;
 		if (pos == textLength) --pos;
 		char prevChar = text[pos];
-		for (int i = pos; i != e && Character.isSpaceChar(prevChar); i += dir)
+		while (pos != e && Character.isSpaceChar(prevChar))
 			prevChar = text[pos += dir];
 
 		if (smartCaret) {
@@ -168,14 +212,14 @@ public class ElementTextField extends ElementBase {
 
 			return true;
 		case 22: // ^V
-			// writeText(GuiScreen.getClipboardString());
+			writeText(GuiScreen.getClipboardString());
 
 			return true;
 		default:
 			switch (keyTyped) {
 			case Keyboard.KEY_INSERT:
 				if (GuiScreen.isShiftKeyDown()) {
-					// writeText(GuiScreen.getClipboardString());
+					writeText(GuiScreen.getClipboardString());
 				} else {
 					caretInsert = !caretInsert;
 				}
@@ -197,7 +241,7 @@ public class ElementTextField extends ElementBase {
 							System.arraycopy(text, caret + 1, text, caret, textLength - caret);
 						}
 					}
-					if (caret < renderStart)
+					if (caret <= renderStart)
 						renderStart = MathHelper.clampI(caret - 3, 0, textLength);
 					findRenderStart();
 
@@ -216,7 +260,7 @@ public class ElementTextField extends ElementBase {
 						--textLength;
 					}
 				}
-				if (caret < renderStart)
+				if (caret <= renderStart)
 					renderStart = MathHelper.clampI(caret - 3, 0, textLength);
 				findRenderStart();
 
@@ -281,7 +325,7 @@ public class ElementTextField extends ElementBase {
 
 				return true;
 			default:
-				if (ChatAllowedCharacters.isAllowedCharacter(charTyped)) {
+				if (isAllowedCharacter(charTyped)) {
 					if (selectionStart != selectionEnd)
 						clearSelection();
 
