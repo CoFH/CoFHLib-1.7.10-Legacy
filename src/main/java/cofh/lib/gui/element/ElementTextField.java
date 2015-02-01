@@ -35,6 +35,8 @@ public class ElementTextField extends ElementBase {
 	private byte caretCounter;
 	protected boolean caretInsert;
 	protected boolean enableStencil = true;
+	protected boolean smartCaret = true;
+	protected boolean smartCaretCase = true;
 
 	public ElementTextField(GuiBase gui, int posX, int posY, int width, int height) {
 
@@ -115,7 +117,30 @@ public class ElementTextField extends ElementBase {
 
 	protected final int seekNextCaretLocation(int pos, boolean forward) {
 
-		return 0;
+		int dir = forward ? 1 : -1;
+		int e = forward ? textLength : 0;
+		if (pos == textLength) --pos;
+		char prevChar = text[pos];
+		for (int i = pos; i != e && Character.isSpaceChar(prevChar); i += dir)
+			prevChar = text[pos += dir];
+
+		if (smartCaret) {
+			for (int i = pos; i != e; i += dir) {
+				char curChar = text[i];
+				boolean caze = Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
+				if (caze || Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar) ||
+						Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar))
+					if ((pos + dir) != i || !Character.isLetterOrDigit(curChar))
+						return i + (smartCaretCase && caze && Character.isUpperCase(prevChar) ? -dir : 0);
+				prevChar = curChar;
+			}
+		}
+		for (int i = pos; i != e; i += dir) {
+			char curChar = text[i];
+			if (Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar))
+				return i;
+		}
+		return forward ? textLength : 0;
 	}
 
 	@Override
