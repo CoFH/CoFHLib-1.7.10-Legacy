@@ -17,6 +17,7 @@ public abstract class ElementBase {
 
 	protected GuiBase gui;
 	protected ResourceLocation texture;
+	private FontRenderer fontRenderer;
 
 	protected int posX;
 	protected int posY;
@@ -160,7 +161,13 @@ public abstract class ElementBase {
 
 	public FontRenderer getFontRenderer() {
 
-		return gui.getFontRenderer();
+		return fontRenderer == null ? gui.getFontRenderer() : fontRenderer;
+	}
+
+	public ElementBase setFontRenderer(FontRenderer renderer) {
+
+		fontRenderer = renderer;
+		return this;
 	}
 
 	public final String getName() {
