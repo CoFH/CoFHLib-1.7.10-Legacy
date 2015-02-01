@@ -157,8 +157,7 @@ public class ElementTextField extends ElementBase {
 
 				return true;
 			case Keyboard.KEY_CLEAR: // mac only (clear selection)
-				if (selectionStart != selectionEnd)
-					clearSelection();
+				clearSelection();
 
 				return true;
 			case Keyboard.KEY_DELETE: // delete

@@ -187,27 +187,48 @@ public abstract class GuiBase extends GuiContainer {
 				return;
 			}
 		}
+
 		TabBase tab = getTabAtPosition(mX, mY);
-		if (tab != null && !tab.onMousePressed(mX, mY, mouseButton)) {
-			for (int i = tabs.size(); i-- > 0;) {
-				TabBase other = tabs.get(i);
-				if (other != tab && other.open && other.side == tab.side) {
-					other.toggleOpen();
+		if (tab != null) {
+			int tMx = mX;
+			/*if (tab.side == TabBase.LEFT)
+				tMx -= tab.currentWidth;
+			//*/
+			if (!tab.onMousePressed(tMx, mY, mouseButton)) {
+				for (int i = tabs.size(); i-- > 0;) {
+					TabBase other = tabs.get(i);
+					if (other != tab && other.open && other.side == tab.side) {
+						other.toggleOpen();
+					}
 				}
+				tab.toggleOpen();
+				return;
 			}
-			tab.toggleOpen();
-			return;
 		}
+
 		mX += guiLeft;
 		mY += guiTop;
 
-		// TODO: Look into a better solution for this.
 		if (tab != null) {
-			xSize += tab.currentWidth;
+			switch (tab.side) {
+			case TabBase.LEFT:
+				guiLeft -= tab.currentWidth;
+				break;
+			case TabBase.RIGHT:
+				xSize += tab.currentWidth;
+				break;
+			}
 		}
 		super.mouseClicked(mX, mY, mouseButton);
 		if (tab != null) {
-			xSize -= tab.currentWidth;
+			switch (tab.side) {
+			case TabBase.LEFT:
+				guiLeft += tab.currentWidth;
+				break;
+			case TabBase.RIGHT:
+				xSize -= tab.currentWidth;
+				break;
+			}
 		}
 	}
 
@@ -540,6 +561,37 @@ public abstract class GuiBase extends GuiContainer {
 		tessellator.draw();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_BLEND);
+	}
+
+	public void drawSizedRect(int x1, int y1, int x2, int y2, int color) {
+
+		int temp;
+
+		if (x1 < x2) {
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+		}
+		if (y1 < y2) {
+			temp = y1;
+			y1 = y2;
+			y2 = temp;
+		}
+
+		float a = (color >> 24 & 255) / 255.0F;
+		float r = (color >> 16 & 255) / 255.0F;
+		float g = (color >> 8 & 255) / 255.0F;
+		float b = (color & 255) / 255.0F;
+		Tessellator tessellator = Tessellator.instance;
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glColor4f(r, g, b, a);
+		tessellator.startDrawingQuads();
+		tessellator.addVertex(x1, y2, this.zLevel);
+		tessellator.addVertex(x2, y2, this.zLevel);
+		tessellator.addVertex(x2, y1, this.zLevel);
+		tessellator.addVertex(x1, y1, this.zLevel);
+		tessellator.draw();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 
 	public void drawSizedTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
