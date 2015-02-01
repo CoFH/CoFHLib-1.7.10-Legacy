@@ -11,8 +11,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.minecraft.client.renderer.Tessellator;
-
 public abstract class ElementListBox extends ElementBase {
 
 	public int borderColor = new GuiColor(120, 120, 120, 255).getColor();
@@ -121,27 +119,10 @@ public abstract class ElementListBox extends ElementBase {
 		glDisable(GL_LIGHTING);
 		glPushMatrix();
 
-		glDisable(GL_TEXTURE_2D);
 		glEnable(GL_STENCIL_TEST);
 		glClear(GL_STENCIL_BUFFER_BIT);
-		glStencilFunc(GL_ALWAYS, 1, 1);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-		glStencilMask(1);
-		glColorMask(false, false, false, false);
-		glDepthMask(false);
+		drawStencil(getContentLeft(), getContentTop(), getContentRight(), getContentBottom(), 1);
 
-		Tessellator.instance.startDrawingQuads();
-		Tessellator.instance.addVertex(getContentLeft(), getContentBottom(), 0);
-		Tessellator.instance.addVertex(getContentRight(), getContentBottom(), 0);
-		Tessellator.instance.addVertex(getContentRight(), getContentTop(), 0);
-		Tessellator.instance.addVertex(getContentLeft(), getContentTop(), 0);
-		Tessellator.instance.draw();
-
-		glEnable(GL_TEXTURE_2D);
-		glStencilFunc(GL_EQUAL, 1, 1);
-		glStencilMask(0);
-		glColorMask(true, true, true, true);
-		glDepthMask(true);
 		glTranslated(-scrollHoriz, 0, 0);
 
 		int e = _elements.size();
