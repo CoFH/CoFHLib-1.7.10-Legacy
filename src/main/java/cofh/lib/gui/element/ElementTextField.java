@@ -484,7 +484,7 @@ public class ElementTextField extends ElementBase {
 				if (caretInsert)
 					caretEnd = width + charW;
 				drawModalRect(startX + width, startY - 1, startX + caretEnd, endY,
-					(0xFF000000 & defaultCaretColor) | ~(defaultCaretColor & 0xFFFFFF));
+					(0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (!end) {
