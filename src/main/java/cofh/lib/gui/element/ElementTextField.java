@@ -31,12 +31,15 @@ public class ElementTextField extends ElementBase {
 
 	private boolean isFocused;
 	private boolean canFocusChange = true;
+
 	private boolean selecting;
+
 	private byte caretCounter;
 	protected boolean caretInsert;
-	protected boolean enableStencil = true;
 	protected boolean smartCaret = true;
 	protected boolean smartCaretCase = true;
+
+	protected boolean enableStencil = true;
 
 	public ElementTextField(GuiBase gui, int posX, int posY, int width, int height) {
 
@@ -125,6 +128,33 @@ public class ElementTextField extends ElementBase {
 	public boolean isFocusable() {
 
 		return canFocusChange;
+	}
+
+	public int getContentWidth() {
+
+		FontRenderer font = getFontRenderer();
+		int width = 0;
+		for (int i = 0; i < textLength; ++i) {
+			width += font.getCharWidth(text[i]);
+		}
+		return width;
+	}
+
+	public int getVisibleWidth() {
+
+		FontRenderer font = getFontRenderer();
+		int width = 0, endX = sizeX - 1;
+		for (int i = renderStart; i < textLength; ++i) {
+			int charW = font.getCharWidth(text[i]);
+			if (!enableStencil && (width + charW) > endX)
+				break;
+			width += charW;
+			if (width >= endX) {
+				width = Math.min(width, endX);
+				break;
+			}
+		}
+		return width;
 	}
 
 	public String getText() {
