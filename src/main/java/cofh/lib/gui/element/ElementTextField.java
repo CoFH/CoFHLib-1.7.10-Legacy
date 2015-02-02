@@ -275,6 +275,11 @@ public class ElementTextField extends ElementBase {
 		return forward ? textLength : 0;
 	}
 
+	protected boolean onEnter() {
+
+		return false;
+	}
+
 	@Override
 	public boolean onKeyTyped(char charTyped, int keyTyped) {
 
@@ -308,6 +313,9 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_ESCAPE:
 				setFocused(false);
 				return !isFocused();
+			case Keyboard.KEY_RETURN:
+			case Keyboard.KEY_NUMPADENTER:
+				return onEnter();
 			case Keyboard.KEY_INSERT:
 				if (GuiScreen.isShiftKeyDown()) {
 					writeText(GuiScreen.getClipboardString());
