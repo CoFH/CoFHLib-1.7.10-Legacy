@@ -46,13 +46,14 @@ public abstract class ElementSlider extends ElementBase {
 		return this;
 	}
 
-	public void setValue(int value) {
+	public ElementSlider setValue(int value) {
 
 		value = Math.max(_valueMin, Math.min(_valueMax, value));
 		if (value != _value) {
 			_value = value;
 			onValueChanged(_value);
 		}
+		return this;
 	}
 
 	@Override
@@ -60,6 +61,7 @@ public abstract class ElementSlider extends ElementBase {
 
 		drawModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
 		drawModalRect(posX, posY, posX + sizeX, posY + sizeY, backgroundColor);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -104,12 +106,15 @@ public abstract class ElementSlider extends ElementBase {
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
 		_isDragging = mouseButton == 0;
+		update(mouseX, mouseY);
 		return true;
 	}
 
 	@Override
 	public void onMouseReleased(int mouseX, int mouseY) {
 
+		if (_isDragging)
+			onStopDragging();
 		_isDragging = false;
 	}
 
@@ -135,6 +140,11 @@ public abstract class ElementSlider extends ElementBase {
 	}
 
 	public void onValueChanged(int value) {
+
+		return;
+	}
+
+	public void onStopDragging() {
 
 		return;
 	}

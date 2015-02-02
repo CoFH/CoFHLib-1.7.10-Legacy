@@ -3,7 +3,7 @@ package cofh.lib.gui.element.listbox;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementSlider;
 
-public abstract class SliderVertical extends ElementSlider {
+public class SliderVertical extends ElementSlider {
 
 	public SliderVertical(GuiBase containerScreen, int x, int y, int width, int height, int maxValue) {
 
@@ -28,7 +28,7 @@ public abstract class SliderVertical extends ElementSlider {
 	@Override
 	public void dragSlider(int x, int v) {
 
-		v += Math.round(_sliderHeight * (v / (float) sizeY - 0.5f));
+		v += Math.round(_sliderHeight * (v / (float) sizeY) + (_sliderHeight * 0.25f));
 		setValue(_valueMin + ((_valueMax - _valueMin) * v / sizeY));
 	}
 }
