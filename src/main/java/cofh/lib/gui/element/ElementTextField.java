@@ -179,7 +179,7 @@ public class ElementTextField extends ElementBase {
 		findRenderStart();
 	}
 
-	protected boolean isAllowedCharacter(char charTyped) {
+	public boolean isAllowedCharacter(char charTyped) {
 
 		return ChatAllowedCharacters.isAllowedCharacter(charTyped);
 	}
@@ -247,7 +247,7 @@ public class ElementTextField extends ElementBase {
 		return seekNextCaretLocation(pos, true);
 	}
 
-	protected final int seekNextCaretLocation(int pos, boolean forward) {
+	protected int seekNextCaretLocation(int pos, boolean forward) {
 
 		int dir = forward ? 1 : -1;
 		int e = forward ? textLength : 0;
@@ -305,6 +305,9 @@ public class ElementTextField extends ElementBase {
 			return true;
 		default:
 			switch (keyTyped) {
+			case Keyboard.KEY_ESCAPE:
+				setFocused(false);
+				return !isFocused();
 			case Keyboard.KEY_INSERT:
 				if (GuiScreen.isShiftKeyDown()) {
 					writeText(GuiScreen.getClipboardString());
@@ -410,28 +413,14 @@ public class ElementTextField extends ElementBase {
 						int t = selectionStart;
 						selectionStart = selectionEnd;
 						selectionEnd = t;
-					} else if (selectionEnd < selectionStart) {
-						int t = selectionStart;
-						selectionStart = selectionEnd;
-						selectionEnd = t;
 					}
 				}
 
 				return true;
 			default:
 				if (isAllowedCharacter(charTyped)) {
-					if (selectionStart != selectionEnd)
-						clearSelection();
-
-					if ((caretInsert && caret == text.length) || textLength == text.length)
-						return true;
-
-					if (!caretInsert) {
-						if (caret < textLength)
-							System.arraycopy(text, caret, text, caret + 1, textLength - caret);
-						++textLength;
-					}
-					text[caret++] = charTyped;
+					insertCharacter(charTyped);
+					clearSelection();
 					findRenderStart();
 					return true;
 				} else
