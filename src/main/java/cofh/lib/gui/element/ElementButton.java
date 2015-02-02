@@ -105,28 +105,24 @@ public class ElementButton extends ElementBase {
 		return false;
 	}
 
-	public ElementButton setSheetX(int pos) {
+	public void setSheetX(int pos) {
 
 		sheetX = pos;
-		return this;
 	}
 
-	public ElementButton setSheetY(int pos) {
+	public void setSheetY(int pos) {
 
 		sheetY = pos;
-		return this;
 	}
 
-	public ElementButton setHoverX(int pos) {
+	public void setHoverX(int pos) {
 
 		hoverX = pos;
-		return this;
 	}
 
-	public ElementButton setHoverY(int pos) {
+	public void setHoverY(int pos) {
 
 		hoverY = pos;
-		return this;
 	}
 
 	public ElementButton setDisabledX(int pos) {
@@ -141,16 +137,14 @@ public class ElementButton extends ElementBase {
 		return this;
 	}
 
-	public ElementButton setActive() {
+	public void setActive() {
 
 		setEnabled(true);
-		return this;
 	}
 
-	public ElementButton setDisabled() {
+	public void setDisabled() {
 
 		setEnabled(false);
-		return this;
 	}
 
 }
