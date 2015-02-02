@@ -49,7 +49,7 @@ public class ContainerInventoryItem extends Container {
 	public void onSlotChanged() {
 
 		ItemStack item = player.inventory.mainInventory[containerIndex];
-		if (valid && (item == null || item.getItem() != containerWrapper.getContainerStack().getItem())) {
+		if (valid && item != null && item.getItem() == containerWrapper.getContainerStack().getItem()) {
 			player.inventory.mainInventory[containerIndex] = containerWrapper.getContainerStack();
 		}
 	}
