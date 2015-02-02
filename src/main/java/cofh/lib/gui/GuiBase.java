@@ -524,6 +524,16 @@ public abstract class GuiBase extends GuiContainer {
 		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
 	}
 
+	public void drawColorIcon(IIcon icon, int x, int y, int spriteSheet) {
+
+		if (spriteSheet == 0) {
+			RenderHelper.setBlockTextureSheet();
+		} else {
+			RenderHelper.setItemTextureSheet();
+		}
+		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
+	}
+
 	public void drawIcon(String iconName, int x, int y, int spriteSheet) {
 
 		drawIcon(getIcon(iconName), x, y, spriteSheet);
