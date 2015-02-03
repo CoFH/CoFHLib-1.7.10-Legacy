@@ -172,16 +172,31 @@ public class ElementTextField extends ElementBase {
 
 	public void writeText(String text) {
 
-		for (int i = 0, e = text.length(); i < e; ++i)
+		int i = 0;
+		for (int e = text.length(); i < e; ++i)
 			if (!insertCharacter(text.charAt(i)))
 				break;
 		clearSelection();
 		findRenderStart();
+		onCharacterEntered(i > 0);
 	}
 
 	public boolean isAllowedCharacter(char charTyped) {
 
 		return ChatAllowedCharacters.isAllowedCharacter(charTyped);
+	}
+
+	protected boolean onEnter() {
+
+		return false;
+	}
+
+	protected void onFocusLost() {
+
+	}
+
+	protected void onCharacterEntered(boolean success) {
+
 	}
 
 	protected boolean insertCharacter(char charTyped) {
@@ -273,11 +288,6 @@ public class ElementTextField extends ElementBase {
 				return i;
 		}
 		return forward ? textLength : 0;
-	}
-
-	protected boolean onEnter() {
-
-		return false;
 	}
 
 	@Override
@@ -427,9 +437,10 @@ public class ElementTextField extends ElementBase {
 				return true;
 			default:
 				if (isAllowedCharacter(charTyped)) {
-					insertCharacter(charTyped);
+					boolean typed = insertCharacter(charTyped);
 					clearSelection();
 					findRenderStart();
+					onCharacterEntered(typed);
 					return true;
 				} else
 					return false;
@@ -472,8 +483,12 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void onMouseReleased(int mouseX, int mouseY) {
 
-		if (!selecting)
+		if (!selecting) {
+			boolean focus = isFocused();
 			setFocused(false);
+			if (focus && !isFocused())
+				onFocusLost();
+		}
 		selecting = false;
 	}
 
