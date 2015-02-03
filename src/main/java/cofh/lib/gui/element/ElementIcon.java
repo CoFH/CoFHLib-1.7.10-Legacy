@@ -43,6 +43,11 @@ public class ElementIcon extends ElementBase {
 		return this;
 	}
 
+	public int getColor() {
+
+		return color.getColor();
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
