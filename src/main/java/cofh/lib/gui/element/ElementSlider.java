@@ -64,13 +64,10 @@ public abstract class ElementSlider extends ElementBase {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	@Override
-	public void drawForeground(int mouseX, int mouseY) {
+	protected void drawSlider(int mouseX, int mouseY, int sliderX, int sliderY) {
 
 		int sliderWidth = _sliderWidth;
 		int sliderHeight = _sliderHeight;
-		int sliderX = posX + getSliderX();
-		int sliderY = posY + getSliderY();
 
 		if (!isEnabled()) {
 			gui.bindTexture(DISABLED);
@@ -85,6 +82,16 @@ public abstract class ElementSlider extends ElementBase {
 		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY, 256 - sliderWidth / 2, 0, sliderWidth / 2, sliderHeight / 2);
 		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY + sliderHeight / 2, 256 - sliderWidth / 2, 256 - sliderHeight / 2, sliderWidth / 2,
 				sliderHeight / 2);
+	}
+
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
+
+		int sliderX = posX + getSliderX();
+		int sliderY = posY + getSliderY();
+
+		drawSlider(mouseX, mouseY, sliderX, sliderY);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	protected boolean isHovering(int x, int y) {
