@@ -210,7 +210,12 @@ public abstract class TabBase extends ElementBase {
 
 	public Rectangle4i getBounds() {
 
-		return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), currentWidth, currentHeight);
+		if (isVisible()) {
+			return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), currentWidth, currentHeight);
+		} else {
+			return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), 0, 0);
+		}
+
 	}
 
 }
