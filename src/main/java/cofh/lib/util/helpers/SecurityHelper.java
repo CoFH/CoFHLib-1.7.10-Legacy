@@ -2,11 +2,16 @@ package cofh.lib.util.helpers;
 
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
+import com.mojang.authlib.GameProfile;
 
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagString;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PreYggdrasilConverter;
 
 public class SecurityHelper {
 
@@ -25,6 +30,7 @@ public class SecurityHelper {
 		}
 		tag.setBoolean("Secure", true);
 		tag.setByte("Access", (byte) tile.getAccess().ordinal());
+		tag.setString("OwnerUUID", tile.getOwner().toString());
 		tag.setString("Owner", tile.getOwnerName());
 		return tag;
 	}
@@ -95,6 +101,39 @@ public class SecurityHelper {
 		return stack.stackTagCompound == null ? AccessMode.PUBLIC : AccessMode.values()[stack.stackTagCompound.getByte("Access")];
 	}
 
+	public static boolean setOwner(ItemStack stack, GameProfile name) {
+
+		if (!isSecure(stack)) {
+			return false;
+		}
+		stack.setTagInfo("OwnerUUID", new NBTTagString(name.getId().toString()));
+		return true;
+	}
+
+	public static UUID getOwner(ItemStack stack) {
+
+		if (stack.stackTagCompound != null) {
+			if (stack.stackTagCompound.hasKey("OwnerUUID", 8))
+				return UUID.fromString(stack.stackTagCompound.getString("OwnerUUID"));
+			if (stack.stackTagCompound.hasKey("Owner", 8))
+				return UUID.fromString(PreYggdrasilConverter.func_152719_a(getOwnerName(stack)));
+		}
+		return UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea");
+	}
+
+	public static GameProfile getProfile(UUID uuid) {
+
+		GameProfile owner = MinecraftServer.getServer().func_152358_ax().func_152652_a(uuid);
+		if (owner == null) {
+			GameProfile temp = new GameProfile(uuid, null);
+			owner = MinecraftServer.getServer().func_147130_as().fillProfileProperties(temp, true);
+			if (owner != temp)
+				MinecraftServer.getServer().func_152358_ax().func_152649_a(owner);
+		}
+		return owner;
+	}
+
+	@Deprecated
 	public static boolean setOwnerName(ItemStack stack, String name) {
 
 		if (!isSecure(stack)) {
