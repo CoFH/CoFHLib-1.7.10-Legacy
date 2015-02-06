@@ -314,25 +314,42 @@ public abstract class GuiBase extends GuiContainer {
 	 */
 	protected void drawTabs(float partialTick, boolean foreground) {
 
-		if (foreground) {
-			return; // TODO:
-		}
 		int yPosRight = 4;
 		int yPosLeft = 4;
-
-		for (int i = 0; i < tabs.size(); i++) {
-			TabBase tab = tabs.get(i);
-			tab.update();
-			if (!tab.isVisible()) {
-				continue;
+		
+		if (foreground) {
+			for (int i = 0; i < tabs.size(); i++) {
+				TabBase tab = tabs.get(i);
+				tab.update();
+				if (!tab.isVisible()) {
+					continue;
+				}
+				if (tab.side == TabBase.LEFT) {
+					tab.drawForeground(mouseX, mouseY);
+					tab.draw(0, yPosLeft);
+					yPosLeft += tab.currentHeight;
+				} else {
+					tab.drawForeground(mouseX, mouseY);
+					tab.draw(xSize, yPosRight);
+					yPosRight += tab.currentHeight;
+				}
 			}
-			// TODO: convert these over to foreground/background (maybe logic for top/bottom tabs?)
-			if (tab.side == TabBase.LEFT) {
-				tab.draw(0, yPosLeft);
-				yPosLeft += tab.currentHeight;
-			} else {
-				tab.draw(xSize, yPosRight);
-				yPosRight += tab.currentHeight;
+		}else{
+			for (int i = 0; i < tabs.size(); i++) {
+				TabBase tab = tabs.get(i);
+				tab.update();
+				if (!tab.isVisible()) {
+					continue;
+				}
+				if (tab.side == TabBase.LEFT) {
+					tab.drawBackground(mouseX, mouseY, partialTick);
+					tab.draw(0, yPosLeft);
+					yPosLeft += tab.currentHeight;
+				} else {
+					tab.drawBackground(mouseX, mouseY, partialTick);
+					tab.draw(xSize, yPosRight);
+					yPosRight += tab.currentHeight;
+				}
 			}
 		}
 	}
