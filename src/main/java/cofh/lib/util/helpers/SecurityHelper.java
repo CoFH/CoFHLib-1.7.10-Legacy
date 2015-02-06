@@ -121,11 +121,11 @@ public class SecurityHelper {
 		return UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea");
 	}
 
-	public static GameProfile getProfile(UUID uuid) {
+	public static GameProfile getProfile(UUID uuid, String name) {
 
 		GameProfile owner = MinecraftServer.getServer().func_152358_ax().func_152652_a(uuid);
 		if (owner == null) {
-			GameProfile temp = new GameProfile(uuid, null);
+			GameProfile temp = new GameProfile(uuid, name);
 			owner = MinecraftServer.getServer().func_147130_as().fillProfileProperties(temp, true);
 			if (owner != temp)
 				MinecraftServer.getServer().func_152358_ax().func_152649_a(owner);
