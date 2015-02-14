@@ -69,7 +69,7 @@ public class FeatureGenUnderfluid extends FeatureBase {
 					}
 				} else {
 					Fluid fluid = FluidHelper.lookupFluidForBlock(block);
-					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getID()) < 0)
+					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getID()) >= 0)
 						continue;
 
 					fluid = FluidHelper.lookupFluidForBlock(world.getBlock(x, y + 1, z));
