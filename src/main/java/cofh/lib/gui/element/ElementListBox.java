@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class ElementListBox extends ElementBase {
+public class ElementListBox extends ElementBase {
 
 	public int borderColor = new GuiColor(120, 120, 120, 255).getColor();
 	public int backgroundColor = new GuiColor(0, 0, 0, 255).getColor();
