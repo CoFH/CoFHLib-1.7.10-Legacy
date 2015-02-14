@@ -60,16 +60,22 @@ public class FeatureGenUnderfluid extends FeatureBase {
 
 			int y = BlockHelper.getSurfaceBlockY(world, x, z);
 			l: do {
+				Block block = world.getBlock(x, y, z);
 				if (water) {
+					if (block.getMaterial() == Material.water)
+						continue;
 					if (world.getBlock(x, y + 1, z).getMaterial() != Material.water) {
 						continue;
 					}
 				} else {
-					Fluid fluid = FluidHelper.lookupFluidForBlock(world.getBlock(x, y + 1, z));
+					Fluid fluid = FluidHelper.lookupFluidForBlock(block);
+					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getID()) < 0)
+						continue;
+
+					fluid = FluidHelper.lookupFluidForBlock(world.getBlock(x, y + 1, z));
 					if (fluid == null || Arrays.binarySearch(fluidList, fluid.getID()) < 0)
 						continue;
 				}
-				Block block = world.getBlock(x, y, z);
 				for (WeightedRandomBlock mat : matList) {
 					if (block.isReplaceableOreGen(world, x, y, z, mat.block)) {
 						break l;
