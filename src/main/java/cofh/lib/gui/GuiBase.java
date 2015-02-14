@@ -54,8 +54,6 @@ public abstract class GuiBase extends GuiContainer {
 	protected List<String> tooltip = new LinkedList<String>();
 	protected boolean tooltips = true;
 
-	// protected boolean tooltips = !Loader.isModLoaded("NotEnoughItems");
-
 	public static void playSound(String name, float volume, float pitch) {
 
 		guiSoundManager.playSound(new SoundBase(name, volume, pitch));
