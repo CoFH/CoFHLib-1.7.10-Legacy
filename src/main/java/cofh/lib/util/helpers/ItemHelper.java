@@ -964,7 +964,7 @@ public final class ItemHelper {
 		if (stackA == null | stackB == null) {
 			return false;
 		}
-		return stackA.getItem().equals(stackB.getItem());
+		return areItemsEqual(stackA.getItem(), stackB.getItem());
 	}
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
