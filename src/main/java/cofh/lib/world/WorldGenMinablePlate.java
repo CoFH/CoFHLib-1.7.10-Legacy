@@ -28,6 +28,7 @@ public class WorldGenMinablePlate extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 
+		++y;
 		int size = radius;
 		if (radius > variation + 1)
 			size = rand.nextInt(radius - variation) + variation;
