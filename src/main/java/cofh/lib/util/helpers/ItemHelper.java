@@ -265,7 +265,8 @@ public final class ItemHelper {
 		}
 		if (dmgItems[0] == null || dmgItems[0].getItem() == null) {
 			return null;
-		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1
+		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() &&
+				dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1
 				&& dmgItems[0].getItem().isRepairable()) {
 			Item theItem = dmgItems[0].getItem();
 			int var13 = theItem.getMaxDamage() - dmgItems[0].getItemDamageForDisplay();
@@ -931,13 +932,10 @@ public final class ItemHelper {
 
 	public static boolean areItemsEqual(Item itemA, Item itemB) {
 
-		if (itemA == itemB) {
-			return true;
-		}
 		if (itemA == null | itemB == null) {
 			return false;
 		}
-		return itemA.equals(itemB);
+		return itemA == itemB || itemA.equals(itemB);
 	}
 
 	public static final boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
@@ -963,17 +961,6 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
-		if (stackA == null | stackB == null) {
-			return false;
-		}
-		return stackA.getItem().equals(stackB.getItem());
-	}
-
-	private static boolean itemsEqualWithoutMetadataNoCheck(ItemStack stackA, ItemStack stackB) {
-
 		if (stackA == null | stackB == null) {
 			return false;
 		}
@@ -982,42 +969,30 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		if (stackA == stackB) {
-			return true;
-		}
-		return itemsEqualWithoutMetadataNoCheck(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
+		return itemsEqualWithoutMetadata(stackA, stackB) &&
+				(!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
-		return itemsEqualWithoutMetadataNoCheck(stackA, stackB) && (stackA.getHasSubtypes() == false || stackA.getItemDamage() == stackB.getItemDamage());
+		return itemsEqualWithoutMetadata(stackA, stackB) &&
+				(stackA.getHasSubtypes() == false || stackA.getItemDamage() == stackB.getItemDamage());
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		if (stackA == stackB) {
-			return true;
-		}
-		return itemsEqualWithoutMetadataNoCheck(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
+		return itemsEqualWithMetadata(stackA, stackB) &&
+				(!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsIdentical(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
-		return itemsEqualWithoutMetadataNoCheck(stackA, stackB) && (stackA.getItemDamage() == stackB.getItemDamage())
+		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getItemDamage() == stackB.getItemDamage())
 				&& doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound);
 	}
 
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
-		if (nbtA == nbtB) {
-			return true;
-		}
 		if (nbtA != null & nbtB != null) {
 			return nbtA.equals(nbtB);
 		}
@@ -1026,12 +1001,10 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualForCrafting(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
-		return itemsEqualWithoutMetadataNoCheck(stackA, stackB)
-				&& (!stackA.getHasSubtypes() || ((stackA.getItemDamage() == OreDictionary.WILDCARD_VALUE || stackB.getItemDamage() == OreDictionary.WILDCARD_VALUE) || stackB
-						.getItemDamage() == stackA.getItemDamage()));
+		return itemsEqualWithoutMetadata(stackA, stackB) && (!stackA.getHasSubtypes() ||
+				((stackA.getItemDamage() == OreDictionary.WILDCARD_VALUE ||
+				stackB.getItemDamage() == OreDictionary.WILDCARD_VALUE) ||
+				stackB.getItemDamage() == stackA.getItemDamage()));
 	}
 
 	public static boolean craftingEquivalent(ItemStack checked, ItemStack source, String oreDict, ItemStack output) {
@@ -1063,7 +1036,8 @@ public final class ItemHelper {
 
 	public static String getItemNBTString(ItemStack theItem, String nbtKey, String invalidReturn) {
 
-		return theItem.stackTagCompound != null && theItem.stackTagCompound.hasKey(nbtKey) ? theItem.stackTagCompound.getString(nbtKey) : invalidReturn;
+		return theItem.stackTagCompound != null &&
+				theItem.stackTagCompound.hasKey(nbtKey) ? theItem.stackTagCompound.getString(nbtKey) : invalidReturn;
 	}
 
 	/**
@@ -1084,7 +1058,8 @@ public final class ItemHelper {
 			addAccessibleInventoryInformation(stack, list, minSlot, maxSlot);
 			return;
 		}
-		if (!stack.stackTagCompound.hasKey("Inventory") || stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
+		if (!stack.stackTagCompound.hasKey("Inventory") ||
+				stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
 			list.add(StringHelper.localize("info.cofh.empty"));
 			return;
 		}
@@ -1138,10 +1113,12 @@ public final class ItemHelper {
 				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" +
+				item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
 							+ " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" +
+				item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
@@ -1201,10 +1178,12 @@ public final class ItemHelper {
 				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" +
+				item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
 							+ " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" +
+				item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
