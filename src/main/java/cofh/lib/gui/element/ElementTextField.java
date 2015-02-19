@@ -452,12 +452,16 @@ public class ElementTextField extends ElementBase {
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
 		selecting = mouseButton == 0;
-		if (selecting) {
+		l: if (selecting) {
+			if (textLength == 0) {
+				selectionStart = selectionEnd = caret = 0;
+				break l;
+			}
 			FontRenderer font = getFontRenderer();
 			int pos = mouseX - posX - 1;
-			for (int i = renderStart, width = 0; i < textLength; ++i) {
+			for (int i = renderStart, width = 0; ; ) {
 				int charW = font.getCharWidth(text[i]);
-				if ((width += charW) > pos) {
+				if ((width += charW) > pos || ++i >= textLength) {
 					selectionStart = selectionEnd = caret = i;
 					break;
 				}
