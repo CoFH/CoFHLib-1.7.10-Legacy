@@ -524,7 +524,7 @@ public class ElementTextField extends ElementBase {
 					break;
 			}
 
-			boolean drawCaret = i == caret && (caretCounter %= 24) < 12 && isFocused();
+			boolean drawCaret = i == caret && (caretCounter &= 31) < 16 && isFocused();
 			if (drawCaret) {
 				int caretEnd = width + 2;
 				if (caretInsert)
