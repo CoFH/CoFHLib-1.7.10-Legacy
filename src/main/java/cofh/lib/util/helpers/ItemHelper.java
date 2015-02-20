@@ -989,6 +989,9 @@ public final class ItemHelper {
 
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
+		if (nbtA == null & nbtB == null) {
+			return true;
+		}
 		if (nbtA != null & nbtB != null) {
 			return nbtA.equals(nbtB);
 		}
