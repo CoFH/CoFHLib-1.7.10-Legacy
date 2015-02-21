@@ -3,6 +3,7 @@ package cofh.lib.gui.element;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class ElementFluidTank extends ElementBase {
 
 	protected IFluidTank tank;
 	protected int gaugeType;
+
+	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
+	protected boolean alwaysShowMinimum = false;
 
 	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank) {
 
@@ -50,6 +54,12 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
+	public ElementFluidTank setAlwaysShow(boolean show) {
+
+		alwaysShowMinimum = show;
+		return this;
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
@@ -71,15 +81,20 @@ public class ElementFluidTank extends ElementBase {
 		if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
 			list.add(StringHelper.getFluidName(tank.getFluid()));
 		}
-		list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
+		if (tank.getCapacity() < 0) {
+			list.add("Infinite Fluid");
+		} else {
+			list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
+		}
 	}
 
 	protected int getScaled() {
 
-		if (tank.getCapacity() <= 0) {
+		if (tank.getCapacity() < 0) {
 			return sizeY;
 		}
-		return tank.getFluidAmount() * sizeY / tank.getCapacity();
+		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.round(tank.getFluidAmount() * sizeY / tank.getCapacity())) : MathHelper
+				.round(tank.getFluidAmount() * sizeY / tank.getCapacity());
 	}
 
 }
