@@ -17,6 +17,7 @@ public class WorldGenMinablePlate extends WorldGenerator {
 	private final int radius;
 	public byte height = 1;
 	public byte variation = 2;
+	public boolean slim = false;
 
 	public WorldGenMinablePlate(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
@@ -43,7 +44,9 @@ public class WorldGenMinablePlate extends WorldGenerator {
 				int zSize = posZ - z;
 
 				if (zSize * zSize + xDist <= dist) {
-					for (int posY = y - height; posY <= y + height; ++posY) {
+					for (int posY = y - height;
+							slim ? posY < y + height : posY <= y + height;
+							++posY) {
 						r |= generateBlock(world, posX, posY, posZ, genBlock, cluster);
 					}
 				}
