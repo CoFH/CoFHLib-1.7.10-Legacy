@@ -93,8 +93,9 @@ public class ElementFluidTank extends ElementBase {
 		if (tank.getCapacity() < 0) {
 			return sizeY;
 		}
-		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.round(tank.getFluidAmount() * sizeY / tank.getCapacity())) : MathHelper
-				.round(tank.getFluidAmount() * sizeY / tank.getCapacity());
+		long fraction = (long) tank.getFluidAmount() * sizeY / tank.getCapacity();
+
+		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
 	}
 
 }

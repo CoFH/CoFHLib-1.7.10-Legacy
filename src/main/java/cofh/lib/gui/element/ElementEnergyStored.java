@@ -44,6 +44,8 @@ public class ElementEnergyStored extends ElementBase {
 
 		int amount = getScaled();
 
+		System.out.println(amount);
+
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
 		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - amount, 16, DEFAULT_SCALE - amount, sizeX, amount);
@@ -69,9 +71,9 @@ public class ElementEnergyStored extends ElementBase {
 		if (storage.getMaxEnergyStored() <= 0) {
 			return sizeY;
 		}
-		return alwaysShowMinimum && storage.getEnergyStored() > 0 ? Math.max(1,
-				MathHelper.round(storage.getEnergyStored() * sizeY / storage.getMaxEnergyStored())) : MathHelper.round(storage.getEnergyStored() * sizeY
-				/ storage.getMaxEnergyStored());
+		long fraction = (long) storage.getEnergyStored() * sizeY / storage.getMaxEnergyStored();
+
+		return alwaysShowMinimum && storage.getEnergyStored() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
 	}
 
 }
