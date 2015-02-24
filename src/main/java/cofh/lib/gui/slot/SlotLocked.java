@@ -11,30 +11,19 @@ import net.minecraft.item.ItemStack;
 /**
  * A slot that can only be used to display an item, not edited. Can optionally not highlight when moused over.
  */
-public class SlotViewOnly extends Slot {
+public class SlotLocked extends Slot {
 
 	protected boolean showHighlight;
 
-	public SlotViewOnly(IInventory inventory, int index, int x, int y) {
+	public SlotLocked(IInventory inventory, int index, int x, int y) {
 
 		this(inventory, index, x, y, false);
 	}
 
-	public SlotViewOnly(IInventory inventory, int index, int x, int y, boolean highlight) {
+	public SlotLocked(IInventory inventory, int index, int x, int y, boolean highlight) {
 
 		super(inventory, index, x, y);
 		showHighlight = highlight;
-	}
-
-	@Override
-	public void putStack(ItemStack stack) {
-
-	}
-
-	@Override
-	public ItemStack decrStackSize(int i) {
-
-		return null;
 	}
 
 	@Override

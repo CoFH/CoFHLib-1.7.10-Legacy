@@ -41,6 +41,11 @@ public class WorldGenDecoration extends WorldGenerator {
 			int y = yStart + (yVar > 1 ? rand.nextInt(yVar) - rand.nextInt(yVar) : 0);
 			int z = zStart + rand.nextInt(zVar) - rand.nextInt(zVar);
 
+			if (!world.blockExists(x, y, z)) {
+				++l;
+				continue;
+			}
+
 			if ((!seeSky || world.canBlockSeeTheSky(x, y, z)) &&
 					canGenerateInBlock(world, x, y - 1, z, onBlock) && canGenerateInBlock(world, x, y, z, genBlock)) {
 

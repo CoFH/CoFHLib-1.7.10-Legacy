@@ -222,16 +222,14 @@ public final class ItemHelper {
 		return disposePlayerItem(stack, dropStack, entityplayer, allowDrop, true);
 	}
 
-	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack,
-			EntityPlayer entityplayer, boolean allowDrop, boolean allowReplace) {
+	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop, boolean allowReplace) {
 
 		if (entityplayer == null || entityplayer.capabilities.isCreativeMode)
 			return true;
 		if (allowReplace && stack.stackSize <= 1) {
 			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, dropStack);
 			return true;
-		}
-		else if (allowDrop) {
+		} else if (allowDrop) {
 			stack.stackSize -= 1;
 			if (dropStack != null && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
 				entityplayer.func_146097_a(dropStack, false, true);
@@ -704,6 +702,7 @@ public final class ItemHelper {
 
 		return addSmallStorageRecipe(one, four_ore) && addSmallReverseStorageRecipe(four, one_ore);
 	}
+
 	// }
 
 	// SMELTING{
@@ -932,13 +931,10 @@ public final class ItemHelper {
 
 	public static boolean areItemsEqual(Item itemA, Item itemB) {
 
-		if (itemA == itemB) {
-			return true;
-		}
 		if (itemA == null | itemB == null) {
 			return false;
 		}
-		return itemA.equals(itemB);
+		return itemA == itemB || itemA.equals(itemB);
 	}
 
 	public static final boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
@@ -964,51 +960,36 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		if (stackA == null | stackB == null) {
 			return false;
 		}
-		return stackA.getItem().equals(stackB.getItem());
+		return areItemsEqual(stackA.getItem(), stackB.getItem());
 	}
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getHasSubtypes() == false || stackA.getItemDamage() == stackB.getItemDamage());
 	}
 
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
 	}
 
 	public static boolean itemsIdentical(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == stackB) {
-			return true;
-		}
 		return itemsEqualWithoutMetadata(stackA, stackB) && (stackA.getItemDamage() == stackB.getItemDamage())
 				&& doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound);
 	}
 
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
-		if (nbtA == nbtB) {
+		if (nbtA == null & nbtB == null) {
 			return true;
 		}
 		if (nbtA != null & nbtB != null) {

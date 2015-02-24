@@ -254,6 +254,7 @@ public class ElementTextField extends ElementBase {
 
 			selectionEnd = caret = selectionStart;
 			findRenderStart();
+			onCharacterEntered(true);
 		}
 	}
 
@@ -339,6 +340,7 @@ public class ElementTextField extends ElementBase {
 
 				return true;
 			case Keyboard.KEY_DELETE: // delete
+				boolean changed = false;
 				if (!GuiScreen.isShiftKeyDown()) {
 					if (selectionStart != selectionEnd)
 						clearSelection();
@@ -351,16 +353,20 @@ public class ElementTextField extends ElementBase {
 						if (caret < textLength && textLength > 0) {
 							--textLength;
 							System.arraycopy(text, caret + 1, text, caret, textLength - caret);
+							changed = true;
 						}
 					}
 					if (caret <= renderStart)
 						renderStart = MathHelper.clampI(caret - 3, 0, textLength);
 					findRenderStart();
 
+					onCharacterEntered(changed);
+
 					return true;
 				}
 				// continue.. (shift+delete = backspace)
 			case Keyboard.KEY_BACK: // backspace
+				changed = false;
 				if (selectionStart != selectionEnd)
 					clearSelection();
 				else if (GuiScreen.isCtrlKeyDown()) {
@@ -373,11 +379,14 @@ public class ElementTextField extends ElementBase {
 						--caret;
 						System.arraycopy(text, caret + 1, text, caret, textLength - caret);
 						--textLength;
+						changed = true;
 					}
 				}
 				if (caret <= renderStart)
 					renderStart = MathHelper.clampI(caret - 3, 0, textLength);
 				findRenderStart();
+
+				onCharacterEntered(changed);
 
 				return true;
 			case Keyboard.KEY_HOME: // home
@@ -406,6 +415,7 @@ public class ElementTextField extends ElementBase {
 				int size = keyTyped == 203 ? -1 : 1;
 				if (GuiScreen.isCtrlKeyDown())
 					size = seekNextCaretLocation(caret, keyTyped == 205) - caret;
+				// else if (altKeyIsDown)
 
 				if (selectionStart == selectionEnd || !GuiScreen.isShiftKeyDown())
 					selectionStart = selectionEnd = caret;
@@ -452,12 +462,16 @@ public class ElementTextField extends ElementBase {
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
 		selecting = mouseButton == 0;
-		if (selecting) {
+		l: if (selecting) {
+			if (textLength == 0) {
+				selectionStart = selectionEnd = caret = 0;
+				break l;
+			}
 			FontRenderer font = getFontRenderer();
 			int pos = mouseX - posX - 1;
-			for (int i = renderStart, width = 0; i < textLength; ++i) {
+			for (int i = renderStart, width = 0; ; ) {
 				int charW = font.getCharWidth(text[i]);
-				if ((width += charW) > pos) {
+				if ((width += charW) > pos || ++i >= textLength) {
 					selectionStart = selectionEnd = caret = i;
 					break;
 				}
@@ -520,7 +534,7 @@ public class ElementTextField extends ElementBase {
 					break;
 			}
 
-			boolean drawCaret = i == caret && (caretCounter %= 24) < 12 && isFocused();
+			boolean drawCaret = i == caret && (caretCounter &= 31) < 16 && isFocused();
 			if (drawCaret) {
 				int caretEnd = width + 2;
 				if (caretInsert)

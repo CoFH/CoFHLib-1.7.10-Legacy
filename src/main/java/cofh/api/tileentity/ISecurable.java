@@ -1,6 +1,6 @@
 package cofh.api.tileentity;
 
-import java.util.UUID;
+import com.mojang.authlib.GameProfile;
 
 /**
  * Implement this interface on Tile Entities which can have access restrictions.
@@ -49,13 +49,13 @@ public interface ISecurable {
 
 	boolean setOwnerName(String name);
 
-	boolean setOwner(UUID name);
+	boolean setOwner(GameProfile name);
 
 	AccessMode getAccess();
 
 	String getOwnerName();
 
-	UUID getOwner();
+	GameProfile getOwner();
 
 	boolean canPlayerAccess(String uuid);
 

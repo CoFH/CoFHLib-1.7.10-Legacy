@@ -54,8 +54,6 @@ public abstract class GuiBase extends GuiContainer {
 	protected List<String> tooltip = new LinkedList<String>();
 	protected boolean tooltips = true;
 
-	// protected boolean tooltips = !Loader.isModLoaded("NotEnoughItems");
-
 	public static void playSound(String name, float volume, float pitch) {
 
 		guiSoundManager.playSound(new SoundBase(name, volume, pitch));
@@ -191,9 +189,7 @@ public abstract class GuiBase extends GuiContainer {
 		TabBase tab = getTabAtPosition(mX, mY);
 		if (tab != null) {
 			int tMx = mX;
-			/*if (tab.side == TabBase.LEFT)
-				tMx -= tab.currentWidth;
-			//*/
+
 			if (!tab.onMousePressed(tMx, mY, mouseButton)) {
 				for (int i = tabs.size(); i-- > 0;) {
 					TabBase other = tabs.get(i);
@@ -427,8 +423,7 @@ public abstract class GuiBase extends GuiContainer {
 			if (!tab.isVisible() || tab.side == TabBase.RIGHT) {
 				continue;
 			}
-			tab.currentShiftX = xShift;
-			tab.currentShiftY = yShift;
+			tab.setCurrentShift(xShift, yShift);
 			if (tab.intersectsWith(mX, mY, xShift, yShift)) {
 				return tab;
 			}
@@ -443,8 +438,7 @@ public abstract class GuiBase extends GuiContainer {
 			if (!tab.isVisible() || tab.side == TabBase.LEFT) {
 				continue;
 			}
-			tab.currentShiftX = xShift;
-			tab.currentShiftY = yShift;
+			tab.setCurrentShift(xShift, yShift);
 			if (tab.intersectsWith(mX, mY, xShift, yShift)) {
 				return tab;
 			}

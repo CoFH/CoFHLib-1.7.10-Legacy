@@ -76,7 +76,7 @@ public class ContainerInventoryItem extends Container {
 
 		int invPlayer = 27;
 		int invFull = invPlayer + 9;
-		int invTile = invFull + (containerWrapper.getSizeInventory());
+		int invTile = invFull + containerWrapper.getSizeInventory();
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();

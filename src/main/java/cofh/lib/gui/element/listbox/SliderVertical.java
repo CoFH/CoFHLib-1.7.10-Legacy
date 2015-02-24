@@ -21,7 +21,7 @@ public class SliderVertical extends ElementSlider {
 	public int getSliderY() {
 
 		int dist = _valueMax - _valueMin;
-		int maxPos = sizeY - _sliderHeight + 1;
+		int maxPos = sizeY - _sliderHeight;
 		return Math.min(dist == 0 ? 0 : maxPos * (_value - _valueMin) / dist, maxPos);
 	}
 

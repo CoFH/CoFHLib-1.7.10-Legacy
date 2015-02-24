@@ -66,8 +66,10 @@ public abstract class ElementSlider extends ElementBase {
 
 	protected void drawSlider(int mouseX, int mouseY, int sliderX, int sliderY) {
 
-		int sliderWidth = _sliderWidth;
-		int sliderHeight = _sliderHeight;
+		int sliderMidX = _sliderWidth / 2;
+		int sliderMidY = _sliderHeight / 2;
+		int sliderEndX = _sliderWidth - sliderMidX;
+		int sliderEndY = _sliderHeight - sliderMidY;
 
 		if (!isEnabled()) {
 			gui.bindTexture(DISABLED);
@@ -77,11 +79,11 @@ public abstract class ElementSlider extends ElementBase {
 			gui.bindTexture(ENABLED);
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderWidth / 2, sliderHeight / 2);
-		drawTexturedModalRect(sliderX, sliderY + sliderHeight / 2, 0, 256 - sliderHeight / 2, sliderWidth / 2, sliderHeight / 2);
-		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY, 256 - sliderWidth / 2, 0, sliderWidth / 2, sliderHeight / 2);
-		drawTexturedModalRect(sliderX + sliderWidth / 2, sliderY + sliderHeight / 2, 256 - sliderWidth / 2, 256 - sliderHeight / 2, sliderWidth / 2,
-				sliderHeight / 2);
+		drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderMidX, sliderMidY);
+		drawTexturedModalRect(sliderX, sliderY + sliderMidY, 0, 256 - sliderEndY, sliderMidX, sliderEndY);
+		drawTexturedModalRect(sliderX + sliderMidX, sliderY, 256 - sliderEndX, 0, sliderEndX, sliderMidY);
+		drawTexturedModalRect(sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX,
+				sliderEndY);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
+import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class SecurityHelper {
 		}
 		tag.setBoolean("Secure", true);
 		tag.setByte("Access", (byte) tile.getAccess().ordinal());
-		tag.setString("OwnerUUID", tile.getOwner().toString());
-		tag.setString("Owner", tile.getOwnerName());
+		tag.setString("OwnerUUID", tile.getOwner().getId().toString());
+		tag.setString("Owner", tile.getOwner().getName());
 		return tag;
 	}
 
@@ -41,10 +42,14 @@ public class SecurityHelper {
 	public static void addOwnerInformation(ItemStack stack, List<String> list) {
 
 		if (SecurityHelper.isSecure(stack)) {
-			if (!stack.stackTagCompound.hasKey("Owner")) {
+			boolean hasUUID = stack.stackTagCompound.hasKey("OwnerUUID");
+			if (!stack.stackTagCompound.hasKey("Owner") && !hasUUID) {
 				list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
 			} else {
-				list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner"));
+				if (hasUUID && stack.stackTagCompound.hasKey("Owner"))
+					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner"));
+				else
+					list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
 			}
 		}
 	}
@@ -107,25 +112,31 @@ public class SecurityHelper {
 			return false;
 		}
 		stack.setTagInfo("OwnerUUID", new NBTTagString(name.getId().toString()));
+		stack.setTagInfo("Owner", new NBTTagString(name.getName()));
 		return true;
 	}
 
-	public static UUID getOwner(ItemStack stack) {
+	public static GameProfile getOwner(ItemStack stack) {
 
 		if (stack.stackTagCompound != null) {
-			if (stack.stackTagCompound.hasKey("OwnerUUID", 8))
-				return UUID.fromString(stack.stackTagCompound.getString("OwnerUUID"));
-			if (stack.stackTagCompound.hasKey("Owner", 8))
-				return UUID.fromString(PreYggdrasilConverter.func_152719_a(getOwnerName(stack)));
+			NBTTagCompound nbt = stack.stackTagCompound;
+
+			String uuid = nbt.getString("OwnerUUID");
+			String name = nbt.getString("Owner");
+	        if (!Strings.isNullOrEmpty(uuid)) {
+	            return new GameProfile(UUID.fromString(uuid), name);
+	        } else if (!Strings.isNullOrEmpty(name)) {
+	            return new GameProfile(UUID.fromString(PreYggdrasilConverter.func_152719_a(name)), name);
+	        }
 		}
-		return UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea");
+		return new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
 	}
 
-	public static GameProfile getProfile(UUID uuid) {
+	public static GameProfile getProfile(UUID uuid, String name) {
 
 		GameProfile owner = MinecraftServer.getServer().func_152358_ax().func_152652_a(uuid);
 		if (owner == null) {
-			GameProfile temp = new GameProfile(uuid, null);
+			GameProfile temp = new GameProfile(uuid, name);
 			owner = MinecraftServer.getServer().func_147130_as().fillProfileProperties(temp, true);
 			if (owner != temp)
 				MinecraftServer.getServer().func_152358_ax().func_152649_a(owner);
@@ -145,7 +156,11 @@ public class SecurityHelper {
 
 	public static String getOwnerName(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? "[None]" : stack.stackTagCompound.getString("Owner");
+		NBTTagCompound nbt = stack.stackTagCompound;
+		boolean hasUUID;
+		if (nbt == null || (!(hasUUID = nbt.hasKey("OwnerUUID")) && !nbt.hasKey("Owner")))
+			return "[None]";
+		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
 	}
 
 }
