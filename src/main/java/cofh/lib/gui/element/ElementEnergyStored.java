@@ -17,6 +17,9 @@ public class ElementEnergyStored extends ElementBase {
 
 	protected IEnergyStorage storage;
 
+	// If this is enabled, 1 pixel of energy will always show in the bar as long as it is non-zero.
+	protected boolean alwaysShowMinimum = false;
+
 	public ElementEnergyStored(GuiBase gui, int posX, int posY, IEnergyStorage storage) {
 
 		super(gui, posX, posY);
@@ -28,6 +31,12 @@ public class ElementEnergyStored extends ElementBase {
 
 		this.texW = 32;
 		this.texH = 64;
+	}
+
+	public ElementEnergyStored setAlwaysShow(boolean show) {
+
+		alwaysShowMinimum = show;
+		return this;
 	}
 
 	@Override
@@ -60,7 +69,9 @@ public class ElementEnergyStored extends ElementBase {
 		if (storage.getMaxEnergyStored() <= 0) {
 			return sizeY;
 		}
-		return MathHelper.round(storage.getEnergyStored() * sizeY / storage.getMaxEnergyStored());
+		long fraction = (long) storage.getEnergyStored() * sizeY / storage.getMaxEnergyStored();
+
+		return alwaysShowMinimum && storage.getEnergyStored() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
 	}
 
 }

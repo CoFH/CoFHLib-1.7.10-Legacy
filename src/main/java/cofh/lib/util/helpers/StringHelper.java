@@ -139,7 +139,7 @@ public final class StringHelper {
 
 	public static String getFlavorText(String key) {
 
-		return LIGHT_GRAY + ITALIC + localize(key) + END;
+		return LIGHT_GRAY + localize(key) + END;
 	}
 
 	public static String getRarity(int level) {
