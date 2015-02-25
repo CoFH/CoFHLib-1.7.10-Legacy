@@ -432,7 +432,6 @@ public class ElementTextField extends ElementBase {
 					caret = MathHelper.clampI(caret + size, 0, textLength);
 					size = caret - t;
 				}
-				findRenderStart();
 
 				if (GuiScreen.isShiftKeyDown()) {
 					if (caret == selectionStart + size)
@@ -450,6 +449,7 @@ public class ElementTextField extends ElementBase {
 				if (shiftCaret) {
 					caret = caret - size;
 				}
+				findRenderStart();
 
 				return true;
 			default:
