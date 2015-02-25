@@ -292,7 +292,10 @@ public final class BlockHelper {
 	/* Safe Tile Entity Retrieval */
 	public static TileEntity getAdjacentTileEntity(World world, int x, int y, int z, ForgeDirection dir) {
 
-		return world == null ? null : world.getTileEntity(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ);
+		x += dir.offsetX;
+		y += dir.offsetY;
+		z += dir.offsetZ;
+		return world == null || !world.blockExists(x, y, z) ? null : world.getTileEntity(x, y, z);
 	}
 
 	public static TileEntity getAdjacentTileEntity(World world, int x, int y, int z, int side) {
