@@ -212,9 +212,7 @@ public final class ItemHelper {
 				player.func_146097_a(ret, false, true);
 		}
 
-		if (stack.stackSize > 0)
-			return stack;
-		return null;
+		return largerStack ? stack : null;
 	}
 
 	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop) {
