@@ -171,7 +171,6 @@ public final class ItemHelper {
 		if (largerStack) {
 			stack.stackSize -= 1;
 		}
-
 		if (item.hasContainerItem(stack)) {
 			ItemStack ret = item.getContainerItem(stack);
 
@@ -198,22 +197,23 @@ public final class ItemHelper {
 		if (largerStack) {
 			stack.stackSize -= 1;
 		}
-
 		if (item.hasContainerItem(stack)) {
 			ItemStack ret = item.getContainerItem(stack);
 
-			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage()))
+			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage())) {
 				ret = null;
-
-			if (stack.stackSize < 1)
+			}
+			if (stack.stackSize < 1) {
 				return ret;
-
-			if (ret != null && !player.inventory.addItemStackToInventory(ret))
+			}
+			if (ret != null && !player.inventory.addItemStackToInventory(ret)) {
 				player.func_146097_a(ret, false, true);
+			}
 		}
 
-		if (stack.stackSize > 0)
+		if (stack.stackSize > 0) {
 			return stack;
+		}
 		return null;
 	}
 
@@ -224,8 +224,9 @@ public final class ItemHelper {
 
 	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop, boolean allowReplace) {
 
-		if (entityplayer == null || entityplayer.capabilities.isCreativeMode)
+		if (entityplayer == null || entityplayer.capabilities.isCreativeMode) {
 			return true;
+		}
 		if (allowReplace && stack.stackSize <= 1) {
 			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, dropStack);
 			return true;

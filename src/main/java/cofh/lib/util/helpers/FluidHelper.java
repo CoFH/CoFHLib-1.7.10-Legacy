@@ -39,7 +39,7 @@ public class FluidHelper {
 	public static final FluidStack WATER = new FluidStack(WATER_FLUID, BUCKET_VOLUME);
 	public static final FluidStack LAVA = new FluidStack(LAVA_FLUID, BUCKET_VOLUME);
 
-	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[]{};
+	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[] {};
 
 	private FluidHelper() {
 
@@ -157,7 +157,7 @@ public class FluidHelper {
 				handler.fill(ForgeDirection.UNKNOWN, fluid, true);
 
 				if (!player.capabilities.isCreativeMode) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemHelper.consumeItem(container));
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemHelper.consumeItem(container, player));
 				}
 				return true;
 			}
