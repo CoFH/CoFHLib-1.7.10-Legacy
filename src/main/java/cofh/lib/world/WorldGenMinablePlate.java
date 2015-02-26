@@ -40,13 +40,11 @@ public class WorldGenMinablePlate extends WorldGenerator {
 		for (int posX = x - size; posX <= x + size; ++posX) {
 			int xDist = posX - x;
 			xDist *= xDist;
-			for (int posZ = z - size; posZ <= z + size; ++posZ) {
+			for (int posZ = z - size; posZ <= z + size; ++posZ){
 				int zSize = posZ - z;
 
-				if (zSize * zSize + xDist <= dist) {
-					for (int posY = y - height;
-							slim ? posY < y + height : posY <= y + height;
-							++posY) {
+				if (zSize * zSize + xDist <= dist){
+					for (int posY = y - height; slim ? posY < y + height : posY <= y + height; ++posY){
 						r |= generateBlock(world, posX, posY, posZ, genBlock, cluster);
 					}
 				}

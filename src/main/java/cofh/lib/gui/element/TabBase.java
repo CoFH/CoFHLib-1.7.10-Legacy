@@ -1,13 +1,15 @@
 package cofh.lib.gui.element;
 
+import java.util.ArrayList;
+
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.TabTracker;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.Rectangle4i;
-
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -45,7 +47,9 @@ public abstract class TabBase extends ElementBase {
 	public int minHeight = 22;
 	public int maxHeight = 22;
 	public int currentHeight = minHeight;
-
+	
+	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
+	
 	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Tab_Left.png");
 	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Tab_Right.png");
 
@@ -89,14 +93,36 @@ public abstract class TabBase extends ElementBase {
 
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
-
+		for (int i = 0; i < elements.size(); i++) {
+			ElementBase element = elements.get(i);
+			if (element.isVisible()) {
+				element.drawBackground(mouseX, mouseY, gameTicks);
+			}
+		}
 	}
 
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
-
+		for (int i = 0; i < elements.size(); i++) {
+			ElementBase element = elements.get(i);
+			if (element.isVisible()) {
+				element.drawForeground(mouseX, mouseY);
+			}
+		}
 	}
-
+	
+	@Override
+	public void update(int mouseX, int mouseY){
+		super.update(mouseX, mouseY);
+		
+		for (int i = elements.size(); i-- > 0;) {
+			ElementBase c = elements.get(i);
+			if (c.isVisible() && c.isEnabled()) {
+				c.update(mouseX, mouseY);
+			}
+		}
+	}
+	
 	@Override
 	public void update() {
 
@@ -236,6 +262,88 @@ public abstract class TabBase extends ElementBase {
 			return new Rectangle4i(posX() + gui.getGuiLeft(), posY + gui.getGuiTop(), 0, 0);
 		}
 
+	}
+	
+	/* Elements */
+	public ElementBase addElement(ElementBase element) {
+
+		elements.add(element);
+		return element;
+	}
+	
+	protected ElementBase getElementAtPosition(int mX, int mY) {
+
+		for (int i = elements.size(); i-- > 0;) {
+			ElementBase element = elements.get(i);
+			if (element.intersectsWith(mX, mY)) {
+				return element;
+			}
+		}
+		return null;
+	}
+	
+	/* Redirects to Elements*/
+	
+	@Override
+	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
+		int wheelMovement = Mouse.getEventDWheel();
+
+		if (wheelMovement != 0) {
+			for (int i = elements.size(); i-- > 0;) {
+				ElementBase c = elements.get(i);
+				if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
+					continue;
+				}
+				if (c.onMouseWheel(mouseX, mouseY, wheelMovement)) {
+					return true;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onKeyTyped(char characterTyped, int keyPressed) {
+
+		for (int i = elements.size(); i-- > 0;) {
+			ElementBase c = elements.get(i);
+			if (!c.isVisible() || !c.isEnabled()) {
+				continue;
+			}
+			if (c.onKeyTyped(characterTyped, keyPressed)) {
+				return true;
+			}
+		}
+		return super.onKeyTyped(characterTyped, keyPressed);
+	}
+
+	@Override
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton){
+
+		for (int i = elements.size(); i-- > 0;) {
+			ElementBase c = elements.get(i);
+			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
+				continue;
+			}
+			if (c.onMousePressed(mouseX, mouseY, mouseButton)) {
+				return true;
+			}
+		}
+		
+		return super.onMousePressed(mouseX, mouseY, mouseButton);
+	}
+	
+	@Override
+	public void onMouseReleased(int mouseX, int mouseY){
+
+		for (int i = elements.size(); i-- > 0;) {
+			ElementBase c = elements.get(i);
+			if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
+				continue;
+			}
+			c.onMouseReleased(mouseX, mouseY);
+		}
 	}
 
 }
