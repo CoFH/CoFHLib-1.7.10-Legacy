@@ -119,7 +119,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseY = y - guiTop;
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
+		GL11.glTranslatef(guiLeft, guiTop, 0.0F); //TODO: Mark this
 		drawElements(partialTick, false);
 		drawTabs(partialTick, false);
 		GL11.glPopMatrix();
@@ -321,12 +321,12 @@ public abstract class GuiBase extends GuiContainer {
 					continue;
 				}
 				if (tab.side == TabBase.LEFT) {
+					//tab.draw(0, yPosLeft);
 					tab.drawForeground(mouseX, mouseY);
-					tab.draw(0, yPosLeft);
 					yPosLeft += tab.currentHeight;
 				} else {
+					//tab.draw(xSize, yPosRight);
 					tab.drawForeground(mouseX, mouseY);
-					tab.draw(xSize, yPosRight);
 					yPosRight += tab.currentHeight;
 				}
 			}
@@ -338,12 +338,12 @@ public abstract class GuiBase extends GuiContainer {
 					continue;
 				}
 				if (tab.side == TabBase.LEFT) {
-					tab.drawBackground(mouseX, mouseY, partialTick);
 					tab.draw(0, yPosLeft);
+					tab.drawBackground(mouseX, mouseY, partialTick);
 					yPosLeft += tab.currentHeight;
 				} else {
-					tab.drawBackground(mouseX, mouseY, partialTick);
 					tab.draw(xSize, yPosRight);
+					tab.drawBackground(mouseX, mouseY, partialTick);
 					yPosRight += tab.currentHeight;
 				}
 			}

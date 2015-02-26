@@ -2,15 +2,16 @@ package cofh.lib.gui.element;
 
 import java.util.ArrayList;
 
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.TabTracker;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.Rectangle4i;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
@@ -75,7 +76,7 @@ public abstract class TabBase extends ElementBase {
 
 		offsetX = x;
 		offsetY = y;
-
+		
 		return this;
 	}
 
@@ -87,33 +88,54 @@ public abstract class TabBase extends ElementBase {
 	}
 
 	public void draw() {
-
+		this.drawBackground();
 		return;
 	}
 
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
+		
+		mouseX -= this.posX();
+		mouseY -= this.posY;
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+		
 		for (int i = 0; i < elements.size(); i++) {
 			ElementBase element = elements.get(i);
 			if (element.isVisible()) {
 				element.drawBackground(mouseX, mouseY, gameTicks);
 			}
 		}
+		
+		GL11.glPopMatrix();
 	}
 
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
+		
+		mouseX -= this.posX();
+		mouseY -= this.posY;
+		
+		GL11.glPushMatrix();
+		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+		
 		for (int i = 0; i < elements.size(); i++) {
 			ElementBase element = elements.get(i);
 			if (element.isVisible()) {
 				element.drawForeground(mouseX, mouseY);
 			}
 		}
+
+		GL11.glPopMatrix();
 	}
 	
 	@Override
 	public void update(int mouseX, int mouseY){
 		super.update(mouseX, mouseY);
+		
+		mouseX -= this.posX();
+		mouseY -= this.posY;
 		
 		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
@@ -222,6 +244,8 @@ public abstract class TabBase extends ElementBase {
 
 	public void setCurrentShift(int x, int y) {
 
+		updateElements();
+		
 		currentShiftX = x + offsetX;
 		currentShiftY = y + offsetY;
 	}
@@ -232,6 +256,8 @@ public abstract class TabBase extends ElementBase {
 		currentWidth = maxWidth;
 		currentHeight = maxHeight;
 		fullyOpen = true;
+		
+		updateElements();
 	}
 
 	public void toggleOpen() {
@@ -252,6 +278,8 @@ public abstract class TabBase extends ElementBase {
 				TabTracker.setOpenedRightTab(this.getClass());
 			}
 		}
+		
+		updateElements();
 	}
 
 	public Rectangle4i getBounds() {
@@ -266,7 +294,7 @@ public abstract class TabBase extends ElementBase {
 	
 	/* Elements */
 	public ElementBase addElement(ElementBase element) {
-
+		
 		elements.add(element);
 		return element;
 	}
@@ -287,7 +315,10 @@ public abstract class TabBase extends ElementBase {
 	@Override
 	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
 		int wheelMovement = Mouse.getEventDWheel();
-
+		
+		mouseX -= this.posX();
+		mouseY -= this.posY;
+		
 		if (wheelMovement != 0) {
 			for (int i = elements.size(); i-- > 0;) {
 				ElementBase c = elements.get(i);
@@ -319,30 +350,50 @@ public abstract class TabBase extends ElementBase {
 	}
 
 	@Override
+	/**
+	 * @return Whether the tab should stay open or not.
+	 */
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton){
 
-		for (int i = elements.size(); i-- > 0;) {
+		mouseX -= this.posX();
+		mouseY -= this.posY;
+		
+		boolean shouldStayOpen = false;
+		
+		for (int i = 0; i < this.elements.size(); i++) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 				continue;
 			}
+			
+			shouldStayOpen = true;
+			
 			if (c.onMousePressed(mouseX, mouseY, mouseButton)) {
 				return true;
 			}
 		}
 		
-		return super.onMousePressed(mouseX, mouseY, mouseButton);
+		return shouldStayOpen;
 	}
 	
 	@Override
 	public void onMouseReleased(int mouseX, int mouseY){
 
+		mouseX -= this.posX();
+		mouseY -= this.posY;
+		
 		for (int i = elements.size(); i-- > 0;) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
 				continue;
 			}
 			c.onMouseReleased(mouseX, mouseY);
+		}
+	}
+	
+	private void updateElements(){
+		for(ElementBase element : elements){
+			element.setVisible(this.isFullyOpened());
 		}
 	}
 
