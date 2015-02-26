@@ -57,6 +57,6 @@ public interface ISecurable {
 
 	GameProfile getOwner();
 
-	boolean canPlayerAccess(String uuid);
+	boolean canPlayerAccess(String name);
 
 }

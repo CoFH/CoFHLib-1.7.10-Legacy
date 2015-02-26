@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.helpers.StringHelper;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -413,9 +414,15 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_LEFT: // left arrow
 			case Keyboard.KEY_RIGHT: // right arrow
 				int size = keyTyped == 203 ? -1 : 1;
+				boolean shiftCaret = false;
 				if (GuiScreen.isCtrlKeyDown())
 					size = seekNextCaretLocation(caret, keyTyped == 205) - caret;
-				// else if (altKeyIsDown)
+				else if (StringHelper.isAltKeyDown() && GuiScreen.isShiftKeyDown()) {
+					caret = seekNextCaretLocation(caret, keyTyped == 205);
+					selectionStart = selectionEnd = caret;
+					size = seekNextCaretLocation(caret, keyTyped != 205) - caret;
+					shiftCaret = true;
+				}
 
 				if (selectionStart == selectionEnd || !GuiScreen.isShiftKeyDown())
 					selectionStart = selectionEnd = caret;
@@ -425,17 +432,12 @@ public class ElementTextField extends ElementBase {
 					caret = MathHelper.clampI(caret + size, 0, textLength);
 					size = caret - t;
 				}
-				findRenderStart();
 
 				if (GuiScreen.isShiftKeyDown()) {
 					if (caret == selectionStart + size)
 						selectionStart = caret;
 					else if (caret == selectionEnd + size)
 						selectionEnd = caret;
-					// this logic is 'broken' in that the selection doesn't wrap
-					// such that a|bc|def becomes abc|def| but it will highlight
-					// the rest of the word the caret is on   i.e., a|bc|def -> a|bcdef|
-					// i don't know that it matters (home+end exhibit the former)
 
 					if (selectionStart > selectionEnd) {
 						int t = selectionStart;
@@ -443,6 +445,11 @@ public class ElementTextField extends ElementBase {
 						selectionEnd = t;
 					}
 				}
+
+				if (shiftCaret) {
+					caret = caret - size;
+				}
+				findRenderStart();
 
 				return true;
 			default:

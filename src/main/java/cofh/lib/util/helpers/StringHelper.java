@@ -137,6 +137,11 @@ public final class StringHelper {
 		return BRIGHT_GREEN + localize(key) + END;
 	}
 
+	public static String getNoticeText(String key) {
+
+		return ORANGE + localize(key) + END;
+	}
+
 	public static String getFlavorText(String key) {
 
 		return LIGHT_GRAY + localize(key) + END;
