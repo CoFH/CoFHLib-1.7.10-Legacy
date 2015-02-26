@@ -178,7 +178,10 @@ public abstract class ElementBase {
 	}
 
 	public boolean intersectsWith(int mouseX, int mouseY) {
-		return mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY;
+		if (mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY) {
+			return true;
+		}
+		return false;
 	}
 
 	public FontRenderer getFontRenderer() {
