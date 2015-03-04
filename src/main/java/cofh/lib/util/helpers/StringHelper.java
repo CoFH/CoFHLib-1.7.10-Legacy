@@ -176,9 +176,14 @@ public final class StringHelper {
 		return localize("info.cofh.tutorial.tabConfiguration.0");
 	}
 
-	public static String tutorialTabOperation() {
+	public static String tutorialTabConfigurationEnergy() {
 
 		return localize("info.cofh.tutorial.tabConfiguration.1");
+	}
+
+	public static String tutorialTabConfigurationOperation() {
+
+		return localize("info.cofh.tutorial.tabConfiguration.2");
 	}
 
 	public static String tutorialTabRedstone() {
