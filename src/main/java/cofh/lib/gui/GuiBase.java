@@ -119,7 +119,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseY = y - guiTop;
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
+		GL11.glTranslatef(guiLeft, guiTop, 0.0F); //TODO: Mark this
 		drawElements(partialTick, false);
 		drawTabs(partialTick, false);
 		GL11.glPopMatrix();
@@ -310,25 +310,42 @@ public abstract class GuiBase extends GuiContainer {
 	 */
 	protected void drawTabs(float partialTick, boolean foreground) {
 
-		if (foreground) {
-			return; // TODO:
-		}
 		int yPosRight = 4;
 		int yPosLeft = 4;
-
-		for (int i = 0; i < tabs.size(); i++) {
-			TabBase tab = tabs.get(i);
-			tab.update();
-			if (!tab.isVisible()) {
-				continue;
+		
+		if (foreground) {
+			for (int i = 0; i < tabs.size(); i++) {
+				TabBase tab = tabs.get(i);
+				tab.update();
+				if (!tab.isVisible()) {
+					continue;
+				}
+				if (tab.side == TabBase.LEFT) {
+					//tab.draw(0, yPosLeft);
+					tab.drawForeground(mouseX, mouseY);
+					yPosLeft += tab.currentHeight;
+				} else {
+					//tab.draw(xSize, yPosRight);
+					tab.drawForeground(mouseX, mouseY);
+					yPosRight += tab.currentHeight;
+				}
 			}
-			// TODO: convert these over to foreground/background (maybe logic for top/bottom tabs?)
-			if (tab.side == TabBase.LEFT) {
-				tab.draw(0, yPosLeft);
-				yPosLeft += tab.currentHeight;
-			} else {
-				tab.draw(xSize, yPosRight);
-				yPosRight += tab.currentHeight;
+		}else{
+			for (int i = 0; i < tabs.size(); i++) {
+				TabBase tab = tabs.get(i);
+				tab.update();
+				if (!tab.isVisible()) {
+					continue;
+				}
+				if (tab.side == TabBase.LEFT) {
+					tab.draw(0, yPosLeft);
+					tab.drawBackground(mouseX, mouseY, partialTick);
+					yPosLeft += tab.currentHeight;
+				} else {
+					tab.draw(xSize, yPosRight);
+					tab.drawBackground(mouseX, mouseY, partialTick);
+					yPosRight += tab.currentHeight;
+				}
 			}
 		}
 	}
