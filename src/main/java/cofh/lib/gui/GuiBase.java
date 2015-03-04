@@ -208,7 +208,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (tab != null) {
 			switch (tab.side) {
 			case TabBase.LEFT:
-				guiLeft -= tab.currentWidth;
+				//guiLeft -= tab.currentWidth;
 				break;
 			case TabBase.RIGHT:
 				xSize += tab.currentWidth;
@@ -219,7 +219,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (tab != null) {
 			switch (tab.side) {
 			case TabBase.LEFT:
-				guiLeft += tab.currentWidth;
+				//guiLeft += tab.currentWidth;
 				break;
 			case TabBase.RIGHT:
 				xSize -= tab.currentWidth;
