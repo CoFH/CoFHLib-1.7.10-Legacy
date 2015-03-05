@@ -102,6 +102,31 @@ public abstract class TabBase extends ElementBase {
 		return;
 	}
 
+	protected void drawForeground() {
+
+		// TODO: this and drawBackground() need to be called after the matrix translation (not for back compat)
+	}
+
+	protected void drawBackground() {
+
+		float colorR = (backgroundColor >> 16 & 255) / 255.0F;
+		float colorG = (backgroundColor >> 8 & 255) / 255.0F;
+		float colorB = (backgroundColor & 255) / 255.0F;
+
+		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+
+		RenderHelper.bindTexture(texture);
+
+		int xPosition = posX();
+
+		gui.drawTexturedModalRect(xPosition, posY + 4, 0, 256 - currentHeight + 4, 4, currentHeight - 4);
+		gui.drawTexturedModalRect(xPosition + 4, posY, 256 - currentWidth + 4, 0, currentWidth - 4, 4);
+		gui.drawTexturedModalRect(xPosition, posY, 0, 0, 4, 4);
+		gui.drawTexturedModalRect(xPosition + 4, posY + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
+
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
@@ -188,30 +213,6 @@ public abstract class TabBase extends ElementBase {
 		if (!fullyOpen && open && currentWidth == maxWidth && currentHeight == maxHeight) {
 			setFullyOpen();
 		}
-	}
-
-	protected void drawForeground() {
-
-	}
-
-	protected void drawBackground() {
-
-		float colorR = (backgroundColor >> 16 & 255) / 255.0F;
-		float colorG = (backgroundColor >> 8 & 255) / 255.0F;
-		float colorB = (backgroundColor & 255) / 255.0F;
-
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
-
-		RenderHelper.bindTexture(texture);
-
-		int xPosition = posX();
-
-		gui.drawTexturedModalRect(xPosition, posY + 4, 0, 256 - currentHeight + 4, 4, currentHeight - 4);
-		gui.drawTexturedModalRect(xPosition + 4, posY, 256 - currentWidth + 4, 0, currentWidth - 4, 4);
-		gui.drawTexturedModalRect(xPosition, posY, 0, 0, 4, 4);
-		gui.drawTexturedModalRect(xPosition + 4, posY + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
-
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	protected void drawTabIcon(String iconName) {
