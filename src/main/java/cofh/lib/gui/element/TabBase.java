@@ -92,12 +92,12 @@ public abstract class TabBase extends ElementBase {
 		return this;
 	}
 
-	@Deprecated // use drawBackground(int, int, float) and drawForeground(int, int)
+	@Deprecated // use drawBackground() and drawForeground()
 	public void draw(int x, int y) {
 
 	}
 
-	@Deprecated // use drawBackground(int, int, float) and drawForeground(int, int)
+	@Deprecated // use drawBackground() and drawForeground()
 	public void draw() {
 		return;
 	}
