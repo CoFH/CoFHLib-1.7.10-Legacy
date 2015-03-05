@@ -120,7 +120,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseY = y - guiTop;
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft, guiTop, 0.0F); //TODO: Mark this
+		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		drawElements(partialTick, false);
 		drawTabs(partialTick, false);
 		GL11.glPopMatrix();
