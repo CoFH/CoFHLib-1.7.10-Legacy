@@ -30,7 +30,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 /**
- * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
+ * Base class for a modular GUIs. Works with Elements {@link ElementBase} and
+ * Tabs {@link TabBase} which are both modular elements.
  *
  * @author King Lemming
  */
@@ -312,7 +313,7 @@ public abstract class GuiBase extends GuiContainer {
 
 		int yPosRight = 4;
 		int yPosLeft = 4;
-		
+
 		if (foreground) {
 			for (int i = 0; i < tabs.size(); i++) {
 				TabBase tab = tabs.get(i);
@@ -321,16 +322,14 @@ public abstract class GuiBase extends GuiContainer {
 					continue;
 				}
 				if (tab.side == TabBase.LEFT) {
-					//tab.draw(0, yPosLeft);
 					tab.drawForeground(mouseX, mouseY);
 					yPosLeft += tab.currentHeight;
 				} else {
-					//tab.draw(xSize, yPosRight);
 					tab.drawForeground(mouseX, mouseY);
 					yPosRight += tab.currentHeight;
 				}
 			}
-		}else{
+		} else {
 			for (int i = 0; i < tabs.size(); i++) {
 				TabBase tab = tabs.get(i);
 				tab.update();
@@ -338,11 +337,11 @@ public abstract class GuiBase extends GuiContainer {
 					continue;
 				}
 				if (tab.side == TabBase.LEFT) {
-					tab.draw(0, yPosLeft);
+					tab.setPosition(0, yPosLeft);
 					tab.drawBackground(mouseX, mouseY, partialTick);
 					yPosLeft += tab.currentHeight;
 				} else {
-					tab.draw(xSize, yPosRight);
+					tab.setPosition(xSize, yPosRight);
 					tab.drawBackground(mouseX, mouseY, partialTick);
 					yPosRight += tab.currentHeight;
 				}
@@ -472,7 +471,8 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	/**
-	 * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
+	 * Abstract method to retrieve icons by name from a registry. You must
+	 * override this if you use any of the String methods below.
 	 */
 	public IIcon getIcon(String name) {
 
@@ -480,7 +480,8 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	/**
-	 * Essentially a placeholder method for tabs to use should they need to draw a button.
+	 * Essentially a placeholder method for tabs to use should they need to draw
+	 * a button.
 	 */
 	public void drawButton(IIcon icon, int x, int y, int spriteSheet, int mode) {
 
@@ -641,7 +642,8 @@ public abstract class GuiBase extends GuiContainer {
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
 		tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, minU, minV + (maxV - minV) * height / 16F);
-		tessellator.addVertexWithUV(x + width, y + height, this.zLevel, minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
+		tessellator.addVertexWithUV(x + width, y + height, this.zLevel, minU + (maxU - minU) * width / 16F, minV + (maxV - minV) *
+				height / 16F);
 		tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, minU + (maxU - minU) * width / 16F, minV);
 		tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, minU, minV);
 		tessellator.draw();
