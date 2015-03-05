@@ -92,13 +92,16 @@ public abstract class TabBase extends ElementBase {
 		return this;
 	}
 
-	@Deprecated // use drawBackground() and drawForeground()
+	@Deprecated
+	// use drawBackground() and drawForeground()
 	public void draw(int x, int y) {
 
 	}
 
-	@Deprecated // use drawBackground() and drawForeground()
+	@Deprecated
+	// use drawBackground() and drawForeground()
 	public void draw() {
+
 		return;
 	}
 
@@ -146,7 +149,6 @@ public abstract class TabBase extends ElementBase {
 				element.drawBackground(mouseX, mouseY, gameTicks);
 			}
 		}
-
 		GL11.glPopMatrix();
 	}
 
@@ -168,12 +170,12 @@ public abstract class TabBase extends ElementBase {
 				element.drawForeground(mouseX, mouseY);
 			}
 		}
-
 		GL11.glPopMatrix();
 	}
 
 	@Override
-	public void update(int mouseX, int mouseY){
+	public void update(int mouseX, int mouseY) {
+
 		super.update(mouseX, mouseY);
 
 		mouseX -= this.posX();
@@ -332,10 +334,11 @@ public abstract class TabBase extends ElementBase {
 		return null;
 	}
 
-	/* Redirects to Elements*/
+	/* Redirects to Elements */
 
 	@Override
 	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
+
 		int wheelMovement = Mouse.getEventDWheel();
 
 		mouseX -= this.posX();
@@ -375,7 +378,7 @@ public abstract class TabBase extends ElementBase {
 	/**
 	 * @return Whether the tab should stay open or not.
 	 */
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton){
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
 		mouseX -= this.posX();
 		mouseY -= this.posY;
@@ -399,7 +402,7 @@ public abstract class TabBase extends ElementBase {
 	}
 
 	@Override
-	public void onMouseReleased(int mouseX, int mouseY){
+	public void onMouseReleased(int mouseX, int mouseY) {
 
 		mouseX -= this.posX();
 		mouseY -= this.posY;
@@ -413,8 +416,9 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
-	private void updateElements(){
-		for(ElementBase element : elements){
+	private void updateElements() {
+
+		for (ElementBase element : elements) {
 			element.setVisible(this.isFullyOpened());
 		}
 	}
