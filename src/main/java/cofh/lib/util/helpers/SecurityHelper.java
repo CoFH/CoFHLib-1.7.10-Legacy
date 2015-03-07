@@ -46,10 +46,11 @@ public class SecurityHelper {
 			if (!stack.stackTagCompound.hasKey("Owner") && !hasUUID) {
 				list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
 			} else {
-				if (hasUUID && stack.stackTagCompound.hasKey("Owner"))
+				if (hasUUID && stack.stackTagCompound.hasKey("Owner")) {
 					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner"));
-				else
+				} else {
 					list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
+				}
 			}
 		}
 	}
@@ -123,11 +124,11 @@ public class SecurityHelper {
 
 			String uuid = nbt.getString("OwnerUUID");
 			String name = nbt.getString("Owner");
-	        if (!Strings.isNullOrEmpty(uuid)) {
-	            return new GameProfile(UUID.fromString(uuid), name);
-	        } else if (!Strings.isNullOrEmpty(name)) {
-	            return new GameProfile(UUID.fromString(PreYggdrasilConverter.func_152719_a(name)), name);
-	        }
+			if (!Strings.isNullOrEmpty(uuid)) {
+				return new GameProfile(UUID.fromString(uuid), name);
+			} else if (!Strings.isNullOrEmpty(name)) {
+				return new GameProfile(UUID.fromString(PreYggdrasilConverter.func_152719_a(name)), name);
+			}
 		}
 		return new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
 	}
@@ -138,8 +139,9 @@ public class SecurityHelper {
 		if (owner == null) {
 			GameProfile temp = new GameProfile(uuid, name);
 			owner = MinecraftServer.getServer().func_147130_as().fillProfileProperties(temp, true);
-			if (owner != temp)
+			if (owner != temp) {
 				MinecraftServer.getServer().func_152358_ax().func_152649_a(owner);
+			}
 		}
 		return owner;
 	}
@@ -158,8 +160,9 @@ public class SecurityHelper {
 
 		NBTTagCompound nbt = stack.stackTagCompound;
 		boolean hasUUID;
-		if (nbt == null || (!(hasUUID = nbt.hasKey("OwnerUUID")) && !nbt.hasKey("Owner")))
+		if (nbt == null || (!(hasUUID = nbt.hasKey("OwnerUUID")) && !nbt.hasKey("Owner"))) {
 			return "[None]";
+		}
 		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
 	}
 

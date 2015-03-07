@@ -4,9 +4,9 @@ import java.util.Random;
 
 /**
  * Contains various math-related helper functions. Often faster than conventional implementations.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class MathHelper {
 

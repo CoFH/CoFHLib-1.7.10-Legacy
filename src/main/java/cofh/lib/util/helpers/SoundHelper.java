@@ -8,9 +8,9 @@ import net.minecraft.client.audio.SoundHandler;
 
 /**
  * Contains various helper functions to assist with Sound manipulation.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class SoundHelper {
 

@@ -22,8 +22,7 @@ public class FireworksHelper {
 	}
 
 	/**
-	 * Represents a single firework rocket and its properties.
-	 * Can be used for manual fireworks creation.
+	 * Represents a single firework rocket and its properties. Can be used for manual fireworks creation.
 	 */
 	public static class Firework {
 
@@ -36,7 +35,8 @@ public class FireworksHelper {
 		/**
 		 * Sets how long the fireworks will fly upwards before exploding.
 		 *
-		 * @param duration Duration before exploding in seconds (0 - 3)
+		 * @param duration
+		 *            Duration before exploding in seconds (0 - 3)
 		 * @return The current Firework instance
 		 */
 		public Firework setFlightDuration(int duration) {
@@ -48,7 +48,8 @@ public class FireworksHelper {
 		/**
 		 * Sets whether the fireworks should have the 'flicker' effect when exploding.
 		 *
-		 * @param flicker Whether to have the 'flicker' effect
+		 * @param flicker
+		 *            Whether to have the 'flicker' effect
 		 * @return The current Firework instance
 		 */
 		public Firework setFlicker(boolean flicker) {
@@ -60,7 +61,8 @@ public class FireworksHelper {
 		/**
 		 * Sets whether the fireworks should have the 'trail' effect when exploding.
 		 *
-		 * @param trail Whether to have the 'trail' effect
+		 * @param trail
+		 *            Whether to have the 'trail' effect
 		 * @return The current Firework instance
 		 */
 		public Firework setTrail(boolean trail) {
@@ -72,7 +74,8 @@ public class FireworksHelper {
 		/**
 		 * Sets the explosion type of the fireworks.
 		 *
-		 * @param type The explosion type
+		 * @param type
+		 *            The explosion type
 		 * @return The current Firework instance
 		 */
 		public Firework setType(FireworkType type) {
@@ -84,22 +87,25 @@ public class FireworksHelper {
 		/**
 		 * Sets the explosion type of the fireworks.
 		 *
-		 * @param type The explosion type as an int
+		 * @param type
+		 *            The explosion type as an int
 		 * @return The current Firework instance
 		 */
 		public Firework setType(int type) {
 
-			this.setType(FireworkType.values()[MathHelper.clampI(type, 0,
-					FireworkType.values().length - 1)]);
+			this.setType(FireworkType.values()[MathHelper.clampI(type, 0, FireworkType.values().length - 1)]);
 			return this;
 		}
 
 		/**
 		 * Adds an RGB color to the explosion of the fireworks.
 		 *
-		 * @param red The RGB red value of the color to add (0 - 255)
-		 * @param green The RGB green value of the color to add (0 - 255)
-		 * @param blue The RGB blue value of the color to add (0 - 255)
+		 * @param red
+		 *            The RGB red value of the color to add (0 - 255)
+		 * @param green
+		 *            The RGB green value of the color to add (0 - 255)
+		 * @param blue
+		 *            The RGB blue value of the color to add (0 - 255)
 		 * @return The current Firework instance
 		 */
 		public Firework addColor(int red, int green, int blue) {
@@ -144,11 +150,9 @@ public class FireworksHelper {
 	}
 
 	/**
-	 * Generates a Firework instance with a random explosion type,
-	 * a chance to have the 'flicker' and/or 'trail' effects, and up to 3 random colors.
+	 * Generates a Firework instance with a random explosion type, a chance to have the 'flicker' and/or 'trail' effects, and up to 3 random colors.
 	 *
-	 * @return A Firework instance with randomized values. Can still be manipulated further
-	 * to set things like the flight duration.
+	 * @return A Firework instance with randomized values. Can still be manipulated further to set things like the flight duration.
 	 */
 	public static Firework getRandomFirework() {
 
@@ -159,8 +163,9 @@ public class FireworksHelper {
 		case 2:
 		case 0:
 			firework.setFlicker(true);
-			if (v == 0)
+			if (v == 0) {
 				break;
+			}
 		case 1:
 			firework.setTrail(true);
 		}
@@ -168,11 +173,8 @@ public class FireworksHelper {
 		firework.setType(MathHelper.RANDOM.nextInt(5));
 
 		for (int i = 0; i <= MathHelper.RANDOM.nextInt(3); i++) {
-			Color randomColor = new Color(Color.HSBtoRGB(
-					MathHelper.RANDOM.nextFloat() * 360,
-					MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
-			firework.addColor(randomColor.getRed(), randomColor.getGreen(),
-					randomColor.getBlue());
+			Color randomColor = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+			firework.addColor(randomColor.getRed(), randomColor.getGreen(), randomColor.getBlue());
 		}
 
 		return firework;

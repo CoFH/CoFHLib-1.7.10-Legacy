@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 
 /**
  * Contains various helper functions to assist with determining Server/Client status.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class ServerHelper {
 

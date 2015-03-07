@@ -5,11 +5,11 @@ import java.util.GregorianCalendar;
 
 /**
  * The class contains helper functions related to Holidays! The holidays intentionally begin a day before the actual holiday and end one day after it.
- * 
+ *
  * Yes, they are US-centric. Feel free to suggest others!
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class HolidayHelper {
 
@@ -77,7 +77,7 @@ public class HolidayHelper {
 
 		/*
 		 * Compute the day of the year that Easter falls on. Step names E1 E2 etc., are direct references to Knuth, Vol 1, p 155.
-		 * 
+		 *
 		 * http://en.wikipedia.org/wiki/Computus#Meeus.2FJones.2FButcher_Gregorian_algorithm
 		 */
 		Calendar easterSun;

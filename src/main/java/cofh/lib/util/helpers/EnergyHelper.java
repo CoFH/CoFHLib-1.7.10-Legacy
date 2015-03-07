@@ -20,8 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
  */
 public class EnergyHelper {
 
-	public final int RF_PER_MJ = 10; // Official Ratio of RF to MJ (BuildCraft)
-	public final int RF_PER_EU = 4; // Official Ratio of RF to EU (IndustrialCraft)
+	public static final int RF_PER_MJ = 10; // Official Ratio of RF to MJ (BuildCraft)
+	public static final int RF_PER_EU = 4; // Official Ratio of RF to EU (IndustrialCraft)
 
 	private EnergyHelper() {
 

@@ -153,7 +153,7 @@ public final class BlockHelper {
 
 		if (x * x + y * y > degreeCenter * degreeCenter) {
 
-			int a = (int) ((Math.atan2(x,  y) + Math.PI) * 4 / Math.PI);
+			int a = (int) ((Math.atan2(x, y) + Math.PI) * 4 / Math.PI);
 			a = ++a & 7;
 			switch (a >> 1) {
 			case 0:
@@ -196,8 +196,8 @@ public final class BlockHelper {
 				break;
 			}
 			block = world.getBlock(x, y, z);
-		} while (block.isAir(world, x, y, z) || block.isReplaceable(world, x, y, z) || block.isLeaves(world, x, y, z)
-				|| block.isFoliage(world, x, y, z) || block.canBeReplacedByLeaves(world, x, y, z));
+		} while (block.isAir(world, x, y, z) || block.isReplaceable(world, x, y, z) || block.isLeaves(world, x, y, z) || block.isFoliage(world, x, y, z)
+				|| block.canBeReplacedByLeaves(world, x, y, z));
 		return y;
 	}
 

@@ -161,8 +161,9 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack) {
 
-		if (stack == null)
+		if (stack == null) {
 			return null;
+		}
 
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
@@ -188,8 +189,9 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack, EntityPlayer player) {
 
-		if (stack == null)
+		if (stack == null) {
 			return null;
+		}
 
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
@@ -963,7 +965,7 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == null | stackB == null) {
+		if (stackA == null || stackB == null) {
 			return false;
 		}
 		return areItemsEqual(stackA.getItem(), stackB.getItem());
