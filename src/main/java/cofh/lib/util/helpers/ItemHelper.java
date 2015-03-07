@@ -228,11 +228,8 @@ public final class ItemHelper {
 			return true;
 		}
 		if (allowReplace && stack.stackSize <= 1) {
-			if (entityplayer.inventory.addItemStackToInventory(dropStack)) {
-				entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
-			} else {
-				entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, dropStack);
-			}
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+			entityplayer.inventory.addItemStackToInventory(dropStack);
 			return true;
 		} else if (allowDrop) {
 			stack.stackSize -= 1;
