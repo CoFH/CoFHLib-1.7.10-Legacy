@@ -1,8 +1,8 @@
 package cofh.api.block;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Implement this interface on blocks which have some debug method which can be activated via a tool or other means.
@@ -28,6 +28,6 @@ public interface IBlockDebug {
 	 * @param player
 	 *            Player doing the debugging.
 	 */
-	void debugBlock(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player);
+	void debugBlock(IBlockAccess world, int x, int y, int z, EnumFacing side, EntityPlayer player);
 
 }
