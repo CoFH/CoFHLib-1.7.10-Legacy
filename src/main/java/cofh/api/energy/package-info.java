@@ -6,5 +6,4 @@
 package cofh.api.energy;
 
 import cofh.api.CoFHAPIProps;
-import cpw.mods.fml.common.API;
-
+import net.minecraftforge.fml.common.API;
