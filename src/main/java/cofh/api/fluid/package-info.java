@@ -6,5 +6,5 @@
 package cofh.api.fluid;
 
 import cofh.api.CoFHAPIProps;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;
 
