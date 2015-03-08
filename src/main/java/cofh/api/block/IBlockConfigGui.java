@@ -1,8 +1,8 @@
 package cofh.api.block;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /**
  * Implement this interface on blocks which have a GUI that needs a tool (e.g., multimeter) to open.
@@ -27,5 +27,5 @@ public interface IBlockConfigGui {
 	 *            Player doing the configuring.
 	 * @return True if the GUI was opened.
 	 */
-	public boolean openConfigGui(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player);
+	public boolean openConfigGui(IBlockAccess world, int x, int y, int z, EnumFacing side, EntityPlayer player);
 }

@@ -1,6 +1,6 @@
 package cofh.api.inventory;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Implement this interface on TileEntities which should connect to item transportation blocks.
@@ -8,11 +8,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 public interface IInventoryConnection {
 
 	/**
-	 * @param from
+	 * @param side
 	 *            Side to which a connector would connect
 	 * @return DEFAULT if the connector should decide how to connect; FORCE if the connector should always connect; DENY if the connector should never connect.
 	 */
-	public ConnectionType canConnectInventory(ForgeDirection from);
+	public ConnectionType canConnectInventory(EnumFacing side);
 
 	public static enum ConnectionType {
 		DEFAULT, FORCE, DENY;
