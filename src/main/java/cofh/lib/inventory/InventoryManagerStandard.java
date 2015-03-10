@@ -60,7 +60,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 					_inv.setInventorySlotContents(i, add);
 					_inv.markDirty();
 				}
-			} else if (ItemHelper.itemsEqualWithMetadata(s, stack)) {
+			} else if (ItemHelper.itemsEqualWithMetadata(s, stack, true)) {
 				ItemStack add = stack.copy();
 				add.stackSize = Math.min(quantitytoadd, maxStackSize - s.stackSize);
 
@@ -129,7 +129,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 
 		for (int i : slots) {
 			ItemStack s = getSlotContents(i);
-			if (ItemHelper.itemsEqualWithMetadata(s, type) && canRemoveItem(s, i)) {
+			if (ItemHelper.itemsEqualWithMetadata(s, type, true) && canRemoveItem(s, i)) {
 				int toRemove = Math.min(s.stackSize, maxRemove);
 				s.stackSize -= toRemove;
 				ItemStack removed = s.copy();
@@ -156,7 +156,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 
 		int quantity = 0;
 		for (ItemStack s : getContents().values()) {
-			if (ItemHelper.itemsEqualWithMetadata(s, type)) {
+			if (ItemHelper.itemsEqualWithMetadata(s, type, true)) {
 				quantity += s.stackSize;
 			}
 		}
@@ -173,7 +173,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 
 		for (int i : slots) {
 			ItemStack s = _inv.getStackInSlot(i);
-			if (ItemHelper.itemsEqualWithMetadata(s, type)) {
+			if (ItemHelper.itemsEqualWithMetadata(s, type, true)) {
 				return i;
 			}
 		}
