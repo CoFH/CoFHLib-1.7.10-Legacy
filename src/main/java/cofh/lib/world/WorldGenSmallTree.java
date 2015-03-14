@@ -32,6 +32,23 @@ public class WorldGenSmallTree extends WorldGenerator {
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 	}
 
+	protected int getLeafRadius(int height, int level, boolean check) {
+
+		if (check) {
+			if (level >= 1 + height - 2) {
+				return 2;
+			} else {
+				return relaxedGrowth ? 0 : 1;
+			}
+		}
+
+		if (level >= 1 + height - 4) {
+			return 1 - ((level - height) / 2);
+		} else {
+			return 0;
+		}
+	}
+
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
 
@@ -50,13 +67,8 @@ public class WorldGenSmallTree extends WorldGenerator {
 			if (y < worldHeight - treeHeight - 1) {
 				if (treeChecks) {
 					for (yOffset = y; yOffset <= y + 1 + treeHeight; ++yOffset) {
-						int radius;
 
-						if (yOffset >= y + 1 + treeHeight - 2) {
-							radius = 2;
-						} else {
-							radius = relaxedGrowth ? 0 : 1;
-						}
+						int radius = getLeafRadius(treeHeight, yOffset - y, true);
 
 						if (yOffset >= 0 & yOffset < worldHeight) {
 							if (radius == 0) {
@@ -108,21 +120,24 @@ public class WorldGenSmallTree extends WorldGenerator {
 
 				boolean r = false;
 
-				for (yOffset = y - 3 + treeHeight; yOffset <= y + treeHeight; ++yOffset) {
-					int var12 = yOffset - (y + treeHeight),
-							center = 1 - var12 / 2;
+				for (yOffset = y; yOffset <= y + treeHeight; ++yOffset) {
 
-					for (xOffset = x - center; xOffset <= x + center; ++xOffset) {
+					int var12 = yOffset - (y + treeHeight);
+					int radius = getLeafRadius(treeHeight, yOffset - y, false);
+					if (radius <= 0)
+						continue;
+
+					for (xOffset = x - radius; xOffset <= x + radius; ++xOffset) {
 						int xPos = xOffset - x, t;
 						xPos = (xPos + (t = xPos >> 31)) ^ t;
 
-						for (zOffset = z - center; zOffset <= z + center; ++zOffset) {
+						for (zOffset = z - radius; zOffset <= z + radius; ++zOffset) {
 							int zPos = zOffset - z;
 							zPos = (zPos + (t = zPos >> 31)) ^ t;
 
 							block = world.getBlock(xOffset, yOffset, zOffset);
 
-							if (((xPos != center | zPos != center) ||
+							if (((xPos != radius | zPos != radius) ||
 									(!leafVariance || (rand.nextInt(2) != 0 && var12 != 0))) &&
 									((treeChecks ? block.isLeaves(world, xOffset, yOffset, zOffset) ||
 											block.isAir(world, xOffset, yOffset, zOffset) ||
