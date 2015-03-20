@@ -99,6 +99,9 @@ public class InventoryHelper {
 	/* IInventory Interaction */
 	public static ItemStack extractItemStackFromInventory(IInventory inventory, int side) {
 
+		if (inventory == null) {
+			return null;
+		}
 		ItemStack retStack = null;
 
 		if (inventory instanceof ISidedInventory) {
@@ -126,7 +129,7 @@ public class InventoryHelper {
 
 	public static ItemStack insertItemStackIntoInventory(IInventory inventory, ItemStack stack, int side) {
 
-		if (stack == null) {
+		if (stack == null || inventory == null) {
 			return null;
 		}
 		int stackSize = stack.stackSize;
@@ -173,7 +176,7 @@ public class InventoryHelper {
 
 	public static ItemStack simulateInsertItemStackIntoInventory(IInventory inventory, ItemStack stack, int side) {
 
-		if (stack == null) {
+		if (stack == null || inventory == null) {
 			return null;
 		}
 		if (inventory instanceof ISidedInventory) {
