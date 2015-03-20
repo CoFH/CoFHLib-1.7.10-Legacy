@@ -31,7 +31,7 @@ public class FeatureGenNormal extends FeatureBase {
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
-			int y = random.nextInt(maxVar) + random.nextInt(maxVar) + meanY - maxVar;
+			int y = maxVar <= 1 ? meanY : (random.nextInt(maxVar) + random.nextInt(maxVar) + meanY - maxVar);
 			int z = blockZ + random.nextInt(16);
 			if (!canGenerateInBiome(world, x, z, random))
 				continue;
