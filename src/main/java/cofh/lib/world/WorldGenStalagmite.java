@@ -40,13 +40,13 @@ public class WorldGenStalagmite extends WorldGenerator {
 			final double pi = Math.PI;
 			double r;
 			r = Math.sqrt((r=((x*lim)/pi))*r + (r=((z*lim)/pi))*r) * pi/180;
-			if (altSinc && (x*x + z*z) < (size*1.1f))
-				r = size * 0.0082;
+			if (altSinc && r < 1)
+				r = Math.sqrt((size*2 *lim)/pi) * pi/180;
 			if (r == 0) return height;
 			if (!altSinc)
 				return (int)Math.round(height * (fat ? Math.sin(r) / r : Math.sin(r=r*pi) / r));
 			double sinc = (Math.sin(r) / r);
-			return (int)Math.round(Math.min(sinc*height+3, height*(sinc*2+(rand.nextGaussian()*.65*Math.sin(r=r*(pi*4))/r))/2.3));
+			return (int)Math.round(height*(sinc*2+(Math.sin(r=r*(pi*4))/r))/2+rand.nextGaussian()*.75);
 		} else {
 			int absx = x < 0 ? -x : x, absz = (z < 0 ? -z : z);
 			int dist = fat ? (absx < absz ? absz + absx / 2 : absx + absz / 2) : absx + absz;
