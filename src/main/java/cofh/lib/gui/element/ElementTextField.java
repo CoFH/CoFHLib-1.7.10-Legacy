@@ -402,7 +402,7 @@ public class ElementTextField extends ElementBase {
 				} else {
 					if (caret > 0 && textLength > 0) {
 						--caret;
-						System.arraycopy(text, caret + 1, text, caret, textLength - caret);
+						System.arraycopy(text, caret + 1, text, caret, textLength - (caret + 1));
 						--textLength;
 						changed = true;
 					}
