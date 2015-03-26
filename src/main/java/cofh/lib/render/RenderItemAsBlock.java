@@ -8,9 +8,9 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Easy way of rendering an item which should look like a block.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class RenderItemAsBlock implements IItemRenderer {
 

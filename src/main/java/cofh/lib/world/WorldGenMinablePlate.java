@@ -31,8 +31,9 @@ public class WorldGenMinablePlate extends WorldGenerator {
 
 		++y;
 		int size = radius;
-		if (radius > variation + 1)
+		if (radius > variation + 1) {
 			size = rand.nextInt(radius - variation) + variation;
+		}
 		final int dist = size * size;
 		byte height = this.height;
 
@@ -44,9 +45,7 @@ public class WorldGenMinablePlate extends WorldGenerator {
 				int zSize = posZ - z;
 
 				if (zSize * zSize + xDist <= dist) {
-					for (int posY = y - height;
-							slim ? posY < y + height : posY <= y + height;
-							++posY) {
+					for (int posY = y - height; slim ? posY < y + height : posY <= y + height; ++posY) {
 						r |= generateBlock(world, posX, posY, posZ, genBlock, cluster);
 					}
 				}

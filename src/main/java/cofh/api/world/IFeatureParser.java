@@ -8,7 +8,7 @@ public interface IFeatureParser {
 
 	/**
 	 * Parse a {@link JsonObject} for registration with an with an {@link IFeatureHandler}.
-	 * 
+	 *
 	 * @param featureName
 	 *            The name of the feature to register.
 	 * @param genObject

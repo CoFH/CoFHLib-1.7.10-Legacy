@@ -6,9 +6,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A slot where the input can be validated based on any arbitrary criteria by using a passthrough method to an {@link ISlotValidator}.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class SlotValidated extends Slot {
 

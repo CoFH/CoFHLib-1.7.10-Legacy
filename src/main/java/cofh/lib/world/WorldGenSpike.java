@@ -56,10 +56,11 @@ public class WorldGenSpike extends WorldGenerator {
 
 		for (int y = 0; y < height; ++y) {
 			float layerSize;
-			if (y >= offsetHeight)
-				layerSize = (1.0F - (float)(y - offsetHeight) / (float)originalHeight) * size;
-			else
+			if (y >= offsetHeight) {
+				layerSize = (1.0F - (float) (y - offsetHeight) / (float) originalHeight) * size;
+			} else {
 				layerSize = largeSpikeFillerSize;
+			}
 			int width = MathHelper.ceiling_float_int(layerSize);
 
 			for (int x = -width; x <= width; ++x) {
@@ -68,13 +69,14 @@ public class WorldGenSpike extends WorldGenerator {
 				for (int z = -width; z <= width; ++z) {
 					float zDist = MathHelper.abs_int(z) - 0.25F;
 
-					if ((x == 0 && z == 0 || xDist * xDist + zDist * zDist <= layerSize * layerSize) &&
-							(x != -width && x != width && z != -width && z != width || rand.nextFloat() <= 0.75F)) {
+					if ((x == 0 && z == 0 || xDist * xDist + zDist * zDist <= layerSize * layerSize)
+							&& (x != -width && x != width && z != -width && z != width || rand.nextFloat() <= 0.75F)) {
 
 						generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
 
-						if (y != 0 && width > 1)
+						if (y != 0 && width > 1) {
 							generateBlock(world, xStart + x, yStart - y + offsetHeight, zStart + z, genBlock, cluster);
+						}
 					}
 				}
 			}

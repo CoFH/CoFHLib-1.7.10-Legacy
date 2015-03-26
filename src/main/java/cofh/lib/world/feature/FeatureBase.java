@@ -70,6 +70,7 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	}
 
 	public void setRarity(int rarity) {
+
 		this.rarity = rarity;
 	}
 

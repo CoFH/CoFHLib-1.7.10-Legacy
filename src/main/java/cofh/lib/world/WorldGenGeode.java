@@ -10,8 +10,8 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class WorldGenGeode extends WorldGenerator
-{
+public class WorldGenGeode extends WorldGenerator {
+
 	private final List<WeightedRandomBlock> cluster;
 	private final List<WeightedRandomBlock> outline;
 	private final WeightedRandomBlock[] genBlock;
@@ -20,8 +20,7 @@ public class WorldGenGeode extends WorldGenerator
 	public int width = 16;
 	public int height = 8;
 
-	public WorldGenGeode(List<WeightedRandomBlock> resource,
-			List<WeightedRandomBlock> material, List<WeightedRandomBlock> cover) {
+	public WorldGenGeode(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> material, List<WeightedRandomBlock> cover) {
 
 		cluster = resource;
 		genBlock = material.toArray(new WeightedRandomBlock[material.size()]);
@@ -36,8 +35,9 @@ public class WorldGenGeode extends WorldGenerator
 		xStart -= widthOff;
 		zStart -= widthOff;
 
-		if (yStart <= heightOff)
+		if (yStart <= heightOff) {
 			return false;
+		}
 
 		yStart -= heightOff;
 		boolean[] spawnBlock = new boolean[width * width * height];
@@ -62,10 +62,12 @@ public class WorldGenGeode extends WorldGenerator
 						double zDist = (z - zCenter) / (zSize / 2.0D);
 						double dist = xDist * xDist + yDist * yDist + zDist * zDist;
 
-						if (dist < 1.0D)
+						if (dist < 1.0D) {
 							spawnBlock[(x * width + z) * height + y] = hollow ? dist > minDist : true;
-						if (hollow)
+						}
+						if (hollow) {
 							hollowBlock[(x * width + z) * height + y] = dist <= minDist;
+						}
 					}
 				}
 			}
@@ -78,15 +80,11 @@ public class WorldGenGeode extends WorldGenerator
 		for (x = 0; x < width; ++x) {
 			for (z = 0; z < width; ++z) {
 				for (y = 0; y < height; ++y) {
-					boolean flag = (fillBlock != null &&
-							hollowBlock[(x * width + z) * height + y]) ||
-							spawnBlock[(x * width + z) * height + y] || (
-							(x < W && spawnBlock[((x + 1) * width + z) * height + y]) ||
-							(x > 0 && spawnBlock[((x - 1) * width + z) * height + y]) ||
-							(z < W && spawnBlock[(x * width + (z + 1)) * height + y]) ||
-							(z > 0 && spawnBlock[(x * width + (z - 1)) * height + y]) ||
-							(y < H && spawnBlock[(x * width + z) * height + (y + 1)]) ||
-							(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
+					boolean flag = (fillBlock != null && hollowBlock[(x * width + z) * height + y])
+							|| spawnBlock[(x * width + z) * height + y]
+							|| ((x < W && spawnBlock[((x + 1) * width + z) * height + y]) || (x > 0 && spawnBlock[((x - 1) * width + z) * height + y])
+									|| (z < W && spawnBlock[(x * width + (z + 1)) * height + y]) || (z > 0 && spawnBlock[(x * width + (z - 1)) * height + y])
+									|| (y < H && spawnBlock[(x * width + z) * height + (y + 1)]) || (y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
 					if (flag && !canGenerateInBlock(world, xStart + x, yStart + y, zStart + z, genBlock)) {
 						return false;
@@ -116,14 +114,11 @@ public class WorldGenGeode extends WorldGenerator
 					if (fillBlock != null && hollowBlock[(x * width + z) * height + y]) {
 						r |= generateBlock(world, xStart + x, yStart + y, zStart + z, fillBlock);
 					} else {
-						boolean flag = !spawnBlock[(x * width + z) * height + y] && (
-								(x < W && spawnBlock[((x + 1) * width + z) * height + y]) ||
-								(x > 0 && spawnBlock[((x - 1) * width + z) * height + y]) ||
-								(z < W && spawnBlock[(x * width + (z + 1)) * height + y]) ||
-								(z > 0 && spawnBlock[(x * width + (z - 1)) * height + y]) ||
-								(y < H && spawnBlock[(x * width + z) * height + (y + 1)]) ||
-								(y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
-
+						boolean flag = !spawnBlock[(x * width + z) * height + y]
+								&& ((x < W && spawnBlock[((x + 1) * width + z) * height + y]) || (x > 0 && spawnBlock[((x - 1) * width + z) * height + y])
+										|| (z < W && spawnBlock[(x * width + (z + 1)) * height + y])
+										|| (z > 0 && spawnBlock[(x * width + (z - 1)) * height + y])
+										|| (y < H && spawnBlock[(x * width + z) * height + (y + 1)]) || (y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
 						if (flag) {
 							r |= generateBlock(world, xStart + x, yStart + y, zStart + z, outline);

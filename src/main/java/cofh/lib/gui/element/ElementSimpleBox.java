@@ -2,7 +2,6 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 
-
 public class ElementSimpleBox extends ElementBase {
 
 	protected int color;

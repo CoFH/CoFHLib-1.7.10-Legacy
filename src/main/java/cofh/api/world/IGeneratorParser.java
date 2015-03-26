@@ -28,7 +28,7 @@ public interface IGeneratorParser {
 	 *            The processed list of materials to generate in
 	 * @return The {@link WorldGenerator} to be registered with an IFeatureGenerator
 	 */
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList);
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList);
 
 }

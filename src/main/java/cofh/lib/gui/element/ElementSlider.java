@@ -82,8 +82,7 @@ public abstract class ElementSlider extends ElementBase {
 		drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderMidX, sliderMidY);
 		drawTexturedModalRect(sliderX, sliderY + sliderMidY, 0, 256 - sliderEndY, sliderMidX, sliderEndY);
 		drawTexturedModalRect(sliderX + sliderMidX, sliderY, 256 - sliderEndX, 0, sliderEndX, sliderMidY);
-		drawTexturedModalRect(sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX,
-				sliderEndY);
+		drawTexturedModalRect(sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX, sliderEndY);
 	}
 
 	@Override
@@ -122,8 +121,9 @@ public abstract class ElementSlider extends ElementBase {
 	@Override
 	public void onMouseReleased(int mouseX, int mouseY) {
 
-		if (_isDragging)
+		if (_isDragging) {
 			onStopDragging();
+		}
 		_isDragging = false;
 	}
 

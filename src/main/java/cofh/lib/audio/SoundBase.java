@@ -9,9 +9,9 @@ import net.minecraft.util.ResourceLocation;
 /**
  * Generic ISound class with lots of constructor functionality. Required because - of course - Mojang has no generic that lets you specify *any* arguments for
  * this.
- * 
+ *
  * @author skyboy
- * 
+ *
  */
 @SideOnly(Side.CLIENT)
 public class SoundBase implements ISound {

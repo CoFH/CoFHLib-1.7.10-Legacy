@@ -12,8 +12,7 @@ public class FeatureGenCave extends FeatureBase {
 	final int count;
 	final boolean ceiling;
 
-	public FeatureGenCave(String name, WorldGenerator worldGen, boolean ceiling, int count, GenRestriction biomeRes,
-			boolean regen, GenRestriction dimRes) {
+	public FeatureGenCave(String name, WorldGenerator worldGen, boolean ceiling, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -28,13 +27,13 @@ public class FeatureGenCave extends FeatureBase {
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
 
-
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
 			int z = blockZ + random.nextInt(16);
-			if (!canGenerateInBiome(world, x, z, random))
+			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
+			}
 			int seaLevel = averageSeaLevel;
 			if (seaLevel < 20) {
 				seaLevel = world.getHeightValue(x, z);
@@ -52,27 +51,31 @@ public class FeatureGenCave extends FeatureBase {
 				do {
 					block = world.getBlock(x, y, z);
 				} while (!block.isAir(world, x, y, z) && ++y < stopY);
-				if (y == stopY)
+				if (y == stopY) {
 					continue;
+				}
 			}
 
 			if (ceiling) {
-				if (y < stopY)
+				if (y < stopY) {
 					seaLevel = stopY + 1;
+				}
 				do {
 					++y;
 					block = world.getBlock(x, y, z);
 				} while (y < seaLevel && block.isAir(world, x, y, z));
-				if (y == seaLevel)
+				if (y == seaLevel) {
 					continue;
+				}
 				--y;
 			} else if (block.isAir(world, x, y - 1, z)) {
 				--y;
 				do {
 					block = world.getBlock(x, y, z);
-				} while (block.isAir(world, x, y, z) && y --> 0);
-				if (y == -1)
+				} while (block.isAir(world, x, y, z) && y-- > 0);
+				if (y == -1) {
 					continue;
+				}
 				++y;
 			}
 

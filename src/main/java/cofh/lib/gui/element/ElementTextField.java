@@ -14,10 +14,9 @@ import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-
 public class ElementTextField extends ElementBase {
 
-	public int borderColor       = new GuiColor( 55,  55,  55).getColor();
+	public int borderColor       = new GuiColor(55, 55, 55).getColor();
 	public int backgroundColor   = new GuiColor(139, 139, 139).getColor();
 	public int disabledColor     = new GuiColor(198, 198, 198).getColor();
 	public int selectedLineColor = new GuiColor(160, 160, 224).getColor();
@@ -55,30 +54,37 @@ public class ElementTextField extends ElementBase {
 
 	public ElementTextField setTextColor(Number textColor, Number selectedTextColor) {
 
-		if (textColor != null)
+		if (textColor != null) {
 			this.textColor = textColor.intValue();
-		if (selectedTextColor != null)
+		}
+		if (selectedTextColor != null) {
 			this.selectedTextColor = selectedTextColor.intValue();
+		}
 		return this;
 	}
 
 	public ElementTextField setSelectionColor(Number selectedLineColor, Number defaultCaretColor) {
 
-		if (selectedLineColor != null)
+		if (selectedLineColor != null) {
 			this.selectedLineColor = selectedLineColor.intValue();
-		if (defaultCaretColor != null)
+		}
+		if (defaultCaretColor != null) {
 			this.defaultCaretColor = defaultCaretColor.intValue();
+		}
 		return this;
 	}
 
 	public ElementTextField setBackgroundColor(Number backgroundColor, Number disabledColor, Number borderColor) {
 
-		if (backgroundColor != null)
+		if (backgroundColor != null) {
 			this.backgroundColor = backgroundColor.intValue();
-		if (disabledColor != null)
+		}
+		if (disabledColor != null) {
 			this.disabledColor = disabledColor.intValue();
-		if (borderColor != null)
+		}
+		if (borderColor != null) {
 			this.borderColor = borderColor.intValue();
+		}
 		return this;
 	}
 
@@ -110,8 +116,9 @@ public class ElementTextField extends ElementBase {
 		char[] oldText = text;
 		text = new char[limit];
 		textLength = Math.min(limit, textLength);
-		if (oldText != null)
+		if (oldText != null) {
 			System.arraycopy(oldText, 0, text, 0, textLength);
+		}
 		findRenderStart();
 		return this;
 	}
@@ -147,8 +154,9 @@ public class ElementTextField extends ElementBase {
 		int width = 0, endX = sizeX - 1;
 		for (int i = renderStart; i < textLength; ++i) {
 			int charW = font.getCharWidth(text[i]);
-			if (!enableStencil && (width + charW) > endX)
+			if (!enableStencil && (width + charW) > endX) {
 				break;
+			}
 			width += charW;
 			if (width >= endX) {
 				width = Math.min(width, endX);
@@ -174,9 +182,11 @@ public class ElementTextField extends ElementBase {
 	public void writeText(String text) {
 
 		int i = 0;
-		for (int e = text.length(); i < e; ++i)
-			if (!insertCharacter(text.charAt(i)))
+		for (int e = text.length(); i < e; ++i) {
+			if (!insertCharacter(text.charAt(i))) {
 				break;
+			}
+		}
 		clearSelection();
 		findRenderStart();
 		onCharacterEntered(i > 0);
@@ -205,24 +215,28 @@ public class ElementTextField extends ElementBase {
 		if (isAllowedCharacter(charTyped)) {
 
 			if (selectionStart != selectionEnd) {
-				if (caret == selectionStart)
+				if (caret == selectionStart) {
 					++caret;
+				}
 				text[selectionStart++] = charTyped;
 				return true;
 			}
 
-			if ((caretInsert && caret == text.length) || textLength == text.length)
+			if ((caretInsert && caret == text.length) || textLength == text.length) {
 				return false;
+			}
 
 			if (!caretInsert) {
-				if (caret < textLength)
+				if (caret < textLength) {
 					System.arraycopy(text, caret, text, caret + 1, textLength - caret);
+				}
 				++textLength;
 			}
 			text[caret++] = charTyped;
 			return true;
-		} else
+		} else {
 			return true;
+		}
 	}
 
 	protected void findRenderStart() {
@@ -240,8 +254,9 @@ public class ElementTextField extends ElementBase {
 			width += font.getCharWidth(text[i]);
 			while (width >= endX) {
 				width -= font.getCharWidth(text[renderStart++]);
-				if (renderStart >= textLength)
+				if (renderStart >= textLength) {
 					return;
+				}
 			}
 		}
 	}
@@ -249,8 +264,9 @@ public class ElementTextField extends ElementBase {
 	protected void clearSelection() {
 
 		if (selectionStart != selectionEnd) {
-			if (selectionEnd < textLength)
+			if (selectionEnd < textLength) {
 				System.arraycopy(text, selectionEnd, text, selectionStart, textLength - selectionEnd);
+			}
 			textLength -= selectionEnd - selectionStart;
 
 			selectionEnd = caret = selectionStart;
@@ -268,26 +284,32 @@ public class ElementTextField extends ElementBase {
 
 		int dir = forward ? 1 : -1;
 		int e = forward ? textLength : 0;
-		if (pos == textLength) --pos;
+		if (pos == textLength) {
+			--pos;
+		}
 		char prevChar = text[pos];
-		while (pos != e && Character.isSpaceChar(prevChar))
+		while (pos != e && Character.isSpaceChar(prevChar)) {
 			prevChar = text[pos += dir];
+		}
 
 		if (smartCaret) {
 			for (int i = pos; i != e; i += dir) {
 				char curChar = text[i];
 				boolean caze = Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
-				if (caze || Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar) ||
-						Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar))
-					if ((pos + dir) != i || !Character.isLetterOrDigit(curChar))
+				if (caze || Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)
+						|| Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar)) {
+					if ((pos + dir) != i || !Character.isLetterOrDigit(curChar)) {
 						return i + (smartCaretCase && caze && Character.isUpperCase(prevChar) ? -dir : 0);
+					}
+				}
 				prevChar = curChar;
 			}
 		}
 		for (int i = pos; i != e; i += dir) {
 			char curChar = text[i];
-			if (Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar))
+			if (Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)) {
 				return i;
+			}
 		}
 		return forward ? textLength : 0;
 	}
@@ -295,8 +317,9 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public boolean onKeyTyped(char charTyped, int keyTyped) {
 
-		if (!isFocused())
+		if (!isFocused()) {
 			return false;
+		}
 
 		switch (charTyped) {
 		case 1: // ^A
@@ -343,9 +366,9 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_DELETE: // delete
 				boolean changed = false;
 				if (!GuiScreen.isShiftKeyDown()) {
-					if (selectionStart != selectionEnd)
+					if (selectionStart != selectionEnd) {
 						clearSelection();
-					else if (GuiScreen.isCtrlKeyDown()) {
+					} else if (GuiScreen.isCtrlKeyDown()) {
 						int size = seekNextCaretLocation(caret, true) - caret;
 						selectionStart = caret;
 						selectionEnd = caret + size;
@@ -357,8 +380,9 @@ public class ElementTextField extends ElementBase {
 							changed = true;
 						}
 					}
-					if (caret <= renderStart)
+					if (caret <= renderStart) {
 						renderStart = MathHelper.clampI(caret - 3, 0, textLength);
+					}
 					findRenderStart();
 
 					onCharacterEntered(changed);
@@ -368,9 +392,9 @@ public class ElementTextField extends ElementBase {
 				// continue.. (shift+delete = backspace)
 			case Keyboard.KEY_BACK: // backspace
 				changed = false;
-				if (selectionStart != selectionEnd)
+				if (selectionStart != selectionEnd) {
 					clearSelection();
-				else if (GuiScreen.isCtrlKeyDown()) {
+				} else if (GuiScreen.isCtrlKeyDown()) {
 					int size = seekNextCaretLocation(caret, false) - caret;
 					selectionStart = caret + size;
 					selectionEnd = caret;
@@ -383,8 +407,9 @@ public class ElementTextField extends ElementBase {
 						changed = true;
 					}
 				}
-				if (caret <= renderStart)
+				if (caret <= renderStart) {
 					renderStart = MathHelper.clampI(caret - 3, 0, textLength);
+				}
 				findRenderStart();
 
 				onCharacterEntered(changed);
@@ -392,21 +417,25 @@ public class ElementTextField extends ElementBase {
 				return true;
 			case Keyboard.KEY_HOME: // home
 				if (GuiScreen.isShiftKeyDown()) {
-					if (caret > selectionEnd)
+					if (caret > selectionEnd) {
 						selectionEnd = selectionStart;
+					}
 					selectionStart = 0;
-				} else
+				} else {
 					selectionStart = selectionEnd = 0;
+				}
 				renderStart = caret = 0;
 
 				return true;
 			case Keyboard.KEY_END: // end
 				if (GuiScreen.isShiftKeyDown()) {
-					if (caret < selectionStart)
+					if (caret < selectionStart) {
 						selectionStart = selectionEnd;
+					}
 					selectionEnd = textLength;
-				} else
+				} else {
 					selectionStart = selectionEnd = textLength;
+				}
 				caret = textLength;
 				findRenderStart();
 
@@ -415,17 +444,18 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_RIGHT: // right arrow
 				int size = keyTyped == 203 ? -1 : 1;
 				boolean shiftCaret = false;
-				if (GuiScreen.isCtrlKeyDown())
+				if (GuiScreen.isCtrlKeyDown()) {
 					size = seekNextCaretLocation(caret, keyTyped == 205) - caret;
-				else if (StringHelper.isAltKeyDown() && GuiScreen.isShiftKeyDown()) {
+				} else if (StringHelper.isAltKeyDown() && GuiScreen.isShiftKeyDown()) {
 					caret = seekNextCaretLocation(caret, keyTyped == 205);
 					selectionStart = selectionEnd = caret;
 					size = seekNextCaretLocation(caret, keyTyped != 205) - caret;
 					shiftCaret = true;
 				}
 
-				if (selectionStart == selectionEnd || !GuiScreen.isShiftKeyDown())
+				if (selectionStart == selectionEnd || !GuiScreen.isShiftKeyDown()) {
 					selectionStart = selectionEnd = caret;
+				}
 
 				{
 					int t = caret;
@@ -434,10 +464,11 @@ public class ElementTextField extends ElementBase {
 				}
 
 				if (GuiScreen.isShiftKeyDown()) {
-					if (caret == selectionStart + size)
+					if (caret == selectionStart + size) {
 						selectionStart = caret;
-					else if (caret == selectionEnd + size)
+					} else if (caret == selectionEnd + size) {
 						selectionEnd = caret;
+					}
 
 					if (selectionStart > selectionEnd) {
 						int t = selectionStart;
@@ -459,8 +490,9 @@ public class ElementTextField extends ElementBase {
 					findRenderStart();
 					onCharacterEntered(typed);
 					return true;
-				} else
+				} else {
 					return false;
+				}
 			}
 		}
 	}
@@ -476,7 +508,7 @@ public class ElementTextField extends ElementBase {
 			}
 			FontRenderer font = getFontRenderer();
 			int pos = mouseX - posX - 1;
-			for (int i = renderStart, width = 0; ; ) {
+			for (int i = renderStart, width = 0;;) {
 				int charW = font.getCharWidth(text[i]);
 				if ((width += charW) > pos || ++i >= textLength) {
 					selectionStart = selectionEnd = caret = i;
@@ -493,12 +525,12 @@ public class ElementTextField extends ElementBase {
 	public void update(int mouseX, int mouseY) {
 
 		++caretCounter;
-		//if (selecting) {
-		//	FontRenderer font = getFontRenderer();
-		//	int pos = mouseX - posX - 1;
-		//	for (int i = renderStart, width = 0; i < textLength; ++i) {
-		//	}
-		//}
+		// if (selecting) {
+		// FontRenderer font = getFontRenderer();
+		// int pos = mouseX - posX - 1;
+		// for (int i = renderStart, width = 0; i < textLength; ++i) {
+		// }
+		// }
 	}
 
 	@Override
@@ -507,8 +539,9 @@ public class ElementTextField extends ElementBase {
 		if (!selecting) {
 			boolean focus = isFocused();
 			setFocused(false);
-			if (focus && !isFocused())
+			if (focus && !isFocused()) {
 				onFocusLost();
+			}
 		}
 		selecting = false;
 	}
@@ -537,30 +570,33 @@ public class ElementTextField extends ElementBase {
 			int charW = 2;
 			if (!end) {
 				charW = font.getCharWidth(text[i]);
-				if (!enableStencil && (width + charW) > endX)
+				if (!enableStencil && (width + charW) > endX) {
 					break;
+				}
 			}
 
 			boolean drawCaret = i == caret && (caretCounter &= 31) < 16 && isFocused();
 			if (drawCaret) {
 				int caretEnd = width + 2;
-				if (caretInsert)
+				if (caretInsert) {
 					caretEnd = width + charW;
-				drawModalRect(startX + width, startY - 1, startX + caretEnd, endY,
-					(0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
+				}
+				drawModalRect(startX + width, startY - 1, startX + caretEnd, endY, (0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (!end) {
 				boolean selected = i >= selectionStart & i < selectionEnd;
-				if (selected)
+				if (selected) {
 					drawModalRect(startX + width, startY, startX + width + charW, endY, selectedLineColor);
+				}
 				font.drawString(String.valueOf(text[i]), startX + width, startY, selected ? selectedTextColor : textColor);
 			}
 
 			if (drawCaret) {
 				int caretEnd = width + 2;
-				if (caretInsert)
+				if (caretInsert) {
 					caretEnd = width + charW;
+				}
 
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
@@ -569,12 +605,14 @@ public class ElementTextField extends ElementBase {
 			}
 
 			width += charW;
-			if (width > endX)
+			if (width > endX) {
 				break;
+			}
 		}
 
-		if (enableStencil)
+		if (enableStencil) {
 			glDisable(GL_STENCIL_TEST);
+		}
 	}
 
 }

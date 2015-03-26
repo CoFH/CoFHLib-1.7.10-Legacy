@@ -22,8 +22,8 @@ public class FeatureGenUnderfluid extends FeatureBase {
 	final List<WeightedRandomBlock> matList;
 	final int[] fluidList;
 
-	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes,
-			boolean regen, GenRestriction dimRes) {
+	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes, boolean regen,
+			GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -55,36 +55,41 @@ public class FeatureGenUnderfluid extends FeatureBase {
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
 			int z = blockZ + random.nextInt(16);
-			if (!canGenerateInBiome(world, x, z, random))
+			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
+			}
 
 			int y = BlockHelper.getSurfaceBlockY(world, x, z);
 			l: do {
 				Block block = world.getBlock(x, y, z);
 				if (water) {
-					if (block.getMaterial() == Material.water)
+					if (block.getMaterial() == Material.water) {
 						continue;
+					}
 					if (world.getBlock(x, y + 1, z).getMaterial() != Material.water) {
 						continue;
 					}
 				} else {
 					Fluid fluid = FluidHelper.lookupFluidForBlock(block);
-					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getID()) >= 0)
+					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getID()) >= 0) {
 						continue;
+					}
 
 					fluid = FluidHelper.lookupFluidForBlock(world.getBlock(x, y + 1, z));
-					if (fluid == null || Arrays.binarySearch(fluidList, fluid.getID()) < 0)
+					if (fluid == null || Arrays.binarySearch(fluidList, fluid.getID()) < 0) {
 						continue;
+					}
 				}
 				for (WeightedRandomBlock mat : matList) {
 					if (block.isReplaceableOreGen(world, x, y, z, mat.block)) {
 						break l;
 					}
 				}
-			} while (y --> 1);
+			} while (y-- > 1);
 
-			if (y > 0)
+			if (y > 0) {
 				generated |= worldGen.generate(world, random, x, y, z);
+			}
 		}
 		return generated;
 	}

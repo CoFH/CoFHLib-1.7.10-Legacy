@@ -1,6 +1,5 @@
 package cofh.lib.util;
 
-
 import java.util.Collection;
 
 @SuppressWarnings("unchecked")
@@ -30,11 +29,11 @@ public class IdentityLinkedHashList<E extends Object> extends LinkedHashList<E> 
 	@Override
 	protected Entry seek(Object obj, int hash) {
 
-		for (Entry entry = hashTable[hash & mask];
-				entry != null;
-				entry = entry.nextInBucket)
-			if (obj == entry.key)
+		for (Entry entry = hashTable[hash & mask]; entry != null; entry = entry.nextInBucket) {
+			if (obj == entry.key) {
 				return entry;
+			}
+		}
 
 		return null;
 	}

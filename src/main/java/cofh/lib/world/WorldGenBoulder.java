@@ -10,8 +10,8 @@ import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class WorldGenBoulder extends WorldGenerator
-{
+public class WorldGenBoulder extends WorldGenerator {
+
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
 	private final int size;
@@ -35,7 +35,7 @@ public class WorldGenBoulder extends WorldGenerator
 		final int minSize = size, var = sizeVariance;
 		boolean r = false;
 		int i = clusterVariance > 0 ? clusters + rand.nextInt(clusterVariance + 1) : clusters;
-		while (i --> 0) {
+		while (i-- > 0) {
 
 			while (yCenter > minSize && world.isAirBlock(xCenter, yCenter - 1, zCenter)) {
 				--yCenter;
@@ -64,19 +64,20 @@ public class WorldGenBoulder extends WorldGenerator
 							final int dist = xzDist + y * y;
 
 							if (dist <= maxDist) {
-								if (dist >= minDist)
+								if (dist >= minDist) {
 									r |= generateBlock(world, xCenter + x, yCenter + y, zCenter + z, cluster);
-								else
+								} else {
 									r |= world.setBlockToAir(xCenter + x, yCenter + y, zCenter + z);
+								}
 							}
 						}
 					}
 				}
 			}
 
-			xCenter += rand.nextInt(var + minSize * 2) - (minSize + var/2);
-			zCenter += rand.nextInt(var + minSize * 2) - (minSize + var/2);
-			yCenter += rand.nextInt((var+1) * 3) - (var+1);
+			xCenter += rand.nextInt(var + minSize * 2) - (minSize + var / 2);
+			zCenter += rand.nextInt(var + minSize * 2) - (minSize + var / 2);
+			yCenter += rand.nextInt((var + 1) * 3) - (var + 1);
 		}
 
 		return r;

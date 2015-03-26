@@ -7,9 +7,9 @@ import net.minecraft.inventory.InventoryCrafting;
 
 /**
  * This class is used to get recipes (IRecipe requires it...) with a Container.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class InventoryCraftingFalse extends InventoryCrafting {
 

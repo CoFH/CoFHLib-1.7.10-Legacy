@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Slot that will only accept ItemStacks when the IInventory returns true from isItemValidForSlot.
- * 
+ *
  * If an ISidedInventory, canInsertItem (from side 6 (UNKNOWN)) must also return true.
  */
 public class SlotAcceptInsertable extends SlotAcceptValid {

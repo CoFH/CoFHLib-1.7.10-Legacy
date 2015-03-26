@@ -21,7 +21,7 @@ public class WorldGenMulti extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random random, int x, int y, int z) {
 
-		WeightedRandomWorldGenerator gen = (WeightedRandomWorldGenerator)WeightedRandom.getRandomItem(random, generators);
+		WeightedRandomWorldGenerator gen = (WeightedRandomWorldGenerator) WeightedRandom.getRandomItem(random, generators);
 		return gen.generator.generate(world, random, x, y, z);
 	}
 

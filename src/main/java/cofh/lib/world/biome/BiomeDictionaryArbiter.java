@@ -16,10 +16,12 @@ public class BiomeDictionaryArbiter {
 	private static boolean loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
 
 	public static Type[] getTypesForBiome(BiomeGenBase biome) {
+
 		if (loaded) {
 			Type[] r = types.get(biome);
-			if (r == null)
+			if (r == null) {
 				types.put(biome, r = BiomeDictionary.getTypesForBiome(biome));
+			}
 			return r;
 		}
 		loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
@@ -27,10 +29,12 @@ public class BiomeDictionaryArbiter {
 	}
 
 	public static BiomeGenBase[] getTypesForBiome(Type type) {
+
 		if (loaded) {
 			BiomeGenBase[] r = biomes.get(type);
-			if (r == null)
+			if (r == null) {
 				biomes.put(type, r = BiomeDictionary.getBiomesForType(type));
+			}
 			return r;
 		}
 		loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
@@ -38,6 +42,7 @@ public class BiomeDictionaryArbiter {
 	}
 
 	private BiomeDictionaryArbiter() {
+
 		throw new IllegalArgumentException();
 	}
 }

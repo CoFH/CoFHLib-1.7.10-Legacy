@@ -5,9 +5,9 @@ import cofh.lib.render.RenderHelper;
 
 /**
  * Basic element which can render an arbitrary texture.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class ElementSimple extends ElementBase {
 

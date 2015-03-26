@@ -18,9 +18,9 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Contains various helper functions to assist with rendering.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public final class RenderHelper {
 

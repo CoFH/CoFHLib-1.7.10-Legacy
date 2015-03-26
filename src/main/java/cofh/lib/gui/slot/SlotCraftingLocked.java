@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Crafting result slot where the result cannot be removed.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class SlotCraftingLocked extends SlotCrafting {
 

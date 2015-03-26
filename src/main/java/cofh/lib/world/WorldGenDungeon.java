@@ -21,8 +21,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
 
-public class WorldGenDungeon extends WorldGenerator
-{
+public class WorldGenDungeon extends WorldGenerator {
+
 	private final List<WeightedRandomBlock> walls;
 	private final WeightedRandomBlock[] genBlock;
 	private final WeightedRandomNBTTag[] spawners;
@@ -43,10 +43,11 @@ public class WorldGenDungeon extends WorldGenerator
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart)
-	{
-		if (yStart <= 2)
+	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
+
+		if (yStart <= 2) {
 			return false;
+		}
 
 		int height = nextInt(rand, maxHeight - minHeight + 1) + minHeight;
 		int xWidth = nextInt(rand, maxWidthX - minWidthX + 1) + minWidthX;
@@ -60,24 +61,28 @@ public class WorldGenDungeon extends WorldGenerator
 			for (z = zStart - zWidth - 1; z <= zStart + zWidth + 1; ++z) {
 				for (y = floor; y <= ceiling; ++y) {
 
-					if (y == floor && !canGenerateInBlock(world, x, y, z, genBlock))
+					if (y == floor && !canGenerateInBlock(world, x, y, z, genBlock)) {
 						return false;
+					}
 
-					if (y == ceiling && !canGenerateInBlock(world, x, y, z, genBlock))
+					if (y == ceiling && !canGenerateInBlock(world, x, y, z, genBlock)) {
 						return false;
+					}
 
-					if ((abs(x - xStart) == xWidth + 1 || abs(z - zStart) == zWidth + 1) && y == yStart &&
-							world.isAirBlock(x, y, z) && world.isAirBlock(x, y + 1, z))
+					if ((abs(x - xStart) == xWidth + 1 || abs(z - zStart) == zWidth + 1) && y == yStart && world.isAirBlock(x, y, z)
+							&& world.isAirBlock(x, y + 1, z)) {
 						++holes;
+					}
 				}
 			}
 		}
 
-		if (holes < minHoles || holes > maxHoles)
+		if (holes < minHoles || holes > maxHoles) {
 			return false;
+		}
 
-		NBTTagCompound tag = (NBTTagCompound) ((WeightedRandomNBTTag)WeightedRandom.getRandomItem(rand, spawners)).tag;
-		ChestGenHooks table = ChestGenHooks.getInfo(((DungeonMob)WeightedRandom.getRandomItem(rand, lootTables)).type);
+		NBTTagCompound tag = (NBTTagCompound) ((WeightedRandomNBTTag) WeightedRandom.getRandomItem(rand, spawners)).tag;
+		ChestGenHooks table = ChestGenHooks.getInfo(((DungeonMob) WeightedRandom.getRandomItem(rand, lootTables)).type);
 
 		for (x = xStart - xWidth - 1; x <= xStart + xWidth + 1; ++x) {
 			for (z = zStart - zWidth - 1; z <= zStart + zWidth + 1; ++z) {
@@ -85,21 +90,20 @@ public class WorldGenDungeon extends WorldGenerator
 
 					if ((abs(x - xStart) != xWidth + 1 || abs(z - zStart) != zWidth + 1) && y != ceiling) {
 						world.setBlockToAir(x, y, z);
-					}
-					else if (y >= 0 && !canGenerateInBlock(world, x, y - 1, z, genBlock)) {
+					} else if (y >= 0 && !canGenerateInBlock(world, x, y - 1, z, genBlock)) {
 						world.setBlockToAir(x, y, z);
-					}
-					else if (canGenerateInBlock(world, x, y, z, genBlock)) {
-						if (y == floor)
+					} else if (canGenerateInBlock(world, x, y, z, genBlock)) {
+						if (y == floor) {
 							generateBlock(world, x, y, z, this.floor);
-						else
+						} else {
 							generateBlock(world, x, y, z, walls);
+						}
 					}
 				}
 			}
 		}
 
-		for (int i = maxChests; i --> 0; ) {
+		for (int i = maxChests; i-- > 0;) {
 			for (int j = 0; j < 3; ++j) {
 				x = xStart + nextInt(rand, xWidth * 2 + 1) - xWidth;
 				z = zStart + nextInt(rand, zWidth * 2 + 1) - zWidth;
@@ -107,21 +111,25 @@ public class WorldGenDungeon extends WorldGenerator
 				if (world.isAirBlock(x, yStart, z)) {
 					int walls = 0;
 
-					if (isWall(world, x - 1, yStart, z))
+					if (isWall(world, x - 1, yStart, z)) {
 						++walls;
+					}
 
-					if (isWall(world, x + 1, yStart, z))
+					if (isWall(world, x + 1, yStart, z)) {
 						++walls;
+					}
 
-					if (isWall(world, x, yStart, z - 1))
+					if (isWall(world, x, yStart, z - 1)) {
 						++walls;
+					}
 
-					if (isWall(world, x, yStart, z + 1))
+					if (isWall(world, x, yStart, z + 1)) {
 						++walls;
+					}
 
 					if (walls >= 1 && walls <= 2) {
 						world.setBlock(x, yStart, z, Blocks.chest, 0, 2);
-						TileEntityChest chest = (TileEntityChest)world.getTileEntity(x, yStart, z);
+						TileEntityChest chest = (TileEntityChest) world.getTileEntity(x, yStart, z);
 
 						if (chest != null) {
 							WeightedRandomChestContent.generateChestContents(rand, table.getItems(rand), chest, table.getCount(rand));
@@ -134,7 +142,7 @@ public class WorldGenDungeon extends WorldGenerator
 		}
 
 		world.setBlock(xStart, yStart, zStart, Blocks.mob_spawner, 0, 2);
-		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(xStart, yStart, zStart);
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(xStart, yStart, zStart);
 
 		if (spawner != null) {
 			spawner.func_145881_a().readFromNBT(tag);
@@ -146,8 +154,10 @@ public class WorldGenDungeon extends WorldGenerator
 	}
 
 	private static int nextInt(Random rand, int v) {
-		if (v <= 1)
+
+		if (v <= 1) {
 			return 0;
+		}
 		return rand.nextInt(v);
 	}
 

@@ -19,8 +19,9 @@ public class CharacterSingleton implements CharSequence {
 	@Override
 	public CharSequence subSequence(int start, int end) {
 
-		if (start == end)
+		if (start == end) {
 			return "";
+		}
 		return this;
 	}
 

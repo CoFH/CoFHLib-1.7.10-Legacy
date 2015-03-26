@@ -2,9 +2,9 @@ package cofh.lib.util;
 
 /**
  * Generic rectangle class.
- * 
+ *
  * @author Chicken Bones
- * 
+ *
  */
 public class Rectangle4i {
 

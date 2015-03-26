@@ -18,8 +18,8 @@ public class FeatureGenTopBlock extends FeatureBase {
 	final int count;
 	final WeightedRandomBlock[] matList;
 
-	public FeatureGenTopBlock(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes,
-			boolean regen, GenRestriction dimRes) {
+	public FeatureGenTopBlock(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes, boolean regen,
+			GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -37,8 +37,9 @@ public class FeatureGenTopBlock extends FeatureBase {
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
 			int z = blockZ + random.nextInt(16);
-			if (!canGenerateInBiome(world, x, z, random))
+			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
+			}
 
 			int y = BlockHelper.getTopBlockY(world, x, z);
 			l: {

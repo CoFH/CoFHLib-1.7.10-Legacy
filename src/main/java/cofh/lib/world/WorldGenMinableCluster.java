@@ -160,14 +160,15 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public static boolean canGenerateInBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat) {
 
-		if (mat == null || mat.length == 0)
+		if (mat == null || mat.length == 0) {
 			return true;
+		}
 
 		Block block = world.getBlock(x, y, z);
 		for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
-			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z)) &&
-					(block.isReplaceableOreGen(world, x, y, z, genBlock.block) || block.isAssociatedBlock(genBlock.block))) {
+			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z))
+					&& (block.isReplaceableOreGen(world, x, y, z, genBlock.block) || block.isAssociatedBlock(genBlock.block))) {
 				return true;
 			}
 		}
@@ -176,8 +177,9 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public static boolean generateBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat, List<WeightedRandomBlock> o) {
 
-		if (mat == null || mat.length == 0)
+		if (mat == null || mat.length == 0) {
 			return generateBlock(world, x, y, z, o);
+		}
 
 		if (canGenerateInBlock(world, x, y, z, mat)) {
 			return generateBlock(world, x, y, z, o);
@@ -188,18 +190,21 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	public static boolean generateBlock(World world, int x, int y, int z, List<WeightedRandomBlock> o) {
 
 		WeightedRandomBlock ore = selectBlock(world, o);
-		if (ore == null)
+		if (ore == null) {
 			return false;
+		}
 		return world.setBlock(x, y, z, ore.block, ore.metadata, 2);
 	}
 
 	public static WeightedRandomBlock selectBlock(World world, List<WeightedRandomBlock> o) {
 
 		int size = o.size();
-		if (size == 0)
+		if (size == 0) {
 			return null;
-		if (size > 1)
+		}
+		if (size > 1) {
 			return (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+		}
 		return o.get(0);
 	}
 

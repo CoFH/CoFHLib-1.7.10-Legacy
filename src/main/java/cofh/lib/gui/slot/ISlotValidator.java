@@ -4,9 +4,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Interface used in conjunction with {@link SlotValidated}.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public interface ISlotValidator {
 

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 public class WorldGenStalactite extends WorldGenStalagmite {
 
 	public WorldGenStalactite(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> block, List<WeightedRandomBlock> gblock) {
+
 		super(resource, block, gblock);
 	}
 
@@ -33,7 +34,7 @@ public class WorldGenStalactite extends WorldGenStalagmite {
 		boolean r = false;
 		for (int x = -size; x <= size; ++x) {
 			for (int z = -size; z <= size; ++z) {
-				if (!canGenerateInBlock(world, xStart + x, yStart+ 1, zStart + z, baseBlock)) {
+				if (!canGenerateInBlock(world, xStart + x, yStart + 1, zStart + z, baseBlock)) {
 					continue;
 				}
 				int height = getHeight(x, z, size, rand, maxHeight);

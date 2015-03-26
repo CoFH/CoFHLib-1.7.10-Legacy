@@ -14,8 +14,8 @@ public class FeatureGenLargeVein extends FeatureBase {
 	private int verticalDensity;
 	private int horizontalDensity;
 
-	public FeatureGenLargeVein(String name, WorldGenerator worldGen, int count, int minY, GenRestriction biomeRes,
-			boolean regen, GenRestriction dimRes, int height, int diameter, int vDensity, int hDensity) {
+	public FeatureGenLargeVein(String name, WorldGenerator worldGen, int count, int minY, GenRestriction biomeRes, boolean regen, GenRestriction dimRes,
+			int height, int diameter, int vDensity, int hDensity) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -30,7 +30,7 @@ public class FeatureGenLargeVein extends FeatureBase {
 	public int getDensity(Random rand, int oreDistance, float oreDensity) {
 
 		oreDensity = (oreDensity * 0.01f * (oreDistance >> 1)) + 1f;
-		int i = (int)oreDensity;
+		int i = (int) oreDensity;
 		int rnd = oreDistance / i;
 		int r = 0;
 		for (; i > 0; --i) {
@@ -52,12 +52,13 @@ public class FeatureGenLargeVein extends FeatureBase {
 		dRand.setSeed(chunkX * l + chunkZ * l1 ^ world.getSeed());
 
 		boolean generated = false;
-		for (int i = count; i --> 0; ) {
+		for (int i = count; i-- > 0;) {
 			int x = blockX + getDensity(dRand, veinDiameter, horizontalDensity);
 			int y = blockY + getDensity(dRand, veinHeight, verticalDensity);
 			int z = blockZ + getDensity(dRand, veinDiameter, horizontalDensity);
-			if (!canGenerateInBiome(world, x, z, random))
+			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
+			}
 
 			generated |= worldGen.generate(world, random, x, y, z);
 		}

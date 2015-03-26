@@ -61,8 +61,9 @@ public class WorldGenSmallTree extends WorldGenerator {
 			int yOffset;
 			int zOffset;
 
-			if (!canGenerateInBlock(world, x, y - 1, z, genSurface))
+			if (!canGenerateInBlock(world, x, y - 1, z, genSurface)) {
 				return false;
+			}
 
 			if (y < worldHeight - treeHeight - 1) {
 				if (treeChecks) {
@@ -73,11 +74,8 @@ public class WorldGenSmallTree extends WorldGenerator {
 						if (yOffset >= 0 & yOffset < worldHeight) {
 							if (radius == 0) {
 								block = world.getBlock(x, yOffset, z);
-								if (!(block.isLeaves(world, x, yOffset, z) ||
-										block.isAir(world, x, yOffset, z) ||
-										block.isReplaceable(world, x, yOffset, z) ||
-										block.canBeReplacedByLeaves(world, x, yOffset, z) ||
-										canGenerateInBlock(world, x, yOffset, z, genBlock))) {
+								if (!(block.isLeaves(world, x, yOffset, z) || block.isAir(world, x, yOffset, z) || block.isReplaceable(world, x, yOffset, z)
+										|| block.canBeReplacedByLeaves(world, x, yOffset, z) || canGenerateInBlock(world, x, yOffset, z, genBlock))) {
 									return false;
 								}
 
@@ -93,27 +91,27 @@ public class WorldGenSmallTree extends WorldGenerator {
 										}
 									}
 								}
-							}
-							else for (xOffset = x - radius; xOffset <= x + radius; ++xOffset) {
-								for (zOffset = z - radius; zOffset <= z + radius; ++zOffset) {
-									block = world.getBlock(xOffset, yOffset, zOffset);
+							} else {
+								for (xOffset = x - radius; xOffset <= x + radius; ++xOffset) {
+									for (zOffset = z - radius; zOffset <= z + radius; ++zOffset) {
+										block = world.getBlock(xOffset, yOffset, zOffset);
 
-									if (!(block.isLeaves(world, xOffset, yOffset, zOffset) ||
-											block.isAir(world, xOffset, yOffset, zOffset) ||
-											block.canBeReplacedByLeaves(world, xOffset, yOffset, zOffset) ||
-											canGenerateInBlock(world, xOffset, yOffset, zOffset, genBlock))) {
-										return false;
+										if (!(block.isLeaves(world, xOffset, yOffset, zOffset) || block.isAir(world, xOffset, yOffset, zOffset)
+												|| block.canBeReplacedByLeaves(world, xOffset, yOffset, zOffset) || canGenerateInBlock(world, xOffset, yOffset,
+													zOffset, genBlock))) {
+											return false;
+										}
 									}
 								}
 							}
-						}
-						else {
+						} else {
 							return false;
 						}
 					}
 
-					if (genSurface != null && !canGenerateInBlock(world, x, y - 1, z, genSurface))
+					if (genSurface != null && !canGenerateInBlock(world, x, y - 1, z, genSurface)) {
 						return false;
+					}
 					block = world.getBlock(x, y - 1, z);
 					block.onPlantGrow(world, x, y - 1, z, x, y, z);
 				}
@@ -124,8 +122,9 @@ public class WorldGenSmallTree extends WorldGenerator {
 
 					int var12 = yOffset - (y + treeHeight);
 					int radius = getLeafRadius(treeHeight, yOffset - y, false);
-					if (radius <= 0)
+					if (radius <= 0) {
 						continue;
+					}
 
 					for (xOffset = x - radius; xOffset <= x + radius; ++xOffset) {
 						int xPos = xOffset - x, t;
@@ -137,12 +136,10 @@ public class WorldGenSmallTree extends WorldGenerator {
 
 							block = world.getBlock(xOffset, yOffset, zOffset);
 
-							if (((xPos != radius | zPos != radius) ||
-									(!leafVariance || (rand.nextInt(2) != 0 && var12 != 0))) &&
-									((treeChecks ? block.isLeaves(world, xOffset, yOffset, zOffset) ||
-											block.isAir(world, xOffset, yOffset, zOffset) ||
-											block.canBeReplacedByLeaves(world, xOffset, yOffset, zOffset) : false) ||
-										canGenerateInBlock(world, xOffset, yOffset, zOffset, genBlock))) {
+							if (((xPos != radius | zPos != radius) || (!leafVariance || (rand.nextInt(2) != 0 && var12 != 0)))
+									&& ((treeChecks ? block.isLeaves(world, xOffset, yOffset, zOffset) || block.isAir(world, xOffset, yOffset, zOffset)
+											|| block.canBeReplacedByLeaves(world, xOffset, yOffset, zOffset) : false) || canGenerateInBlock(world, xOffset,
+												yOffset, zOffset, genBlock))) {
 								r |= generateBlock(world, xOffset, yOffset, zOffset, leaves);
 							}
 						}
@@ -152,10 +149,9 @@ public class WorldGenSmallTree extends WorldGenerator {
 				for (yOffset = 0; yOffset < treeHeight; ++yOffset) {
 					block = world.getBlock(x, y + yOffset, z);
 
-					if ((treeChecks ? block.isAir(world, x, y + yOffset, z)  ||
-							block.isLeaves(world, x, y + yOffset, z) ||
-							block.isReplaceable(world, x, y + yOffset, z) : false) ||
-							canGenerateInBlock(world, x, yOffset + y, z, genBlock)){
+					if ((treeChecks ? block.isAir(world, x, y + yOffset, z) || block.isLeaves(world, x, y + yOffset, z)
+							|| block.isReplaceable(world, x, y + yOffset, z) : false)
+							|| canGenerateInBlock(world, x, yOffset + y, z, genBlock)) {
 						r |= generateBlock(world, x, yOffset + y, z, trunk);
 					}
 				}

@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Slot which copies an ItemStack when clicked on, does not decrement the ItemStack on the cursor.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class SlotFalseCopy extends Slot {
 

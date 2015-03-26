@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Slot that will redirect inserts to another inventory slot (other than index), but not be visible.
- * 
+ *
  * Used primarily for containers that have a larger internal inventory than external (e.g., DeepStorageUnit)
  */
 public class SlotInvisible extends Slot {

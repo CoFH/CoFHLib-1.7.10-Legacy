@@ -19,8 +19,10 @@ public class ElementTextFieldLimited extends ElementTextField {
 
 	/**
 	 *
-	 * @param pattern String containing all characters permitted
-	 * @param includeVanilla Include vanilla disallowed characters
+	 * @param pattern
+	 *            String containing all characters permitted
+	 * @param includeVanilla
+	 *            Include vanilla disallowed characters
 	 * @return this
 	 */
 	public ElementTextFieldLimited setFilter(String pattern, boolean includeVanilla) {
