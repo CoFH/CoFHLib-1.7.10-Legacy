@@ -28,9 +28,7 @@ public class HolidayHelper {
 		setDate(holidayEnd, Calendar.JANUARY, 2, true);
 		holidayEnd.set(Calendar.YEAR, Calendar.YEAR + 1);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isValentinesDay() {
@@ -38,9 +36,7 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.FEBRUARY, 13, false);
 		setDate(holidayEnd, Calendar.FEBRUARY, 15, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isStPatricksDay() {
@@ -48,9 +44,7 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.MARCH, 16, false);
 		setDate(holidayEnd, Calendar.MARCH, 18, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isAprilFools() {
@@ -58,9 +52,7 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.MARCH, 31, false);
 		setDate(holidayEnd, Calendar.APRIL, 2, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isEarthDay() {
@@ -68,19 +60,17 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.APRIL, 21, false);
 		setDate(holidayEnd, Calendar.APRIL, 23, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isEaster() {
 
-		/*
+		/**
 		 * Compute the day of the year that Easter falls on. Step names E1 E2 etc., are direct references to Knuth, Vol 1, p 155.
 		 *
 		 * http://en.wikipedia.org/wiki/Computus#Meeus.2FJones.2FButcher_Gregorian_algorithm
 		 */
-		Calendar easterSun;
+		Calendar easterSunCal;
 
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 
@@ -89,10 +79,10 @@ public class HolidayHelper {
 		}
 		int golden, century, x, z, d, epact, n;
 
-		golden = (year % 19) + 1; /* metonic cycle */
-		century = (year / 100) + 1; /* Centuries are shifted by one e.g. 1984 was in 20th C */
-		x = (3 * century / 4) - 12; /* leap year correction */
-		z = ((8 * century + 5) / 25) - 5; /* syncing with moon's orbit */
+		golden = (year % 19) + 1; // metonic cycle
+		century = (year / 100) + 1; // Centuries are shifted by one e.g. 1984 was in 20th C
+		x = (3 * century / 4) - 12; // leap year correction
+		z = ((8 * century + 5) / 25) - 5; // syncing with moon's orbit
 
 		d = (5 * year / 4) - x - 10;
 		epact = (11 * golden + 20 + z - x) % 30; /* epact */
@@ -105,16 +95,14 @@ public class HolidayHelper {
 		n += 7 - ((d + n) % 7);
 
 		if (n > 31) {
-			easterSun = new GregorianCalendar(year, 4 - 1, n - 31); /* if April */
+			easterSunCal = new GregorianCalendar(year, 4 - 1, n - 31); // if April
 		} else {
-			easterSun = new GregorianCalendar(year, 3 - 1, n); /* if March */
+			easterSunCal = new GregorianCalendar(year, 3 - 1, n); // if March
 		}
-		setDate(holidayStart, easterSun.get(Calendar.MONTH), easterSun.get(Calendar.DAY_OF_MONTH) - 1, false);
-		setDate(holidayEnd, easterSun.get(Calendar.MONTH), easterSun.get(Calendar.DAY_OF_MONTH) + 1, true);
+		setDate(holidayStart, easterSunCal.get(Calendar.MONTH), easterSunCal.get(Calendar.DAY_OF_MONTH) - 1, false);
+		setDate(holidayEnd, easterSunCal.get(Calendar.MONTH), easterSunCal.get(Calendar.DAY_OF_MONTH) + 1, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isUSIndependenceDay() {
@@ -122,9 +110,7 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.JULY, 3, false);
 		setDate(holidayEnd, Calendar.JULY, 5, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
 	public static boolean isHalloween() {
@@ -132,19 +118,45 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.OCTOBER, 30, false);
 		setDate(holidayEnd, Calendar.NOVEMBER, 1, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
-	public static boolean isThanksgiving() {
+	public static boolean isVeteransDay() {
 
-		return false;
+		setDate(holidayStart, Calendar.NOVEMBER, 10, false);
+		setDate(holidayEnd, Calendar.NOVEMBER, 12, true);
+
+		return dateCheck();
 	}
 
-	public static boolean isHanukkah() {
+	public static boolean isCAThanksgiving() {
 
-		return false;
+		Calendar thanksgivingCal = Calendar.getInstance();
+		thanksgivingCal.clear();
+		thanksgivingCal.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+		thanksgivingCal.set(Calendar.MONTH, Calendar.OCTOBER);
+		thanksgivingCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+		thanksgivingCal.set(Calendar.DAY_OF_WEEK_IN_MONTH, 2);
+
+		setDate(holidayStart, Calendar.OCTOBER, thanksgivingCal.get(Calendar.DAY_OF_MONTH) - 1, false);
+		setDate(holidayEnd, Calendar.OCTOBER, thanksgivingCal.get(Calendar.DAY_OF_MONTH) + 1, true);
+
+		return dateCheck();
+	}
+
+	public static boolean isUSThanksgiving() {
+
+		Calendar thanksgivingCal = Calendar.getInstance();
+		thanksgivingCal.clear();
+		thanksgivingCal.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+		thanksgivingCal.set(Calendar.MONTH, Calendar.NOVEMBER);
+		thanksgivingCal.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+		thanksgivingCal.set(Calendar.DAY_OF_WEEK_IN_MONTH, 4);
+
+		setDate(holidayStart, Calendar.NOVEMBER, thanksgivingCal.get(Calendar.DAY_OF_MONTH) - 1, false);
+		setDate(holidayEnd, Calendar.NOVEMBER, thanksgivingCal.get(Calendar.DAY_OF_MONTH) + 1, true);
+
+		return dateCheck();
 	}
 
 	public static boolean isChristmas() {
@@ -152,11 +164,18 @@ public class HolidayHelper {
 		setDate(holidayStart, Calendar.DECEMBER, 24, false);
 		setDate(holidayEnd, Calendar.DECEMBER, 26, true);
 
-		curTime = Calendar.getInstance();
-
-		return curTime.after(holidayStart) && curTime.before(holidayEnd);
+		return dateCheck();
 	}
 
+	public static boolean isBoxingDay() {
+
+		setDate(holidayStart, Calendar.DECEMBER, 25, false);
+		setDate(holidayEnd, Calendar.DECEMBER, 27, true);
+
+		return dateCheck();
+	}
+
+	/* HELPER FUNCTIONS */
 	static void setDate(Calendar cal, int month, int date, boolean endOfDay) {
 
 		cal.clear();
@@ -176,6 +195,12 @@ public class HolidayHelper {
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 		}
+	}
+
+	static boolean dateCheck() {
+
+		curTime = Calendar.getInstance();
+		return curTime.after(holidayStart) && curTime.before(holidayEnd);
 	}
 
 }
