@@ -39,6 +39,8 @@ public class ElementTextField extends ElementBase {
 	protected boolean smartCaret = true;
 	protected boolean smartCaretCase = true;
 
+	protected boolean multiline = false;
+
 	protected boolean enableStencil = true;
 
 	public ElementTextField(GuiBase gui, int posX, int posY, int width, int height) {
@@ -85,6 +87,12 @@ public class ElementTextField extends ElementBase {
 		if (borderColor != null) {
 			this.borderColor = borderColor.intValue();
 		}
+		return this;
+	}
+
+	public ElementTextField setMultiline(boolean multi) {
+
+		multiline = multi;
 		return this;
 	}
 
@@ -194,11 +202,18 @@ public class ElementTextField extends ElementBase {
 
 	public boolean isAllowedCharacter(char charTyped) {
 
-		return ChatAllowedCharacters.isAllowedCharacter(charTyped);
+		return (multiline && charTyped == '\n') || ChatAllowedCharacters.isAllowedCharacter(charTyped);
 	}
 
 	protected boolean onEnter() {
 
+		if (multiline) {
+			boolean typed = insertCharacter('\n');
+			clearSelection();
+			findRenderStart();
+			onCharacterEntered(typed);
+			return true;
+		}
 		return false;
 	}
 
@@ -284,31 +299,50 @@ public class ElementTextField extends ElementBase {
 
 		int dir = forward ? 1 : -1;
 		int e = forward ? textLength : 0;
-		if (pos == textLength) {
-			--pos;
+		if (pos != e) {
+			pos += dir;
 		}
-		char prevChar = text[pos];
-		while (pos != e && Character.isSpaceChar(prevChar)) {
-			prevChar = text[pos += dir];
+		char prevChar = pos == textLength ? 0 : text[pos];
+		if (!forward) {
+			if (pos != e && Character.isSpaceChar(prevChar)) {
+				pos += !Character.isSpaceChar(text[pos + dir]) ? dir : 0;
+			}
+		} else if (pos != e && Character.isSpaceChar(prevChar)) {
+			pos -= !Character.isSpaceChar(text[pos - dir]) ? dir : 0;
 		}
+		prevChar = text[pos];
+		int i = pos;
 
 		if (smartCaret) {
-			for (int i = pos; i != e; i += dir) {
+			for (; i != e; i += dir) {
 				char curChar = text[i];
 				boolean caze = Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
-				if (caze || Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)
-						|| Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar)) {
-					if ((pos + dir) != i || !Character.isLetterOrDigit(curChar)) {
-						return i + (smartCaretCase && caze && Character.isUpperCase(prevChar) ? -dir : 0);
+				boolean dig = Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar);
+				 if ((dig ? true : caze) || Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)) {
+					int o = 0;
+					if (smartCaretCase && caze) {
+						o = !forward ? 0 : -dir;
+					} else {
+						if (Character.isWhitespace(prevChar) != Character.isWhitespace(curChar)) {
+							if (forward) {
+								if (i != e && !Character.isWhitespace(text[i + dir])) {
+									o = Character.isWhitespace(curChar) ? 1 : 0;
+								}
+							} else {
+								o = 1;
+							}
+						}
 					}
+					return i + o;
 				}
 				prevChar = curChar;
 			}
-		}
-		for (int i = pos; i != e; i += dir) {
-			char curChar = text[i];
-			if (Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)) {
-				return i;
+		} else {
+			for (; i != e; i += dir) {
+				char curChar = text[i];
+				if (Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)) {
+					return i;
+				}
 			}
 		}
 		return forward ? textLength : 0;
@@ -418,27 +452,48 @@ public class ElementTextField extends ElementBase {
 
 				return true;
 			case Keyboard.KEY_HOME: // home
+				int begin = 0;
+				if (!GuiScreen.isCtrlKeyDown()) {
+					for (int i = caret - 1; i > 0; --i) {
+						if (text[i] == '\n') {
+							begin = Math.min(i + 1, textLength);
+							break;
+						}
+					}
+				}
+
 				if (GuiScreen.isShiftKeyDown()) {
 					if (caret > selectionEnd) {
 						selectionEnd = selectionStart;
 					}
-					selectionStart = 0;
+					selectionStart = begin;
 				} else {
-					selectionStart = selectionEnd = 0;
+					selectionStart = selectionEnd = begin;
 				}
-				renderStart = caret = 0;
+				caret = begin;
+				findRenderStart();
 
 				return true;
 			case Keyboard.KEY_END: // end
+				int end = textLength;
+				if (!GuiScreen.isCtrlKeyDown()) {
+					for (int i = caret; i < textLength; ++i) {
+						if (text[i] == '\n') {
+							end = i;
+							break;
+						}
+					}
+				}
+
 				if (GuiScreen.isShiftKeyDown()) {
 					if (caret < selectionStart) {
 						selectionStart = selectionEnd;
 					}
-					selectionEnd = textLength;
+					selectionEnd = end;
 				} else {
-					selectionStart = selectionEnd = textLength;
+					selectionStart = selectionEnd = end;
 				}
-				caret = textLength;
+				caret = end;
 				findRenderStart();
 
 				return true;
@@ -567,12 +622,18 @@ public class ElementTextField extends ElementBase {
 		FontRenderer font = getFontRenderer();
 		char[] text = this.text;
 		int startX = posX + 1, endX = sizeX - 1, startY = posY + 1, endY = startY + font.FONT_HEIGHT;
-		for (int i = renderStart, width = 0; i <= textLength; ++i) {
+		for (int i = renderStart, width = 0, height = 0; i <= textLength; ++i) {
 			boolean end = i == textLength;
 			int charW = 2;
+			char c = 0;
 			if (!end) {
-				charW = font.getCharWidth(text[i]);
+				if (width > endX)
+					continue;
+				c = text[i];
+				charW = font.getCharWidth(c);
 				if (!enableStencil && (width + charW) > endX) {
+					if (multiline)
+						continue;
 					break;
 				}
 			}
@@ -583,15 +644,17 @@ public class ElementTextField extends ElementBase {
 				if (caretInsert) {
 					caretEnd = width + charW;
 				}
-				drawModalRect(startX + width, startY - 1, startX + caretEnd, endY, (0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
+				drawModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height,
+					(0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (!end) {
 				boolean selected = i >= selectionStart & i < selectionEnd;
 				if (selected) {
-					drawModalRect(startX + width, startY, startX + width + charW, endY, selectedLineColor);
+					drawModalRect(startX + width, startY + height, startX + width + charW, endY + height, selectedLineColor);
 				}
-				font.drawString(String.valueOf(text[i]), startX + width, startY, selected ? selectedTextColor : textColor);
+				if (c != '\n')
+					font.drawString(String.valueOf(c), startX + width, startY + height, selected ? selectedTextColor : textColor);
 			}
 
 			if (drawCaret) {
@@ -602,12 +665,19 @@ public class ElementTextField extends ElementBase {
 
 				GL11.glEnable(GL11.GL_BLEND);
 				GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
-				gui.drawSizedRect(startX + width, startY - 1, startX + caretEnd, endY, -1);
+				gui.drawSizedRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, -1);
 				GL11.glDisable(GL11.GL_BLEND);
 			}
 
+			if (c == '\n') {
+				height += font.FONT_HEIGHT;
+				charW = width = 0;
+				if (height > startY + sizeY)
+					break;
+			}
+
 			width += charW;
-			if (width > endX) {
+			if (!multiline && width > endX) {
 				break;
 			}
 		}
