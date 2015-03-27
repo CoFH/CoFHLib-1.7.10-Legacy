@@ -401,8 +401,10 @@ public class ElementTextField extends ElementBase {
 					clearSelection();
 				} else {
 					if (caret > 0 && textLength > 0) {
+						if (caret != textLength) {
+							System.arraycopy(text, caret, text, caret - 1, textLength - caret);
+						}
 						--caret;
-						System.arraycopy(text, caret + 1, text, caret, textLength - (caret + 1));
 						--textLength;
 						changed = true;
 					}
