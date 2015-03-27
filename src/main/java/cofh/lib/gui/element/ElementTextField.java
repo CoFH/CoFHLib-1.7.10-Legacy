@@ -10,6 +10,7 @@ import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ChatAllowedCharacters;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -27,7 +28,7 @@ public class ElementTextField extends ElementBase {
 	protected char[] text;
 	protected int textLength;
 	protected int selectionStart, selectionEnd;
-	protected int renderStart, caret;
+	protected int renderStartX, renderStartY, caret;
 
 	private boolean isFocused;
 	private boolean canFocusChange = true;
@@ -160,7 +161,7 @@ public class ElementTextField extends ElementBase {
 
 		FontRenderer font = getFontRenderer();
 		int width = 0, endX = sizeX - 1;
-		for (int i = renderStart; i < textLength; ++i) {
+		for (int i = renderStartX; i < textLength; ++i) {
 			int charW = font.getCharWidth(text[i]);
 			if (!enableStencil && (width + charW) > endX) {
 				break;
@@ -208,7 +209,14 @@ public class ElementTextField extends ElementBase {
 	protected boolean onEnter() {
 
 		if (multiline) {
-			boolean typed = insertCharacter('\n');
+			boolean typed;
+			if (caretInsert && selectionStart == selectionEnd) {
+				caretInsert = false;
+				typed = insertCharacter('\n');
+				caretInsert = true;
+			} else {
+				typed = insertCharacter('\n');
+			}
 			clearSelection();
 			findRenderStart();
 			onCharacterEntered(typed);
@@ -257,19 +265,22 @@ public class ElementTextField extends ElementBase {
 	protected void findRenderStart() {
 
 		caret = MathHelper.clampI(caret, 0, textLength);
-		if (caret < renderStart) {
-			renderStart = caret;
+		if (selectionStart == selectionEnd) {
+			selectionStart = selectionEnd = caret;
+		}
+		if (caret < renderStartX) {
+			renderStartX = caret;
 			return;
 		}
 
 		FontRenderer font = getFontRenderer();
 		int endX = sizeX - 2;
 
-		for (int i = renderStart, width = 0; i < caret; ++i) {
+		for (int i = renderStartX, width = 0; i < caret; ++i) {
 			width += font.getCharWidth(text[i]);
 			while (width >= endX) {
-				width -= font.getCharWidth(text[renderStart++]);
-				if (renderStart >= textLength) {
+				width -= font.getCharWidth(text[renderStartX++]);
+				if (renderStartX >= textLength) {
 					return;
 				}
 			}
@@ -316,14 +327,15 @@ public class ElementTextField extends ElementBase {
 		if (smartCaret) {
 			for (; i != e; i += dir) {
 				char curChar = text[i];
-				boolean caze = Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
 				boolean dig = Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar);
-				 if ((dig ? true : caze) || Character.isSpaceChar(curChar) != Character.isSpaceChar(prevChar)) {
+				boolean caze = !dig && Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
+				boolean space = Character.isWhitespace(prevChar) != Character.isWhitespace(curChar);
+				if (dig || caze || space) {
 					int o = 0;
 					if (smartCaretCase && caze) {
 						o = !forward ? 0 : -dir;
 					} else {
-						if (Character.isWhitespace(prevChar) != Character.isWhitespace(curChar)) {
+						if (space) {
 							if (forward) {
 								if (i != e && !Character.isWhitespace(text[i + dir])) {
 									o = Character.isWhitespace(curChar) ? 1 : 0;
@@ -414,8 +426,8 @@ public class ElementTextField extends ElementBase {
 							changed = true;
 						}
 					}
-					if (caret <= renderStart) {
-						renderStart = MathHelper.clampI(caret - 3, 0, textLength);
+					if (caret <= renderStartX) {
+						renderStartX = MathHelper.clampI(caret - 3, 0, textLength);
 					}
 					findRenderStart();
 
@@ -443,8 +455,8 @@ public class ElementTextField extends ElementBase {
 						changed = true;
 					}
 				}
-				if (caret <= renderStart) {
-					renderStart = MathHelper.clampI(caret - 3, 0, textLength);
+				if (caret <= renderStartX) {
+					renderStartX = MathHelper.clampI(caret - 3, 0, textLength);
 				}
 				findRenderStart();
 
@@ -463,7 +475,7 @@ public class ElementTextField extends ElementBase {
 				}
 
 				if (GuiScreen.isShiftKeyDown()) {
-					if (caret > selectionEnd) {
+					if (caret >= selectionEnd) {
 						selectionEnd = selectionStart;
 					}
 					selectionStart = begin;
@@ -486,7 +498,7 @@ public class ElementTextField extends ElementBase {
 				}
 
 				if (GuiScreen.isShiftKeyDown()) {
-					if (caret < selectionStart) {
+					if (caret <= selectionStart) {
 						selectionStart = selectionEnd;
 					}
 					selectionEnd = end;
@@ -565,7 +577,7 @@ public class ElementTextField extends ElementBase {
 			}
 			FontRenderer font = getFontRenderer();
 			int pos = mouseX - posX - 1;
-			for (int i = renderStart, width = 0;;) {
+			for (int i = renderStartX, width = 0;;) {
 				int charW = font.getCharWidth(text[i]);
 				if ((width += charW) > pos || ++i >= textLength) {
 					selectionStart = selectionEnd = caret = i;
@@ -613,32 +625,40 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		if (enableStencil) {
+		boolean enableStencil = this.enableStencil;
+		int bit = -1;
+		l: if (enableStencil) {
+			bit = MinecraftForgeClient.reserveStencilBit();
+			if (bit == -1) {
+				enableStencil = false;
+				break l;
+			}
 			glEnable(GL_STENCIL_TEST);
-			glClear(GL_STENCIL_BUFFER_BIT);
-			drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1);
+			drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1 << bit);
 		}
 
 		FontRenderer font = getFontRenderer();
 		char[] text = this.text;
 		int startX = posX + 1, endX = sizeX - 1, startY = posY + 1, endY = startY + font.FONT_HEIGHT;
-		for (int i = renderStart, width = 0, height = 0; i <= textLength; ++i) {
-			boolean end = i == textLength;
+		for (int i = renderStartX, width = 0, height = 0; i <= textLength; ++i) {
+			boolean end = i == textLength, draw = true;
 			int charW = 2;
 			char c = 0;
 			if (!end) {
-				if (width > endX)
-					continue;
 				c = text[i];
 				charW = font.getCharWidth(c);
-				if (!enableStencil && (width + charW) > endX) {
-					if (multiline)
+				l: if (!enableStencil && (width + charW) > endX) {
+					draw = false;
+					if (multiline) {
+						if (c == '\n')
+							break l;
 						continue;
+					}
 					break;
 				}
 			}
 
-			boolean drawCaret = i == caret && (caretCounter &= 31) < 16 && isFocused();
+			boolean drawCaret = draw && i == caret && (caretCounter &= 31) < 16 && isFocused();
 			if (drawCaret) {
 				int caretEnd = width + 2;
 				if (caretInsert) {
@@ -648,7 +668,7 @@ public class ElementTextField extends ElementBase {
 					(0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
 			}
 
-			if (!end) {
+			if (draw && !end) {
 				boolean selected = i >= selectionStart & i < selectionEnd;
 				if (selected) {
 					drawModalRect(startX + width, startY + height, startX + width + charW, endY + height, selectedLineColor);
@@ -672,7 +692,7 @@ public class ElementTextField extends ElementBase {
 			if (c == '\n') {
 				height += font.FONT_HEIGHT;
 				charW = width = 0;
-				if (height > startY + sizeY)
+				if ((!enableStencil ? font.FONT_HEIGHT : 0) + height > sizeY)
 					break;
 			}
 
@@ -684,6 +704,7 @@ public class ElementTextField extends ElementBase {
 
 		if (enableStencil) {
 			glDisable(GL_STENCIL_TEST);
+			MinecraftForgeClient.releaseStencilBit(bit);
 		}
 	}
 

@@ -128,7 +128,7 @@ public abstract class ElementBase {
 
 		glDisable(GL_TEXTURE_2D);
 		glStencilFunc(GL_ALWAYS, flag, flag);
-		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
 		glStencilMask(1);
 		glColorMask(false, false, false, false);
 		glDepthMask(false);
