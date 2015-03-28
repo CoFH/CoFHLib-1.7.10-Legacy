@@ -28,12 +28,13 @@ public class ElementTextField extends ElementBase {
 	protected char[] text;
 	protected int textLength;
 	protected int selectionStart, selectionEnd;
-	protected int renderStartX, renderStartY, caret;
+	protected int renderStartX, renderStartY;
+	protected int caret, prevCaret;
 
 	private boolean isFocused;
 	private boolean canFocusChange = true;
 
-	private boolean selecting;
+	private boolean selecting, pressed;
 
 	private byte caretCounter;
 	protected boolean caretInsert;
@@ -105,7 +106,7 @@ public class ElementTextField extends ElementBase {
 
 	public ElementTextField setFocused(boolean focused) {
 
-		if (canFocusChange) {
+		if (isFocusable()) {
 			isFocused = focused;
 			caretCounter = 0;
 		}
@@ -132,6 +133,15 @@ public class ElementTextField extends ElementBase {
 		return this;
 	}
 
+	public int getMaxLength() {
+
+		return text.length;
+	}
+
+	/**
+	 * @deprecated Use <tt>getMaxLength</tt>
+	 */
+	@Deprecated
 	public int getMaxStringLength() {
 
 		return text.length;
@@ -147,6 +157,34 @@ public class ElementTextField extends ElementBase {
 		return canFocusChange;
 	}
 
+	public int getContentHeight() {
+
+		FontRenderer font = getFontRenderer();
+		int height = font.FONT_HEIGHT;
+		if (multiline) {
+			for (int i = 0; i < textLength; ++i) {
+				if (text[i] == '\n') {
+					height += font.FONT_HEIGHT;
+				}
+			}
+		}
+		return height;
+	}
+
+	public int getVisibleHeight() {
+
+		FontRenderer font = getFontRenderer();
+		int height = font.FONT_HEIGHT;
+		if (multiline) {
+			for (int i = 0; i < textLength; ++i) {
+				if (text[i] == '\n') {
+					height += font.FONT_HEIGHT;
+				}
+			}
+		}
+		return Math.min(height - renderStartY, sizeY);
+	}
+
 	public int getContentWidth() {
 
 		FontRenderer font = getFontRenderer();
@@ -160,19 +198,35 @@ public class ElementTextField extends ElementBase {
 	public int getVisibleWidth() {
 
 		FontRenderer font = getFontRenderer();
-		int width = 0, endX = sizeX - 1;
-		for (int i = renderStartX; i < textLength; ++i) {
-			int charW = font.getCharWidth(text[i]);
-			if (!enableStencil && (width + charW) > endX) {
-				break;
+		int width = 0, endX = sizeX - 1, maxWidth = 0;
+		if (multiline) {
+			for (int i = 0; i < textLength; ++i) {
+				char c = text[i];
+				int charW = font.getCharWidth(c);
+				if (c == '\n') {
+					maxWidth = Math.max(maxWidth, width);
+					width = 0;
+				} else {
+					width += charW;
+				}
+				if ((width - renderStartX) >= endX) {
+					maxWidth = endX + renderStartX;
+					break;
+				}
 			}
-			width += charW;
-			if (width >= endX) {
-				width = Math.min(width, endX);
-				break;
+			maxWidth -= renderStartX;
+		} else {
+			for (int i = renderStartX; i < textLength; ++i) {
+				char c = text[i];
+				int charW = font.getCharWidth(c);
+				maxWidth += charW;
+				if (maxWidth >= endX) {
+					maxWidth = endX;
+					break;
+				}
 			}
 		}
-		return width;
+		return maxWidth;
 	}
 
 	public String getText() {
@@ -249,7 +303,7 @@ public class ElementTextField extends ElementBase {
 				return false;
 			}
 
-			if (!caretInsert) {
+			if (!caretInsert || (multiline && text[caret] == '\n')) {
 				if (caret < textLength) {
 					System.arraycopy(text, caret, text, caret + 1, textLength - caret);
 				}
@@ -268,6 +322,14 @@ public class ElementTextField extends ElementBase {
 		if (selectionStart == selectionEnd) {
 			selectionStart = selectionEnd = caret;
 		}
+
+		if (multiline) {
+			findRenderStartML();
+			return;
+		}
+
+		renderStartY = 0;
+
 		if (caret < renderStartX) {
 			renderStartX = caret;
 			return;
@@ -285,6 +347,60 @@ public class ElementTextField extends ElementBase {
 				}
 			}
 		}
+	}
+
+	protected void findRenderStartML() {
+
+		if (caret == textLength && textLength == 0) {
+			renderStartX = renderStartY = 0;
+			return;
+		}
+		FontRenderer font = getFontRenderer();
+		int widthLeft = 0;
+		int breaksAbove = 0;
+		for (int i = caret; i --> 0; ) {
+			char c = text[i];
+			if (c == '\n') {
+				for (; i > 0; --i) {
+					c = text[i];
+					if (c == '\n') {
+						breaksAbove += font.FONT_HEIGHT;
+					}
+				}
+				break;
+			}
+			widthLeft += font.getCharWidth(c);
+		}
+
+		int pos = Math.max(0, (sizeY - 2) / font.FONT_HEIGHT) * font.FONT_HEIGHT;
+		if (caret > 0 && text[caret - 1] == '\n') {
+			renderStartX = 0;
+			if (caret == textLength) {
+				renderStartY -= pos;
+				renderStartY &= ~renderStartY >> 31;
+			}
+		}
+
+		while ((breaksAbove - renderStartY) < 0) {
+			renderStartY -= font.FONT_HEIGHT;
+		}
+		while ((breaksAbove - renderStartY) >= pos) {
+			renderStartY += font.FONT_HEIGHT;
+		}
+
+		int dir = prevCaret > caret ? 1 : -1;
+		for (int i = 0; (widthLeft - renderStartX) < 0; i += dir) {
+			char c = text[caret + i];
+			if (c == '\n')
+				break;
+			renderStartX -= font.getCharWidth(c);
+		}
+		renderStartX &= ~renderStartX >> 31;
+		pos = sizeX - 2 - 3;
+		for (int i = 0; (widthLeft - renderStartX) >= pos; ++i) {
+			renderStartX += font.getCharWidth(text[caret - i]);
+		}
+		prevCaret = caret;
 	}
 
 	protected void clearSelection() {
@@ -425,19 +541,17 @@ public class ElementTextField extends ElementBase {
 							System.arraycopy(text, caret + 1, text, caret, textLength - caret);
 							changed = true;
 						}
-					}
-					if (caret <= renderStartX) {
-						renderStartX = MathHelper.clampI(caret - 3, 0, textLength);
-					}
-					findRenderStart();
+						findRenderStart();
 
-					onCharacterEntered(changed);
+						onCharacterEntered(changed);
+					}
 
 					return true;
 				}
 				// continue.. (shift+delete = backspace)
 			case Keyboard.KEY_BACK: // backspace
 				changed = false;
+				boolean calledEntered = true, onBreak = false;
 				if (selectionStart != selectionEnd) {
 					clearSelection();
 				} else if (GuiScreen.isCtrlKeyDown()) {
@@ -446,21 +560,25 @@ public class ElementTextField extends ElementBase {
 					selectionEnd = caret;
 					clearSelection();
 				} else {
+					calledEntered = false;
 					if (caret > 0 && textLength > 0) {
 						if (caret != textLength) {
 							System.arraycopy(text, caret, text, caret - 1, textLength - caret);
 						}
-						--caret;
+						onBreak = text[--caret] == '\n';
 						--textLength;
 						changed = true;
 					}
 				}
-				if (caret <= renderStartX) {
-					renderStartX = MathHelper.clampI(caret - 3, 0, textLength);
+				int old = caret;
+				if (!onBreak) {
+					for (int i = 3; i --> 0 && caret > 1 && text[caret - 1] != '\n'; --caret);
 				}
 				findRenderStart();
+				caret = old;
 
-				onCharacterEntered(changed);
+				if (!calledEntered)
+					onCharacterEntered(changed);
 
 				return true;
 			case Keyboard.KEY_HOME: // home
@@ -569,21 +687,58 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
-		selecting = mouseButton == 0;
+		pressed = mouseButton == 0;
+		selecting = mouseButton == 0 && isFocused();
 		l: if (selecting) {
 			if (textLength == 0) {
 				selectionStart = selectionEnd = caret = 0;
 				break l;
 			}
 			FontRenderer font = getFontRenderer();
-			int pos = mouseX - posX - 1;
-			for (int i = renderStartX, width = 0;;) {
-				int charW = font.getCharWidth(text[i]);
-				if ((width += charW) > pos || ++i >= textLength) {
-					selectionStart = selectionEnd = caret = i;
-					break;
+			int posX = mouseX - this.posX - 1, posY = mouseY - this.posY - 1;
+			s: if (!multiline) {
+				for (int i = renderStartX, width = 0;;) {
+					int charW = font.getCharWidth(text[i]);
+					if ((width += charW) > posX || ++i >= textLength) {
+						selectionStart = selectionEnd = caret = i;
+						break;
+					}
 				}
+			} else {
+				posX += renderStartX;
+				posY += renderStartY;
+				int maxX = 0;
+				boolean found = false;
+				for (int i = 0, width = 0, height = font.FONT_HEIGHT; i < textLength;) {
+					char c = text[i];
+					int charW = 0;
+					if (c == '\n') {
+						if (height > posY) {
+							maxX = i;
+							break;
+						}
+						found = false;
+						width = 0;
+						height += font.FONT_HEIGHT;
+					} else {
+						charW = font.getCharWidth(c);
+					}
+					if (!found) {
+						maxX = i;
+					}
+					if ((width += charW) > posX || ++i >= textLength) {
+						if (posY < height || i >= textLength) {
+							selectionStart = selectionEnd = caret = i;
+							break s;
+						} else {
+							++i;
+							found = true;
+						}
+					}
+				}
+				selectionStart = selectionEnd = caret = maxX;
 			}
+			findRenderStart();
 		}
 
 		setFocused(true);
@@ -605,14 +760,14 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void onMouseReleased(int mouseX, int mouseY) {
 
-		if (!selecting) {
+		if (!pressed) {
 			boolean focus = isFocused();
 			setFocused(false);
 			if (focus && !isFocused()) {
 				onFocusLost();
 			}
 		}
-		selecting = false;
+		pressed = selecting = false;
 	}
 
 	@Override
@@ -639,15 +794,29 @@ public class ElementTextField extends ElementBase {
 
 		FontRenderer font = getFontRenderer();
 		char[] text = this.text;
-		int startX = posX + 1, endX = sizeX - 1, startY = posY + 1, endY = startY + font.FONT_HEIGHT;
-		for (int i = renderStartX, width = 0, height = 0; i <= textLength; ++i) {
-			boolean end = i == textLength, draw = true;
+		int startX = posX + 1 - (multiline ? renderStartX : 0), endX = sizeX - 1;
+		int startY = posY + 1 - renderStartY, endY = startY + font.FONT_HEIGHT;
+		int drawY = renderStartY + Math.max(0, (sizeY - 2) / font.FONT_HEIGHT) * font.FONT_HEIGHT;
+		if (enableStencil) {
+			if (sizeY - (drawY - renderStartY) > 2)
+				drawY += font.FONT_HEIGHT;
+		}
+		int drawX = endX + (multiline ? renderStartX : 0);
+		for (int i = multiline ? 0 : renderStartX, width = 0, height = 0; i <= textLength; ++i) {
+			boolean end = i == textLength, draw = height >= renderStartY && width < drawX && height < drawY;
 			int charW = 2;
 			char c = 0;
 			if (!end) {
 				c = text[i];
-				charW = font.getCharWidth(c);
-				l: if (!enableStencil && (width + charW) > endX) {
+				if (draw)
+					charW = multiline && c == '\n' ? 2 : font.getCharWidth(c);
+				int tWidth = width + charW;
+				if (multiline) {
+					if (!enableStencil)
+						draw &= width >= renderStartX;
+					draw &= tWidth > renderStartX;
+				}
+				l: if (!enableStencil && tWidth > endX) {
 					draw = false;
 					if (multiline) {
 						if (c == '\n')
@@ -692,7 +861,7 @@ public class ElementTextField extends ElementBase {
 			if (c == '\n') {
 				height += font.FONT_HEIGHT;
 				charW = width = 0;
-				if ((!enableStencil ? font.FONT_HEIGHT : 0) + height > sizeY)
+				if (height > drawY)
 					break;
 			}
 
