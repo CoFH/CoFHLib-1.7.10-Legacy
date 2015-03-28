@@ -306,7 +306,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		if (size > old.length * 2 && old.length < Ints.MAX_POWER_OF_TWO) {
 			synchronized (hashTable) {
 				int newTableSize = old.length * 2, newMask = newTableSize - 1;
-				newTable = hashTable = new Entry[newTableSize];
+				newTable = new Entry[newTableSize];
 				mask = newMask;
 
 				for (int bucket = old.length; bucket-- > 0;) {
@@ -319,6 +319,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 						entry = nextEntry;
 					}
 				}
+				hashTable = newTable;
 			}
 		}
 	}
