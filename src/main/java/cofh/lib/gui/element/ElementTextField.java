@@ -645,7 +645,7 @@ public class ElementTextField extends ElementBase {
 					shiftCaret = true;
 				}
 
-				if (selectionStart == selectionEnd || !GuiScreen.isShiftKeyDown()) {
+				if (!GuiScreen.isShiftKeyDown()) {
 					selectionStart = selectionEnd = caret;
 				}
 
@@ -680,9 +680,14 @@ public class ElementTextField extends ElementBase {
 				if (!multiline) {
 					return false;
 				}
+
+				if (!GuiScreen.isShiftKeyDown()) {
+					selectionStart = selectionEnd = caret;
+				}
 				int dir = keyTyped == Keyboard.KEY_UP ? -1 : 1;
 				end = dir == -1 ? 0 : textLength;
 				int i = caret, pos = caretX;
+				old = i;
 				for (; i != end; i += dir) {
 					if ((dir == -1 ? i != caret : true) && text[i] == '\n') {
 						if (i != end) {
@@ -715,6 +720,25 @@ public class ElementTextField extends ElementBase {
 						break;
 					} else {
 						width += font.getCharWidth(c);
+					}
+				}
+
+				size = caret - old;
+
+				if (GuiScreen.isShiftKeyDown()) {
+					if (selectionStart == selectionEnd) {
+						selectionStart = selectionEnd = old;
+					}
+					if (caret == selectionStart + size) {
+						selectionStart = caret;
+					} else if (caret == selectionEnd + size) {
+						selectionEnd = caret;
+					}
+
+					if (selectionStart > selectionEnd) {
+						int t = selectionStart;
+						selectionStart = selectionEnd;
+						selectionEnd = t;
 					}
 				}
 
