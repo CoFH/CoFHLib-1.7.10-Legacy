@@ -25,11 +25,14 @@ public class ElementTextField extends ElementBase {
 	public int selectedTextColor = new GuiColor(224, 224, 224).getColor();
 	public int defaultCaretColor = new GuiColor(255, 255, 255).getColor();
 
+	@Deprecated // dummy variable to avoid crashes with older implementation
+	protected int renderStart;
+
 	protected char[] text;
 	protected int textLength;
 	protected int selectionStart, selectionEnd;
 	protected int renderStartX, renderStartY;
-	protected int caret, prevCaret;
+	protected int caret, prevCaret, caretX;
 
 	private boolean isFocused;
 	private boolean canFocusChange = true;
@@ -299,7 +302,8 @@ public class ElementTextField extends ElementBase {
 				return true;
 			}
 
-			if ((caretInsert && caret == text.length) || textLength == text.length) {
+			int len = getMaxLength();
+			if ((caretInsert && caret == len) || textLength == len) {
 				return false;
 			}
 
@@ -371,6 +375,7 @@ public class ElementTextField extends ElementBase {
 			}
 			widthLeft += font.getCharWidth(c);
 		}
+		caretX = widthLeft;
 
 		int pos = Math.max(0, (sizeY - 2) / font.FONT_HEIGHT) * font.FONT_HEIGHT;
 		if (caret > 0 && text[caret - 1] == '\n') {
@@ -668,6 +673,50 @@ public class ElementTextField extends ElementBase {
 					caret = caret - size;
 				}
 				findRenderStart();
+
+				return true;
+			case Keyboard.KEY_UP:
+			case Keyboard.KEY_DOWN:
+				if (!multiline) {
+					return false;
+				}
+				int dir = keyTyped == Keyboard.KEY_UP ? -1 : 1;
+				end = dir == -1 ? 0 : textLength;
+				int i = caret, pos = caretX;
+				for (; i != end; i += dir) {
+					if ((dir == -1 ? i != caret : true) && text[i] == '\n') {
+						if (i != end) {
+							 i += dir;
+						} else {
+							return true;
+						}
+						break;
+					}
+				}
+				l: if (dir == -1) {
+					for (; i > 0 && text[i] != '\n'; --i);
+					if (i == 0) {
+						if (text[0] == '\n') {
+							caret = 0;
+							findRenderStart();
+							caretX = pos;
+						}
+						break l;
+					}
+					++i;
+				}
+				FontRenderer font = getFontRenderer();
+				for (int width = 0; i <= textLength; ++i) {
+					char c = i < textLength ? text[i] : 0;
+					if (i == textLength || c == '\n' || width >= pos) {
+						caret = i;
+						findRenderStart();
+						caretX = pos;
+						break;
+					} else {
+						width += font.getCharWidth(c);
+					}
+				}
 
 				return true;
 			default:
