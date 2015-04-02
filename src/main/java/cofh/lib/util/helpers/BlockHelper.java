@@ -215,18 +215,28 @@ public final class BlockHelper {
 		return y;
 	}
 
-	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, double distance) {
+	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, double distance, boolean fluid) {
 
 		Vec3 posVec = Vec3.createVectorHelper(player.posX, player.posY, player.posZ);
 		Vec3 lookVec = player.getLook(1);
 		posVec.yCoord += player.getEyeHeight();
 		lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
-		return player.worldObj.rayTraceBlocks(posVec, lookVec);
+		return player.worldObj.rayTraceBlocks(posVec, lookVec, fluid);
+	}
+
+	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, double distance) {
+
+		return getCurrentMovingObjectPosition(player, distance, false);
+	}
+
+	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, boolean fluid) {
+
+		return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F, fluid);
 	}
 
 	public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player) {
 
-		return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F);
+		return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F, false);
 	}
 
 	public static int getCurrentMousedOverSide(EntityPlayer player) {

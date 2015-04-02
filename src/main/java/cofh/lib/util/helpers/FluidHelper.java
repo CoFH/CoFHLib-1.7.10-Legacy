@@ -47,18 +47,30 @@ public class FluidHelper {
 	}
 
 	/* IFluidContainer Interaction */
+	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
+
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+	}
+
+	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
+
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
+				: null;
+	}
+
 	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
 
 		ItemStack container = player.getCurrentEquippedItem();
 
-		return isFluidContainerItem(container) ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
+				: null;
 	}
 
 	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
 
 		ItemStack container = player.getCurrentEquippedItem();
 
-		return isFluidContainerItem(container) ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
 	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
@@ -136,7 +148,6 @@ public class FluidHelper {
 					}
 				} else {
 					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
-
 						player.openContainer.detectAndSendChanges();
 						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 					}
@@ -215,7 +226,7 @@ public class FluidHelper {
 		return fluid == null ? 0 : fluid.getLuminosity();
 	}
 
-	public static FluidStack getFluidFromWorld(World world, int x, int y, int z) {
+	public static FluidStack getFluidFromWorld(World world, int x, int y, int z, boolean doDrain) {
 
 		Block bId = world.getBlock(x, y, z);
 		int bMeta = world.getBlockMetadata(x, y, z);
@@ -234,9 +245,14 @@ public class FluidHelper {
 			}
 		} else if (bId instanceof IFluidBlock) {
 			IFluidBlock block = (IFluidBlock) bId;
-			return block.drain(world, x, y, z, true);
+			return block.drain(world, x, y, z, doDrain);
 		}
 		return null;
+	}
+
+	public static FluidStack getFluidFromWorld(World world, int x, int y, int z) {
+
+		return getFluidFromWorld(world, x, y, z, false);
 	}
 
 	public static Fluid lookupFluidForBlock(Block block) {

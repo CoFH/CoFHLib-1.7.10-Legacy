@@ -4,6 +4,7 @@ import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
+import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -901,6 +902,37 @@ public final class ItemHelper {
 		IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped.getItem();
 
 		return empowerableItem.setEmpoweredState(equipped, !empowerableItem.isEmpowered(equipped));
+	}
+
+	/* MULTIMODE ITEM HELPERS */
+	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
+
+		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		return equipped instanceof IMultiModeItem;
+	}
+
+	public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+
+		return multiModeItem.incrMode(equipped);
+	}
+
+	public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+
+		return multiModeItem.incrMode(equipped);
+	}
+
+	public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
+
+		ItemStack equipped = player.getCurrentEquippedItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+
+		return multiModeItem.setMode(equipped, mode);
 	}
 
 	/**
