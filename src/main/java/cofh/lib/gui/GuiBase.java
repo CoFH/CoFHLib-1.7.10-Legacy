@@ -369,7 +369,7 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		ElementBase element = getElementAtPosition(mouseX, mouseY);
 
-		if (element != null) {
+		if (element != null && element.isVisible()) {
 			element.addTooltip(tooltip);
 		}
 	}
