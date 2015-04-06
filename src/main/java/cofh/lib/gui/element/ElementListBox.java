@@ -116,8 +116,8 @@ public class ElementListBox extends ElementBase {
 		int heightDrawn = 0;
 		int nextElement = _firstIndexDisplayed;
 
-		glDisable(GL_LIGHTING);
 		glPushMatrix();
+		glDisable(GL_LIGHTING);
 
 		glEnable(GL_STENCIL_TEST);
 		glClear(GL_STENCIL_BUFFER_BIT);
@@ -135,9 +135,7 @@ public class ElementListBox extends ElementBase {
 			heightDrawn += _elements.get(nextElement).getHeight();
 			nextElement++;
 		}
-
 		glDisable(GL_STENCIL_TEST);
-
 		glPopMatrix();
 	}
 
@@ -190,11 +188,9 @@ public class ElementListBox extends ElementBase {
 			heightDisplayed += _elements.get(i).getHeight();
 			elementsDisplayed++;
 		}
-
 		if (_firstIndexDisplayed + elementsDisplayed < _elements.size()) {
 			_firstIndexDisplayed++;
 		}
-
 		onScrollV(_firstIndexDisplayed);
 	}
 
@@ -227,7 +223,6 @@ public class ElementListBox extends ElementBase {
 			position--;
 			heightUsed += _elements.get(position).getHeight();
 		}
-
 		return position + 1;
 	}
 
