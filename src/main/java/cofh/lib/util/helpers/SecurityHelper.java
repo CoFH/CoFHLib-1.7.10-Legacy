@@ -20,6 +20,11 @@ public class SecurityHelper {
 
 	}
 
+	public static boolean isDefaultUUID(UUID uuid) {
+
+		return uuid == null || (uuid.version() == 4 && uuid.variant() == 0);
+	}
+
 	/* NBT TAG HELPER */
 	public static NBTTagCompound setItemStackTagSecure(NBTTagCompound tag, ISecurable tile) {
 
