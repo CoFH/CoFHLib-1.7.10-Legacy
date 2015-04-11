@@ -30,16 +30,22 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 public class SecurityHelper {
 
 	private static boolean setup = false;
+
 	public static void setup() {
 
-		if (setup)
+		if (setup) {
 			return;
+		}
 		EnumConnectionState.PLAY.func_150755_b().put(-26, S__PacketSendUUID.class);
 		Map<Class<?>, EnumConnectionState> data;
 		data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
 		data.put(S__PacketSendUUID.class, EnumConnectionState.PLAY);
 		FMLCommonHandler.instance().bus().register(new S__PacketSendUUID.Login());
 		setup = true;
+	}
+
+	static {
+		setup();
 	}
 
 	private SecurityHelper() {
@@ -218,15 +224,16 @@ public class SecurityHelper {
 		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
 	}
 
-	private static class S__PacketSendUUID extends Packet {
+	public static class S__PacketSendUUID extends Packet {
 
 		public static class Login {
+
 			// this class is to avoid an illegal access error from FML's event handler
 
 			@SubscribeEvent
 			public void login(PlayerLoggedInEvent evt) {
 
-				((EntityPlayerMP)evt.player).playerNetServerHandler.sendPacket(new S__PacketSendUUID(evt.player));
+				((EntityPlayerMP) evt.player).playerNetServerHandler.sendPacket(new S__PacketSendUUID(evt.player));
 			}
 
 		}
@@ -268,10 +275,6 @@ public class SecurityHelper {
 			cachedId = id;
 		}
 
-	}
-
-	static {
-		setup();
 	}
 
 }
