@@ -4,17 +4,43 @@ import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
 
 public class SecurityHelper {
+
+	private static boolean setup = false;
+	public static void setup() {
+
+		if (setup)
+			return;
+		EnumConnectionState.PLAY.func_150755_b().put(-26, S__PacketSendUUID.class);
+		Map<Class<?>, EnumConnectionState> data;
+		data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
+		data.put(S__PacketSendUUID.class, EnumConnectionState.PLAY);
+		FMLCommonHandler.instance().bus().register(new S__PacketSendUUID.Login());
+		setup = true;
+	}
 
 	private SecurityHelper() {
 
@@ -23,6 +49,27 @@ public class SecurityHelper {
 	public static boolean isDefaultUUID(UUID uuid) {
 
 		return uuid == null || (uuid.version() == 4 && uuid.variant() == 0);
+	}
+
+	public static UUID getID(EntityPlayer player) {
+
+		if (MinecraftServer.getServer() != null) {
+			return player.getGameProfile().getId();
+		}
+		return getClientId(player);
+	}
+
+	private static UUID cachedId;
+
+	private static UUID getClientId(EntityPlayer player) {
+
+		if (player != Minecraft.getMinecraft().thePlayer) {
+			return player.getGameProfile().getId();
+		}
+		if (cachedId == null) {
+			cachedId = Minecraft.getMinecraft().thePlayer.getGameProfile().getId();
+		}
+		return cachedId;
 	}
 
 	/* NBT TAG HELPER */
@@ -169,6 +216,62 @@ public class SecurityHelper {
 			return "[None]";
 		}
 		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
+	}
+
+	private static class S__PacketSendUUID extends Packet {
+
+		public static class Login {
+			// this class is to avoid an illegal access error from FML's event handler
+
+			@SubscribeEvent
+			public void login(PlayerLoggedInEvent evt) {
+
+				((EntityPlayerMP)evt.player).playerNetServerHandler.sendPacket(new S__PacketSendUUID(evt.player));
+			}
+
+		}
+
+		private UUID id;
+
+		@SuppressWarnings("unused")
+		public S__PacketSendUUID() {
+
+		}
+
+		public S__PacketSendUUID(EntityPlayer player) {
+
+			id = player.getGameProfile().getId();
+		}
+
+		@Override
+		public void readPacketData(PacketBuffer buffer) throws IOException {
+
+			id = new UUID(buffer.readLong(), buffer.readLong());
+		}
+
+		@Override
+		public void writePacketData(PacketBuffer buffer) throws IOException {
+
+			buffer.writeLong(id.getMostSignificantBits());
+			buffer.writeLong(id.getLeastSignificantBits());
+		}
+
+		@Override
+		public boolean hasPriority() {
+
+			return true;
+		}
+
+		@Override
+		public void processPacket(INetHandler p_148833_1_) {
+
+			cachedId = id;
+		}
+
+	}
+
+	static {
+		setup();
 	}
 
 }
