@@ -36,11 +36,11 @@ public class SecurityHelper {
 		if (setup) {
 			return;
 		}
-		EnumConnectionState.PLAY.func_150755_b().put(-26, S__PacketSendUUID.class);
+		EnumConnectionState.PLAY.func_150755_b().put(-26, Login.S__PacketSendUUID.class);
 		Map<Class<?>, EnumConnectionState> data;
 		data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
-		data.put(S__PacketSendUUID.class, EnumConnectionState.PLAY);
-		FMLCommonHandler.instance().bus().register(new S__PacketSendUUID.Login());
+		data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
+		FMLCommonHandler.instance().bus().register(new Login.S__PacketSendUUID());
 		setup = true;
 	}
 
@@ -224,11 +224,10 @@ public class SecurityHelper {
 		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
 	}
 
-	public static class S__PacketSendUUID extends Packet {
+	// this class is to avoid an illegal access error from FML's event handler
+	private static class Login {
 
-		public static class Login {
-
-			// this class is to avoid an illegal access error from FML's event handler
+		public static class S__PacketSendUUID extends Packet {
 
 			@SubscribeEvent
 			public void login(PlayerLoggedInEvent evt) {
@@ -236,43 +235,42 @@ public class SecurityHelper {
 				((EntityPlayerMP) evt.player).playerNetServerHandler.sendPacket(new S__PacketSendUUID(evt.player));
 			}
 
-		}
+			private UUID id;
 
-		private UUID id;
+			public S__PacketSendUUID() {
 
-		@SuppressWarnings("unused")
-		public S__PacketSendUUID() {
+			}
 
-		}
+			public S__PacketSendUUID(EntityPlayer player) {
 
-		public S__PacketSendUUID(EntityPlayer player) {
+				id = player.getGameProfile().getId();
+			}
 
-			id = player.getGameProfile().getId();
-		}
+			@Override
+			public void readPacketData(PacketBuffer buffer) throws IOException {
 
-		@Override
-		public void readPacketData(PacketBuffer buffer) throws IOException {
+				id = new UUID(buffer.readLong(), buffer.readLong());
+			}
 
-			id = new UUID(buffer.readLong(), buffer.readLong());
-		}
+			@Override
+			public void writePacketData(PacketBuffer buffer) throws IOException {
 
-		@Override
-		public void writePacketData(PacketBuffer buffer) throws IOException {
+				buffer.writeLong(id.getMostSignificantBits());
+				buffer.writeLong(id.getLeastSignificantBits());
+			}
 
-			buffer.writeLong(id.getMostSignificantBits());
-			buffer.writeLong(id.getLeastSignificantBits());
-		}
+			@Override
+			public boolean hasPriority() {
 
-		@Override
-		public boolean hasPriority() {
+				return true;
+			}
 
-			return true;
-		}
+			@Override
+			public void processPacket(INetHandler p_148833_1_) {
 
-		@Override
-		public void processPacket(INetHandler p_148833_1_) {
+				cachedId = id;
+			}
 
-			cachedId = id;
 		}
 
 	}
