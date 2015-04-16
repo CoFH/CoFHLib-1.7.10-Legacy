@@ -18,6 +18,14 @@ public class SliderHorizontal extends ElementSlider {
 	}
 
 	@Override
+	public ElementSlider setLimits(int min, int max) {
+
+		int dist = max - min;
+		setSliderSize(dist <= 0 ? getWidth() : Math.max(getWidth() / ++dist, 9), getHeight());
+		return super.setLimits(min, max);
+	}
+
+	@Override
 	public int getSliderX() {
 
 		int dist = _valueMax - _valueMin;

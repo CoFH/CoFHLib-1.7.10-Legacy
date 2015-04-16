@@ -1,6 +1,6 @@
 package cofh.lib.gui.element;
 
-import static cofh.lib.gui.element.ElementButtonManaged.*;
+import static cofh.lib.gui.element.ElementButtonBase.*;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
@@ -53,6 +53,14 @@ public abstract class ElementSlider extends ElementBase {
 			_value = value;
 			onValueChanged(_value);
 		}
+		return this;
+	}
+
+	public ElementSlider setLimits(int min, int max) {
+
+		_valueMin = min;
+		_valueMax = max;
+		setValue(_value);
 		return this;
 	}
 

@@ -55,6 +55,11 @@ public class ElementListBox extends ElementBase {
 		_elements.remove(index);
 	}
 
+	public void removeAll() {
+
+		_elements.clear();
+	}
+
 	public int getInternalWidth() {
 
 		int width = 0;
@@ -101,6 +106,36 @@ public class ElementListBox extends ElementBase {
 	public final int getContentRight() {
 
 		return getContentLeft() + getContentWidth();
+	}
+
+	public ElementListBox setTextColor(Number textColor, Number selectedTextColor) {
+
+		if (textColor != null) {
+			this.textColor = textColor.intValue();
+		}
+		if (selectedTextColor != null) {
+			this.selectedTextColor = selectedTextColor.intValue();
+		}
+		return this;
+	}
+
+	public ElementListBox setSelectionColor(Number selectedLineColor) {
+
+		if (selectedLineColor != null) {
+			this.selectedLineColor = selectedLineColor.intValue();
+		}
+		return this;
+	}
+
+	public ElementListBox setBackgroundColor(Number backgroundColor, Number borderColor) {
+
+		if (backgroundColor != null) {
+			this.backgroundColor = backgroundColor.intValue();
+		}
+		if (borderColor != null) {
+			this.borderColor = borderColor.intValue();
+		}
+		return this;
 	}
 
 	@Override

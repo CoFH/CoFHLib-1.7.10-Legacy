@@ -6,7 +6,9 @@ import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
 
-public class ElementButton extends ElementBase {
+import org.lwjgl.opengl.GL11;
+
+public class ElementButton extends ElementButtonBase {
 
 	int sheetX;
 	int sheetY;
@@ -15,13 +17,32 @@ public class ElementButton extends ElementBase {
 	int disabledX = 0;
 	int disabledY = 0;
 	boolean tooltipLocalized = false;
+	boolean managedClicks;
 	String tooltip;
+
+	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, String texture) {
+
+		super(gui, posX, posY, sizeX, sizeY);
+		setGuiManagedClicks(false);
+		setTexture(texture, texW, texH);
+		this.sheetX = sheetX;
+		this.sheetY = sheetY;
+		this.hoverX = hoverX;
+		this.hoverY = hoverY;
+	}
+
+	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, String texture) {
+
+		this(gui, posX, posY, sizeX, sizeY, sheetX, sheetY, hoverX, hoverY, texture);
+		this.disabledX = disabledX;
+		this.disabledY = disabledY;
+	}
 
 	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int sizeX, int sizeY, String texture) {
 
-		super(gui, posX, posY);
+		super(gui, posX, posY, sizeX, sizeY);
+		setGuiManagedClicks(true);
 		setName(name);
-		setSize(sizeX, sizeY);
 		setTexture(texture, texW, texH);
 		this.sheetX = sheetX;
 		this.sheetY = sheetY;
@@ -32,16 +53,15 @@ public class ElementButton extends ElementBase {
 	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, int sizeX,
 			int sizeY, String texture) {
 
-		super(gui, posX, posY);
-		setName(name);
-		setSize(sizeX, sizeY);
-		setTexture(texture, texW, texH);
-		this.sheetX = sheetX;
-		this.sheetY = sheetY;
-		this.hoverX = hoverX;
-		this.hoverY = hoverY;
+		this(gui, posX, posY, name, sheetX, sheetY, hoverX, hoverY, sizeX, sizeY, texture);
 		this.disabledX = disabledX;
 		this.disabledY = disabledY;
+	}
+
+	public ElementButton setGuiManagedClicks(boolean managed) {
+
+		this.managedClicks = managed;
+		return this;
 	}
 
 	public ElementButton clearToolTip() {
@@ -65,6 +85,7 @@ public class ElementButton extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
+		GL11.glColor4f(1, 1, 1, 1);
 		RenderHelper.bindTexture(texture);
 		if (isEnabled()) {
 			if (intersectsWith(mouseX, mouseY)) {
@@ -96,8 +117,16 @@ public class ElementButton extends ElementBase {
 	}
 
 	@Override
+	public void onClick() {
+
+	}
+
+	@Override
 	public boolean onMousePressed(int x, int y, int mouseButton) {
 
+		if (!managedClicks) {
+			return super.onMousePressed(x, y, mouseButton);
+		}
 		if (isEnabled()) {
 			gui.handleElementButtonClick(getName(), mouseButton);
 			return true;
