@@ -283,12 +283,15 @@ public class ElementListBox extends ElementBase {
 
 	public IListBoxElement getSelectedElement() {
 
+		if (_selectedIndex == -1 || _selectedIndex == _elements.size()) {
+			return null;
+		}
 		return _elements.get(_selectedIndex);
 	}
 
 	public void setSelectedIndex(int index) {
 
-		if (index >= 0 && index < _elements.size() && index != _selectedIndex) {
+		if (index >= -1 && index != _selectedIndex && index < _elements.size()) {
 			_selectedIndex = index;
 			onSelectionChanged(_selectedIndex, getSelectedElement());
 		}
