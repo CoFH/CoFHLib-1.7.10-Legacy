@@ -348,6 +348,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 		elementData = new Object[10];
 		hashTable = new Entry[8];
 		mask = 7;
+		size = 0;
 
 		// Read in size, and any hidden stuff
 		s.defaultReadObject();
