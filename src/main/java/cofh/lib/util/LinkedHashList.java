@@ -77,7 +77,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		return size;
 	}
 
-	protected boolean add(E obj, int hash) {
+	protected synchronized boolean add(E obj, int hash) {
 
 		if (seek(obj, hash) != null) {
 			return false;
@@ -125,7 +125,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 	}
 
 	@Override
-	public void add(int index, E obj) {
+	public synchronized void add(int index, E obj) {
 
 		checkPositionIndex(index);
 
@@ -206,16 +206,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 		Entry e = tail;
 		if (e != null) {
-			++modCount;
-			delete(e);
-			tail = e.prev;
-			e.prev = null;
-			if (tail != null) {
-				tail.next = null;
-			} else {
-				head = null;
-			}
-			return (E) e.key;
+			return unlink(e);
 		}
 		return null;
 	}
@@ -232,40 +223,14 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 	public boolean unshift(E obj) {
 
-		int hash = hash(obj);
-		if (seek(obj, hash) != null) {
-			return false;
-		}
-
-		Entry e;
-		++modCount;
-		insert(e = new Entry(obj, hash));
-		rehashIfNecessary();
-		e.next = head;
-		e.prev = null;
-		if (head != null) {
-			head.prev = e;
-		} else {
-			tail = e;
-		}
-		head = e;
-		return true;
+		return linkBefore(obj, head);
 	}
 
 	public E shift() {
 
 		Entry e = head;
 		if (e != null) {
-			++modCount;
-			delete(e);
-			head = e.next;
-			e.next = null;
-			if (head != null) {
-				head.prev = null;
-			} else {
-				tail = null;
-			}
-			return (E) e.key;
+			return unlink(e);
 		}
 		return null;
 	}
@@ -294,9 +259,8 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		checkElementIndex(index);
 
 		Entry oldValue = index(index);
-		unlink(oldValue);
 
-		return (E) oldValue.key;
+		return unlink(oldValue);
 	}
 
 	protected Entry index(int index) {
@@ -329,13 +293,15 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 
 	protected void insert(Entry entry) {
 
-		int bucket = entry.hash & mask;
-		entry.nextInBucket = hashTable[bucket];
-		hashTable[bucket] = entry;
+		synchronized (hashTable) {
+			int bucket = entry.hash & mask;
+			entry.nextInBucket = hashTable[bucket];
+			hashTable[bucket] = entry;
+		}
 		++size;
 	}
 
-	protected boolean linkBefore(E obj, Entry succ) {
+	protected synchronized boolean linkBefore(E obj, Entry succ) {
 
 		int hash = hash(obj);
 		if (seek(obj, hash) != null) {
@@ -378,8 +344,9 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		--size;
 	}
 
-	protected E unlink(Entry x) {
+	protected synchronized E unlink(Entry x) {
 
+		modCount++;
 		final E element = (E) x.key;
 		final Entry next = x.next;
 		final Entry prev = x.prev;
@@ -399,7 +366,6 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		}
 
 		delete(x);
-		modCount++;
 		return element;
 	}
 

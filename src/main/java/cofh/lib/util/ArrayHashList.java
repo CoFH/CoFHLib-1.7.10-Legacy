@@ -30,13 +30,6 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 		}
 	}
 
-	protected static int hash(Object n) {
-
-		int h = n == null ? 0 : n.hashCode();
-		h ^= (h >>> 20) ^ (h >>> 12);
-		return h ^ (h >>> 7) ^ (h >>> 4);
-	}
-
 	private static int roundUpToPowerOf2(int number) {
 
 		return number >= Ints.MAX_POWER_OF_TWO ? Ints.MAX_POWER_OF_TWO : (number > 2) ? Integer.highestOneBit((number - 1) << 1) : 2;
@@ -71,6 +64,13 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 		hashTable = new Entry[size];
 		mask = size - 1;
 		addAll(col);
+	}
+
+	protected int hash(Object n) {
+
+		int h = n == null ? 0 : n.hashCode();
+		h ^= (h >>> 20) ^ (h >>> 12);
+		return h ^ (h >>> 7) ^ (h >>> 4);
 	}
 
 	@Override
