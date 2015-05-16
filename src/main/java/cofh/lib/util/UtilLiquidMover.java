@@ -21,7 +21,7 @@ public class UtilLiquidMover {
 
 	/**
 	 * Attempts to fill tank with the player's current item.
-	 * 
+	 *
 	 * @param itcb
 	 *            the tank the liquid is going into
 	 * @param player
@@ -87,7 +87,7 @@ public class UtilLiquidMover {
 
 	/**
 	 * Attempts to drain tank into the player's current item.
-	 * 
+	 *
 	 * @param itcb
 	 *            the tank the liquid is coming from
 	 * @param player
@@ -113,7 +113,7 @@ public class UtilLiquidMover {
 					filledBucket.stackSize = 1;
 					if (fluidContainer.fill(filledBucket, tankLiquid, false) > 0) {
 						int amount = fluidContainer.fill(filledBucket, tankLiquid, true);
-						bucketLiquid = new FluidStack(tankLiquid.fluidID, amount);
+						bucketLiquid = new FluidStack(tankLiquid, amount);
 						FluidStack l = itcb.drain(ForgeDirection.UNKNOWN, bucketLiquid, false);
 						if (l == null || l.amount < amount) {
 							filledBucket = null;
