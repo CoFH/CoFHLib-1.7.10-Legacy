@@ -248,7 +248,7 @@ public class InventoryHelper {
 
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 
-		if (stack.stackSize + existingStack.stackSize > stackLimit) {
+		if (stack.stackSize + existingStack.stackSize > stackLimit && stackLimit > existingStack.stackSize) {
 			int stackDiff = stackLimit - existingStack.stackSize;
 			existingStack.stackSize = stackLimit;
 			stack.stackSize -= stackDiff;
@@ -285,7 +285,7 @@ public class InventoryHelper {
 
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 
-		if (stack.stackSize + existingStack.stackSize > stackLimit) {
+		if (stack.stackSize + existingStack.stackSize > stackLimit && stackLimit > existingStack.stackSize) {
 			stack.stackSize -= stackLimit - existingStack.stackSize;
 			return stack;
 		}
