@@ -20,6 +20,7 @@ public class DamageHelper {
 	/* DAMAGE SOURCES */
 	public static final DamageSourcePyrotheum pyrotheum = new DamageSourcePyrotheum();
 	public static final DamageSourceCryotheum cryotheum = new DamageSourceCryotheum();
+	public static final DamageSourcePetrotheum petrotheum = new DamageSourcePetrotheum();
 	public static final DamageSourceMana mana = new DamageSourceMana();
 	public static final DamageSourceFlux flux = new DamageSourceFlux();
 
@@ -39,6 +40,15 @@ public class DamageHelper {
 		protected DamageSourceCryotheum() {
 
 			super("cryotheum");
+			this.setDamageBypassesArmor();
+		}
+	}
+
+	public static class DamageSourcePetrotheum extends DamageSource {
+
+		protected DamageSourcePetrotheum() {
+
+			super("petrotheum");
 			this.setDamageBypassesArmor();
 		}
 	}
