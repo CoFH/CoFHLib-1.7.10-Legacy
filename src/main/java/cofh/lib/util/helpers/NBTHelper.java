@@ -150,7 +150,7 @@ public final class NBTHelper {
 		getTagCompound(stack).setTag(key, value);
 	}
 	
-	public static NBTTagCompound getCompundTag(ItemStack stack, String key) {
+	public static NBTTagCompound getCompoundTag(ItemStack stack, String key) {
 		if (!keyExists(stack, key)) {
 			return null;
 		}
