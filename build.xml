@@ -18,8 +18,8 @@
 	<property name="mc.version"  value="1.7.10"/>
 	<property name="forge.major" value="10"/>
 	<property name="forge.minor" value="13"/>
-	<property name="forge.patch" value="1"/>
-	<property name="forge.build" value="1217"/>
+	<property name="forge.patch" value="4"/>
+	<property name="forge.build" value="1448"/>
 	
 	<!-- Packaging -->
 	<property name="dist.dir" value="${build.dir}/dist"/>
@@ -27,7 +27,7 @@
 	<property name="apiclasses.dir" value="${build.dir}/api-packaging"/>
 	
 	<!-- Forge paths -->
-	<property name="forge.version" value="${mc.version}-${forge.major}.${forge.minor}.${forge.patch}.${forge.build}"/>
+	<property name="forge.version" value="${mc.version}-${forge.major}.${forge.minor}.${forge.patch}.${forge.build}-${mc.version}"/>
 	<property name="forge.dir" value="${build.dir}/forge"/>
 	<property name="forgebuild.dir" value="${forge.dir}/build"/>
 	<property name="compile.dir" value="${forgebuild.dir}/tmp/compile"/>
