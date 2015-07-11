@@ -360,6 +360,20 @@ public abstract class TabBase extends ElementBase {
 	}
 
 	@Override
+	public void addTooltip(List<String> list) {
+		for(int i = 0; i < this.elements.size(); i++) {
+			ElementBase c = elements.get(i);
+
+			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
+				continue;
+			}
+
+			c.addTooltip(list);
+
+		}
+	}
+
+	@Override
 	public boolean onKeyTyped(char characterTyped, int keyPressed) {
 
 		for (int i = elements.size(); i-- > 0;) {
