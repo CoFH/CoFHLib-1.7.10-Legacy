@@ -54,7 +54,7 @@ public class OreDictionaryProxy {
 
 	public boolean oreNameExists(String oreName) {
 
-		return !OreDictionary.getOres(oreName).isEmpty();
+		return OreDictionary.doesOreNameExist(oreName);
 	}
 
 }
