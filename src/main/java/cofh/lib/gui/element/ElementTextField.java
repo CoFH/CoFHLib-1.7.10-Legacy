@@ -17,15 +17,16 @@ import org.lwjgl.opengl.GL11;
 
 public class ElementTextField extends ElementBase {
 
-	public int borderColor       = new GuiColor(55, 55, 55).getColor();
-	public int backgroundColor   = new GuiColor(139, 139, 139).getColor();
-	public int disabledColor     = new GuiColor(198, 198, 198).getColor();
+	public int borderColor = new GuiColor(55, 55, 55).getColor();
+	public int backgroundColor = new GuiColor(139, 139, 139).getColor();
+	public int disabledColor = new GuiColor(198, 198, 198).getColor();
 	public int selectedLineColor = new GuiColor(160, 160, 224).getColor();
-	public int textColor         = new GuiColor(224, 224, 224).getColor();
+	public int textColor = new GuiColor(224, 224, 224).getColor();
 	public int selectedTextColor = new GuiColor(224, 224, 224).getColor();
 	public int defaultCaretColor = new GuiColor(255, 255, 255).getColor();
 
-	@Deprecated // dummy variable to avoid crashes with older implementation
+	@Deprecated
+	// dummy variable to avoid crashes with older implementation
 	protected int renderStart;
 
 	protected char[] text;
@@ -362,7 +363,7 @@ public class ElementTextField extends ElementBase {
 		FontRenderer font = getFontRenderer();
 		int widthLeft = 0;
 		int breaksAbove = 0;
-		for (int i = caret; i --> 0; ) {
+		for (int i = caret; i-- > 0;) {
 			char c = text[i];
 			if (c == '\n') {
 				for (; i > 0; --i) {
@@ -396,8 +397,9 @@ public class ElementTextField extends ElementBase {
 		int dir = prevCaret > caret ? 1 : -1;
 		for (int i = 0; (widthLeft - renderStartX) < 0; i += dir) {
 			char c = text[caret + i];
-			if (c == '\n')
+			if (c == '\n') {
 				break;
+			}
 			renderStartX -= font.getCharWidth(c);
 		}
 		renderStartX &= ~renderStartX >> 31;
@@ -556,7 +558,8 @@ public class ElementTextField extends ElementBase {
 				// continue.. (shift+delete = backspace)
 			case Keyboard.KEY_BACK: // backspace
 				changed = false;
-				boolean calledEntered = true, onBreak = false;
+				boolean calledEntered = true,
+				onBreak = false;
 				if (selectionStart != selectionEnd) {
 					clearSelection();
 				} else if (GuiScreen.isCtrlKeyDown()) {
@@ -577,13 +580,16 @@ public class ElementTextField extends ElementBase {
 				}
 				int old = caret;
 				if (!onBreak) {
-					for (int i = 3; i --> 0 && caret > 1 && text[caret - 1] != '\n'; --caret);
+					for (int i = 3; i-- > 0 && caret > 1 && text[caret - 1] != '\n'; --caret) {
+						;
+					}
 				}
 				findRenderStart();
 				caret = old;
 
-				if (!calledEntered)
+				if (!calledEntered) {
 					onCharacterEntered(changed);
+				}
 
 				return true;
 			case Keyboard.KEY_HOME: // home
@@ -686,12 +692,13 @@ public class ElementTextField extends ElementBase {
 				}
 				int dir = keyTyped == Keyboard.KEY_UP ? -1 : 1;
 				end = dir == -1 ? 0 : textLength;
-				int i = caret, pos = caretX;
+				int i = caret,
+				pos = caretX;
 				old = i;
 				for (; i != end; i += dir) {
 					if ((dir == -1 ? i != caret : true) && text[i] == '\n') {
 						if (i != end) {
-							 i += dir;
+							i += dir;
 						} else {
 							return true;
 						}
@@ -699,7 +706,9 @@ public class ElementTextField extends ElementBase {
 					}
 				}
 				l: if (dir == -1) {
-					for (; i > 0 && text[i] != '\n'; --i);
+					for (; i > 0 && text[i] != '\n'; --i) {
+						;
+					}
 					if (i == 0) {
 						if (text[0] == '\n') {
 							caret = 0;
@@ -871,8 +880,9 @@ public class ElementTextField extends ElementBase {
 		int startY = posY + 1 - renderStartY, endY = startY + font.FONT_HEIGHT;
 		int drawY = renderStartY + Math.max(0, (sizeY - 2) / font.FONT_HEIGHT) * font.FONT_HEIGHT;
 		if (enableStencil) {
-			if (sizeY - (drawY - renderStartY) > 2)
+			if (sizeY - (drawY - renderStartY) > 2) {
 				drawY += font.FONT_HEIGHT;
+			}
 		}
 		int drawX = endX + (multiline ? renderStartX : 0);
 		for (int i = multiline ? 0 : renderStartX, width = 0, height = 0; i <= textLength; ++i) {
@@ -881,19 +891,22 @@ public class ElementTextField extends ElementBase {
 			char c = 0;
 			if (!end) {
 				c = text[i];
-				if (draw)
+				if (draw) {
 					charW = multiline && c == '\n' ? 2 : font.getCharWidth(c);
+				}
 				int tWidth = width + charW;
 				if (multiline) {
-					if (!enableStencil)
+					if (!enableStencil) {
 						draw &= width >= renderStartX;
+					}
 					draw &= tWidth > renderStartX;
 				}
 				l: if (!enableStencil && tWidth > endX) {
 					draw = false;
 					if (multiline) {
-						if (c == '\n')
+						if (c == '\n') {
 							break l;
+						}
 						continue;
 					}
 					break;
@@ -906,8 +919,8 @@ public class ElementTextField extends ElementBase {
 				if (caretInsert) {
 					caretEnd = width + charW;
 				}
-				drawModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height,
-					(0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
+				drawModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, (0xFF000000 & defaultCaretColor)
+						| (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (draw && !end) {
@@ -915,8 +928,9 @@ public class ElementTextField extends ElementBase {
 				if (selected) {
 					drawModalRect(startX + width, startY + height, startX + width + charW, endY + height, selectedLineColor);
 				}
-				if (c != '\n')
+				if (c != '\n') {
 					font.drawString(String.valueOf(c), startX + width, startY + height, selected ? selectedTextColor : textColor);
+				}
 			}
 
 			if (drawCaret) {
@@ -934,8 +948,9 @@ public class ElementTextField extends ElementBase {
 			if (c == '\n') {
 				height += font.FONT_HEIGHT;
 				charW = width = 0;
-				if (height > drawY)
+				if (height > drawY) {
 					break;
+				}
 			}
 
 			width += charW;

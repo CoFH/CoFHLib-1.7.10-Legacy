@@ -11,21 +11,21 @@ import net.minecraft.nbt.NBTTagList;
 
 /**
  * Contains helper functions to assist with working with fireworks.
- * 
+ *
  * @author Tonius
  */
 public final class FireworksHelper {
 
 	/**
 	 * Represents a single explosion that a firework rocket can contain.
-	 * 
+	 *
 	 * @author Tonius
 	 */
 	public static final class Explosion {
 
 		/**
 		 * The different shapes that an explosion can have.
-		 * 
+		 *
 		 * @author Tonius
 		 */
 		public static enum Type {
@@ -43,14 +43,12 @@ public final class FireworksHelper {
 
 		/**
 		 * Generates a randomized Explosion instance.
-		 * 
+		 *
 		 * @param primaryColors
-		 *            The amount of different primary colors that the Explosion
-		 *            will have.
+		 *            The amount of different primary colors that the Explosion will have.
 		 * @param fadeColors
-		 *            The amount of different fade colors that the Explosion
-		 *            will have.
-		 * 
+		 *            The amount of different fade colors that the Explosion will have.
+		 *
 		 * @return A random Explosion instance
 		 */
 		public static Explosion getRandom(int primaryColors, int fadeColors) {
@@ -75,14 +73,12 @@ public final class FireworksHelper {
 			e.setType(MathHelper.RANDOM.nextInt(5));
 
 			for (int i = 0; i < primaryColors; i++) {
-				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360,
-					MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
 				e.addPrimaryColor(color.getRed(), color.getGreen(), color.getBlue());
 			}
 
 			for (int i = 0; i < fadeColors; i++) {
-				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360,
-					MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
 				e.addFadeColor(color.getRed(), color.getGreen(), color.getBlue());
 			}
 
@@ -96,9 +92,8 @@ public final class FireworksHelper {
 		private Type type = Type.BALL;
 
 		/**
-		 * Sets whether the explosion should have the 'twinkle' effect (made
-		 * with Glowstone Dust).
-		 * 
+		 * Sets whether the explosion should have the 'twinkle' effect (made with Glowstone Dust).
+		 *
 		 * @param twinkle
 		 *            Whether to have the 'twinkle' effect.
 		 * @return The current Explosion instance.
@@ -110,9 +105,8 @@ public final class FireworksHelper {
 		}
 
 		/**
-		 * Sets whether the explosion should have the 'trail' effect (made with
-		 * Diamond).
-		 * 
+		 * Sets whether the explosion should have the 'trail' effect (made with Diamond).
+		 *
 		 * @param trail
 		 *            Whether to have the 'trail' effect.
 		 * @return The current Explosion instance.
@@ -125,7 +119,7 @@ public final class FireworksHelper {
 
 		/**
 		 * Sets the explosion type using the {@link Type} enum.
-		 * 
+		 *
 		 * @param type
 		 *            The explosion type to set.
 		 * @return The current Explosion instance.
@@ -138,7 +132,7 @@ public final class FireworksHelper {
 
 		/**
 		 * Sets the explosion type using an integer.
-		 * 
+		 *
 		 * @param type
 		 *            The explosion type as an integer.
 		 * @return The current Explosion instance.
@@ -151,7 +145,7 @@ public final class FireworksHelper {
 
 		/**
 		 * Adds a primary color to the explosion.
-		 * 
+		 *
 		 * @param red
 		 *            The RGB red value of the color to add (0 - 255).
 		 * @param green
@@ -168,7 +162,7 @@ public final class FireworksHelper {
 
 		/**
 		 * Adds a fade color to the explosion.
-		 * 
+		 *
 		 * @param red
 		 *            The RGB red value of the color to add (0 - 255).
 		 * @param green
@@ -184,9 +178,8 @@ public final class FireworksHelper {
 		}
 
 		/**
-		 * Converts the Explosion to an {@link NBTTagCompound} for use in
-		 * creating fireworks {@link ItemStack}s.
-		 * 
+		 * Converts the Explosion to an {@link NBTTagCompound} for use in creating fireworks {@link ItemStack}s.
+		 *
 		 * @return An NBTTagCompound representing the Explosion.
 		 */
 		public NBTTagCompound getTagCompound() {
@@ -215,7 +208,7 @@ public final class FireworksHelper {
 
 		/**
 		 * Converts the Explosion to a Firework Star {@link ItemStack}.
-		 * 
+		 *
 		 * @return A Firework Star ItemStack representing the Explosion.
 		 */
 		public ItemStack getFireworkStarStack() {
@@ -232,12 +225,10 @@ public final class FireworksHelper {
 	}
 
 	/**
-	 * Creates a fireworks {@link ItemStack}, with the resulting fireworks
-	 * having a certain flight duration and a variety of {@link Explosion}s.
-	 * 
+	 * Creates a fireworks {@link ItemStack}, with the resulting fireworks having a certain flight duration and a variety of {@link Explosion}s.
+	 *
 	 * @param flightDuration
-	 *            The flight duration of the fireworks. Possible range is
-	 *            between 0 (inclusive) and 3 (inclusive).
+	 *            The flight duration of the fireworks. Possible range is between 0 (inclusive) and 3 (inclusive).
 	 * @param explosions
 	 *            The explosions that will occur when the fireworks detonate.
 	 * @return A fireworks ItemStack.
@@ -268,19 +259,15 @@ public final class FireworksHelper {
 
 	/**
 	 * Creates a randomized fireworks {@link ItemStack}.
-	 * 
+	 *
 	 * @param flightDuration
-	 *            The flight duration of the fireworks. Possible range is
-	 *            between 0 (inclusive) and 3 (inclusive).
+	 *            The flight duration of the fireworks. Possible range is between 0 (inclusive) and 3 (inclusive).
 	 * @param explosions
-	 *            The amount of {@link Explosion}s that will occur when the
-	 *            fireworks detonate.
+	 *            The amount of {@link Explosion}s that will occur when the fireworks detonate.
 	 * @param primaryColors
-	 *            The amount of different primary colors that each Explosion
-	 *            will have.
+	 *            The amount of different primary colors that each Explosion will have.
 	 * @param fadeColors
-	 *            The amount of different fade colors that each Explosion will
-	 *            have.
+	 *            The amount of different fade colors that each Explosion will have.
 	 * @return A randomized fireworks ItemStack.
 	 */
 	public static ItemStack getRandomFireworks(int flightDuration, int explosions, int primaryColors, int fadeColors) {

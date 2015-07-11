@@ -7,6 +7,7 @@ import cofh.lib.render.RenderHelper;
 import cofh.lib.util.Rectangle4i;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
 
@@ -361,15 +362,14 @@ public abstract class TabBase extends ElementBase {
 
 	@Override
 	public void addTooltip(List<String> list) {
-		for(int i = 0; i < this.elements.size(); i++) {
+
+		for (int i = 0; i < this.elements.size(); i++) {
 			ElementBase c = elements.get(i);
 
-			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
+			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(gui.getMouseX(), gui.getMouseY())) {
 				continue;
 			}
-
 			c.addTooltip(list);
-
 		}
 	}
 

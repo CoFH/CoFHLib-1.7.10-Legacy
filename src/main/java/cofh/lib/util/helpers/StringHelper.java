@@ -64,8 +64,8 @@ public final class StringHelper {
 
 	public static String getKeyName(int key) {
 
-        return key < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", key + 101): Keyboard.getKeyName(key);
-    }
+		return key < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);
+	}
 
 	public static String getFluidName(FluidStack stack) {
 
