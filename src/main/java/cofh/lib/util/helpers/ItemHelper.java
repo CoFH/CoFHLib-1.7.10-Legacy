@@ -470,7 +470,7 @@ public final class ItemHelper {
 		if (gear == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron"));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron"));
 		return true;
 	}
 
@@ -479,7 +479,7 @@ public final class ItemHelper {
 		if (gear == null || !oreNameExists(ingot) || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -488,7 +488,7 @@ public final class ItemHelper {
 		if (gear == null | center == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -497,7 +497,7 @@ public final class ItemHelper {
 		if (gear == null | ingot == null || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -516,7 +516,7 @@ public final class ItemHelper {
 		if (gear == null || !oreNameExists(ingot) || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -525,7 +525,7 @@ public final class ItemHelper {
 		if (gear == null | center == null || !oreNameExists(ingot)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -534,7 +534,7 @@ public final class ItemHelper {
 		if (gear == null | ingot == null || !oreNameExists(center)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
+		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
 		return true;
 	}
 
@@ -564,7 +564,7 @@ public final class ItemHelper {
 		if (out == null | eight == null || !oreNameExists(one)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
 		return true;
 	}
 
@@ -573,7 +573,7 @@ public final class ItemHelper {
 		if (out == null | one == null || !oreNameExists(eight)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
 		return true;
 	}
 
@@ -582,7 +582,7 @@ public final class ItemHelper {
 		if (out == null || !oreNameExists(one) || !oreNameExists(eight)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
 		return true;
 	}
 
@@ -603,7 +603,7 @@ public final class ItemHelper {
 		if (out == null || !oreNameExists(in)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(out, "XXX", "XXX", 'X', in));
+		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XXX", 'X', in));
 		return true;
 	}
 
@@ -615,7 +615,7 @@ public final class ItemHelper {
 		if (nine == null || !oreNameExists(one)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapelessOreRecipe(cloneStack(nine, 9), one));
+		GameRegistry.addRecipe(ShapelessRecipe(cloneStack(nine, 9), one));
 		return true;
 	}
 
@@ -633,7 +633,7 @@ public final class ItemHelper {
 		if (four == null || !oreNameExists(one)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapelessOreRecipe(cloneStack(four, 4), one));
+		GameRegistry.addRecipe(ShapelessRecipe(cloneStack(four, 4), one));
 		return true;
 	}
 
@@ -654,7 +654,7 @@ public final class ItemHelper {
 		if (one == null || !oreNameExists(nine)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapelessOreRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine));
+		GameRegistry.addRecipe(ShapelessRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine));
 		return true;
 	}
 
@@ -673,7 +673,7 @@ public final class ItemHelper {
 		if (one == null || !oreNameExists(four)) {
 			return false;
 		}
-		GameRegistry.addRecipe(new ShapedOreRecipe(one, "XX", "XX", 'X', four));
+		GameRegistry.addRecipe(ShapedRecipe(one, "XX", "XX", 'X', four));
 		return true;
 	}
 
