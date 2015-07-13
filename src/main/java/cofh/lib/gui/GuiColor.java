@@ -79,38 +79,41 @@ public class GuiColor extends Number {
 
 		return getIntA() / 255f;
 	}
-	
-	/////////////////////////////////////////////////////////// Math Methods ////////////////////////////////////////////
-	public GuiColor multiply(float amount)
-	{
-		return multiply(amount,amount,amount,amount);
+
+	// ///////////////////////////////////////////////////////// Math Methods ////////////////////////////////////////////
+	public GuiColor multiply(float amount) {
+
+		return multiply(amount, amount, amount, amount);
 	}
-	
-	public GuiColor multiply(float rgb,float a)
-	{
-		return multiply(rgb,rgb,rgb,a);
+
+	public GuiColor multiply(float rgb, float a) {
+
+		return multiply(rgb, rgb, rgb, a);
 	}
-	
-	public GuiColor multiply(float r,float g,float b)
-	{
-		return multiply(r,g,b,1);
+
+	public GuiColor multiply(float r, float g, float b) {
+
+		return multiply(r, g, b, 1);
 	}
-	
-	public GuiColor multiply(float r,float g,float b,float a)
-	{
-	        return new GuiColor(Math.min((int) (getIntR() * r), 255),Math.min((int)(getIntG() * g),255),Math.min((int)(getIntB() * b),255));
+
+	public GuiColor multiply(float r, float g, float b, float a) {
+
+		return new GuiColor(Math.min((int) (getIntR() * r), 255), Math.min((int) (getIntG() * g), 255), Math.min((int) (getIntB() * b), 255));
 	}
-	
-	public GuiColor add(int amount)
-	{
-	        return new GuiColor(Math.max(Math.min(getIntR() + amount,255),0),Math.max(Math.min(getIntG() + amount,255),0),Math.max(Math.min(getIntB() + amount,255),0),Math.max(Math.min(getIntA() + amount,255),0));
+
+	public GuiColor add(int amount) {
+
+		return new GuiColor(Math.max(Math.min(getIntR() + amount, 255), 0), Math.max(Math.min(getIntG() + amount, 255), 0), Math.max(
+				Math.min(getIntB() + amount, 255), 0), Math.max(Math.min(getIntA() + amount, 255), 0));
 	}
-	
-	public GuiColor add(GuiColor color)
-	{
-	     	return new GuiColor(Math.max(Math.min(getIntR() + color.getIntR(),255),0),Math.max(Math.min(getIntG() + color.getIntG(),255),0),Math.max(Math.min(getIntB() + color.getIntB(),255),0), Math.max(Math.min(getIntA() + color.getIntA(), 255), 0));
+
+	public GuiColor add(GuiColor color) {
+
+		return new GuiColor(Math.max(Math.min(getIntR() + color.getIntR(), 255), 0), Math.max(Math.min(getIntG() + color.getIntG(), 255), 0), Math.max(
+				Math.min(getIntB() + color.getIntB(), 255), 0), Math.max(Math.min(getIntA() + color.getIntA(), 255), 0));
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// ///////////////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public int intValue() {
