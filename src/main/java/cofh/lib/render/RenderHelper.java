@@ -217,4 +217,10 @@ public final class RenderHelper {
 		net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
 	}
 
+
+    public static void enableStandardItemLighting() {
+
+        net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+    }
+
 }
