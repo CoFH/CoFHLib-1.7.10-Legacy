@@ -33,6 +33,11 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 		Collections.sort(list);
 	}
 
+	public String getChannelName() {
+
+		return hostedChannel;
+	}
+
 	@Override
 	public List<Frequency> getFrequencyList(String _) {
 
