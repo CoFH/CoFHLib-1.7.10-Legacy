@@ -76,6 +76,13 @@ public final class EnderRegistry {
 		}
 	}
 
+	public void save() {
+
+		if (linkConf.hasChanged()) {
+			linkConf.save();
+		}
+	}
+
 	private <T> T getElement(HashMap<String, TIntObjectHashMap<T>> map, IEnderAttuned theAttuned) {
 
 		TIntObjectHashMap<T> list = map.get(theAttuned.getChannelString());

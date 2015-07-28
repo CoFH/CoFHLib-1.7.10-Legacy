@@ -44,6 +44,13 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 		}
 	}
 
+	public void save() {
+
+		if (linkConf.hasChanged()) {
+			linkConf.save();
+		}
+	}
+
 	/**
 	 * Returns nulls or a ByteBuf of the frequency<->name mappings for <code>channel</code><br>
 	 * <b>Format:</b><ul>
