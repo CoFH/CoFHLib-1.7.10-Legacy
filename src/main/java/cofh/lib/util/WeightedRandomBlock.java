@@ -47,7 +47,7 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 	public static boolean isBlockContained(Block block, int metadata, Collection<WeightedRandomBlock> list) {
 
 		for (WeightedRandomBlock rb : list) {
-			if (block.equals(rb) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
+			if (block.equals(rb.block) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
 				return true;
 			}
 		}
@@ -57,7 +57,7 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 	public static boolean isBlockContained(Block block, int metadata, WeightedRandomBlock[] list) {
 
 		for (WeightedRandomBlock rb : list) {
-			if (block.equals(rb) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
+			if (block.equals(rb.block) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
 				return true;
 			}
 		}
