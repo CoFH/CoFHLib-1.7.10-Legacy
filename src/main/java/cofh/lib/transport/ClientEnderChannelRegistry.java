@@ -14,6 +14,7 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 
 	private TIntObjectHashMap<String> channel = new TIntObjectHashMap<String>();
 	private ArrayList<Frequency> list = new ArrayList<Frequency>();
+	protected String hostedChannel = "";
 
 	public ClientEnderChannelRegistry() {
 
@@ -22,6 +23,7 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 	public void readFrequencyData(ByteBuf data) {
 
 		int size = ByteBufHelper.readVarInt(data);
+		hostedChannel = ByteBufHelper.readString(data);
 		for (int i = 0; i < size; ++i) {
 			int freq = ByteBufHelper.readVarInt(data);
 			String name = ByteBufHelper.readString(data);

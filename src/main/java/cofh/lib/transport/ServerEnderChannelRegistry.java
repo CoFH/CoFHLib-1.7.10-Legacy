@@ -60,6 +60,7 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 			ret = Unpooled.directBuffer();
 			TIntObjectIterator<String> iter = map.iterator(); // allocate before size() so a comod throws correctly
 			ByteBufHelper.writeVarInt(map.size(), ret);
+			ByteBufHelper.writeString(channel, ret);
 			for (; iter.hasNext(); ) {
 				iter.advance();
 				ByteBufHelper.writeVarInt(iter.key(), ret);
