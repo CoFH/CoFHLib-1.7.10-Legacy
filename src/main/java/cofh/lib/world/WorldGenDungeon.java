@@ -89,7 +89,7 @@ public class WorldGenDungeon extends WorldGenerator {
 				for (y = yStart + height; y >= floor; --y) {
 
 					l: if (y != floor) {
-						if ((abs(x - xStart) != xWidth + 1 || abs(z - zStart) != zWidth + 1)) {
+						if ((abs(x - xStart) != xWidth + 1 && abs(z - zStart) != zWidth + 1)) {
 							world.setBlockToAir(x, y, z);
 						} else if (y >= 0 && !canGenerateInBlock(world, x, y - 1, z, genBlock)) {
 							world.setBlockToAir(x, y, z);
