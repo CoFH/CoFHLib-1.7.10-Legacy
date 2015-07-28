@@ -30,7 +30,7 @@ public class WorldGenDungeon extends WorldGenerator {
 	public int minWidthZ = 2, maxWidthZ = 3;
 	public int minHeight = 3, maxHeight = 3;
 	public int minHoles = 1, maxHoles = 5;
-	public int maxChests = 2;
+	public int maxChests = 2, maxChestTries = 3;
 	public List<DungeonMob> lootTables = Arrays.asList(new DungeonMob(100, ChestGenHooks.DUNGEON_CHEST));
 	public List<WeightedRandomBlock> floor;
 
@@ -109,8 +109,8 @@ public class WorldGenDungeon extends WorldGenerator {
 			}
 		}
 
-		for (int i = maxChests; i-- > 0;) {
-			for (int j = 0; j < 3; ++j) {
+		for (int i = maxChests; i-- > 0; ) {
+			for (int j = maxChestTries; j-- > 0; ) {
 				x = xStart + nextInt(rand, xWidth * 2 + 1) - xWidth;
 				z = zStart + nextInt(rand, zWidth * 2 + 1) - zWidth;
 
