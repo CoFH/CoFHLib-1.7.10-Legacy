@@ -47,11 +47,21 @@ public class ElementListBox extends ElementBase {
 
 	public void remove(IListBoxElement element) {
 
-		_elements.remove(element);
+		int e = _elements.indexOf(element);
+		if (_elements.remove(element)) {
+			if (e < _firstIndexDisplayed) {
+				--_firstIndexDisplayed;
+			}
+			if (e < _selectedIndex) {
+				--_selectedIndex;
+			}
+		}
 	}
 
 	public void removeAt(int index) {
 
+		_firstIndexDisplayed = scrollHoriz = 0;
+		_selectedIndex = -1;
 		_elements.remove(index);
 	}
 
@@ -283,7 +293,7 @@ public class ElementListBox extends ElementBase {
 
 	public IListBoxElement getSelectedElement() {
 
-		if (_selectedIndex == -1 || _selectedIndex == _elements.size()) {
+		if (_selectedIndex == -1 || _selectedIndex >= _elements.size()) {
 			return null;
 		}
 		return _elements.get(_selectedIndex);
