@@ -24,8 +24,11 @@ public final class ByteBufHelper {
 
 	public static void writeVarInt(int in, ByteBuf out) {
 
-		while ((in & ~0x7F) != 0) {
-			out.writeByte(in & 127 | 128);
+		if (in == 0) {
+			out.writeByte(0);
+		}
+		while (in != 0) {
+			out.writeByte(in & 127 | ((in & ~0x7F) != 0 ? 128 : 0));
 			in >>>= 7;
 		}
 	}
