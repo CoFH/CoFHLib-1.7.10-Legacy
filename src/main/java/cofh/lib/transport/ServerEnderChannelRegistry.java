@@ -64,9 +64,8 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 	public ByteBuf getFrequencyData(String channel) {
 
 		TIntObjectHashMap<String> map = channels.get(channel);
-		ByteBuf ret = null;
+		ByteBuf ret = Unpooled.directBuffer();
 		if (map != null) {
-			ret = Unpooled.directBuffer();
 			TIntObjectIterator<String> iter = map.iterator(); // allocate before size() so a comod throws correctly
 			ByteBufHelper.writeVarInt(map.size(), ret);
 			ByteBufHelper.writeString(channel, ret);
@@ -75,6 +74,9 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 				ByteBufHelper.writeVarInt(iter.key(), ret);
 				ByteBufHelper.writeString(iter.value(), ret);
 			}
+		} else {
+			ByteBufHelper.writeVarInt(0, ret);
+			ByteBufHelper.writeString(channel, ret);
 		}
 		return ret;
 	}
