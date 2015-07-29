@@ -10,6 +10,7 @@ public interface IEnderChannelRegistry {
 	public String getFrequency(String channel, int freq);
 	public String setFrequency(String channel, int freq, String name);
 	public String removeFrequency(String channel, int freq);
+	public int updated();
 
 	public static class Frequency implements Comparable<Frequency> {
 

@@ -14,6 +14,7 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 
 	private TIntObjectHashMap<String> channel = new TIntObjectHashMap<String>();
 	private ArrayList<Frequency> list = new ArrayList<Frequency>();
+	private int modCount;
 	protected String hostedChannel = "";
 
 	public ClientEnderChannelRegistry() {
@@ -22,6 +23,9 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 
 	public void readFrequencyData(ByteBuf data) {
 
+		++modCount;
+		channel.clear();
+		list.clear();
 		int size = ByteBufHelper.readVarInt(data);
 		hostedChannel = ByteBufHelper.readString(data);
 		for (int i = 0; i < size; ++i) {
@@ -53,6 +57,7 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 	@Override
 	public String setFrequency(String _, int freq, String name) {
 
+		++modCount;
 		Frequency f = new Frequency(freq, name);
 		int i = list.indexOf(f);
 		if (i < 0) {
@@ -66,8 +71,15 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 	@Override
 	public String removeFrequency(String _, int freq) {
 
+		++modCount;
 		list.remove(new Frequency(freq, ""));
 		return channel.remove(freq);
+	}
+
+	@Override
+	public int updated() {
+
+		return modCount;
 	}
 
 

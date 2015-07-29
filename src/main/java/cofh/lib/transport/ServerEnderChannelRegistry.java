@@ -20,6 +20,7 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 
 	protected Configuration linkConf;
 	protected HashMap<String, TIntObjectHashMap<String>> channels;
+	private int modCount;
 
 	public ServerEnderChannelRegistry(Configuration config) {
 
@@ -31,6 +32,7 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 
 	protected void load() {
 
+		++modCount;
 		for (String channel : linkConf.getCategoryNames()) {
 			ConfigCategory category = linkConf.getCategory(channel);
 			TIntObjectHashMap<String> map = channels.get(channel);
@@ -107,8 +109,8 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 		if (map == null)
 			channels.put(channel, map = new TIntObjectHashMap<String>());
 		String old = map.put(freq, name);
+		++modCount;
 		linkConf.get(channel, String.valueOf(freq), "").set(name);
-		linkConf.save();
 		return old;
 	}
 
@@ -120,10 +122,16 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 			return null;
 		String old = map.remove(freq);
 		if (old != null) {
+			++modCount;
 			linkConf.getCategory(channel).remove(String.valueOf(freq));
-			linkConf.save();
 		}
 		return old;
+	}
+
+	@Override
+	public int updated() {
+
+		return modCount;
 	}
 
 }
