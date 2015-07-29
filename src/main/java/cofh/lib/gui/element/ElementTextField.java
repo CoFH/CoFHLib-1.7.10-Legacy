@@ -137,6 +137,11 @@ public class ElementTextField extends ElementBase {
 		return this;
 	}
 
+	public int getContentLength() {
+
+		return textLength;
+	}
+
 	public int getMaxLength() {
 
 		return text.length;
