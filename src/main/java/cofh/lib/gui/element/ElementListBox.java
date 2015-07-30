@@ -19,16 +19,16 @@ public class ElementListBox extends ElementBase {
 	public int textColor = new GuiColor(150, 150, 150, 255).getColor();
 	public int selectedTextColor = new GuiColor(255, 255, 255, 255).getColor();
 
-	private final int _marginTop = 2;
-	private final int _marginLeft = 2;
-	private final int _marginRight = 2;
-	private final int _marginBottom = 2;
+	protected int _marginTop = 2;
+	protected int _marginLeft = 2;
+	protected int _marginRight = 2;
+	protected int _marginBottom = 2;
 
-	private final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
+	protected final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
 
-	private int _firstIndexDisplayed;
-	private int _selectedIndex;
-	private int scrollHoriz;
+	protected int _firstIndexDisplayed;
+	protected int _selectedIndex;
+	protected int scrollHoriz;
 
 	public ElementListBox(GuiBase containerScreen, int x, int y, int width, int height) {
 
