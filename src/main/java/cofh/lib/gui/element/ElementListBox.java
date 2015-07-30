@@ -165,9 +165,9 @@ public class ElementListBox extends ElementBase {
 		glDisable(GL_LIGHTING);
 
 		glEnable(GL_STENCIL_TEST);
-		glClear(GL_STENCIL_BUFFER_BIT);
 		drawStencil(getContentLeft(), getContentTop(), getContentRight(), getContentBottom(), 1);
 
+		glPushMatrix();
 		glTranslated(-scrollHoriz, 0, 0);
 
 		int e = _elements.size();
@@ -175,6 +175,7 @@ public class ElementListBox extends ElementBase {
 			heightDrawn += drawElement(nextElement, getContentLeft(), getContentTop() + heightDrawn);
 			nextElement++;
 		}
+		glPopMatrix();
 		glDisable(GL_STENCIL_TEST);
 		glPopMatrix();
 	}
@@ -271,12 +272,13 @@ public class ElementListBox extends ElementBase {
 		int position = _elements.size() - 1;
 		if (position < 0)
 			return 0;
-		int heightUsed = _elements.get(position).getHeight();
+		int heightUsed = 0;
 
-		while (position > 0 && heightUsed < sizeY) {
-			position--;
-			heightUsed += _elements.get(position).getHeight();
+		while (position >= 0 && heightUsed < sizeY) {
+			heightUsed += _elements.get(position--).getHeight();
 		}
+		if (heightUsed > sizeY) // an element is partially visible
+			++position;
 		return position + 1;
 	}
 
