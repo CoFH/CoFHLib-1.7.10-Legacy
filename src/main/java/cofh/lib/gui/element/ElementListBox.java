@@ -172,16 +172,23 @@ public class ElementListBox extends ElementBase {
 
 		int e = _elements.size();
 		while (nextElement < e && heightDrawn <= getContentHeight()) {
-			if (nextElement == _selectedIndex) {
-				_elements.get(nextElement).draw(this, getContentLeft(), getContentTop() + heightDrawn, selectedLineColor, selectedTextColor);
-			} else {
-				_elements.get(nextElement).draw(this, getContentLeft(), getContentTop() + heightDrawn, backgroundColor, textColor);
-			}
-			heightDrawn += _elements.get(nextElement).getHeight();
+			heightDrawn += drawElement(nextElement, getContentLeft(), getContentTop() + heightDrawn);
 			nextElement++;
 		}
 		glDisable(GL_STENCIL_TEST);
 		glPopMatrix();
+	}
+
+	private int drawElement(int elementIndex, int x, int y) {
+
+		IListBoxElement element = _elements.get(elementIndex);
+		if (elementIndex == _selectedIndex) {
+			element.draw(this, x, y, selectedLineColor, selectedTextColor);
+		} else {
+			element.draw(this, x, y, backgroundColor, textColor);
+		}
+
+		return element.getHeight();
 	}
 
 	@Override

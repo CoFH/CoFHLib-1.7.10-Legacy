@@ -83,6 +83,11 @@ public class ElementButton extends ElementButtonBase {
 		return this;
 	}
 
+	public ElementButton setToolTipLocalized(String tooltip) {
+
+		return setToolTip(tooltip).setToolTipLocalized(true);
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
