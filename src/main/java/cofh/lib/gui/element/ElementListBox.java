@@ -179,7 +179,7 @@ public class ElementListBox extends ElementBase {
 		glPopMatrix();
 	}
 
-	private int drawElement(int elementIndex, int x, int y) {
+	protected int drawElement(int elementIndex, int x, int y) {
 
 		IListBoxElement element = _elements.get(elementIndex);
 		if (elementIndex == _selectedIndex) {
