@@ -129,9 +129,11 @@ public abstract class ElementBase {
 		glDisable(GL_TEXTURE_2D);
 		glStencilFunc(GL_ALWAYS, flag, flag);
 		glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
-		glStencilMask(1);
+		glStencilMask(flag);
 		glColorMask(false, false, false, false);
 		glDepthMask(false);
+		glClearStencil(0);
+		glClear(GL_STENCIL_BUFFER_BIT);
 
 		Tessellator.instance.startDrawingQuads();
 		Tessellator.instance.addVertex(xStart, yEnd, 0);
