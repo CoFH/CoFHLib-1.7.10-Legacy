@@ -39,10 +39,13 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 			if (map == null) {
 				channels.put(channel, map = new TIntObjectHashMap<String>());
 			}
-			for (Property prop : category.values()) try {
-				int freq = Integer.parseInt(prop.getName());
-				map.put(freq, prop.getString());
-			} catch (Throwable p) {}
+			for (Property prop : category.values()) {
+				try {
+					int freq = Integer.parseInt(prop.getName());
+					map.put(freq, prop.getString());
+				} catch (Throwable p) {
+				}
+			}
 		}
 	}
 
@@ -55,10 +58,13 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 
 	/**
 	 * Returns nulls or a ByteBuf of the frequency<->name mappings for <code>channel</code><br>
-	 * <b>Format:</b><ul>
+	 * <b>Format:</b>
+	 * <ul>
 	 * <code><b>VarInt</b> entries : <b>VarInt</b> frequency ; <b>VarInt</b> length ; <b>byte[]</b> UTF8</code>
 	 * </ul>
-	 * @param channel The channel to get frequency data for
+	 * 
+	 * @param channel
+	 *            The channel to get frequency data for
 	 * @return A ByteBuf of the frequency data for <code>channel</code> or null if the channel does not exist.
 	 */
 	public ByteBuf getFrequencyData(String channel) {
@@ -69,7 +75,7 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 			TIntObjectIterator<String> iter = map.iterator(); // allocate before size() so a comod throws correctly
 			ByteBufHelper.writeVarInt(map.size(), ret);
 			ByteBufHelper.writeString(channel, ret);
-			for (; iter.hasNext(); ) {
+			for (; iter.hasNext();) {
 				iter.advance();
 				ByteBufHelper.writeVarInt(iter.key(), ret);
 				ByteBufHelper.writeString(iter.value(), ret);
@@ -87,7 +93,7 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 		LinkedList<Frequency> ret = new LinkedList<Frequency>();
 		TIntObjectHashMap<String> map = channels.get(channel);
 		if (map != null) {
-			for (TIntObjectIterator<String> iter = map.iterator(); iter.hasNext(); ) {
+			for (TIntObjectIterator<String> iter = map.iterator(); iter.hasNext();) {
 				iter.advance();
 				ret.add(new Frequency(iter.key(), iter.value()));
 			}
@@ -99,8 +105,9 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 	public String getFrequency(String channel, int freq) {
 
 		TIntObjectHashMap<String> map = channels.get(channel);
-		if (map != null)
+		if (map != null) {
 			return map.get(freq);
+		}
 		return null;
 	}
 
@@ -108,8 +115,9 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 	public String setFrequency(String channel, int freq, String name) {
 
 		TIntObjectHashMap<String> map = channels.get(channel);
-		if (map == null)
+		if (map == null) {
 			channels.put(channel, map = new TIntObjectHashMap<String>());
+		}
 		String old = map.put(freq, name);
 		++modCount;
 		linkConf.get(channel, String.valueOf(freq), "").set(name);
@@ -120,8 +128,9 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 	public String removeFrequency(String channel, int freq) {
 
 		TIntObjectHashMap<String> map = channels.get(channel);
-		if (map == null)
+		if (map == null) {
 			return null;
+		}
 		String old = map.remove(freq);
 		if (old != null) {
 			++modCount;

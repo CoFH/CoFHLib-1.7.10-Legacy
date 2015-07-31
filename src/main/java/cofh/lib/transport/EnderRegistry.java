@@ -57,22 +57,27 @@ public final class EnderRegistry {
 			if (map == null) {
 				outputTeleport.put(channel, map = new TIntObjectHashMap<EnderDestination>());
 			}
-			for (Property prop : category.values()) try {
-				int freq = Integer.parseInt(prop.getName());
-				String[] data = prop.getString().split("@");
-				if (data.length != 2)
-					continue;
-				int dimension = Integer.parseInt(data[0]);
-				data = data[1].split(",");
-				if (data.length != 3)
-					continue;
-				int x, y, z;
-				x = Integer.parseInt(data[0]);
-				y = Integer.parseInt(data[1]);
-				z = Integer.parseInt(data[2]);
-				EnderDestination dest = new EnderDestination(x, y, z, dimension);
-				map.put(freq, dest);
-			} catch (Throwable p) {}
+			for (Property prop : category.values()) {
+				try {
+					int freq = Integer.parseInt(prop.getName());
+					String[] data = prop.getString().split("@");
+					if (data.length != 2) {
+						continue;
+					}
+					int dimension = Integer.parseInt(data[0]);
+					data = data[1].split(",");
+					if (data.length != 3) {
+						continue;
+					}
+					int x, y, z;
+					x = Integer.parseInt(data[0]);
+					y = Integer.parseInt(data[1]);
+					z = Integer.parseInt(data[2]);
+					EnderDestination dest = new EnderDestination(x, y, z, dimension);
+					map.put(freq, dest);
+				} catch (Throwable p) {
+				}
+			}
 		}
 	}
 
@@ -86,8 +91,9 @@ public final class EnderRegistry {
 	private <T> T getElement(HashMap<String, TIntObjectHashMap<T>> map, IEnderAttuned theAttuned) {
 
 		TIntObjectHashMap<T> list = map.get(theAttuned.getChannelString());
-		if (list != null)
+		if (list != null) {
 			return list.get(theAttuned.getFrequency());
+		}
 		return null;
 	}
 
@@ -291,39 +297,25 @@ public final class EnderRegistry {
 	}
 
 	/*
-	public void sortClientNames() {
-
-		List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(clientFrequencyNames.entrySet());
-		Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
-
-			@Override
-			public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
-
-				int int1 = Integer.valueOf(clientFrequencyNamesReversed.get(o1.getValue()));
-				int int2 = Integer.valueOf(clientFrequencyNamesReversed.get(o2.getValue()));
-				return int1 > int2 ? 1 : int1 == int2 ? 0 : -1;
-			}
-		});
-		Map<String, String> result = new LinkedHashMap<String, String>();
-		for (Map.Entry<String, String> entry : list) {
-			result.put(entry.getKey(), entry.getValue());
-		}
-		clientFrequencyNames = result;
-	}
-
-	public void clearClientNames() {
-
-		clientFrequencyNames.clear();
-		clientFrequencyNamesReversed.clear();
-	}
-
-	public void addClientNames(String owner, String name) {
-
-		if (!owner.isEmpty()) {
-			clientFrequencyNames.put(owner, name);
-			clientFrequencyNamesReversed.put(name, owner);
-		}
-	}//*/
+	 * public void sortClientNames() {
+	 * 
+	 * List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(clientFrequencyNames.entrySet()); Collections.sort(list, new
+	 * Comparator<Map.Entry<String, String>>() {
+	 * 
+	 * @Override public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+	 * 
+	 * int int1 = Integer.valueOf(clientFrequencyNamesReversed.get(o1.getValue())); int int2 = Integer.valueOf(clientFrequencyNamesReversed.get(o2.getValue()));
+	 * return int1 > int2 ? 1 : int1 == int2 ? 0 : -1; } }); Map<String, String> result = new LinkedHashMap<String, String>(); for (Map.Entry<String, String>
+	 * entry : list) { result.put(entry.getKey(), entry.getValue()); } clientFrequencyNames = result; }
+	 * 
+	 * public void clearClientNames() {
+	 * 
+	 * clientFrequencyNames.clear(); clientFrequencyNamesReversed.clear(); }
+	 * 
+	 * public void addClientNames(String owner, String name) {
+	 * 
+	 * if (!owner.isEmpty()) { clientFrequencyNames.put(owner, name); clientFrequencyNamesReversed.put(name, owner); } }//
+	 */
 
 	private static class EnderDestination {
 
@@ -393,8 +385,9 @@ public final class EnderRegistry {
 		@Override
 		public boolean equals(Object o) {
 
-			if (o == null || o.getClass() != EnderDestination.class)
+			if (o == null || o.getClass() != EnderDestination.class) {
 				return false;
+			}
 			EnderDestination other = (EnderDestination) o;
 			return other.x == x && other.y == y && other.z == z && other.dimension == dimension;
 		}

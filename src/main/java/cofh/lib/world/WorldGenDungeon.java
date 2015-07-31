@@ -109,8 +109,8 @@ public class WorldGenDungeon extends WorldGenerator {
 			}
 		}
 
-		for (int i = maxChests; i-- > 0; ) {
-			for (int j = maxChestTries; j-- > 0; ) {
+		for (int i = maxChests; i-- > 0;) {
+			for (int j = maxChestTries; j-- > 0;) {
 				x = xStart + nextInt(rand, xWidth * 2 + 1) - xWidth;
 				z = zStart + nextInt(rand, zWidth * 2 + 1) - zWidth;
 

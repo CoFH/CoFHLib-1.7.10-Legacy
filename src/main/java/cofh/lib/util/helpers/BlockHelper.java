@@ -505,14 +505,15 @@ public final class BlockHelper {
 		}
 	}
 
-	public static List<ItemStack> breakBlock(World worldObj, int x, int y, int z, Block block, int fortune, boolean doBreak, boolean silkTouch) {
+	public static List<ItemStack> breakBlock(World worldObj, EntityPlayer player, int x, int y, int z, Block block, int fortune, boolean doBreak,
+			boolean silkTouch) {
 
 		if (block.getBlockHardness(worldObj, x, y, z) == -1) {
 			return new LinkedList<ItemStack>();
 		}
 		int meta = worldObj.getBlockMetadata(x, y, z);
 		List<ItemStack> stacks = null;
-		if (silkTouch && block.canSilkHarvest(worldObj, null, x, y, z, meta)) {
+		if (silkTouch && block.canSilkHarvest(worldObj, player, x, y, z, meta)) {
 			stacks = new LinkedList<ItemStack>();
 			stacks.add(createStackedBlock(block, meta));
 		} else {
@@ -521,7 +522,7 @@ public final class BlockHelper {
 		if (!doBreak) {
 			return stacks;
 		}
-		worldObj.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(block) + (meta << 12));
+		worldObj.playAuxSFXAtEntity(player, 2001, x, y, z, Block.getIdFromBlock(block) + (meta << 12));
 		worldObj.setBlockToAir(x, y, z);
 
 		List<EntityItem> result = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(x - 2, y - 2, z - 2, x + 3, y + 3, z + 3));

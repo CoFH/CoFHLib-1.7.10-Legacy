@@ -63,8 +63,9 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 		if (i < 0) {
 			list.add(f);
 			Collections.sort(list);
-		} else
+		} else {
 			list.set(i, f);
+		}
 		return channel.put(freq, name);
 	}
 
@@ -81,7 +82,5 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
 
 		return modCount;
 	}
-
-
 
 }

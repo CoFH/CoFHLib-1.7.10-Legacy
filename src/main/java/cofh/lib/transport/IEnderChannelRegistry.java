@@ -7,9 +7,13 @@ import java.util.List;
 public interface IEnderChannelRegistry {
 
 	public List<Frequency> getFrequencyList(String channel);
+
 	public String getFrequency(String channel, int freq);
+
 	public String setFrequency(String channel, int freq, String name);
+
 	public String removeFrequency(String channel, int freq);
+
 	public int updated();
 
 	public static class Frequency implements Comparable<Frequency> {
@@ -26,8 +30,9 @@ public interface IEnderChannelRegistry {
 		@Override
 		public int compareTo(Frequency o) {
 
-			if (o == null)
+			if (o == null) {
 				return 1;
+			}
 			return Ints.compare(freq, o.freq);
 		}
 
@@ -35,7 +40,7 @@ public interface IEnderChannelRegistry {
 		public boolean equals(Object o) {
 
 			if (o instanceof Frequency) {
-				return ((Frequency)o).freq == freq;
+				return ((Frequency) o).freq == freq;
 			}
 			return false;
 		}
