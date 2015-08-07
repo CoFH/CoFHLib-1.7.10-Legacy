@@ -256,7 +256,7 @@ public final class EnderRegistry {
 			return;
 		}
 		if (dest.dimension == theAttuned.dimension()) {
-			if (dest.x == theAttuned.x() && dest.y == theAttuned.x() && dest.z == theAttuned.x()) {
+			if (dest.x == theAttuned.x() && dest.y == theAttuned.y() && dest.z == theAttuned.z()) {
 				int freq = theAttuned.getFrequency();
 				map.remove(freq);
 				linkConf.getCategory(channel).remove(String.valueOf(freq));
