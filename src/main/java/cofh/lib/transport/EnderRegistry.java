@@ -196,7 +196,7 @@ public final class EnderRegistry {
 				@Override
 				public int x() {
 
-					return dest.z;
+					return dest.x;
 				}
 
 				@Override
