@@ -159,7 +159,7 @@ public final class EnderRegistry {
 		if (dest == null) {
 			return null;
 		}
-		IEnderDestination out = dest.getOutput();
+		IEnderDestination out = dest.getOutput(requireLoaded);
 		if (!requireLoaded && out == null && !dest.isInvalid) {
 			return new IEnderDestination() {
 
@@ -384,27 +384,6 @@ public final class EnderRegistry {
 		}
 	}
 
-	/*
-	 * public void sortClientNames() {
-	 * 
-	 * List<Map.Entry<String, String>> list = new ArrayList<Map.Entry<String, String>>(clientFrequencyNames.entrySet()); Collections.sort(list, new
-	 * Comparator<Map.Entry<String, String>>() {
-	 * 
-	 * @Override public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
-	 * 
-	 * int int1 = Integer.valueOf(clientFrequencyNamesReversed.get(o1.getValue())); int int2 = Integer.valueOf(clientFrequencyNamesReversed.get(o2.getValue()));
-	 * return int1 > int2 ? 1 : int1 == int2 ? 0 : -1; } }); Map<String, String> result = new LinkedHashMap<String, String>(); for (Map.Entry<String, String>
-	 * entry : list) { result.put(entry.getKey(), entry.getValue()); } clientFrequencyNames = result; }
-	 * 
-	 * public void clearClientNames() {
-	 * 
-	 * clientFrequencyNames.clear(); clientFrequencyNamesReversed.clear(); }
-	 * 
-	 * public void addClientNames(String owner, String name) {
-	 * 
-	 * if (!owner.isEmpty()) { clientFrequencyNames.put(owner, name); clientFrequencyNamesReversed.put(name, owner); } }//
-	 */
-
 	private static class EnderDestination {
 
 		private final int dimension;
@@ -434,7 +413,7 @@ public final class EnderRegistry {
 			return !isInvalid && DimensionManager.isDimensionRegistered(dimension);
 		}
 
-		public IEnderDestination getOutput() {
+		public IEnderDestination getOutput(boolean onlyLoaded) {
 
 			if (output == null || output.isNotValid()) {
 				output = null;
@@ -442,11 +421,13 @@ public final class EnderRegistry {
 					return null;
 				}
 				WorldServer world = DimensionManager.getWorld(dimension);
-				if (world == null) {
+				if (world == null && !onlyLoaded) {
 					DimensionManager.initDimension(dimension);
 					world = DimensionManager.getWorld(dimension);
+				} else {
+					return null;
 				}
-				if (world.blockExists(x, y, z)) {
+				if (!onlyLoaded || world.blockExists(x, y, z)) {
 					TileEntity te = world.getTileEntity(x, y, z);
 					if (te instanceof IEnderDestination) {
 						output = (IEnderDestination) te;
