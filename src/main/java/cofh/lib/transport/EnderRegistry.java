@@ -160,7 +160,7 @@ public final class EnderRegistry {
 			return null;
 		}
 		IEnderDestination out = dest.getOutput(requireLoaded);
-		if (!requireLoaded && out == null && !dest.isInvalid) {
+		if (requireLoaded && out == null && !dest.isInvalid) {
 			return new IEnderDestination() {
 
 				@Override
