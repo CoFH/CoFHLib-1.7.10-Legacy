@@ -144,12 +144,100 @@ public final class EnderRegistry {
 
 	public IEnderDestination getDestination(IEnderDestination theAttuned) {
 
-		TIntObjectHashMap<EnderDestination> map = outputTeleport.get(theAttuned.getChannelString());
+		return getDestination(theAttuned, true);
+	}
+
+	public IEnderDestination getDestination(IEnderDestination theAttuned, boolean requireLoaded) {
+
+		final String channel = theAttuned.getChannelString();
+		TIntObjectHashMap<EnderDestination> map = outputTeleport.get(channel);
 		if (map == null) {
 			return null;
 		}
-		EnderDestination dest = map.get(theAttuned.getDestination());
-		return dest == null ? null : dest.getOutput();
+		final int frequency = theAttuned.getDestination();
+		final EnderDestination dest = map.get(frequency);
+		if (dest == null) {
+			return null;
+		}
+		IEnderDestination out = dest.getOutput();
+		if (!requireLoaded && out == null && !dest.isInvalid) {
+			return new IEnderDestination() {
+
+				@Override
+				public String getChannelString() {
+
+					return channel;
+				}
+
+				@Override
+				public int getFrequency() {
+
+					return frequency;
+				}
+
+				@Override
+				public boolean setFrequency(int frequency) {
+
+					return false;
+				}
+
+				@Override
+				public boolean clearFrequency() {
+
+					return false;
+				}
+
+				@Override
+				public boolean isNotValid() {
+
+					return true;
+				}
+
+				@Override
+				public int x() {
+
+					return dest.z;
+				}
+
+				@Override
+				public int y() {
+
+					return dest.y;
+				}
+
+				@Override
+				public int z() {
+
+					return dest.z;
+				}
+
+				@Override
+				public int dimension() {
+
+					return dest.dimension;
+				}
+
+				@Override
+				public int getDestination() {
+
+					return -1;
+				}
+
+				@Override
+				public boolean setDestination(int frequency) {
+
+					return false;
+				}
+
+				@Override
+				public boolean clearDestination() {
+
+					return false;
+				}
+
+			};
+		}
+		return out;
 	}
 
 	/* HELPER FUNCTIONS */
@@ -256,7 +344,7 @@ public final class EnderRegistry {
 			return;
 		}
 		if (dest.dimension == theAttuned.dimension()) {
-			if (dest.x == theAttuned.x() && dest.y == theAttuned.x() && dest.z == theAttuned.x()) {
+			if (dest.x == theAttuned.x() && dest.y == theAttuned.y() && dest.z == theAttuned.z()) {
 				int freq = theAttuned.getFrequency();
 				map.remove(freq);
 				linkConf.getCategory(channel).remove(String.valueOf(freq));
