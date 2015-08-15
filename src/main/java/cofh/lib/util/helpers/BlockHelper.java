@@ -505,6 +505,11 @@ public final class BlockHelper {
 		}
 	}
 
+	public static List<ItemStack> breakBlock(World worldObj, int x, int y, int z, Block block, int fortune, boolean doBreak, boolean silkTouch) {
+
+		return breakBlock(worldObj, null, x, y, z, block, fortune, doBreak, silkTouch);
+	}
+
 	public static List<ItemStack> breakBlock(World worldObj, EntityPlayer player, int x, int y, int z, Block block, int fortune, boolean doBreak,
 			boolean silkTouch) {
 
