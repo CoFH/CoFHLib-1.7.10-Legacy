@@ -62,7 +62,7 @@ public class ServerEnderChannelRegistry implements IEnderChannelRegistry {
 	 * <ul>
 	 * <code><b>VarInt</b> entries : <b>VarInt</b> frequency ; <b>VarInt</b> length ; <b>byte[]</b> UTF8</code>
 	 * </ul>
-	 * 
+	 *
 	 * @param channel
 	 *            The channel to get frequency data for
 	 * @return A ByteBuf of the frequency data for <code>channel</code> or null if the channel does not exist.

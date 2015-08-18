@@ -12,7 +12,7 @@ public interface IEnderAttuned {
 	 * It is used to separate frequency spectrums.
 	 * <p>
 	 * Before changing, the IEnderAttuned must be removed from all registries it has been added to.
-	 * 
+	 *
 	 * @return The channel this IEnderAttuned is operating on.
 	 */
 	public String getChannelString();
@@ -22,14 +22,14 @@ public interface IEnderAttuned {
 	 * Nominally, this value is positive and user-controlled.
 	 * <p>
 	 * Before changing, the IEnderAttuned must be removed from all registries it has been added to.
-	 * 
+	 *
 	 * @return The frequency this IEnderAttuned is operating on.
 	 */
 	public int getFrequency();
 
 	/**
 	 * Changes the value returned by <code>getFrequency()</code>
-	 * 
+	 *
 	 * @return True if the frequency was successfully modified.
 	 */
 	public boolean setFrequency(int frequency);
@@ -37,7 +37,7 @@ public interface IEnderAttuned {
 	/**
 	 * Removes this IEnderAttuned from all registries.<br>
 	 * It is recommended that this not be called from <code>setFrequency()</code>.
-	 * 
+	 *
 	 * @return True if the frequency was successfully modified.
 	 */
 	public boolean clearFrequency();

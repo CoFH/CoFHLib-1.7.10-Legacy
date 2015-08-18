@@ -270,15 +270,17 @@ public class ElementListBox extends ElementBase {
 	public int getLastScrollPosition() {
 
 		int position = _elements.size() - 1;
-		if (position < 0)
+		if (position < 0) {
 			return 0;
+		}
 		int heightUsed = 0;
 
 		while (position >= 0 && heightUsed < sizeY) {
 			heightUsed += _elements.get(position--).getHeight();
 		}
-		if (heightUsed > sizeY) // an element is partially visible
+		if (heightUsed > sizeY) {
 			++position;
+		}
 		return position + 1;
 	}
 
