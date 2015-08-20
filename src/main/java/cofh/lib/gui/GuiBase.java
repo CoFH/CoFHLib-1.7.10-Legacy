@@ -166,8 +166,15 @@ public abstract class GuiBase extends GuiContainer {
 			if (tab != null && tab.onMouseWheel(mouseX, mouseY, wheelMovement)) {
 				return;
 			}
+
+			if(onMouseWheel(mouseX, mouseY, wheelMovement))
+				return;
 		}
 		super.handleMouseInput();
+	}
+
+	protected boolean onMouseWheel(int mouseX, int mouseY, int wheelMovement) {
+		return false;
 	}
 
 	@Override
