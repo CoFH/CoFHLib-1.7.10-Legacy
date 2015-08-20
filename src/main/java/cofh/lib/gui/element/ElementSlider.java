@@ -165,4 +165,8 @@ public abstract class ElementSlider extends ElementBase {
 
 		return;
 	}
+
+	public int getValue(){
+		return _value;
+	}
 }
