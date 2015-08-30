@@ -59,7 +59,7 @@ public class SecurityHelper {
 
 	public static UUID getID(EntityPlayer player) {
 
-		if (MinecraftServer.getServer() != null) {
+		if (MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning()) {
 			return player.getGameProfile().getId();
 		}
 		return getClientId(player);
