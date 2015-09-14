@@ -29,6 +29,7 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 
 public class SecurityHelper {
 
+	public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
 	private static boolean setup = false;
 
 	public static void setup() {
@@ -105,7 +106,7 @@ public class SecurityHelper {
 				list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
 			} else {
 				if (hasUUID && stack.stackTagCompound.hasKey("Owner")) {
-					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner"));
+					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner") + " \u0378");
 				} else {
 					list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
 				}
@@ -188,7 +189,7 @@ public class SecurityHelper {
 				return new GameProfile(UUID.fromString(PreYggdrasilConverter.func_152719_a(name)), name);
 			}
 		}
-		return new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
+		return UNKNOWN_GAME_PROFILE;
 	}
 
 	public static GameProfile getProfile(UUID uuid, String name) {
