@@ -93,19 +93,6 @@ public abstract class TabBase extends ElementBase {
 		return this;
 	}
 
-	@Deprecated
-	// use drawBackground() and drawForeground()
-	public void draw(int x, int y) {
-
-	}
-
-	@Deprecated
-	// use drawBackground() and drawForeground()
-	public void draw() {
-
-		return;
-	}
-
 	protected void drawForeground() {
 
 		// TODO: this and drawBackground() need to be called after the matrix translation (not for back compat)
@@ -128,7 +115,7 @@ public abstract class TabBase extends ElementBase {
 		gui.drawTexturedModalRect(xPosition, posY, 0, 0, 4, 4);
 		gui.drawTexturedModalRect(xPosition + 4, posY + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
 
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -140,7 +127,6 @@ public abstract class TabBase extends ElementBase {
 		GL11.glPushMatrix();
 
 		drawBackground();
-		draw();
 
 		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
 

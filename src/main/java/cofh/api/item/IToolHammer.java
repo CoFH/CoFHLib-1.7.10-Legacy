@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 public interface IToolHammer {
 
 	/**
-	 * Called to ensure that the wrench can be used.
+	 * Called to ensure that the tool can be used.
 	 *
 	 * @param item
 	 *            The itemstack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools)

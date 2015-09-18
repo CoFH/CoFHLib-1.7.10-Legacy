@@ -443,7 +443,6 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
 
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 

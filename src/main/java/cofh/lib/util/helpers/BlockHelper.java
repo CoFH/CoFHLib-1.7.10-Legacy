@@ -30,7 +30,8 @@ public final class BlockHelper {
 
 	}
 
-	public static byte[] rotateType = new byte[4096];
+	public static int MAX_ID = 1024;
+	public static byte[] rotateType = new byte[MAX_ID];
 	public static final int[][] SIDE_COORD_MOD = { { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 }, { -1, 0, 0 }, { 1, 0, 0 } };
 	public static float[][] SIDE_COORD_AABB = { { 1, -2, 1 }, { 1, 2, 1 }, { 1, 1, 1 }, { 1, 1, 2 }, { 1, 1, 1 }, { 2, 1, 1 } };
 	public static final byte[] SIDE_LEFT = { 4, 5, 5, 4, 2, 3 };
@@ -170,9 +171,7 @@ public final class BlockHelper {
 				direction = 5;
 				break;
 			}
-
 		}
-
 		return direction;
 	}
 
@@ -379,7 +378,8 @@ public final class BlockHelper {
 	/* BLOCK ROTATION */
 	public static boolean canRotate(Block block) {
 
-		return rotateType[Block.getIdFromBlock(block)] != 0;
+		int bId = Block.getIdFromBlock(block);
+		return bId < MAX_ID ? rotateType[Block.getIdFromBlock(block)] != 0 : false;
 	}
 
 	public static int rotateVanillaBlock(World world, Block block, int x, int y, int z) {

@@ -152,6 +152,22 @@ public class SecurityHelper {
 		return stack;
 	}
 
+	public static ItemStack removeSecure(ItemStack stack) {
+
+		if (!isSecure(stack)) {
+			return stack;
+		}
+		stack.stackTagCompound.removeTag("Secure");
+		stack.stackTagCompound.removeTag("Access");
+		stack.stackTagCompound.removeTag("OwnerUUID");
+		stack.stackTagCompound.removeTag("Owner");
+
+		if (stack.stackTagCompound.hasNoTags()) {
+			stack.stackTagCompound = null;
+		}
+		return stack;
+	}
+
 	public static boolean setAccess(ItemStack stack, AccessMode access) {
 
 		if (!isSecure(stack)) {
@@ -203,16 +219,6 @@ public class SecurityHelper {
 			}
 		}
 		return owner;
-	}
-
-	@Deprecated
-	public static boolean setOwnerName(ItemStack stack, String name) {
-
-		if (!isSecure(stack)) {
-			return false;
-		}
-		stack.stackTagCompound.setString("Owner", name);
-		return true;
 	}
 
 	public static String getOwnerName(ItemStack stack) {

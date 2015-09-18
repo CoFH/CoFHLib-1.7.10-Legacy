@@ -167,13 +167,15 @@ public abstract class GuiBase extends GuiContainer {
 				return;
 			}
 
-			if(onMouseWheel(mouseX, mouseY, wheelMovement))
+			if (onMouseWheel(mouseX, mouseY, wheelMovement)) {
 				return;
+			}
 		}
 		super.handleMouseInput();
 	}
 
 	protected boolean onMouseWheel(int mouseX, int mouseY, int wheelMovement) {
+
 		return false;
 	}
 
@@ -497,7 +499,6 @@ public abstract class GuiBase extends GuiContainer {
 		drawButton(getIcon(iconName), x, y, spriteSheet, mode);
 	}
 
-
 	public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -508,13 +509,18 @@ public abstract class GuiBase extends GuiContainer {
 		itemRender.zLevel = 200.0F;
 
 		FontRenderer font = null;
-		if (stack != null) font = stack.getItem().getFontRenderer(stack);
-		if (font == null) font = fontRendererObj;
+		if (stack != null) {
+			font = stack.getItem().getFontRenderer(stack);
+		}
+		if (font == null) {
+			font = fontRendererObj;
+		}
 
 		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, x, y);
 
-		if (drawOverlay)
+		if (drawOverlay) {
 			itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+		}
 
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
