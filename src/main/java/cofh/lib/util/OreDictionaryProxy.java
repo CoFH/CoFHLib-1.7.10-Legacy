@@ -16,7 +16,7 @@ public class OreDictionaryProxy {
 
 	public ItemStack getOre(String oreName) {
 
-		if (OreDictionary.getOres(oreName).isEmpty()) {
+		if (!oreNameExists(oreName)) {
 			return null;
 		}
 		return ItemHelper.cloneStack(OreDictionary.getOres(oreName).get(0), 1);
