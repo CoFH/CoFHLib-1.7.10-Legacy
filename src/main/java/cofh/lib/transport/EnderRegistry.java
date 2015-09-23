@@ -9,6 +9,7 @@ import cofh.lib.util.ArrayHashList;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public final class EnderRegistry {
 	private HashMap<String, TIntObjectHashMap<ArrayHashList<IEnderEnergyHandler>>> outputEnergy;
 
 	private HashMap<String, TIntObjectHashMap<EnderDestination>> outputTeleport;
+	private HashMap<String, BitSet> usedTeleports;
 
 	private Configuration linkConf;
 
@@ -44,6 +46,7 @@ public final class EnderRegistry {
 		outputEnergy = new HashMap<String, TIntObjectHashMap<ArrayHashList<IEnderEnergyHandler>>>();
 
 		outputTeleport = new HashMap<String, TIntObjectHashMap<EnderDestination>>();
+		usedTeleports = new HashMap<String, BitSet>();
 
 		linkConf = config;
 		load();
@@ -54,8 +57,10 @@ public final class EnderRegistry {
 		for (String channel : linkConf.getCategoryNames()) {
 			ConfigCategory category = linkConf.getCategory(channel);
 			TIntObjectHashMap<EnderDestination> map = outputTeleport.get(channel);
+			BitSet set = usedTeleports.get(channel);
 			if (map == null) {
 				outputTeleport.put(channel, map = new TIntObjectHashMap<EnderDestination>());
+				usedTeleports.put(channel, set = new BitSet());
 			}
 			for (Property prop : category.values()) {
 				try {
@@ -75,6 +80,7 @@ public final class EnderRegistry {
 					z = Integer.parseInt(data[2]);
 					EnderDestination dest = new EnderDestination(x, y, z, dimension);
 					map.put(freq, dest);
+					set.set(freq);
 				} catch (Throwable p) {
 				}
 			}
@@ -127,6 +133,15 @@ public final class EnderRegistry {
 		return getElement(outputEnergy, theAttuned);
 	}
 
+	public int findFreeFrequency(IEnderDestination theAttuned) {
+
+		BitSet set = usedTeleports.get(theAttuned.getChannelString());
+		if (set == null) {
+			return 0;
+		}
+		return set.nextClearBit(0);
+	}
+
 	public boolean hasDestination(IEnderDestination theAttuned) {
 
 		return hasDestination(theAttuned, true);
@@ -134,12 +149,16 @@ public final class EnderRegistry {
 
 	public boolean hasDestination(IEnderDestination theAttuned, boolean to) {
 
-		TIntObjectHashMap<EnderDestination> map = outputTeleport.get(theAttuned.getChannelString());
+		String channel = theAttuned.getChannelString();
+		TIntObjectHashMap<EnderDestination> map = outputTeleport.get(channel);
 		if (map == null) {
 			return false;
 		}
-		EnderDestination dest = map.get(to ? theAttuned.getDestination() : theAttuned.getFrequency());
-		return dest == null ? false : dest.hasOutput();
+		int freq = to ? theAttuned.getDestination() : theAttuned.getFrequency();
+		EnderDestination dest = map.get(freq);
+		boolean r = dest == null ? false : dest.hasOutput();
+		usedTeleports.get(channel).set(freq, r);
+		return r;
 	}
 
 	public IEnderDestination getDestination(IEnderDestination theAttuned) {
@@ -291,12 +310,15 @@ public final class EnderRegistry {
 		if (!hasDestination(theAttuned, false)) {
 			String channel = theAttuned.getChannelString();
 			TIntObjectHashMap<EnderDestination> map = outputTeleport.get(channel);
+			BitSet set = usedTeleports.get(channel);
 			if (map == null) {
 				outputTeleport.put(channel, map = new TIntObjectHashMap<EnderDestination>());
+				usedTeleports.put(channel, set = new BitSet());
 			}
 			int freq = theAttuned.getFrequency();
 			EnderDestination dest = new EnderDestination(theAttuned);
 			map.put(freq, dest);
+			set.set(freq);
 			linkConf.get(channel, String.valueOf(freq), "").set(dest.toString());
 		}
 	}
@@ -339,14 +361,15 @@ public final class EnderRegistry {
 		if (map == null) {
 			return;
 		}
-		EnderDestination dest = map.get(theAttuned.getFrequency());
+		int freq = theAttuned.getFrequency();
+		EnderDestination dest = map.get(freq);
 		if (dest == null) {
 			return;
 		}
 		if (dest.dimension == theAttuned.dimension()) {
 			if (dest.x == theAttuned.x() && dest.y == theAttuned.y() && dest.z == theAttuned.z()) {
-				int freq = theAttuned.getFrequency();
 				map.remove(freq);
+				usedTeleports.get(channel).set(freq, false);
 				linkConf.getCategory(channel).remove(String.valueOf(freq));
 			}
 		}
