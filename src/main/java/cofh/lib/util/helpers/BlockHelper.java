@@ -298,6 +298,19 @@ public final class BlockHelper {
 	// ForgeDirection.values()[side]);
 	// }
 
+	public static Block getAdjacentBlock(World world, int x, int y, int z, ForgeDirection dir) {
+
+		x += dir.offsetX;
+		y += dir.offsetY;
+		z += dir.offsetZ;
+		return world == null || !world.blockExists(x, y, z) ? Blocks.air : world.getBlock(x, y, z);
+	}
+
+	public static Block getAdjacentBlock(World world, int x, int y, int z, int side) {
+
+		return world == null ? Blocks.air : getAdjacentBlock(world, x, y, z, ForgeDirection.getOrientation(side));
+	}
+
 	/* Safe Tile Entity Retrieval */
 	public static TileEntity getAdjacentTileEntity(World world, int x, int y, int z, ForgeDirection dir) {
 
@@ -309,7 +322,7 @@ public final class BlockHelper {
 
 	public static TileEntity getAdjacentTileEntity(World world, int x, int y, int z, int side) {
 
-		return world == null ? null : getAdjacentTileEntity(world, x, y, z, ForgeDirection.values()[side]);
+		return world == null ? null : getAdjacentTileEntity(world, x, y, z, ForgeDirection.getOrientation(side));
 	}
 
 	public static TileEntity getAdjacentTileEntity(TileEntity refTile, ForgeDirection dir) {
