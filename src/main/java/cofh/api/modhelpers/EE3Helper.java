@@ -104,7 +104,7 @@ public class EE3Helper {
 			return;
 		}
 		if (prob == 1.0) {
-			addRecipe(output, input);
+			addRecipe(output, (Object[]) input);
 		} else {
 			int[] ratio = getRatio(output.stackSize * prob, 16);
 
@@ -150,7 +150,7 @@ public class EE3Helper {
 		addRecipe_do(output, items);
 	}
 
-	private static void addRecipe_do(Object itemStack, List items) throws Throwable {
+	private static void addRecipe_do(Object itemStack, List<Object> items) throws Throwable {
 
 		if (EE3_PRESENT) {
 			addRecipe.invoke(null, itemStack, items);
