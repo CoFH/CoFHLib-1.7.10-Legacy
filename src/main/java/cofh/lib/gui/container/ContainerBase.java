@@ -39,7 +39,7 @@ public abstract class ContainerBase extends Container {
 
 	protected abstract int getSizeInventory();
 
-	protected boolean supportsShiftClick() {
+	protected boolean supportsShiftClick(int slotIndex) {
 
 		return true;
 	}
@@ -47,7 +47,7 @@ public abstract class ContainerBase extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
-		if (!supportsShiftClick()) {
+		if (!supportsShiftClick(slotIndex)) {
 			return null;
 		}
 
