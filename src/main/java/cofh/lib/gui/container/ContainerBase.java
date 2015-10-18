@@ -44,6 +44,22 @@ public abstract class ContainerBase extends Container {
 		return true;
 	}
 
+	protected boolean performMerge(EntityPlayer player, int slotIndex, ItemStack stack) {
+
+		return performMerge(slotIndex, stack);
+	}
+
+	protected boolean performMerge(int slotIndex, ItemStack stack) {
+
+		int invBase = getSizeInventory();
+		int invFull = inventorySlots.size();
+
+		if (slotIndex < invBase) {
+			return mergeItemStack(stack, invBase, invFull, false);
+		}
+		return mergeItemStack(stack, 0, invBase, true);
+	}
+
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
@@ -54,25 +70,20 @@ public abstract class ContainerBase extends Container {
 		ItemStack stack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 
-		int invBase = getSizeInventory();
-		int invFull = inventorySlots.size();
-
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();
 			stack = stackInSlot.copy();
 
-			if (slotIndex < invBase) {
-				if (!mergeItemStack(stackInSlot, invBase, invFull, false)) {
-					return null;
-				}
-			} else if (!mergeItemStack(stackInSlot, 0, invBase, true)) {
+			if (!performMerge(player, slotIndex, stackInSlot)) {
 				return null;
 			}
+
 			if (stackInSlot.stackSize <= 0) {
 				slot.putStack((ItemStack) null);
 			} else {
 				slot.putStack(stackInSlot);
 			}
+
 			if (stackInSlot.stackSize == stack.stackSize) {
 				return null;
 			}
