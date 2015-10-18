@@ -317,22 +317,26 @@ public class InventoryHelper {
 				slot = slots.get(i);
 				existingStack = slot.getStack();
 
-				if (slot.isItemValid(stack) && existingStack != null && existingStack.getItem().equals(stack.getItem())
-						&& (!stack.getHasSubtypes() || stack.getItemDamage() == existingStack.getItemDamage())
-						&& ItemStack.areItemStackTagsEqual(stack, existingStack)) {
-					int existingSize = existingStack.stackSize + stack.stackSize;
+				if (existingStack != null) {
 					int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+					int rmv = Math.min(maxStack, stack.stackSize);
 
-					if (existingSize <= maxStack) {
-						stack.stackSize = 0;
-						existingStack.stackSize = existingSize;
-						slot.onSlotChanged();
-						successful = true;
-					} else if (existingStack.stackSize < maxStack) {
-						stack.stackSize -= maxStack - existingStack.stackSize;
-						existingStack.stackSize = maxStack;
-						slot.onSlotChanged();
-						successful = true;
+					if (slot.isItemValid(ItemHelper.cloneStack(stack, rmv)) && existingStack.getItem().equals(stack.getItem())
+							&& (!stack.getHasSubtypes() || stack.getItemDamage() == existingStack.getItemDamage())
+							&& ItemStack.areItemStackTagsEqual(stack, existingStack)) {
+						int existingSize = existingStack.stackSize + stack.stackSize;
+
+						if (existingSize <= maxStack) {
+							stack.stackSize = 0;
+							existingStack.stackSize = existingSize;
+							slot.putStack(existingStack);
+							successful = true;
+						} else if (existingStack.stackSize < maxStack) {
+							stack.stackSize -= maxStack - existingStack.stackSize;
+							existingStack.stackSize = maxStack;
+							slot.putStack(existingStack);
+							successful = true;
+						}
 					}
 				}
 
@@ -347,12 +351,15 @@ public class InventoryHelper {
 				slot = slots.get(i);
 				existingStack = slot.getStack();
 
-				if (slot.isItemValid(stack) && existingStack == null) {
-					int maxStack = limit ? Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit()) : slot.getSlotStackLimit();
-					existingStack = stack.splitStack(Math.min(stack.stackSize, maxStack));
-					slot.putStack(existingStack);
-					slot.onSlotChanged();
-					successful = true;
+				if (existingStack == null) {
+					int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
+					int rmv = Math.min(maxStack, stack.stackSize);
+
+					if (slot.isItemValid(ItemHelper.cloneStack(stack, rmv))) {
+						existingStack = stack.splitStack(rmv);
+						slot.putStack(existingStack);
+						successful = true;
+					}
 				}
 
 				i += iterOrder;
