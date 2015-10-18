@@ -64,7 +64,6 @@ public abstract class ContainerBase extends Container {
 				slot.putStack((ItemStack) null);
 			} else {
 				slot.putStack(stackInSlot);
-				slot.onSlotChanged();
 			}
 
 			if (stackInSlot.stackSize == stack.stackSize) {
@@ -82,7 +81,6 @@ public abstract class ContainerBase extends Container {
 		if (slot instanceof SlotFalseCopy) {
 			if (mouseButton == 2) {
 				slot.putStack(null);
-				slot.onSlotChanged();
 			} else {
 				slot.putStack(player.inventory.getItemStack() == null ? null : player.inventory.getItemStack().copy());
 			}
