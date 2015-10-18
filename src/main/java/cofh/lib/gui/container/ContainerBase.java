@@ -2,10 +2,12 @@ package cofh.lib.gui.container;
 
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
+import cofh.lib.util.helpers.MathHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -39,6 +41,11 @@ public abstract class ContainerBase extends Container {
 
 	protected abstract int getSizeInventory();
 
+	protected boolean supportsShiftClick(EntityPlayer player, int slotIndex) {
+
+		return supportsShiftClick(slotIndex);
+	}
+
 	protected boolean supportsShiftClick(int slotIndex) {
 
 		return true;
@@ -63,7 +70,7 @@ public abstract class ContainerBase extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
-		if (!supportsShiftClick(slotIndex)) {
+		if (!supportsShiftClick(player, slotIndex)) {
 			return null;
 		}
 
@@ -90,6 +97,22 @@ public abstract class ContainerBase extends Container {
 			slot.onPickupFromSlot(player, stackInSlot);
 		}
 		return stack;
+	}
+
+	protected void sendSlots(int start, int end) {
+
+		start = MathHelper.clampI(start, 0, inventorySlots.size());
+		end = MathHelper.clampI(end, 0, inventorySlots.size());
+		for (; start < end; ++start) {
+			ItemStack itemstack = ((Slot) inventorySlots.get(start)).getStack();
+
+			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
+			inventoryItemStacks.set(start, itemstack1);
+
+			for (int j = 0; j < this.crafters.size(); ++j) {
+				((ICrafting) this.crafters.get(j)).sendSlotContents(this, start, itemstack1);
+			}
+		}
 	}
 
 	@Override
