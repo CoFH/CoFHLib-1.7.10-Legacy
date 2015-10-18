@@ -45,19 +45,18 @@ public abstract class ContainerBase extends Container {
 		ItemStack stack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 
-		int invPlayer = 27;
-		int invFull = invPlayer + 9;
-		int invTile = invFull + getSizeInventory();
+		int invBase = getSizeInventory();
+		int invFull = inventorySlots.size();
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();
 			stack = stackInSlot.copy();
 
-			if (slotIndex < invFull) {
-				if (!mergeItemStack(stackInSlot, invFull, invTile, false)) {
+			if (slotIndex < invBase) {
+				if (!mergeItemStack(stackInSlot, invBase, invFull, false)) {
 					return null;
 				}
-			} else if (!mergeItemStack(stackInSlot, 0, invFull, true)) {
+			} else if (!mergeItemStack(stackInSlot, 0, invBase, true)) {
 				return null;
 			}
 			if (stackInSlot.stackSize <= 0) {
@@ -65,7 +64,6 @@ public abstract class ContainerBase extends Container {
 			} else {
 				slot.putStack(stackInSlot);
 			}
-
 			if (stackInSlot.stackSize == stack.stackSize) {
 				return null;
 			}
