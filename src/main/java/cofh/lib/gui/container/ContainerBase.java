@@ -39,8 +39,17 @@ public abstract class ContainerBase extends Container {
 
 	protected abstract int getSizeInventory();
 
+	protected boolean supportsShiftClick() {
+
+		return true;
+	}
+
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+
+		if (!supportsShiftClick()) {
+			return null;
+		}
 
 		ItemStack stack = null;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
