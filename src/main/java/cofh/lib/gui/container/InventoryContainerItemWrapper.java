@@ -4,25 +4,87 @@ import cofh.api.item.IInventoryContainerItem;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class InventoryContainerItemWrapper implements IInventory {
 
-	private final ContainerInventoryItem container;
-	private final ItemStack inventory;
-	private final IInventoryContainerItem inventoryItem;
-	private boolean dirty = false;
+	protected final IInventoryContainerItem inventoryItem;
+	protected final ItemStack stack;
+	protected NBTTagCompound tag;
+	protected ItemStack[] inventory;
+	protected boolean dirty = false;
 
+	@Deprecated
 	public InventoryContainerItemWrapper(ContainerInventoryItem gui, ItemStack stack) {
 
-		container = gui;
-		inventory = stack;
-		inventoryItem = (IInventoryContainerItem) stack.getItem();
+		this(stack);
+	}
 
-		if (inventory.stackTagCompound == null) {
-			inventory.setTagCompound(new NBTTagCompound());
+	public InventoryContainerItemWrapper(ItemStack itemstack) {
+
+		stack = itemstack;
+		inventoryItem = (IInventoryContainerItem) stack.getItem();
+		inventory = new ItemStack[getSizeInventory()];
+
+		loadInventory();
+		markDirty();
+	}
+
+	protected void loadInventory() {
+
+		boolean loaded = false;
+		if (stack.stackTagCompound == null || !stack.stackTagCompound.hasKey("Inventory")) {
+			loaded = stack.hasTagCompound();
+			if (loaded) {
+				if (stack.stackTagCompound.hasKey("inventory")) {
+					tag = stack.stackTagCompound.getCompoundTag("inventory");
+					stack.stackTagCompound.removeTag("inventory");
+				} else {
+					tag = stack.stackTagCompound;
+				}
+				loadStacks();
+				tag = new NBTTagCompound();
+				saveStacks();
+			} else {
+				stack.setTagInfo("Inventory", new NBTTagCompound());
+			}
 		}
+		tag = stack.stackTagCompound.getCompoundTag("Inventory");
+		loadStacks();
+	}
+
+	protected void loadStacks() {
+
+		for (int i = inventory.length; i-- > 0;) {
+			if (tag.hasKey("Slot" + i)) {
+				inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + i));
+			} else if (tag.hasKey("slot" + i)) {
+				inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("slot" + i));
+			} else {
+				inventory[i] = null;
+			}
+		}
+	}
+
+	protected void saveStacks() {
+
+		for (int i = inventory.length; i-- > 0;) {
+			if (inventory[i] == null) {
+				tag.removeTag("Slot" + i);
+			} else {
+				tag.setTag("Slot" + i, inventory[i].writeToNBT(new NBTTagCompound()));
+			}
+		}
+		stack.setTagInfo("Inventory", tag);
+	}
+
+	@Override
+	public void markDirty() {
+
+		saveStacks();
+		dirty = true;
 	}
 
 	public boolean getDirty() {
@@ -32,42 +94,48 @@ public class InventoryContainerItemWrapper implements IInventory {
 		return r;
 	}
 
+	public Item getContainerItem() {
+
+		return stack.getItem();
+	}
+
 	public ItemStack getContainerStack() {
 
-		return inventory;
+		saveStacks();
+		return stack;
 	}
 
 	@Override
 	public int getSizeInventory() {
 
-		return inventoryItem.getSizeInventory(inventory);
+		return inventoryItem.getSizeInventory(stack);
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot) {
+	public ItemStack getStackInSlot(int i) {
 
-		if (inventory.stackTagCompound.getCompoundTag("Slot" + slot) == null || inventory.stackTagCompound.getCompoundTag("Slot" + slot).hasNoTags()) {
-			return null;
-		}
-		return ItemStack.loadItemStackFromNBT(inventory.stackTagCompound.getCompoundTag("Slot" + slot));
+		return inventory[i];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int slot, int amount) {
+	public ItemStack decrStackSize(int i, int j) {
 
-		if (inventory.stackTagCompound.getCompoundTag("Slot" + slot) == null || inventory.stackTagCompound.getCompoundTag("Slot" + slot).hasNoTags()) {
+		ItemStack s = inventory[i];
+		if (s == null) {
 			return null;
 		}
-		ItemStack stack = ItemStack.loadItemStackFromNBT(inventory.stackTagCompound.getCompoundTag("Slot" + slot));
-		ItemStack retStack = stack.splitStack(amount);
-		if (stack.stackSize <= 0) {
-			inventory.stackTagCompound.setTag("Slot" + slot, new NBTTagCompound());
-		} else {
-			NBTTagCompound itemTag = new NBTTagCompound();
-			stack.writeToNBT(itemTag);
-			inventory.stackTagCompound.setTag("Slot" + slot, itemTag);
+		ItemStack r = s.splitStack(j);
+		if (s.stackSize <= 0) {
+			inventory[i] = null;
+			r.stackSize += s.stackSize;
 		}
-		return retStack;
+		return r;
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+
+		inventory[i] = itemstack;
 	}
 
 	@Override
@@ -77,21 +145,18 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 
-		if (stack == null) {
-			inventory.stackTagCompound.setTag("Slot" + slot, new NBTTagCompound());
-		} else {
-			NBTTagCompound itemTag = new NBTTagCompound();
-			stack.writeToNBT(itemTag);
-			inventory.stackTagCompound.setTag("Slot" + slot, itemTag);
+		if (stack != null && stack.getItem() instanceof IInventoryContainerItem) {
+			return ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack) <= 0;
 		}
+		return true;
 	}
 
 	@Override
 	public String getInventoryName() {
 
-		return inventory.getDisplayName();
+		return stack.getDisplayName();
 	}
 
 	@Override
@@ -104,13 +169,6 @@ public class InventoryContainerItemWrapper implements IInventory {
 	public int getInventoryStackLimit() {
 
 		return 64;
-	}
-
-	@Override
-	public void markDirty() {
-
-		dirty = true;
-		container.onSlotChanged();
 	}
 
 	@Override
@@ -127,18 +185,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	@Override
 	public void closeInventory() {
 
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-
-		if (stack == null) {
-			return false;
-		}
-		if (stack.getItem() instanceof IInventoryContainerItem) {
-			return ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack) <= 0;
-		}
-		return true;
+		markDirty();
 	}
 
 }

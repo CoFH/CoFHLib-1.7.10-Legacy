@@ -25,6 +25,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -1114,7 +1115,7 @@ public final class ItemHelper {
 			addAccessibleInventoryInformation(stack, list, minSlot, maxSlot);
 			return;
 		}
-		if (!stack.stackTagCompound.hasKey("Inventory") || stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
+		if (!stack.stackTagCompound.hasKey("Inventory", Constants.NBT.TAG_LIST) || stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
 			list.add(StringHelper.localize("info.cofh.empty"));
 			return;
 		}
@@ -1187,14 +1188,19 @@ public final class ItemHelper {
 
 		boolean[] visited = new boolean[invSize];
 
+		NBTTagCompound tag = stack.stackTagCompound;
+		if (tag.hasKey("Inventory")) {
+			tag = tag.getCompoundTag("Inventory");
+		}
+
 		for (int i = minSlot; i < Math.min(invSize, maxSlot); i++) {
 			if (visited[i]) {
 				continue;
 			}
-			if (!stack.stackTagCompound.hasKey("Slot" + i)) {
+			if (!tag.hasKey("Slot" + i)) {
 				continue;
 			}
-			curStack = ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("Slot" + i));
+			curStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + i));
 			visited[i] = true;
 
 			if (curStack == null) {
@@ -1205,10 +1211,10 @@ public final class ItemHelper {
 				if (visited[j]) {
 					continue;
 				}
-				if (!stack.stackTagCompound.hasKey("Slot" + j)) {
+				if (!tag.hasKey("Slot" + j)) {
 					continue;
 				}
-				curStack2 = ItemStack.loadItemStackFromNBT(stack.stackTagCompound.getCompoundTag("Slot" + j));
+				curStack2 = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + j));
 
 				if (curStack2 == null) {
 					continue;
