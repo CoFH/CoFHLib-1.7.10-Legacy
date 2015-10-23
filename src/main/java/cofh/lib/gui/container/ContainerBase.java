@@ -3,6 +3,8 @@ package cofh.lib.gui.container;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
 import cofh.lib.util.helpers.MathHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -112,6 +114,15 @@ public abstract class ContainerBase extends Container {
 			for (int j = 0; j < this.crafters.size(); ++j) {
 				((ICrafting) this.crafters.get(j)).sendSlotContents(this, start, itemstack1);
 			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void putStacksInSlots(ItemStack[] stacks) {
+
+		for (int i = 0; i < stacks.length; ++i) {
+			putStackInSlot(i, stacks[i]);
 		}
 	}
 

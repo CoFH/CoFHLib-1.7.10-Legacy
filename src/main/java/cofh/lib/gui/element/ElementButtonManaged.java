@@ -19,6 +19,11 @@ public abstract class ElementButtonManaged extends ElementButtonBase {
 		_text = text;
 	}
 
+	public String getText() {
+
+		return _text;
+	}
+
 	protected void bindTexture(int mouseX, int mouseY) {
 
 		if (!isEnabled()) {
