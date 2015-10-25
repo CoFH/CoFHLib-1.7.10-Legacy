@@ -6,11 +6,13 @@ import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
+import com.google.common.base.Strings;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -103,7 +105,7 @@ public final class ItemHelper {
 
 	public static NBTTagCompound setItemStackTagName(NBTTagCompound tag, String name) {
 
-		if (name == "") {
+		if (Strings.isNullOrEmpty(name)) {
 			return null;
 		}
 		if (tag == null) {
@@ -159,6 +161,21 @@ public final class ItemHelper {
 			return "";
 		}
 		return stack.stackTagCompound.getCompoundTag("display").getString("Name");
+	}
+
+	public static ItemStack damageItem(ItemStack stack, int amt, Random rand) {
+
+		if (stack != null && stack.isItemStackDamageable()) {
+			if (stack.attemptDamageItem(amt, rand)) {
+				if (--stack.stackSize <= 0) {
+					stack = null;
+				} else {
+					stack.setItemDamage(0);
+				}
+			}
+		}
+
+		return stack;
 	}
 
 	public static ItemStack consumeItem(ItemStack stack) {

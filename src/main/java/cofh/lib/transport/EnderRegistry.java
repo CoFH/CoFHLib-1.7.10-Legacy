@@ -450,7 +450,7 @@ public final class EnderRegistry {
 				} else {
 					return null;
 				}
-				if (!onlyLoaded || world.blockExists(x, y, z)) {
+				if (world.blockExists(x, y, z)) {
 					TileEntity te = world.getTileEntity(x, y, z);
 					if (te instanceof IEnderDestination) {
 						output = (IEnderDestination) te;

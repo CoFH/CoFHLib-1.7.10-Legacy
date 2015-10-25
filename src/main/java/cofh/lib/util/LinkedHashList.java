@@ -405,7 +405,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		// Write out all elements in the proper order.
 		Entry n = head;
 		for (int i = 0; i < size; i++) {
-			s.writeObject(n);
+			s.writeObject(n.key);
 			n = n.next;
 		}
 
