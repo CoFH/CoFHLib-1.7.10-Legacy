@@ -63,6 +63,7 @@ public class RegistryUtils {
 			if (obj instanceof Item) {
 				RegistryDelegate<Item> delegate = ((Item) obj).delegate;
 				ReflectionHelper.setPrivateValue(DelegateClass, delegate, repl, "referant");
+				ReflectionHelper.setPrivateValue(DelegateClass, ((Item) repl).delegate, delegate.name(), "name");
 			}
 		}
 
