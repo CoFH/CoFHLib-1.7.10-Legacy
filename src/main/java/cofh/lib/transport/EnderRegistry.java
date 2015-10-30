@@ -133,11 +133,11 @@ public final class EnderRegistry {
 		return getElement(outputEnergy, theAttuned);
 	}
 
-	public int findFreeFrequency(IEnderDestination theAttuned) {
+	public int findFreeFrequency(String channel) {
 
-		BitSet set = usedTeleports.get(theAttuned.getChannelString());
+		BitSet set = usedTeleports.get(channel);
 		if (set == null) {
-			return 0;
+			return -1;
 		}
 		return set.nextClearBit(0);
 	}
