@@ -418,7 +418,6 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 			synchronized (hashTable) {
 				int newTableSize = old.length * 2, newMask = newTableSize - 1;
 				newTable = new Entry[newTableSize];
-				mask = newMask;
 
 				for (int bucket = old.length; bucket-- > 0;) {
 					Entry entry = old[bucket];
@@ -431,6 +430,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 					}
 				}
 				hashTable = newTable;
+				mask = newMask;
 			}
 		}
 	}
