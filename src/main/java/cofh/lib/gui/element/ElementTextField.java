@@ -7,6 +7,7 @@ import cofh.lib.gui.GuiColor;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ChatAllowedCharacters;
@@ -835,7 +836,7 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void update(int mouseX, int mouseY) {
 
-		++caretCounter;
+		caretCounter = (byte) (Minecraft.getMinecraft().ingameGUI.getUpdateCounter() & 0xFF);
 		// if (selecting) {
 		// FontRenderer font = getFontRenderer();
 		// int pos = mouseX - posX - 1;
