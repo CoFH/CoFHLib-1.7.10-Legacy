@@ -6,6 +6,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
+/**
+ * The purpose of this class is to show how to use and provide an interface for Thermal Expansion's IMC Recipe manipulation.
+ *
+ * It is not the only way to add recipes to TE, but it is BY FAR the safest. Please use it.
+ *
+ * @author King Lemming
+ *
+ */
 public class ThermalExpansionHelper {
 
 	private ThermalExpansionHelper() {

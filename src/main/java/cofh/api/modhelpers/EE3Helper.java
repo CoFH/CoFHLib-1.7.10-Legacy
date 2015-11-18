@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 public class EE3Helper {
 
-	public final static boolean EE3_PRESENT;
+	public static final boolean EE3_PRESENT;
 
 	private static Method addRecipe;
 	private static Method setAsNotLearnable;
@@ -38,6 +38,10 @@ public class EE3Helper {
 			}
 		}
 		EE3_PRESENT = found;
+	}
+
+	private EE3Helper() {
+
 	}
 
 	public static void addPreAssignedEnergyValue(Object object, float val) throws Throwable {

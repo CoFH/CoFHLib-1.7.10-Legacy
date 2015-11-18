@@ -14,9 +14,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ThaumcraftHelper {
 
-	private ThaumcraftHelper() {
-
-	}
+	// public static final boolean THAUMCRAFT_PRESENT;
 
 	private static Map<String, ? extends Object> aspects = null;
 	private static Method registerItem = null;
@@ -44,6 +42,10 @@ public class ThaumcraftHelper {
 		} catch (Throwable x) {
 			x.printStackTrace();
 		}
+	}
+
+	private ThaumcraftHelper() {
+
 	}
 
 	private static void parseAspects(Object aspectList, String toadd) throws Throwable {
