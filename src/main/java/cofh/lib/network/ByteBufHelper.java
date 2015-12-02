@@ -36,6 +36,9 @@ public final class ByteBufHelper {
 	public static String readString(ByteBuf data) {
 
 		int utflen = readVarInt(data);
+		if (utflen == -1) {
+			return null;
+		}
 		byte[] bytearr = null;
 		char[] chararr = null;
 		bytearr = new byte[utflen];
@@ -108,35 +111,38 @@ public final class ByteBufHelper {
 
 	public static void writeString(String str, ByteBuf out) {
 
+		if (str == null) {
+			writeVarInt(-1, out);
+			return;
+		}
+
 		int strlen = str.length();
-		int utflen = 0;
+		long utflen = 0;
 		int c, count = 0;
-		boolean hasLarge = false;
 
 		/* use charAt instead of copying String to char array */
 		for (int i = 0; i < strlen; ++i) {
 			c = str.charAt(i);
-			if ((c >= 0x0001) && (c <= 0x007F)) {
+			if ((c >= 0x0001) & (c <= 0x007F)) {
 				utflen++;
-			} else if (c > 0x07FF) {
-				utflen += 3;
-				hasLarge = true;
-			} else {
+			} else if (c < 0x0800) {
 				utflen += 2;
-				hasLarge = true;
+			} else {
+				utflen += 3;
 			}
 		}
 
-		if (utflen < 0) {
+		if (utflen < 0 || utflen > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException("encoded string too long: " + utflen + " bytes");
 		}
 
-		byte[] bytearr = new byte[utflen];
+		byte[] bytearr = new byte[(int) utflen];
 
-		writeVarInt(utflen, out);
+		writeVarInt((int) utflen, out);
 
 		int i = 0;
-		if (!hasLarge) {
+
+		if (utflen == strlen) {
 			for (; i < strlen; ++i) {
 				bytearr[count++] = (byte) str.charAt(i);
 			}
@@ -144,15 +150,15 @@ public final class ByteBufHelper {
 
 		for (; i < strlen; ++i) {
 			c = str.charAt(i);
-			if ((c >= 0x0001) && (c <= 0x007F)) {
+			if ((c >= 0x0001) & (c <= 0x007F)) {
 				bytearr[count++] = (byte) c;
 
-			} else if (c > 0x07FF) {
-				bytearr[count++] = (byte) (0xE0 | ((c >> 12) & 0x0F));
-				bytearr[count++] = (byte) (0x80 | ((c >> 6) & 0x3F));
+			} else if (c < 0x0800) {
+				bytearr[count++] = (byte) (0xC0 | ((c >> 6) & 0x1F));
 				bytearr[count++] = (byte) (0x80 | ((c >> 0) & 0x3F));
 			} else {
-				bytearr[count++] = (byte) (0xC0 | ((c >> 6) & 0x1F));
+				bytearr[count++] = (byte) (0xE0 | ((c >> 12) & 0x0F));
+				bytearr[count++] = (byte) (0x80 | ((c >> 6) & 0x3F));
 				bytearr[count++] = (byte) (0x80 | ((c >> 0) & 0x3F));
 			}
 		}
