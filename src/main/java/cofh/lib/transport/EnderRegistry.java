@@ -137,7 +137,7 @@ public final class EnderRegistry {
 
 		BitSet set = usedTeleports.get(channel);
 		if (set == null) {
-			return -1;
+			return 0;
 		}
 		return set.nextClearBit(0);
 	}
