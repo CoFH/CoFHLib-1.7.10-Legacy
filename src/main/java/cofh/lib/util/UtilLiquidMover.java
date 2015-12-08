@@ -17,6 +17,11 @@ import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fluids.IFluidHandler;
 import net.minecraftforge.fluids.IFluidTank;
 
+/**
+ *
+ * @deprecated Use {@link cofh.lib.util.helpers.FluidHelper}
+ */
+@Deprecated
 public class UtilLiquidMover {
 
 	/**
