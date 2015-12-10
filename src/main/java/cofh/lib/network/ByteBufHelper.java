@@ -6,29 +6,40 @@ public final class ByteBufHelper {
 
 	public static int readVarInt(ByteBuf data) {
 
-		int r = 0;
-		int i = 0;
-		byte b;
-
-		do {
-			b = data.readByte();
-			r |= (b & 127) << i++ * 7;
-
-			if (i > 5) {
+		int v = data.readByte(), r = v & 0x3F;
+		boolean n = (v & 0x40) != 0;
+		for (int i = 6; (v & 0x80) != 0;) {
+			v = data.readByte();
+			r |= (v & 0x7F) << i;
+			i += 7;
+			if (i > 34) { // 7 * 4 + 6
 				throw new RuntimeException("VarInt too big");
 			}
-		} while ((b & 128) == 128);
-
-		return r;
+		}
+		return n ? ~r : r;
 	}
 
 	public static void writeVarInt(int in, ByteBuf out) {
 
-		if (in == 0) {
-			out.writeByte(0);
+		/*
+		 * Custom format: pseudo-ones-compliment utf-7
+		 * zyxx xxxx | zxxx xxxx | zxxx xxxx | zxxx xxxx | 0000 xxxx
+		 *  z = `continue` bit, if not set following bytes do not exist
+		 *  y = `negate` bit, if set the final value should be twos-compliment bitwise negated
+		 *  x = value bit. encoded in little-endian
+		 */
+		int v = 0x00;
+		if (in < 0) {
+			v |= 0x40;
+			in = ~in;
 		}
+		if ((in & ~0x3F) != 0) {
+			v |= 0x80;
+		}
+		out.writeByte(v | (in & 0x3F));
+		in >>>= 6;
 		while (in != 0) {
-			out.writeByte(in & 127 | ((in & ~0x7F) != 0 ? 128 : 0));
+			out.writeByte((in & 0x7F) | ((in & ~0x7F) != 0 ? 0x80 : 0));
 			in >>>= 7;
 		}
 	}
