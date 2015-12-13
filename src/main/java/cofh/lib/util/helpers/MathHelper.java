@@ -38,12 +38,35 @@ public final class MathHelper {
 		return SIN_TABLE[(int) ((float) d * 10430.378F + 16384.0F) & 65535];
 	}
 
+	/**
+	 * @deprecated use {@link clamp} instead
+	 */
+	@Deprecated
 	public static int clampI(int a, int min, int max) {
 
 		return a < min ? min : (a > max ? max : a);
 	}
 
+	/**
+	 * @deprecated use {@link clamp} instead
+	 */
+	@Deprecated
 	public static float clampF(float a, float min, float max) {
+
+		return a < min ? min : (a > max ? max : a);
+	}
+
+	public static int clamp(int a, int min, int max) {
+
+		return a < min ? min : (a > max ? max : a);
+	}
+
+	public static float clamp(float a, float min, float max) {
+
+		return a < min ? min : (a > max ? max : a);
+	}
+
+	public static double clamp(double a, double min, double max) {
 
 		return a < min ? min : (a > max ? max : a);
 	}
