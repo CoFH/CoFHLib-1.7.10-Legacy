@@ -74,7 +74,7 @@ public class RenderFluidOverlayItem implements IItemRenderer {
 		int colorMult = hasFluid ? fluid.getFluid().getColor(fluid) : 0xFFFFFF;
 		boolean isFloaty = hasFluid ? fluid.getFluid().getDensity(fluid) < 0 : false;
 
-		if (fluid == null) {
+		if (fluidIcon == null) {
 			fluidIcon = Blocks.flowing_lava.getIcon(2, 0);
 			fluidSheet = 0;
 			colorMult = 0x3F3F3F;
