@@ -103,8 +103,8 @@ public abstract class ContainerBase extends Container {
 
 	protected void sendSlots(int start, int end) {
 
-		start = MathHelper.clampI(start, 0, inventorySlots.size());
-		end = MathHelper.clampI(end, 0, inventorySlots.size());
+		start = MathHelper.clamp(start, 0, inventorySlots.size());
+		end = MathHelper.clamp(end, 0, inventorySlots.size());
 		for (; start < end; ++start) {
 			ItemStack itemstack = ((Slot) inventorySlots.get(start)).getStack();
 

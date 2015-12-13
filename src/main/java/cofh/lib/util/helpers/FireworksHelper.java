@@ -53,8 +53,8 @@ public final class FireworksHelper {
 		 */
 		public static Explosion getRandom(int primaryColors, int fadeColors) {
 
-			primaryColors = MathHelper.clampI(primaryColors, 1, Integer.MAX_VALUE);
-			fadeColors = MathHelper.clampI(fadeColors, 1, Integer.MAX_VALUE);
+			primaryColors = MathHelper.clamp(primaryColors, 1, Integer.MAX_VALUE);
+			fadeColors = MathHelper.clamp(fadeColors, 1, Integer.MAX_VALUE);
 
 			Explosion e = new Explosion();
 
@@ -139,7 +139,7 @@ public final class FireworksHelper {
 		 */
 		public Explosion setType(int type) {
 
-			this.setType(Type.values()[MathHelper.clampI(type, 0, Type.values().length - 1)]);
+			this.setType(Type.values()[MathHelper.clamp(type, 0, Type.values().length - 1)]);
 			return this;
 		}
 
@@ -248,7 +248,7 @@ public final class FireworksHelper {
 			}
 		}
 
-		fireworksTag.setByte("Flight", (byte) MathHelper.clampI(flightDuration, 0, 3));
+		fireworksTag.setByte("Flight", (byte) MathHelper.clamp(flightDuration, 0, 3));
 		fireworksTag.setTag("Explosions", explosionsList);
 		tags.setTag("Fireworks", fireworksTag);
 
@@ -272,7 +272,7 @@ public final class FireworksHelper {
 	 */
 	public static ItemStack getRandomFireworks(int flightDuration, int explosions, int primaryColors, int fadeColors) {
 
-		explosions = MathHelper.clampI(explosions, 0, Integer.MAX_VALUE);
+		explosions = MathHelper.clamp(explosions, 0, Integer.MAX_VALUE);
 		Explosion[] explosionsArray = new Explosion[explosions];
 		for (int i = 0; i < explosions; i++) {
 			explosionsArray[i] = Explosion.getRandom(primaryColors, fadeColors);

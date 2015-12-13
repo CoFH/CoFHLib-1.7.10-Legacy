@@ -329,7 +329,7 @@ public class ElementTextField extends ElementBase {
 
 	protected void findRenderStart() {
 
-		caret = MathHelper.clampI(caret, 0, textLength);
+		caret = MathHelper.clamp(caret, 0, textLength);
 		if (selectionStart == selectionEnd) {
 			selectionStart = selectionEnd = caret;
 		}
@@ -663,7 +663,7 @@ public class ElementTextField extends ElementBase {
 
 				{
 					int t = caret;
-					caret = MathHelper.clampI(caret + size, 0, textLength);
+					caret = MathHelper.clamp(caret + size, 0, textLength);
 					size = caret - t;
 				}
 
