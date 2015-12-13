@@ -121,6 +121,24 @@ public final class StringHelper {
 		}
 	}
 
+	public static String toNumerals(short v) {
+
+		String s = "potion.potency." + v;
+		if (StatCollector.canTranslate(s))
+			return StatCollector.translateToLocal(s);
+		StringBuilder r = new StringBuilder();
+		int i = v;
+		if (i < 0) {
+			i = -i;
+			r.append('-');
+		}
+		for (Numeral k : Numeral.values) {
+			for (int j = i / k.value; j-- > 0; r.append(k.name));
+			i %= k.value;
+		}
+		return r.toString();
+	}
+
 	@Deprecated
 	public static String getScaledNumber(long number, int minDigits) {
 
@@ -207,6 +225,18 @@ public final class StringHelper {
 		return localize("info.cofh.tutorial.fluxRequired");
 	}
 
+	public static final String[] ROMAN_NUMERAL = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
+
+	private static enum Numeral {
+		M(1000), CM(900), D(500), CD(400), C(100), XC(90), L(50), XL(40), X(10), IX(9), V(5), IV(4), I(1);
+		public final String name = name();
+		public final int value;
+		private Numeral(int val) {
+			value = val;
+		}
+		private static final Numeral[] values = values();
+	}
+
 	/** When formatting a string, always apply color before font modification. */
 	public static final String BLACK = (char) 167 + "0";
 	public static final String BLUE = (char) 167 + "1";
@@ -231,8 +261,6 @@ public final class StringHelper {
 	public static final String UNDERLINE = (char) 167 + "n";
 	public static final String ITALIC = (char) 167 + "o";
 	public static final String END = (char) 167 + "r";
-
-	public static final String[] ROMAN_NUMERAL = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
 	public static boolean displayShiftForDetail = true;
 	public static boolean displayStackCount = false;
