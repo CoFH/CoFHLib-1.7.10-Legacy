@@ -64,9 +64,9 @@ public abstract class ContainerBase extends Container {
 		int invFull = inventorySlots.size();
 
 		if (slotIndex < invBase) {
-			return mergeItemStack(stack, invBase, invFull, false);
+			return mergeItemStack(stack, invBase, invFull, true);
 		}
-		return mergeItemStack(stack, 0, invBase, true);
+		return mergeItemStack(stack, 0, invBase, false);
 	}
 
 	@Override
