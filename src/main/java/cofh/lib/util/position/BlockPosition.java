@@ -9,7 +9,9 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BlockPosition implements Comparable<BlockPosition>, Serializable {
@@ -339,7 +341,10 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		if (!world.blockExists(x, y, z)) {
 			return null;
 		}
-		return world.getChunkFromBlockCoords(x, z).getTileEntityUnsafe(x & 15, y, z & 15);
+        ChunkPosition chunkposition = new ChunkPosition(x & 15, y, z & 15);
+        Chunk chunk = world.getChunkFromBlockCoords(x, z);
+        TileEntity tileentity = (TileEntity)chunk.chunkTileEntityMap.get(chunkposition);
+		return tileentity == null || tileentity.isInvalid() ? null : tileentity;
 	}
 
 	@SuppressWarnings("unchecked")
