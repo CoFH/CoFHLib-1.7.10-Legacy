@@ -622,11 +622,10 @@ public class WorldGenMassiveTree extends WorldGenerator {
 			return;
 		}
 		// ++blocksAdded;
-		long pos = (((long) (x & ~15)) << 32) | (z & ~15);
+		long pos = ((x & 0xFFFFFFF0L) << 32) | (z  & 0xFFFFFFF0L);
 
-		Chunk chunk;// = chunkMap.get(pos);
-		// if (chunk == null)
-		{
+		Chunk chunk = chunkMap.get(pos);
+		if (chunk == null) {
 			chunk = world.getChunkFromBlockCoords(x, z);
 			chunkMap.put(pos, chunk);
 		}
@@ -652,4 +651,5 @@ public class WorldGenMassiveTree extends WorldGenerator {
 		}
 		subChunk.setExtBlocklightValue(x, y, z, 0);
 	}
+
 }
