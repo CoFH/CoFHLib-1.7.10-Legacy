@@ -1132,7 +1132,8 @@ public final class ItemHelper {
 			addAccessibleInventoryInformation(stack, list, minSlot, maxSlot);
 			return;
 		}
-		if (!stack.stackTagCompound.hasKey("Inventory", Constants.NBT.TAG_LIST) || stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
+		if (!stack.stackTagCompound.hasKey("Inventory", Constants.NBT.TAG_LIST)
+				|| stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
 			list.add(StringHelper.localize("info.cofh.empty"));
 			return;
 		}
@@ -1170,7 +1171,7 @@ public final class ItemHelper {
 				if (curStack2 == null) {
 					continue;
 				}
-				if (itemsEqualWithMetadata(curStack, curStack2)) {
+				if (itemsIdentical(curStack, curStack2)) {
 					curStack.stackSize += curStack2.stackSize;
 					visited[j] = true;
 				}
@@ -1236,7 +1237,7 @@ public final class ItemHelper {
 				if (curStack2 == null) {
 					continue;
 				}
-				if (itemsEqualWithMetadata(curStack, curStack2)) {
+				if (itemsIdentical(curStack, curStack2)) {
 					curStack.stackSize += curStack2.stackSize;
 					visited[j] = true;
 				}
