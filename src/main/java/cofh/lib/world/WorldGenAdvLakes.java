@@ -46,8 +46,7 @@ public class WorldGenAdvLakes extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xStart, int yStart,
-			int zStart) {
+	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
 
 		int widthOff = width / 2;
 		xStart -= widthOff;
