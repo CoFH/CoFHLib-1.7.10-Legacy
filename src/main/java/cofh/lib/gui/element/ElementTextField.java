@@ -42,6 +42,7 @@ public class ElementTextField extends ElementBase {
 	private boolean selecting, pressed;
 
 	private byte caretCounter;
+	protected int offsetX = 0, offsetY = 0;
 	protected boolean caretInsert;
 	protected boolean smartCaret = true;
 	protected boolean smartCaretCase = true;
@@ -137,6 +138,16 @@ public class ElementTextField extends ElementBase {
 		findRenderStart();
 		return this;
 	}
+	
+	public ElementTextField setOffsetX(int offsetX) {
+		this.offsetX = offsetX;
+		return this;
+	}
+	
+	public ElementTextField setOffsetY(int offsetY) {
+		this.offsetY = offsetY;
+		return this;
+	}
 
 	public int getContentLength() {
 
@@ -165,6 +176,14 @@ public class ElementTextField extends ElementBase {
 	public boolean isFocusable() {
 
 		return canFocusChange;
+	}
+	
+	public int getOffsetX() {
+		return offsetX;
+	}
+	
+	public int getOffsetY() {
+		return offsetY;
 	}
 
 	public int getContentHeight() {
@@ -882,8 +901,8 @@ public class ElementTextField extends ElementBase {
 
 		FontRenderer font = getFontRenderer();
 		char[] text = this.text;
-		int startX = posX + 1 - (multiline ? renderStartX : 0), endX = sizeX - 1;
-		int startY = posY + 1 - renderStartY, endY = startY + font.FONT_HEIGHT;
+		int startX = posX + 1 - (multiline ? renderStartX : 0) + offsetX, endX = sizeX - 1;
+		int startY = posY + 1 - renderStartY + offsetY, endY = startY + font.FONT_HEIGHT;
 		int drawY = renderStartY + Math.max(0, (sizeY - 2) / font.FONT_HEIGHT) * font.FONT_HEIGHT;
 		if (enableStencil) {
 			if (sizeY - (drawY - renderStartY) > 2) {
