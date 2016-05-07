@@ -454,15 +454,16 @@ public class ElementTextField extends ElementBase {
 		int i = pos;
 
 		if (smartCaret) {
+			boolean originalCase = Character.isUpperCase(prevChar);
 			for (; i != e; i += dir) {
 				char curChar = text[i];
 				boolean dig = Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar);
 				boolean caze = !dig && Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
 				boolean space = Character.isWhitespace(prevChar) != Character.isWhitespace(curChar);
-				if (dig || caze || space) {
+				if (dig || (caze & smartCaretCase) || space) {
 					int o = 0;
 					if (smartCaretCase && caze) {
-						o = !forward ? 0 : -dir;
+						o = originalCase && Character.isUpperCase(prevChar) ? -dir : 0;
 					} else {
 						if (space) {
 							if (forward) {
