@@ -41,7 +41,7 @@ public class ElementTextField extends ElementBase {
 
 	private boolean selecting, pressed;
 
-	private byte caretCounter;
+	private byte caretCounter, counterOffset;
 	protected boolean caretInsert;
 	protected boolean smartCaret = true;
 	protected boolean smartCaretCase = true;
@@ -113,7 +113,7 @@ public class ElementTextField extends ElementBase {
 
 		if (isFocusable()) {
 			isFocused = focused;
-			caretCounter = 0;
+			resetCaretFlash();
 		}
 		return this;
 	}
@@ -284,6 +284,8 @@ public class ElementTextField extends ElementBase {
 			clearSelection();
 			findRenderStart();
 			onCharacterEntered(typed);
+
+			resetCaretFlash();
 			return true;
 		}
 		return false;
@@ -295,6 +297,14 @@ public class ElementTextField extends ElementBase {
 
 	protected void onCharacterEntered(boolean success) {
 
+	}
+
+	protected void resetCaretFlash() {
+
+		int v = Minecraft.getMinecraft().ingameGUI.getUpdateCounter();
+		counterOffset = (byte) ((v - counterOffset) & 63);
+		counterOffset += (byte) ((v - counterOffset) & 63);
+		caretCounter = 0;
 	}
 
 	protected boolean insertCharacter(char charTyped) {
@@ -512,11 +522,15 @@ public class ElementTextField extends ElementBase {
 			if (selectionStart != selectionEnd) {
 				GuiScreen.setClipboardString(getSelectedText());
 				clearSelection();
+
+				resetCaretFlash();
 			}
 
 			return true;
 		case 22: // ^V
 			writeText(GuiScreen.getClipboardString());
+
+			resetCaretFlash();
 
 			return true;
 		default:
@@ -530,6 +544,8 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_INSERT:
 				if (GuiScreen.isShiftKeyDown()) {
 					writeText(GuiScreen.getClipboardString());
+
+					resetCaretFlash();
 				} else {
 					caretInsert = !caretInsert;
 				}
@@ -537,6 +553,8 @@ public class ElementTextField extends ElementBase {
 				return true;
 			case Keyboard.KEY_CLEAR: // mac only (clear selection)
 				clearSelection();
+
+				resetCaretFlash();
 
 				return true;
 			case Keyboard.KEY_DELETE: // delete
@@ -559,6 +577,8 @@ public class ElementTextField extends ElementBase {
 
 						onCharacterEntered(changed);
 					}
+
+					resetCaretFlash();
 
 					return true;
 				}
@@ -598,6 +618,8 @@ public class ElementTextField extends ElementBase {
 					onCharacterEntered(changed);
 				}
 
+				resetCaretFlash();
+
 				return true;
 			case Keyboard.KEY_HOME: // home
 				int begin = 0;
@@ -621,6 +643,8 @@ public class ElementTextField extends ElementBase {
 				caret = begin;
 				findRenderStart();
 
+				resetCaretFlash();
+
 				return true;
 			case Keyboard.KEY_END: // end
 				int end = textLength;
@@ -643,6 +667,8 @@ public class ElementTextField extends ElementBase {
 				}
 				caret = end;
 				findRenderStart();
+
+				resetCaretFlash();
 
 				return true;
 			case Keyboard.KEY_LEFT: // left arrow
@@ -686,6 +712,8 @@ public class ElementTextField extends ElementBase {
 					caret = caret - size;
 				}
 				findRenderStart();
+
+				resetCaretFlash();
 
 				return true;
 			case Keyboard.KEY_UP:
@@ -757,6 +785,8 @@ public class ElementTextField extends ElementBase {
 						selectionEnd = t;
 					}
 				}
+
+				resetCaretFlash();
 
 				return true;
 			default:
@@ -837,7 +867,7 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void update(int mouseX, int mouseY) {
 
-		caretCounter = (byte) (Minecraft.getMinecraft().ingameGUI.getUpdateCounter() & 0xFF);
+		caretCounter = (byte) ((Minecraft.getMinecraft().ingameGUI.getUpdateCounter() - counterOffset) & 63);
 		// if (selecting) {
 		// FontRenderer font = getFontRenderer();
 		// int pos = mouseX - posX - 1;
@@ -920,7 +950,7 @@ public class ElementTextField extends ElementBase {
 				}
 			}
 
-			boolean drawCaret = draw && i == caret && (caretCounter &= 31) < 16 && isFocused();
+			boolean drawCaret = draw && i == caret && (caretCounter & 31) < 16 && isFocused();
 			if (drawCaret) {
 				int caretEnd = width + 2;
 				if (caretInsert) {
