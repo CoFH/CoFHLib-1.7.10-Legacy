@@ -237,7 +237,7 @@ public class FluidHelper {
 			} else {
 				return null;
 			}
-		} else if (Block.isEqualTo(bId, Blocks.lava)) {
+		} else if (Block.isEqualTo(bId, Blocks.lava) || Block.isEqualTo(bId, Blocks.flowing_lava)) {
 			if (bMeta == 0) {
 				return LAVA.copy();
 			} else {
