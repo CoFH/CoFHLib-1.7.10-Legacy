@@ -210,7 +210,7 @@ public class WorldGenMassiveTree extends WorldGenerator {
 			int y = 0;
 
 			for (int var5 = y + leafDistanceLimit; y < var5; ++y) {
-				int size = (y != 0) & y != leafDistanceLimit - 1 ? 3 : 2;
+				int size = (y != 0) && y != leafDistanceLimit - 1 ? 3 : 2;
 				genLeafLayer(x, yO++, z, size);
 			}
 		}
@@ -260,7 +260,7 @@ public class WorldGenMassiveTree extends WorldGenerator {
 				int var20 = Math.max(var18, var19);
 
 				int var17 = meta;
-				if (smoothLogs & var20 > 0) {
+				if (smoothLogs && var20 > 0) {
 					if (var18 == var20) {
 						var17 |= 4;
 					} else if (var19 == var20) {
@@ -609,7 +609,7 @@ public class WorldGenMassiveTree extends WorldGenerator {
 	@Override
 	public void setBlockAndNotifyAdequately(World world, int x, int y, int z, Block block, int meta) {
 
-		if ((y < 0) | y > 255) {
+		if ((y < 0) || y > 255) {
 			return;
 		}
 		generated = true;

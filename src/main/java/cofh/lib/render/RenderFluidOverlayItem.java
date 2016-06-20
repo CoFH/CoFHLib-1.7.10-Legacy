@@ -44,7 +44,7 @@ public class RenderFluidOverlayItem implements IItemRenderer {
 	@Override
 	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
 
-		return handleRenderType(item, type) & helper.ordinal() < ItemRendererHelper.EQUIPPED_BLOCK.ordinal();
+		return handleRenderType(item, type) && helper.ordinal() < ItemRendererHelper.EQUIPPED_BLOCK.ordinal();
 	}
 
 	@Override

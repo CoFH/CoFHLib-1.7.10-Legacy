@@ -45,7 +45,7 @@ public class IconOverlay implements IIcon {
 		case 7: // left empty
 			w = parts & 9;
 			value ^= ((w & (w << 3)) << 1); // bithack: add 16 if both connections
-			if ((w == 1) | w == 8) // bottom right, top right
+			if ((w == 1) || w == 8) // bottom right, top right
 				value = 32 | (w >> 3);
 			break;
 		case 10: // bottom left connection
@@ -54,7 +54,7 @@ public class IconOverlay implements IIcon {
 		case 11: // top empty
 			w = parts & 3;
 			value ^= ((w & (w << 1)) << 3); // bithack: add 16 if both connections
-			if ((w == 1) | w == 2) // bottom right, bottom left
+			if ((w == 1) || w == 2) // bottom right, bottom left
 				value = 34 | (w >> 1);
 			break;
 		case 12: // top left connection
@@ -63,13 +63,13 @@ public class IconOverlay implements IIcon {
 		case 13: // bottom empty
 			w = parts & 12;
 			value ^= ((w & (w << 1)) << 1); // bithack: add 16 if both connections
-			if ((w == 4) | w == 8) // top left, top right
+			if ((w == 4) || w == 8) // top left, top right
 				value = 36 | (w >> 3);
 			break;
 		case 14: // right empty
 			w = parts & 6;
 			value ^= ((w & (w << 1)) << 2); // bithack: add 16 if both connections
-			if ((w == 2) | w == 4) // bottom left, top left
+			if ((w == 2) || w == 4) // bottom left, top left
 				value = 38 | (w >> 2);
 			break;
 		case 15: // all sides
