@@ -30,10 +30,10 @@ public final class BlockHelper {
 
 	}
 
-	public static int MAX_ID = 1024;
-	public static byte[] rotateType = new byte[MAX_ID];
+	public static final int MAX_ID = 1024;
+	public static final byte[] ROTATE_TYPE = new byte[MAX_ID];
 	public static final int[][] SIDE_COORD_MOD = { { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 }, { -1, 0, 0 }, { 1, 0, 0 } };
-	public static float[][] SIDE_COORD_AABB = { { 1, -2, 1 }, { 1, 2, 1 }, { 1, 1, 1 }, { 1, 1, 2 }, { 1, 1, 1 }, { 2, 1, 1 } };
+	public static final float[][] SIDE_COORD_AABB = { { 1, -2, 1 }, { 1, 2, 1 }, { 1, 1, 1 }, { 1, 1, 2 }, { 1, 1, 1 }, { 2, 1, 1 } };
 	public static final byte[] SIDE_LEFT = { 4, 5, 5, 4, 2, 3 };
 	public static final byte[] SIDE_RIGHT = { 5, 4, 4, 5, 3, 2 };
 	public static final byte[] SIDE_OPPOSITE = { 1, 0, 3, 2, 5, 4 };
@@ -86,51 +86,51 @@ public final class BlockHelper {
 	}
 
 	static { // TODO: review which of these can be removed in favor of the vanilla handler
-		rotateType[Block.getIdFromBlock(Blocks.bed)] = RotationType.PREVENT;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.bed)] = RotationType.PREVENT;
 
-		rotateType[Block.getIdFromBlock(Blocks.stone_slab)] = RotationType.SLAB;
-		rotateType[Block.getIdFromBlock(Blocks.wooden_slab)] = RotationType.SLAB;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.stone_slab)] = RotationType.SLAB;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.wooden_slab)] = RotationType.SLAB;
 
-		rotateType[Block.getIdFromBlock(Blocks.rail)] = RotationType.RAIL;
-		rotateType[Block.getIdFromBlock(Blocks.golden_rail)] = RotationType.RAIL;
-		rotateType[Block.getIdFromBlock(Blocks.detector_rail)] = RotationType.RAIL;
-		rotateType[Block.getIdFromBlock(Blocks.activator_rail)] = RotationType.RAIL;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.rail)] = RotationType.RAIL;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.golden_rail)] = RotationType.RAIL;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.detector_rail)] = RotationType.RAIL;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.activator_rail)] = RotationType.RAIL;
 
-		rotateType[Block.getIdFromBlock(Blocks.pumpkin)] = RotationType.PUMPKIN;
-		rotateType[Block.getIdFromBlock(Blocks.lit_pumpkin)] = RotationType.PUMPKIN;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.pumpkin)] = RotationType.PUMPKIN;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.lit_pumpkin)] = RotationType.PUMPKIN;
 
-		rotateType[Block.getIdFromBlock(Blocks.furnace)] = RotationType.FOUR_WAY;
-		rotateType[Block.getIdFromBlock(Blocks.lit_furnace)] = RotationType.FOUR_WAY;
-		rotateType[Block.getIdFromBlock(Blocks.ender_chest)] = RotationType.FOUR_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.furnace)] = RotationType.FOUR_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.lit_furnace)] = RotationType.FOUR_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.ender_chest)] = RotationType.FOUR_WAY;
 
-		rotateType[Block.getIdFromBlock(Blocks.trapped_chest)] = RotationType.CHEST;
-		rotateType[Block.getIdFromBlock(Blocks.chest)] = RotationType.CHEST;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.trapped_chest)] = RotationType.CHEST;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.chest)] = RotationType.CHEST;
 
-		rotateType[Block.getIdFromBlock(Blocks.dispenser)] = RotationType.SIX_WAY;
-		rotateType[Block.getIdFromBlock(Blocks.sticky_piston)] = RotationType.SIX_WAY;
-		rotateType[Block.getIdFromBlock(Blocks.piston)] = RotationType.SIX_WAY;
-		rotateType[Block.getIdFromBlock(Blocks.hopper)] = RotationType.SIX_WAY;
-		rotateType[Block.getIdFromBlock(Blocks.dropper)] = RotationType.SIX_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.dispenser)] = RotationType.SIX_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.sticky_piston)] = RotationType.SIX_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.piston)] = RotationType.SIX_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.hopper)] = RotationType.SIX_WAY;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.dropper)] = RotationType.SIX_WAY;
 
-		rotateType[Block.getIdFromBlock(Blocks.unpowered_repeater)] = RotationType.REDSTONE;
-		rotateType[Block.getIdFromBlock(Blocks.unpowered_comparator)] = RotationType.REDSTONE;
-		rotateType[Block.getIdFromBlock(Blocks.powered_repeater)] = RotationType.REDSTONE;
-		rotateType[Block.getIdFromBlock(Blocks.powered_comparator)] = RotationType.REDSTONE;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.unpowered_repeater)] = RotationType.REDSTONE;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.unpowered_comparator)] = RotationType.REDSTONE;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.powered_repeater)] = RotationType.REDSTONE;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.powered_comparator)] = RotationType.REDSTONE;
 
-		rotateType[Block.getIdFromBlock(Blocks.lever)] = RotationType.LEVER;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.lever)] = RotationType.LEVER;
 
-		rotateType[Block.getIdFromBlock(Blocks.standing_sign)] = RotationType.SIGN;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.standing_sign)] = RotationType.SIGN;
 
-		rotateType[Block.getIdFromBlock(Blocks.oak_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.stone_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.brick_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.stone_brick_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.nether_brick_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.sandstone_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.spruce_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.birch_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.jungle_stairs)] = RotationType.STAIRS;
-		rotateType[Block.getIdFromBlock(Blocks.quartz_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.oak_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.stone_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.brick_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.stone_brick_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.nether_brick_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.sandstone_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.spruce_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.birch_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.jungle_stairs)] = RotationType.STAIRS;
+		ROTATE_TYPE[Block.getIdFromBlock(Blocks.quartz_stairs)] = RotationType.STAIRS;
 	}
 
 	public static int getMicroBlockAngle(int side, float hitX, float hitY, float hitZ) {
@@ -396,13 +396,13 @@ public final class BlockHelper {
 	public static boolean canRotate(Block block) {
 
 		int bId = Block.getIdFromBlock(block);
-		return bId < MAX_ID ? rotateType[Block.getIdFromBlock(block)] != 0 : false;
+		return bId < MAX_ID ? ROTATE_TYPE[Block.getIdFromBlock(block)] != 0 : false;
 	}
 
 	public static int rotateVanillaBlock(World world, Block block, int x, int y, int z) {
 
 		int bId = Block.getIdFromBlock(block), bMeta = world.getBlockMetadata(x, y, z);
-		switch (rotateType[bId]) {
+		switch (ROTATE_TYPE[bId]) {
 		case RotationType.FOUR_WAY:
 			return SIDE_LEFT[bMeta];
 		case RotationType.SIX_WAY:
@@ -464,7 +464,7 @@ public final class BlockHelper {
 	public static int rotateVanillaBlockAlt(World world, Block block, int x, int y, int z) {
 
 		int bId = Block.getIdFromBlock(block), bMeta = world.getBlockMetadata(x, y, z);
-		switch (rotateType[bId]) {
+		switch (ROTATE_TYPE[bId]) {
 		case RotationType.FOUR_WAY:
 			return SIDE_RIGHT[bMeta];
 		case RotationType.SIX_WAY:

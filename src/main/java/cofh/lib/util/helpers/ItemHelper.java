@@ -48,7 +48,7 @@ public final class ItemHelper {
 	public static final String NUGGET = "nugget";
 	public static final String LOG = "log";
 
-	public static OreDictionaryProxy oreProxy = new OreDictionaryProxy();
+	public static final OreDictionaryProxy ORE_PROXY = new OreDictionaryProxy();
 
 	private ItemHelper() {
 
@@ -309,27 +309,27 @@ public final class ItemHelper {
 	/* ORE DICTIONARY FUNCTIONS */
 	public static ItemStack getOre(String oreName) {
 
-		return oreProxy.getOre(oreName);
+		return ORE_PROXY.getOre(oreName);
 	}
 
 	public static String getOreName(ItemStack stack) {
 
-		return oreProxy.getOreName(stack);
+		return ORE_PROXY.getOreName(stack);
 	}
 
 	public static boolean isOreIDEqual(ItemStack stack, int oreID) {
 
-		return oreProxy.isOreIDEqual(stack, oreID);
+		return ORE_PROXY.isOreIDEqual(stack, oreID);
 	}
 
 	public static boolean isOreNameEqual(ItemStack stack, String oreName) {
 
-		return oreProxy.isOreNameEqual(stack, oreName);
+		return ORE_PROXY.isOreNameEqual(stack, oreName);
 	}
 
 	public static boolean oreNameExists(String oreName) {
 
-		return oreProxy.oreNameExists(oreName);
+		return ORE_PROXY.oreNameExists(oreName);
 	}
 
 	public static boolean hasOreName(ItemStack stack) {
@@ -1095,8 +1095,8 @@ public final class ItemHelper {
 
 	public static boolean doOreIDsMatch(ItemStack stackA, ItemStack stackB) {
 
-		int id = oreProxy.getOreID(stackA);
-		return id >= 0 && id == oreProxy.getOreID(stackB);
+		int id = ORE_PROXY.getOreID(stackA);
+		return id >= 0 && id == ORE_PROXY.getOreID(stackB);
 	}
 
 	public static boolean isBlacklist(ItemStack output) {
