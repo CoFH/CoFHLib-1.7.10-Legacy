@@ -138,15 +138,14 @@ public class UtilLiquidMover {
 						filledBucket = null;
 					}
 				}
-				if (filledBucket != null) {
-					if (ItemHelper.disposePlayerItem(ci, filledBucket, player, true)) {
-						if (!player.worldObj.isRemote) {
-							player.openContainer.detectAndSendChanges();
-							((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
-						}
-						itcb.drain(ForgeDirection.UNKNOWN, bucketLiquid, true);
-						return true;
+				if (filledBucket != null
+						&& ItemHelper.disposePlayerItem(ci, filledBucket, player, true)) {
+					if (!player.worldObj.isRemote) {
+						player.openContainer.detectAndSendChanges();
+						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
 					}
+					itcb.drain(ForgeDirection.UNKNOWN, bucketLiquid, true);
+					return true;
 				}
 			}
 		}

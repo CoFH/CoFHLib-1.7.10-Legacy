@@ -165,13 +165,11 @@ public final class ItemHelper {
 
 	public static ItemStack damageItem(ItemStack stack, int amt, Random rand) {
 
-		if (stack != null && stack.isItemStackDamageable()) {
-			if (stack.attemptDamageItem(amt, rand)) {
-				if (--stack.stackSize <= 0) {
-					stack = null;
-				} else {
-					stack.setItemDamage(0);
-				}
+		if (stack != null && stack.isItemStackDamageable() && stack.attemptDamageItem(amt, rand)) {
+			if (--stack.stackSize <= 0) {
+				stack = null;
+			} else {
+				stack.setItemDamage(0);
 			}
 		}
 

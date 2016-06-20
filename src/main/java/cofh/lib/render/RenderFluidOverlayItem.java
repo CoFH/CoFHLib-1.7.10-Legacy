@@ -55,10 +55,9 @@ public class RenderFluidOverlayItem implements IItemRenderer {
 		if (item instanceof IFluidContainerItem) {
 			IFluidContainerItem fluidItem = (IFluidContainerItem) item;
 			fluid = fluidItem.getFluid(stack);
-		} else if (item instanceof IFluidOverlayItem) {
-			if (item.getRenderPasses(ItemHelper.getItemDamage(stack)) == 2) {
-				fluid = FluidContainerRegistry.getFluidForFilledItem(stack);
-			}
+		} else if (item instanceof IFluidOverlayItem 
+					&& item.getRenderPasses(ItemHelper.getItemDamage(stack)) == 2) {
+			fluid = FluidContainerRegistry.getFluidForFilledItem(stack);
 		}
 		doRenderItem(type, stack, item, fluid);
 	}

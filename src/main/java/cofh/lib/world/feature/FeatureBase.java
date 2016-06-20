@@ -105,10 +105,9 @@ public abstract class FeatureBase implements IFeatureGenerator {
 		if (!newGen && !regen) {
 			return false;
 		}
-		if (dimensionRestriction != GenRestriction.NONE) {
-			if (dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.dimensionId)) {
-				return false;
-			}
+		if (dimensionRestriction != GenRestriction.NONE
+				&& dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.dimensionId)) {
+			return false;
 		}
 		if (rarity > 1 && random.nextInt(rarity) != 0) {
 			return false;

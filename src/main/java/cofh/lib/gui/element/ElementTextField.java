@@ -916,10 +916,8 @@ public class ElementTextField extends ElementBase {
 		int startX = posX + 1 - (multiline ? renderStartX : 0), endX = sizeX - 1;
 		int startY = posY + 1 - renderStartY, endY = startY + font.FONT_HEIGHT;
 		int drawY = renderStartY + Math.max(0, (sizeY - 2) / font.FONT_HEIGHT) * font.FONT_HEIGHT;
-		if (enableStencil) {
-			if (sizeY - (drawY - renderStartY) > 2) {
-				drawY += font.FONT_HEIGHT;
-			}
+		if (enableStencil && sizeY - (drawY - renderStartY) > 2) {
+			drawY += font.FONT_HEIGHT;
 		}
 		int drawX = endX + (multiline ? renderStartX : 0);
 		for (int i = multiline ? 0 : renderStartX, width = 0, height = 0; i <= textLength; ++i) {
