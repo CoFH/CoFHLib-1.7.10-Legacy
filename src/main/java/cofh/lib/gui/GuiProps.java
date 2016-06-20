@@ -9,5 +9,9 @@ public class GuiProps {
 	public static final String PATH_RENDER = PATH_GFX + "blocks/";
 	public static final String PATH_ELEMENTS = PATH_GUI + "elements/";
 	public static final String PATH_ICON = PATH_GUI + "icons/";
+	
+	private GuiProps() {
+		
+	}
 
 }

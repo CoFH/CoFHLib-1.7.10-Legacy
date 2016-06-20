@@ -79,6 +79,10 @@ public final class BlockHelper {
 		public static final int CHEST = 9;
 		public static final int LEVER = 10;
 		public static final int SIGN = 11;
+		
+		private RotationType() {
+			
+		}
 	}
 
 	static { // TODO: review which of these can be removed in favor of the vanilla handler
