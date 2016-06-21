@@ -2,7 +2,6 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 
@@ -13,13 +12,14 @@ import net.minecraftforge.fluids.IFluidTank;
 
 public class ElementFluidTank extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "FluidTank.png");
+	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank.png");
 	public static final int DEFAULT_SCALE = 60;
 
 	protected IFluidTank tank;
 	protected int gaugeType;
 
-	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
+	// If this is enabled, 1 pixel of fluid will always show in the tank as long
+	// as fluid is present.
 	protected boolean alwaysShowMinimum = false;
 
 	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank) {
@@ -66,7 +66,7 @@ public class ElementFluidTank extends ElementBase {
 		int amount = getScaled();
 
 		gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
-		RenderHelper.bindTexture(texture);
+		gui.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
 	}
 

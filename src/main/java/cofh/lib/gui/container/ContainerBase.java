@@ -3,15 +3,14 @@ package cofh.lib.gui.container;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
 import cofh.lib.util.helpers.MathHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerBase extends Container {
 
@@ -69,6 +68,22 @@ public abstract class ContainerBase extends Container {
 		return mergeItemStack(stack, 0, invBase, false);
 	}
 
+	protected void sendSlots(int start, int end) {
+
+		start = MathHelper.clamp(start, 0, inventorySlots.size());
+		end = MathHelper.clamp(end, 0, inventorySlots.size());
+		for (; start < end; ++start) {
+			ItemStack itemstack = inventorySlots.get(start).getStack();
+
+			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
+			inventoryItemStacks.set(start, itemstack1);
+
+			for (int j = 0; j < this.crafters.size(); ++j) {
+				this.crafters.get(j).sendSlotContents(this, start, itemstack1);
+			}
+		}
+	}
+
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
@@ -77,7 +92,7 @@ public abstract class ContainerBase extends Container {
 		}
 
 		ItemStack stack = null;
-		Slot slot = (Slot) inventorySlots.get(slotIndex);
+		Slot slot = inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();
@@ -86,8 +101,6 @@ public abstract class ContainerBase extends Container {
 			if (!performMerge(player, slotIndex, stackInSlot)) {
 				return null;
 			}
-
-			slot.onSlotChange(stackInSlot, stack);
 
 			if (stackInSlot.stackSize <= 0) {
 				slot.putStack((ItemStack) null);
@@ -103,22 +116,6 @@ public abstract class ContainerBase extends Container {
 		return stack;
 	}
 
-	protected void sendSlots(int start, int end) {
-
-		start = MathHelper.clamp(start, 0, inventorySlots.size());
-		end = MathHelper.clamp(end, 0, inventorySlots.size());
-		for (; start < end; ++start) {
-			ItemStack itemstack = ((Slot) inventorySlots.get(start)).getStack();
-
-			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
-			inventoryItemStacks.set(start, itemstack1);
-
-			for (int j = 0; j < this.crafters.size(); ++j) {
-				((ICrafting) this.crafters.get(j)).sendSlotContents(this, start, itemstack1);
-			}
-		}
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void putStacksInSlots(ItemStack[] stacks) {
@@ -129,18 +126,18 @@ public abstract class ContainerBase extends Container {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int mouseButton, int modifier, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
 
 		Slot slot = slotId < 0 ? null : (Slot) this.inventorySlots.get(slotId);
 		if (slot instanceof SlotFalseCopy) {
-			if (mouseButton == 2) {
+			if (clickedButton == 2) {
 				slot.putStack(null);
 			} else {
 				slot.putStack(player.inventory.getItemStack() == null ? null : player.inventory.getItemStack().copy());
 			}
 			return player.inventory.getItemStack();
 		}
-		return super.slotClick(slotId, mouseButton, modifier, player);
+		return super.slotClick(slotId, clickedButton, mode, player);
 	}
 
 	@Override

@@ -13,17 +13,22 @@ import net.minecraft.entity.player.EntityPlayer;
 public interface ISecurable {
 
 	/**
-	 * Enum for Access Modes - Restricted is Friends Only, Private is Owner only.
+	 * Enum for Access Modes - Guild allows Guild access, Restricted is Friends Only, Private is Owner only.
 	 *
 	 * @author King Lemming
 	 *
 	 */
 	public static enum AccessMode {
-		PUBLIC, RESTRICTED, PRIVATE;
+		PUBLIC, GUILD, RESTRICTED, PRIVATE;
 
 		public boolean isPublic() {
 
 			return this == PUBLIC;
+		}
+
+		public boolean isGuild() {
+
+			return this == GUILD;
 		}
 
 		public boolean isRestricted() {
@@ -38,14 +43,16 @@ public interface ISecurable {
 
 		public static AccessMode stepForward(AccessMode curAccess) {
 
-			return curAccess == PUBLIC ? RESTRICTED : curAccess == PRIVATE ? PUBLIC : PRIVATE;
+			return curAccess == PUBLIC ? GUILD : curAccess == GUILD ? RESTRICTED : curAccess == PRIVATE ? PUBLIC : PRIVATE;
 		}
 
 		public static AccessMode stepBackward(AccessMode curAccess) {
 
-			return curAccess == PUBLIC ? PRIVATE : curAccess == PRIVATE ? RESTRICTED : PUBLIC;
+			return curAccess == PUBLIC ? PRIVATE : curAccess == PRIVATE ? RESTRICTED : curAccess == RESTRICTED ? GUILD : PUBLIC;
 		}
 	}
+
+	boolean canPlayerAccess(EntityPlayer player);
 
 	boolean setAccess(AccessMode access);
 
@@ -58,7 +65,5 @@ public interface ISecurable {
 	String getOwnerName();
 
 	GameProfile getOwner();
-
-	boolean canPlayerAccess(EntityPlayer player);
 
 }

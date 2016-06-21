@@ -102,7 +102,7 @@ public class ComparableItem {
 	@Override
 	public int hashCode() {
 
-		// TODO: this hash conflicts a lot
+		// TODO: Does this hash conflict a lot?
 		return (metadata & 65535) | getId() << 16;
 	}
 

@@ -11,7 +11,7 @@ import net.minecraft.util.EntityDamageSource;
  * @author King Lemming
  *
  */
-public class DamageHelper {
+public final class DamageHelper {
 
 	private DamageHelper() {
 

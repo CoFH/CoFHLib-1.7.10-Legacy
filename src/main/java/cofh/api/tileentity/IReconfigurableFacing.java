@@ -1,5 +1,7 @@
 package cofh.api.tileentity;
 
+import net.minecraft.util.EnumFacing;
+
 /**
  * Implement this interface on Tile Entities which allow for reconfiguration of their facing.
  *
@@ -25,7 +27,7 @@ public interface IReconfigurableFacing {
 	 *
 	 * @return True if rotation was successful, false otherwise.
 	 */
-	boolean rotateBlock();
+	boolean rotateBlock(EnumFacing side);
 
 	/**
 	 * Set the facing of the block.
@@ -34,6 +36,6 @@ public interface IReconfigurableFacing {
 	 *            The side to set the facing to.
 	 * @return True if the facing was set, false otherwise.
 	 */
-	boolean setFacing(int side);
+	boolean setFacing(EnumFacing side);
 
 }

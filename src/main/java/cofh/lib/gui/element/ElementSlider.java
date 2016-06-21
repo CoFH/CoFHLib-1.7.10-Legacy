@@ -67,8 +67,8 @@ public abstract class ElementSlider extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		drawModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
-		drawModalRect(posX, posY, posX + sizeX, posY + sizeY, backgroundColor);
+		drawSizedModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
+		drawSizedModalRect(posX, posY, posX + sizeX, posY + sizeY, backgroundColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -127,7 +127,7 @@ public abstract class ElementSlider extends ElementBase {
 	}
 
 	@Override
-	public void onMouseReleased(int mouseX, int mouseY) {
+	public void onMouseReleased(int mouseX, int mouseY, int state) {
 
 		if (_isDragging) {
 			onStopDragging();

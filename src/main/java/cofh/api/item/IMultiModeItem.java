@@ -4,8 +4,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 /**
- * Implement this interface on Item classes which may be "Empowered" - what that means is completely up to you. This just provides a uniform way of dealing with
- * them.
+ * Implement this interface on Item classes which have multiple modes - what that means is completely up to you. This just provides a uniform way of dealing
+ * with them.
  *
  * @author King Lemming
  *

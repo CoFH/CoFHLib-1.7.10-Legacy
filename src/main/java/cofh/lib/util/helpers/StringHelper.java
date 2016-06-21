@@ -73,11 +73,11 @@ public final class StringHelper {
 		Fluid fluid = stack.getFluid();
 
 		String name = "" + END;
-		if (fluid.getRarity() == EnumRarity.uncommon) {
+		if (fluid.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (fluid.getRarity() == EnumRarity.rare) {
+		} else if (fluid.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (fluid.getRarity() == EnumRarity.epic) {
+		} else if (fluid.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += fluid.getLocalizedName(stack) + END;
@@ -96,11 +96,11 @@ public final class StringHelper {
 	public static String getItemName(ItemStack stack) {
 
 		String name = "" + END;
-		if (stack.getRarity() == EnumRarity.uncommon) {
+		if (stack.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (stack.getRarity() == EnumRarity.rare) {
+		} else if (stack.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (stack.getRarity() == EnumRarity.epic) {
+		} else if (stack.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += stack.getDisplayName() + END;
@@ -124,8 +124,9 @@ public final class StringHelper {
 	public static String toNumerals(short v) {
 
 		String s = "potion.potency." + v;
-		if (StatCollector.canTranslate(s))
+		if (StatCollector.canTranslate(s)) {
 			return StatCollector.translateToLocal(s);
+		}
 		StringBuilder r = new StringBuilder();
 		int i = v;
 		if (i < 0) {
@@ -133,16 +134,12 @@ public final class StringHelper {
 			r.append('-');
 		}
 		for (Numeral k : Numeral.values) {
-			for (int j = i / k.value; j-- > 0; r.append(k.name));
+			for (int j = i / k.value; j-- > 0; r.append(k.name)) {
+				;
+			}
 			i %= k.value;
 		}
 		return r.toString();
-	}
-
-	@Deprecated
-	public static String getScaledNumber(long number, int minDigits) {
-
-		return getScaledNumber(number);
 	}
 
 	/* ITEM TEXT HELPERS */
@@ -229,11 +226,15 @@ public final class StringHelper {
 
 	private static enum Numeral {
 		M(1000), CM(900), D(500), CD(400), C(100), XC(90), L(50), XL(40), X(10), IX(9), V(5), IV(4), I(1);
+
 		public final String name = name();
 		public final int value;
+
 		private Numeral(int val) {
+
 			value = val;
 		}
+
 		private static final Numeral[] values = values();
 	}
 

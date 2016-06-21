@@ -1,7 +1,6 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
 
 public class ElementDualScaled extends ElementBase {
 
@@ -35,7 +34,7 @@ public class ElementDualScaled extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		RenderHelper.bindTexture(texture);
+		gui.bindTexture(texture);
 
 		if (background) {
 			drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);

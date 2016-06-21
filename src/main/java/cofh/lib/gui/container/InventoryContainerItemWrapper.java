@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IChatComponent;
 
 public class InventoryContainerItemWrapper implements IInventory {
 
@@ -15,12 +16,6 @@ public class InventoryContainerItemWrapper implements IInventory {
 	protected NBTTagCompound tag;
 	protected ItemStack[] inventory;
 	protected boolean dirty = false;
-
-	@Deprecated
-	public InventoryContainerItemWrapper(ContainerInventoryItem gui, ItemStack stack) {
-
-		this(stack);
-	}
 
 	public InventoryContainerItemWrapper(ItemStack itemstack) {
 
@@ -35,14 +30,14 @@ public class InventoryContainerItemWrapper implements IInventory {
 	protected void loadInventory() {
 
 		boolean loaded = false;
-		if (stack.stackTagCompound == null || !stack.stackTagCompound.hasKey("Inventory")) {
+		if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("Inventory")) {
 			loaded = stack.hasTagCompound();
 			if (loaded) {
-				if (stack.stackTagCompound.hasKey("inventory")) {
-					tag = stack.stackTagCompound.getCompoundTag("inventory");
-					stack.stackTagCompound.removeTag("inventory");
+				if (stack.getTagCompound().hasKey("inventory")) {
+					tag = stack.getTagCompound().getCompoundTag("inventory");
+					stack.getTagCompound().removeTag("inventory");
 				} else {
-					tag = stack.stackTagCompound;
+					tag = stack.getTagCompound();
 				}
 				loadStacks();
 				tag = new NBTTagCompound();
@@ -51,7 +46,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 				stack.setTagInfo("Inventory", new NBTTagCompound());
 			}
 		}
-		tag = stack.stackTagCompound.getCompoundTag("Inventory");
+		tag = stack.getTagCompound().getCompoundTag("Inventory");
 		loadStacks();
 	}
 
@@ -133,15 +128,15 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
+	public ItemStack removeStackFromSlot(int slot) {
 
-		inventory[i] = itemstack;
+		return null;
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
 
-		return null;
+		inventory[i] = itemstack;
 	}
 
 	@Override
@@ -150,18 +145,6 @@ public class InventoryContainerItemWrapper implements IInventory {
 		if (stack != null && stack.getItem() instanceof IInventoryContainerItem) {
 			return ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack) <= 0;
 		}
-		return true;
-	}
-
-	@Override
-	public String getInventoryName() {
-
-		return stack.getDisplayName();
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-
 		return true;
 	}
 
@@ -178,14 +161,55 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 		markDirty();
+	}
+
+	@Override
+	public int getField(int id) {
+
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
+	}
+
+	/* IWorldNameable */
+	@Override
+	public String getName() {
+
+		return stack.getDisplayName();
+	}
+
+	@Override
+	public boolean hasCustomName() {
+
+		return true;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+
+		return null;
 	}
 
 }

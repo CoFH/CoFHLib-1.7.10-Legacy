@@ -29,7 +29,7 @@ public class SlotAcceptInsertable extends SlotAcceptValid {
 
 		boolean valid = super.isItemValid(stack);
 
-		return valid && sidedInv != null ? sidedInv.canInsertItem(slotNumber, stack, 6) : valid;
+		return valid && sidedInv != null ? sidedInv.canInsertItem(slotNumber, stack, null) : valid;
 	}
 
 }

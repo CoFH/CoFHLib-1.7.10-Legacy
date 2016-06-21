@@ -64,6 +64,7 @@ public final class BlockWrapper {
 	@Override
 	public int hashCode() {
 
+		// TODO: Does this hash conflict a lot?
 		return metadata | getId() << 16;
 	}
 

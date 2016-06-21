@@ -151,8 +151,8 @@ public class ElementListBox extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		drawModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
-		drawModalRect(posX, posY, posX + sizeX, posY + sizeY, backgroundColor);
+		drawSizedModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
+		drawSizedModalRect(posX, posY, posX + sizeX, posY + sizeY, backgroundColor);
 	}
 
 	@Override

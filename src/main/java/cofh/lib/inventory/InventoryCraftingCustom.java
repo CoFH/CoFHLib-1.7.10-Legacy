@@ -1,6 +1,5 @@
 package cofh.lib.inventory;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
@@ -52,7 +51,7 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 
 		if (masterInv.getStackInSlot(invOffset + slot) != null) {
 			ItemStack stack = masterInv.getStackInSlot(invOffset + slot);
@@ -94,36 +93,8 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-
-		return 64;
-	}
-
-	@Override
 	public void markDirty() {
 
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-
-		return true;
-	}
-
-	@Override
-	public void openInventory() {
-
-	}
-
-	@Override
-	public void closeInventory() {
-
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-
-		return true;
 	}
 
 }

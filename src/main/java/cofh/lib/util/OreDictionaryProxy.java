@@ -2,6 +2,9 @@ package cofh.lib.util;
 
 import cofh.lib.util.helpers.ItemHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -11,7 +14,6 @@ import net.minecraftforge.oredict.OreDictionary;
  * @author King Lemming
  *
  */
-@SuppressWarnings("deprecation")
 public class OreDictionaryProxy {
 
 	public ItemStack getOre(String oreName) {
@@ -22,9 +24,27 @@ public class OreDictionaryProxy {
 		return ItemHelper.cloneStack(OreDictionary.getOres(oreName).get(0), 1);
 	}
 
-	public int getOreID(ItemStack stack) {
+	public int getPrimaryOreID(ItemStack stack) {
 
-		return OreDictionary.getOreID(stack);
+		int[] oreIDs = OreDictionary.getOreIDs(stack);
+		return oreIDs.length > 0 ? oreIDs[0] : -1;
+	}
+
+	public String getPrimaryOreName(ItemStack stack) {
+
+		return getOreName(getPrimaryOreID(stack));
+	}
+
+	public List<Integer> getOreIDs(ItemStack stack) {
+
+		int[] ids = OreDictionary.getOreIDs(stack);
+
+		ArrayList<Integer> oreIDs = new ArrayList<Integer>();
+
+		for (int i = 0; i < ids.length; i++) {
+			oreIDs.add(ids[i]);
+		}
+		return oreIDs;
 	}
 
 	public int getOreID(String oreName) {
@@ -32,9 +52,16 @@ public class OreDictionaryProxy {
 		return OreDictionary.getOreID(oreName);
 	}
 
-	public String getOreName(ItemStack stack) {
+	public List<String> getOreNames(ItemStack stack) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack));
+		int[] oreIDs = OreDictionary.getOreIDs(stack);
+
+		ArrayList<String> oreNames = new ArrayList<String>();
+
+		for (int i = 0; i < oreIDs.length; i++) {
+			oreNames.add(OreDictionary.getOreName(oreIDs[i]));
+		}
+		return oreNames;
 	}
 
 	public String getOreName(int oreID) {
@@ -44,12 +71,26 @@ public class OreDictionaryProxy {
 
 	public boolean isOreIDEqual(ItemStack stack, int oreID) {
 
-		return OreDictionary.getOreID(stack) == oreID;
+		int[] oreIDs = OreDictionary.getOreIDs(stack);
+
+		for (int i = 0; i < oreIDs.length; i++) {
+			if (oreID == oreIDs[i]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean isOreNameEqual(ItemStack stack, String oreName) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack)).equals(oreName);
+		List<String> oreNames = getOreNames(stack);
+
+		for (int i = 0; i < oreNames.size(); i++) {
+			if (oreName.equals(oreNames.get(i))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean oreNameExists(String oreName) {

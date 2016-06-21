@@ -6,10 +6,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-public class AugmentHelper {
+public final class AugmentHelper {
 
 	private AugmentHelper() {
 
+	}
+
+	public static boolean isAugmentItem(ItemStack stack) {
+
+		return stack != null && stack.getItem() instanceof IAugmentItem;
 	}
 
 	/* NBT TAG HELPERS */
@@ -36,7 +41,7 @@ public class AugmentHelper {
 		if (augments.length <= 0) {
 			return;
 		}
-		if (stack.stackTagCompound == null) {
+		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
 		NBTTagList list = new NBTTagList();
@@ -48,12 +53,7 @@ public class AugmentHelper {
 				list.appendTag(tag);
 			}
 		}
-		stack.stackTagCompound.setTag("Augments", list);
-	}
-
-	public static boolean isAugmentItem(ItemStack stack) {
-
-		return stack != null && stack.getItem() instanceof IAugmentItem;
+		stack.getTagCompound().setTag("Augments", list);
 	}
 
 }

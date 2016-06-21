@@ -1,6 +1,6 @@
 package cofh.lib.gui;
 
-import cofh.lib.gui.element.TabBase;
+import cofh.lib.gui.element.tab.TabBase;
 
 /**
  * Keeps track of which tabs should be open by default when a player opens a GUI.

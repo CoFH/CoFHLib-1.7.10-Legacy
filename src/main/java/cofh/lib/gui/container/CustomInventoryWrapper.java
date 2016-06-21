@@ -5,6 +5,7 @@ import cofh.api.core.ICustomInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IChatComponent;
 
 public class CustomInventoryWrapper implements IInventory {
 
@@ -12,9 +13,29 @@ public class CustomInventoryWrapper implements IInventory {
 
 	public CustomInventoryWrapper(ICustomInventory customInv, int inventoryIndex) {
 
-		inventory = customInv.getInventorySlots(0);
+		inventory = customInv.getInventorySlots(inventoryIndex);
 	}
 
+	/* IWorldNameable */
+	@Override
+	public String getName() {
+
+		return "container.crafting";
+	}
+
+	@Override
+	public boolean hasCustomName() {
+
+		return false;
+	}
+
+	@Override
+	public IChatComponent getDisplayName() {
+
+		return null;
+	}
+
+	/* IInventory */
 	@Override
 	public int getSizeInventory() {
 
@@ -45,7 +66,7 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 
 		if (inventory[slot] == null) {
 			return null;
@@ -66,18 +87,6 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
-
-		return "container.crafting";
-	}
-
-	@Override
-	public boolean hasCustomInventoryName() {
-
-		return false;
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 
 		return 64;
@@ -95,12 +104,12 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
@@ -108,6 +117,28 @@ public class CustomInventoryWrapper implements IInventory {
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 
 		return true;
+	}
+
+	@Override
+	public int getField(int id) {
+
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
 	}
 
 }

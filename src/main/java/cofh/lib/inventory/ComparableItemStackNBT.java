@@ -20,8 +20,8 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 		super(stack);
 
 		if (stack != null) {
-			if (stack.stackTagCompound != null) {
-				tag = (NBTTagCompound) stack.stackTagCompound.copy();
+			if (stack.hasTagCompound()) {
+				tag = (NBTTagCompound) stack.getTagCompound().copy();
 			}
 		}
 	}
@@ -42,7 +42,7 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 
 		ItemStack ret = super.toItemStack();
 		if (ret != null) {
-			ret.stackTagCompound = (NBTTagCompound) tag.copy();
+			ret.setTagCompound((NBTTagCompound) tag.copy());
 		}
 		return ret;
 	}

@@ -26,7 +26,7 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 
 	public static int getOreID(ItemStack stack) {
 
-		int id = ItemHelper.oreProxy.getOreID(stack);
+		int id = ItemHelper.oreProxy.getPrimaryOreID(stack);
 
 		if (!safeOreType(ItemHelper.oreProxy.getOreName(id))) {
 			return -1;

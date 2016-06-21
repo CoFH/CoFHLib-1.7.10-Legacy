@@ -26,10 +26,6 @@ public class ElementTextField extends ElementBase {
 	public int selectedTextColor = new GuiColor(224, 224, 224).getColor();
 	public int defaultCaretColor = new GuiColor(255, 255, 255).getColor();
 
-	@Deprecated
-	// dummy variable to avoid crashes with older implementation
-	protected int renderStart;
-
 	protected char[] text;
 	protected int textLength;
 	protected int selectionStart, selectionEnd;
@@ -41,7 +37,7 @@ public class ElementTextField extends ElementBase {
 
 	private boolean selecting, pressed;
 
-	private byte caretCounter, counterOffset;
+	private byte caretCounter;
 	protected boolean caretInsert;
 	protected boolean smartCaret = true;
 	protected boolean smartCaretCase = true;
@@ -113,7 +109,7 @@ public class ElementTextField extends ElementBase {
 
 		if (isFocusable()) {
 			isFocused = focused;
-			resetCaretFlash();
+			caretCounter = 0;
 		}
 		return this;
 	}
@@ -144,15 +140,6 @@ public class ElementTextField extends ElementBase {
 	}
 
 	public int getMaxLength() {
-
-		return text.length;
-	}
-
-	/**
-	 * @deprecated Use <tt>getMaxLength</tt>
-	 */
-	@Deprecated
-	public int getMaxStringLength() {
 
 		return text.length;
 	}
@@ -284,8 +271,6 @@ public class ElementTextField extends ElementBase {
 			clearSelection();
 			findRenderStart();
 			onCharacterEntered(typed);
-
-			resetCaretFlash();
 			return true;
 		}
 		return false;
@@ -297,14 +282,6 @@ public class ElementTextField extends ElementBase {
 
 	protected void onCharacterEntered(boolean success) {
 
-	}
-
-	protected void resetCaretFlash() {
-
-		int v = Minecraft.getMinecraft().ingameGUI.getUpdateCounter();
-		counterOffset = (byte) ((v - counterOffset) & 63);
-		counterOffset += (byte) ((v - counterOffset) & 63);
-		caretCounter = 0;
 	}
 
 	protected boolean insertCharacter(char charTyped) {
@@ -464,16 +441,15 @@ public class ElementTextField extends ElementBase {
 		int i = pos;
 
 		if (smartCaret) {
-			boolean originalCase = Character.isUpperCase(prevChar);
 			for (; i != e; i += dir) {
 				char curChar = text[i];
 				boolean dig = Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar);
 				boolean caze = !dig && Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
 				boolean space = Character.isWhitespace(prevChar) != Character.isWhitespace(curChar);
-				if (dig || (caze & smartCaretCase) || space) {
+				if (dig || caze || space) {
 					int o = 0;
 					if (smartCaretCase && caze) {
-						o = originalCase && Character.isUpperCase(prevChar) ? -dir : 0;
+						o = !forward ? 0 : -dir;
 					} else {
 						if (space) {
 							if (forward) {
@@ -522,15 +498,11 @@ public class ElementTextField extends ElementBase {
 			if (selectionStart != selectionEnd) {
 				GuiScreen.setClipboardString(getSelectedText());
 				clearSelection();
-
-				resetCaretFlash();
 			}
 
 			return true;
 		case 22: // ^V
 			writeText(GuiScreen.getClipboardString());
-
-			resetCaretFlash();
 
 			return true;
 		default:
@@ -544,8 +516,6 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_INSERT:
 				if (GuiScreen.isShiftKeyDown()) {
 					writeText(GuiScreen.getClipboardString());
-
-					resetCaretFlash();
 				} else {
 					caretInsert = !caretInsert;
 				}
@@ -553,8 +523,6 @@ public class ElementTextField extends ElementBase {
 				return true;
 			case Keyboard.KEY_CLEAR: // mac only (clear selection)
 				clearSelection();
-
-				resetCaretFlash();
 
 				return true;
 			case Keyboard.KEY_DELETE: // delete
@@ -577,8 +545,6 @@ public class ElementTextField extends ElementBase {
 
 						onCharacterEntered(changed);
 					}
-
-					resetCaretFlash();
 
 					return true;
 				}
@@ -618,8 +584,6 @@ public class ElementTextField extends ElementBase {
 					onCharacterEntered(changed);
 				}
 
-				resetCaretFlash();
-
 				return true;
 			case Keyboard.KEY_HOME: // home
 				int begin = 0;
@@ -643,8 +607,6 @@ public class ElementTextField extends ElementBase {
 				caret = begin;
 				findRenderStart();
 
-				resetCaretFlash();
-
 				return true;
 			case Keyboard.KEY_END: // end
 				int end = textLength;
@@ -667,8 +629,6 @@ public class ElementTextField extends ElementBase {
 				}
 				caret = end;
 				findRenderStart();
-
-				resetCaretFlash();
 
 				return true;
 			case Keyboard.KEY_LEFT: // left arrow
@@ -712,8 +672,6 @@ public class ElementTextField extends ElementBase {
 					caret = caret - size;
 				}
 				findRenderStart();
-
-				resetCaretFlash();
 
 				return true;
 			case Keyboard.KEY_UP:
@@ -785,8 +743,6 @@ public class ElementTextField extends ElementBase {
 						selectionEnd = t;
 					}
 				}
-
-				resetCaretFlash();
 
 				return true;
 			default:
@@ -867,7 +823,7 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void update(int mouseX, int mouseY) {
 
-		caretCounter = (byte) ((Minecraft.getMinecraft().ingameGUI.getUpdateCounter() - counterOffset) & 63);
+		caretCounter = (byte) (Minecraft.getMinecraft().ingameGUI.getUpdateCounter() & 0xFF);
 		// if (selecting) {
 		// FontRenderer font = getFontRenderer();
 		// int pos = mouseX - posX - 1;
@@ -877,7 +833,7 @@ public class ElementTextField extends ElementBase {
 	}
 
 	@Override
-	public void onMouseReleased(int mouseX, int mouseY) {
+	public void onMouseReleased(int mouseX, int mouseY, int state) {
 
 		if (!pressed) {
 			boolean focus = isFocused();
@@ -892,8 +848,8 @@ public class ElementTextField extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		drawModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
-		drawModalRect(posX, posY, posX + sizeX, posY + sizeY, isEnabled() ? backgroundColor : disabledColor);
+		drawSizedModalRect(posX - 1, posY - 1, posX + sizeX + 1, posY + sizeY + 1, borderColor);
+		drawSizedModalRect(posX, posY, posX + sizeX, posY + sizeY, isEnabled() ? backgroundColor : disabledColor);
 	}
 
 	@Override
@@ -950,20 +906,20 @@ public class ElementTextField extends ElementBase {
 				}
 			}
 
-			boolean drawCaret = draw && i == caret && (caretCounter & 31) < 16 && isFocused();
+			boolean drawCaret = draw && i == caret && (caretCounter &= 31) < 16 && isFocused();
 			if (drawCaret) {
 				int caretEnd = width + 2;
 				if (caretInsert) {
 					caretEnd = width + charW;
 				}
-				drawModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, (0xFF000000 & defaultCaretColor)
+				drawSizedModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, (0xFF000000 & defaultCaretColor)
 						| (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (draw && !end) {
 				boolean selected = i >= selectionStart & i < selectionEnd;
 				if (selected) {
-					drawModalRect(startX + width, startY + height, startX + width + charW, endY + height, selectedLineColor);
+					drawSizedModalRect(startX + width, startY + height, startX + width + charW, endY + height, selectedLineColor);
 				}
 				if (c != '\n') {
 					font.drawString(String.valueOf(c), startX + width, startY + height, selected ? selectedTextColor : textColor);

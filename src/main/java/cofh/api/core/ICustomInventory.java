@@ -10,6 +10,12 @@ import net.minecraft.item.ItemStack;
  */
 public interface ICustomInventory {
 
+	/**
+	 *
+	 * @param inventoryIndex
+	 *            Internal index of the inventory (there may be multiple). Assume 0 as default.
+	 * @return An array of ItemStacks stored in the Inventory.
+	 */
 	ItemStack[] getInventorySlots(int inventoryIndex);
 
 	int getSlotStackLimit(int slotIndex);

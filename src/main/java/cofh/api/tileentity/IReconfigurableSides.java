@@ -1,5 +1,7 @@
 package cofh.api.tileentity;
 
+import net.minecraft.util.EnumFacing;
+
 /**
  * Implement this interface on Tile Entities which allow for reconfiguration of their sides.
  *
@@ -17,7 +19,7 @@ public interface IReconfigurableSides {
 	 *            The side to decrement.
 	 * @return True if config was changed, false otherwise.
 	 */
-	boolean decrSide(int side);
+	boolean decrSide(EnumFacing side);
 
 	/**
 	 * Increment the config for a given side.
@@ -26,7 +28,7 @@ public interface IReconfigurableSides {
 	 *            The side to decrement.
 	 * @return True if config was changed, false otherwise.
 	 */
-	boolean incrSide(int side);
+	boolean incrSide(EnumFacing side);
 
 	/**
 	 * Set the config for a given side.
@@ -37,7 +39,7 @@ public interface IReconfigurableSides {
 	 *            The config value to use.
 	 * @return True of config was set, false otherwise.
 	 */
-	boolean setSide(int side, int config);
+	boolean setSide(EnumFacing side, int config);
 
 	/**
 	 * Reset configs on all sides to their base values.
@@ -49,6 +51,6 @@ public interface IReconfigurableSides {
 	/**
 	 * Returns the number of possible config settings for a given side.
 	 */
-	int getNumConfig(int side);
+	int getNumConfig(EnumFacing side);
 
 }

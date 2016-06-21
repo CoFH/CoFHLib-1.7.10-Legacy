@@ -12,12 +12,16 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public final class NBTHelper {
 
+	private NBTHelper() {
+
+	}
+
 	public static NBTTagCompound getTagCompound(ItemStack stack) {
 
 		if (stack == null) {
 			return null;
 		}
-		if (stack.getTagCompound() == null) {
+		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
 		return stack.getTagCompound();

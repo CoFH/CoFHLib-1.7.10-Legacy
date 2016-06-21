@@ -64,7 +64,7 @@ public class SlotCustomInventory extends Slot {
 	}
 
 	@Override
-	public boolean isSlotInInventory(IInventory inventory, int slot) {
+	public boolean isHere(IInventory inventory, int slot) {
 
 		return false;
 	}

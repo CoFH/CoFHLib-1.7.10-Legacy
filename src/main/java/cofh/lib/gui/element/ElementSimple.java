@@ -1,7 +1,6 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
 
 /**
  * Basic element which can render an arbitrary texture.
@@ -29,7 +28,7 @@ public class ElementSimple extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		RenderHelper.bindTexture(texture);
+		gui.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, texU, texV, sizeX, sizeY);
 	}
 

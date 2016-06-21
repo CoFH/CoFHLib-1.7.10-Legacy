@@ -4,50 +4,21 @@ import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
 
-public class SecurityHelper {
+public final class SecurityHelper {
 
 	public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
-	private static boolean setup = false;
-
-	public static void setup() {
-
-		if (setup) {
-			return;
-		}
-		EnumConnectionState.PLAY.func_150755_b().put(-26, Login.S__PacketSendUUID.class);
-		Map<Class<?>, EnumConnectionState> data;
-		data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
-		data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
-		FMLCommonHandler.instance().bus().register(new Login.S__PacketSendUUID());
-		setup = true;
-	}
-
-	static {
-		setup();
-	}
 
 	private SecurityHelper() {
 
@@ -101,12 +72,12 @@ public class SecurityHelper {
 	public static void addOwnerInformation(ItemStack stack, List<String> list) {
 
 		if (SecurityHelper.isSecure(stack)) {
-			boolean hasUUID = stack.stackTagCompound.hasKey("OwnerUUID");
-			if (!stack.stackTagCompound.hasKey("Owner") && !hasUUID) {
+			boolean hasUUID = stack.getTagCompound().hasKey("OwnerUUID");
+			if (!stack.getTagCompound().hasKey("Owner") && !hasUUID) {
 				list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
 			} else {
-				if (hasUUID && stack.stackTagCompound.hasKey("Owner")) {
-					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner") + " \u0378");
+				if (hasUUID && stack.getTagCompound().hasKey("Owner")) {
+					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.getTagCompound().getString("Owner") + " \u0378");
 				} else {
 					list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
 				}
@@ -118,14 +89,17 @@ public class SecurityHelper {
 
 		if (SecurityHelper.isSecure(stack)) {
 			String accessString = "";
-			switch (stack.stackTagCompound.getByte("Access")) {
-			case 0:
+			switch (ISecurable.AccessMode.values()[stack.getTagCompound().getByte("Access")]) {
+			case PUBLIC:
 				accessString = StringHelper.localize("info.cofh.accessPublic");
 				break;
-			case 1:
+			case GUILD:
+				accessString = StringHelper.localize("info.cofh.accessGuild");
+				break;
+			case RESTRICTED:
 				accessString = StringHelper.localize("info.cofh.accessRestricted");
 				break;
-			case 2:
+			case PRIVATE:
 				accessString = StringHelper.localize("info.cofh.accessPrivate");
 				break;
 			}
@@ -136,7 +110,7 @@ public class SecurityHelper {
 	/* ITEM HELPERS */
 	public static boolean isSecure(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? false : stack.stackTagCompound.hasKey("Secure");
+		return !stack.hasTagCompound() ? false : stack.getTagCompound().hasKey("Secure");
 	}
 
 	public static ItemStack setSecure(ItemStack stack) {
@@ -144,11 +118,11 @@ public class SecurityHelper {
 		if (isSecure(stack)) {
 			return stack;
 		}
-		if (stack.stackTagCompound == null) {
+		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
-		stack.stackTagCompound.setBoolean("Secure", true);
-		stack.stackTagCompound.setByte("Access", (byte) 0);
+		stack.getTagCompound().setBoolean("Secure", true);
+		stack.getTagCompound().setByte("Access", (byte) 0);
 		return stack;
 	}
 
@@ -157,13 +131,13 @@ public class SecurityHelper {
 		if (!isSecure(stack)) {
 			return stack;
 		}
-		stack.stackTagCompound.removeTag("Secure");
-		stack.stackTagCompound.removeTag("Access");
-		stack.stackTagCompound.removeTag("OwnerUUID");
-		stack.stackTagCompound.removeTag("Owner");
+		stack.getTagCompound().removeTag("Secure");
+		stack.getTagCompound().removeTag("Access");
+		stack.getTagCompound().removeTag("OwnerUUID");
+		stack.getTagCompound().removeTag("Owner");
 
-		if (stack.stackTagCompound.hasNoTags()) {
-			stack.stackTagCompound = null;
+		if (stack.getTagCompound().hasNoTags()) {
+			stack.setTagCompound(null);
 		}
 		return stack;
 	}
@@ -173,13 +147,13 @@ public class SecurityHelper {
 		if (!isSecure(stack)) {
 			return false;
 		}
-		stack.stackTagCompound.setByte("Access", (byte) access.ordinal());
+		stack.getTagCompound().setByte("Access", (byte) access.ordinal());
 		return true;
 	}
 
 	public static AccessMode getAccess(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? AccessMode.PUBLIC : AccessMode.values()[stack.stackTagCompound.getByte("Access")];
+		return !stack.hasTagCompound() ? AccessMode.PUBLIC : AccessMode.values()[stack.getTagCompound().getByte("Access")];
 	}
 
 	public static boolean setOwner(ItemStack stack, GameProfile name) {
@@ -194,15 +168,15 @@ public class SecurityHelper {
 
 	public static GameProfile getOwner(ItemStack stack) {
 
-		if (stack.stackTagCompound != null) {
-			NBTTagCompound nbt = stack.stackTagCompound;
+		if (stack.getTagCompound() != null) {
+			NBTTagCompound nbt = stack.getTagCompound();
 
 			String uuid = nbt.getString("OwnerUUID");
 			String name = nbt.getString("Owner");
 			if (!Strings.isNullOrEmpty(uuid)) {
 				return new GameProfile(UUID.fromString(uuid), name);
 			} else if (!Strings.isNullOrEmpty(name)) {
-				return new GameProfile(UUID.fromString(PreYggdrasilConverter.func_152719_a(name)), name);
+				return new GameProfile(UUID.fromString(PreYggdrasilConverter.getStringUUIDFromName(name)), name);
 			}
 		}
 		return UNKNOWN_GAME_PROFILE;
@@ -210,12 +184,12 @@ public class SecurityHelper {
 
 	public static GameProfile getProfile(UUID uuid, String name) {
 
-		GameProfile owner = MinecraftServer.getServer().func_152358_ax().func_152652_a(uuid);
+		GameProfile owner = MinecraftServer.getServer().getPlayerProfileCache().getProfileByUUID(uuid);
 		if (owner == null) {
 			GameProfile temp = new GameProfile(uuid, name);
-			owner = MinecraftServer.getServer().func_147130_as().fillProfileProperties(temp, true);
+			owner = MinecraftServer.getServer().getMinecraftSessionService().fillProfileProperties(temp, true);
 			if (owner != temp) {
-				MinecraftServer.getServer().func_152358_ax().func_152649_a(owner);
+				MinecraftServer.getServer().getPlayerProfileCache().addEntry(owner);
 			}
 		}
 		return owner;
@@ -223,63 +197,12 @@ public class SecurityHelper {
 
 	public static String getOwnerName(ItemStack stack) {
 
-		NBTTagCompound nbt = stack.stackTagCompound;
+		NBTTagCompound nbt = stack.getTagCompound();
 		boolean hasUUID;
 		if (nbt == null || (!(hasUUID = nbt.hasKey("OwnerUUID")) && !nbt.hasKey("Owner"))) {
 			return "[None]";
 		}
-		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
-	}
-
-	// this class is to avoid an illegal access error from FML's event handler
-	private static class Login {
-
-		public static class S__PacketSendUUID extends Packet {
-
-			@SubscribeEvent
-			public void login(PlayerLoggedInEvent evt) {
-
-				((EntityPlayerMP) evt.player).playerNetServerHandler.sendPacket(new S__PacketSendUUID(evt.player));
-			}
-
-			private UUID id;
-
-			public S__PacketSendUUID() {
-
-			}
-
-			public S__PacketSendUUID(EntityPlayer player) {
-
-				id = player.getGameProfile().getId();
-			}
-
-			@Override
-			public void readPacketData(PacketBuffer buffer) throws IOException {
-
-				id = new UUID(buffer.readLong(), buffer.readLong());
-			}
-
-			@Override
-			public void writePacketData(PacketBuffer buffer) throws IOException {
-
-				buffer.writeLong(id.getMostSignificantBits());
-				buffer.writeLong(id.getLeastSignificantBits());
-			}
-
-			@Override
-			public boolean hasPriority() {
-
-				return true;
-			}
-
-			@Override
-			public void processPacket(INetHandler p_148833_1_) {
-
-				cachedId = id;
-			}
-
-		}
-
+		return hasUUID ? stack.getTagCompound().getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
 	}
 
 }

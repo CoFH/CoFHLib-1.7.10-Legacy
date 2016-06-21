@@ -32,8 +32,9 @@ public final class ColorHelper {
 	public static final int[] DYE_COLORS = { DYE_BLACK, DYE_RED, DYE_GREEN, DYE_BROWN, DYE_BLUE, DYE_PURPLE, DYE_CYAN, DYE_LIGHT_GRAY, DYE_GRAY, DYE_PINK,
 			DYE_LIME, DYE_YELLOW, DYE_LIGHT_BLUE, DYE_MAGENTA, DYE_ORANGE, DYE_WHITE };
 
-	// Yes, this list is pre-localized to en_US and has no spaces. There are times when this is useful, such as in a config file. Localization there is messy
-	// and not strictly required.
+	// Yes, this list is pre-localized to en_US and has no spaces. There are
+	// times when this is useful, such as in a config file. Localization there
+	// is messy and not strictly required.
 	public static final String[] woolColorConfig = { "White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan",
 			"Purple", "Blue", "Brown", "Green", "Red", "Black" };
 

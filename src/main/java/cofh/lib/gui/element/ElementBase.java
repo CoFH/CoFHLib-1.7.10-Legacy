@@ -8,6 +8,8 @@ import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -119,12 +121,12 @@ public abstract class ElementBase {
 
 	}
 
-	public void drawModalRect(int x, int y, int width, int height, int color) {
+	public void drawSizedModalRect(int x, int y, int width, int height, int color) {
 
 		gui.drawSizedModalRect(x, y, width, height, color);
 	}
 
-	public void drawStencil(int xStart, int yStart, int xEnd, int yEnd, int flag) {
+	public void drawStencil(int x1, int y1, int x2, int y2, int flag) {
 
 		glDisable(GL_TEXTURE_2D);
 		glStencilFunc(GL_ALWAYS, flag, flag);
@@ -135,12 +137,14 @@ public abstract class ElementBase {
 		glClearStencil(0);
 		glClear(GL_STENCIL_BUFFER_BIT);
 
-		Tessellator.instance.startDrawingQuads();
-		Tessellator.instance.addVertex(xStart, yEnd, 0);
-		Tessellator.instance.addVertex(xEnd, yEnd, 0);
-		Tessellator.instance.addVertex(xEnd, yStart, 0);
-		Tessellator.instance.addVertex(xStart, yStart, 0);
-		Tessellator.instance.draw();
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
+		worldrenderer.pos(x1, y2, 0.0D).endVertex();
+		worldrenderer.pos(x2, y2, 0.0D).endVertex();
+		worldrenderer.pos(x2, y1, 0.0D).endVertex();
+		worldrenderer.pos(x1, y1, 0.0D).endVertex();
+		tessellator.draw();
 
 		glEnable(GL_TEXTURE_2D);
 		glStencilFunc(GL_EQUAL, flag, flag);
@@ -164,7 +168,7 @@ public abstract class ElementBase {
 		return false;
 	}
 
-	public void onMouseReleased(int mouseX, int mouseY) {
+	public void onMouseReleased(int mouseX, int mouseY, int state) {
 
 		return;
 	}

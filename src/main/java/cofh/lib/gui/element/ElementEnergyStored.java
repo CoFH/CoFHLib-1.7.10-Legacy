@@ -3,7 +3,6 @@ package cofh.lib.gui.element;
 import cofh.api.energy.IEnergyStorage;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 
 import java.util.List;
@@ -12,12 +11,13 @@ import net.minecraft.util.ResourceLocation;
 
 public class ElementEnergyStored extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Energy.png");
+	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "energy.png");
 	public static final int DEFAULT_SCALE = 42;
 
 	protected IEnergyStorage storage;
 
-	// If this is enabled, 1 pixel of energy will always show in the bar as long as it is non-zero.
+	// If this is enabled, 1 pixel of energy will always show in the bar as long
+	// as it is non-zero.
 	protected boolean alwaysShowMinimum = false;
 
 	public ElementEnergyStored(GuiBase gui, int posX, int posY, IEnergyStorage storage) {
@@ -44,7 +44,7 @@ public class ElementEnergyStored extends ElementBase {
 
 		int amount = getScaled();
 
-		RenderHelper.bindTexture(texture);
+		gui.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
 		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - amount, 16, DEFAULT_SCALE - amount, sizeX, amount);
 	}

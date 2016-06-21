@@ -10,6 +10,7 @@ package cofh.api.tileentity;
 public interface IRedstoneControl extends IRedstoneCache {
 
 	public static enum ControlMode {
+
 		DISABLED(true), LOW(false), HIGH(true);
 
 		private final boolean state;

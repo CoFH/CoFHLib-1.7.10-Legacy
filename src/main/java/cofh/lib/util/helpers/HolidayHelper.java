@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
  * @author King Lemming
  *
  */
-public class HolidayHelper {
+public final class HolidayHelper {
 
 	private HolidayHelper() {
 
@@ -68,19 +68,21 @@ public class HolidayHelper {
 		/**
 		 * Compute the day of the year that Easter falls on. Step names E1 E2 etc., are direct references to Knuth, Vol 1, p 155.
 		 *
-		 * http://en.wikipedia.org/wiki/Computus#Meeus.2FJones.2FButcher_Gregorian_algorithm
+		 * http://en.wikipedia.org/wiki/Computus#Meeus.2FJones.2F Butcher_Gregorian_algorithm
 		 */
 		Calendar easterSunCal;
 
 		int year = Calendar.getInstance().get(Calendar.YEAR);
 
 		if (year <= 1582) {
-			return false; // The calculation is based on Gregorian calendar and it's incorrect before 1582
+			return false; // The calculation is based on Gregorian calendar and
+			// it's incorrect before 1582
 		}
 		int golden, century, x, z, d, epact, n;
 
 		golden = (year % 19) + 1; // metonic cycle
-		century = (year / 100) + 1; // Centuries are shifted by one e.g. 1984 was in 20th C
+		century = (year / 100) + 1; // Centuries are shifted by one e.g. 1984
+		// was in 20th C
 		x = (3 * century / 4) - 12; // leap year correction
 		z = ((8 * century + 5) / 25) - 5; // syncing with moon's orbit
 
@@ -95,7 +97,8 @@ public class HolidayHelper {
 		n += 7 - ((d + n) % 7);
 
 		if (n > 31) {
-			easterSunCal = new GregorianCalendar(year, 4 - 1, n - 31); // if April
+			easterSunCal = new GregorianCalendar(year, 4 - 1, n - 31); // if
+			// April
 		} else {
 			easterSunCal = new GregorianCalendar(year, 3 - 1, n); // if March
 		}

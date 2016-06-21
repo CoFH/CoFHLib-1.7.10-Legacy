@@ -7,16 +7,16 @@ import java.util.Map;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class InventoryManagerStandard implements IInventoryManager {
 
 	private final IInventory _inv;
-	protected ForgeDirection _targetSide;
+	protected EnumFacing _targetSide;
 	protected int _cachedSize;
 	protected int[] _cachedSlots = new int[] {};
 
-	public InventoryManagerStandard(IInventory inventory, ForgeDirection targetSide) {
+	public InventoryManagerStandard(IInventory inventory, EnumFacing targetSide) {
 
 		_inv = inventory;
 		_targetSide = targetSide;

@@ -26,7 +26,7 @@ public class ElementSimpleBox extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		drawModalRect(posX, posY, posX + sizeX, posY + sizeY, color);
+		drawSizedModalRect(posX, posY, posX + sizeX, posY + sizeY, color);
 	}
 
 	@Override

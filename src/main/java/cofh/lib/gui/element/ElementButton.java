@@ -1,7 +1,6 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
@@ -92,7 +91,7 @@ public class ElementButton extends ElementButtonBase {
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		GL11.glColor4f(1, 1, 1, 1);
-		RenderHelper.bindTexture(texture);
+		gui.bindTexture(texture);
 		if (isEnabled()) {
 			if (intersectsWith(mouseX, mouseY)) {
 

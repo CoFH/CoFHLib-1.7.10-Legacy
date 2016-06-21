@@ -1,10 +1,9 @@
 package cofh.lib.audio;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.audio.ISound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Generic ISound class with lots of constructor functionality. Required because - of course - Mojang has no generic that lets you specify *any* arguments for
@@ -125,7 +124,7 @@ public class SoundBase implements ISound {
 	}
 
 	@Override
-	public ResourceLocation getPositionedSoundLocation() {
+	public ResourceLocation getSoundLocation() {
 
 		return sound;
 	}

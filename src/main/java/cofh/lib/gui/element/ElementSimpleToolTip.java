@@ -1,7 +1,6 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
@@ -52,7 +51,7 @@ public class ElementSimpleToolTip extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		RenderHelper.bindTexture(texture);
+		gui.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, texU, texV, sizeX, sizeY);
 	}
 
