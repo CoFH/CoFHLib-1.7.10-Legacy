@@ -19,10 +19,8 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 
 		super(stack);
 
-		if (stack != null) {
-			if (stack.stackTagCompound != null) {
-				tag = (NBTTagCompound) stack.stackTagCompound.copy();
-			}
+		if (stack != null && stack.stackTagCompound != null) {
+			tag = (NBTTagCompound) stack.stackTagCompound.copy();
 		}
 	}
 

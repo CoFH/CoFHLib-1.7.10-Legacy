@@ -366,12 +366,11 @@ public final class EnderRegistry {
 		if (dest == null) {
 			return;
 		}
-		if (dest.dimension == theAttuned.dimension()) {
-			if (dest.x == theAttuned.x() && dest.y == theAttuned.y() && dest.z == theAttuned.z()) {
-				map.remove(freq);
-				usedTeleports.get(channel).set(freq, false);
-				linkConf.getCategory(channel).remove(String.valueOf(freq));
-			}
+		if (dest.dimension == theAttuned.dimension()
+				&& dest.x == theAttuned.x() && dest.y == theAttuned.y() && dest.z == theAttuned.z()) {
+			map.remove(freq);
+			usedTeleports.get(channel).set(freq, false);
+			linkConf.getCategory(channel).remove(String.valueOf(freq));
 		}
 	}
 

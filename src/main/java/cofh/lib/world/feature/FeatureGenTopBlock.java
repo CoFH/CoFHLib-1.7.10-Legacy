@@ -44,11 +44,8 @@ public class FeatureGenTopBlock extends FeatureBase {
 			int y = BlockHelper.getTopBlockY(world, x, z);
 			l: {
 				Block block = world.getBlock(x, y, z);
-				if (!block.isAir(world, x, y, z)) {
-
-					if (canGenerateInBlock(world, x, y, z, matList)) {
-						break l;
-					}
+				if (!block.isAir(world, x, y, z) && canGenerateInBlock(world, x, y, z, matList)) {
+					break l;
 				}
 				continue;
 			}
