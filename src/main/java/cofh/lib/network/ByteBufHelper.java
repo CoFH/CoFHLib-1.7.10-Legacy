@@ -3,6 +3,10 @@ package cofh.lib.network;
 import io.netty.buffer.ByteBuf;
 
 public final class ByteBufHelper {
+	
+	private ByteBufHelper() {
+		
+	}
 
 	public static int readVarInt(ByteBuf data) {
 

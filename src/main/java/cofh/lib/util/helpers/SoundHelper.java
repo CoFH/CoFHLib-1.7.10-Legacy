@@ -15,6 +15,10 @@ import net.minecraft.client.audio.SoundHandler;
 public class SoundHelper {
 
 	public static final SoundHandler soundManager = FMLClientHandler.instance().getClient().getSoundHandler();
+	
+	private SoundHelper() {
+		
+	}
 
 	/**
 	 * This allows you to have some tricky functionality with Tile Entities. Just be sure you aren't dumb.

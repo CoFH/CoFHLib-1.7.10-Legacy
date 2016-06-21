@@ -16,6 +16,10 @@ import net.minecraft.nbt.NBTTagList;
  */
 public final class FireworksHelper {
 
+	private FireworksHelper() {
+		
+	}
+	
 	/**
 	 * Represents a single explosion that a firework rocket can contain.
 	 *
