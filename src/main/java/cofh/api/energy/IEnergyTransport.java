@@ -5,13 +5,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Implement this interface on Tile Entities which transport energy.
  * <p>
- * This is used to "negotiate" connection types between two separate IFluxTransports, allowing users to set flow direction and allowing for networks Of
- * IFluxTransports to intelligently transfer energy to other networks.
+ * This is used to "negotiate" connection types between two separate IEnergyTransports, allowing users to set flow direction and allowing for networks Of
+ * IEnergyTransports to intelligently transfer energy to other networks.
  */
-public interface IFluxTransport extends IEnergyProvider, IEnergyReceiver {
+public interface IEnergyTransport extends IEnergyProvider, IEnergyReceiver {
 
 	/**
-	 * The type of interface for a given side of a {@link IFluxTransport}.
+	 * The type of interface for a given side of a {@link IEnergyTransport}.
 	 * <p>
 	 * Values are:<br>
 	 * {@link SEND} for sending only<br>
@@ -20,22 +20,22 @@ public interface IFluxTransport extends IEnergyProvider, IEnergyReceiver {
 	 */
 	public enum InterfaceType {
 		/**
-		 * Indicates that this {@link IFluxTransport} is only sending power on this side.
+		 * Indicates that this {@link IEnergyTransport} is only sending power on this side.
 		 */
 		SEND,
 		/**
-		 * Indicates that this {@link IFluxTransport} is only receiving power on this side.
+		 * Indicates that this {@link IEnergyTransport} is only receiving power on this side.
 		 */
 		RECEIVE,
 		/**
-		 * Indicates that this {@link IFluxTransport} wants to balance power between itself and the
+		 * Indicates that this {@link IEnergyTransport} wants to balance power between itself and the
 		 * senders/receivers on this side. This is the default state.<br>
 		 * To block any connection, use {@link IEnergyConnection#canConnectEnergy}
 		 * <p>
-		 * IFluxTransport based senders should check that the total power in the destination IFluxTransport is less than the power in themselves before sending.
+		 * IEnergyTransport based senders should check that the total power in the destination IEnergyTransport is less than the power in themselves before sending.
 		 * <br>
-		 * Active IFluxTransport receivers (i.e., those that call {@link IEnergyProvider#extractEnergy}) should check that they contain less power than the
-		 * source IFluxTransport.
+		 * Active IEnergyTransport receivers (i.e., those that call {@link IEnergyProvider#extractEnergy}) should check that they contain less power than the
+		 * source IEnergyTransport.
 		 */
 		BALANCE;
 
@@ -51,7 +51,7 @@ public interface IFluxTransport extends IEnergyProvider, IEnergyReceiver {
 		}
 
 		/**
-		 * Returns the next InterfaceType as described in {@link IFluxTransport#getTransportState}
+		 * Returns the next InterfaceType as described in {@link IEnergyTransport#getTransportState}
 		 */
 		public InterfaceType rotate() {
 
@@ -59,10 +59,10 @@ public interface IFluxTransport extends IEnergyProvider, IEnergyReceiver {
 		}
 
 		/**
-		 * Returns the next InterfaceType as described in {@link IFluxTransport#getTransportState}
+		 * Returns the next InterfaceType as described in {@link IEnergyTransport#getTransportState}
 		 *
 		 * @param forward
-		 *            Whether to step in the order specified by {@link IFluxTransport#getTransportState} (<tt>true</tt>) or to step in the opposite direction
+		 *            Whether to step in the order specified by {@link IEnergyTransport#getTransportState} (<tt>true</tt>) or to step in the opposite direction
 		 */
 		public InterfaceType rotate(boolean forward) {
 
@@ -76,15 +76,15 @@ public interface IFluxTransport extends IEnergyProvider, IEnergyReceiver {
 
 	/**
 	 * {@inheritDoc}<br>
-	 * This method <b>cannot</b> be a no-op for IFluxTransport.
+	 * This method <b>cannot</b> be a no-op for IEnergyTransport.
 	 */
 	@Override
 	int getEnergyStored(ForgeDirection from);
 
 	/**
-	 * Indicates to other IFluxTransports the state of the given side. See {@link #InterfaceType} for details.
+	 * Indicates to other IEnergyTransports the state of the given side. See {@link #InterfaceType} for details.
 	 * <p>
-	 * For clarity of state tracking, on a tile update from another IFluxTransport, if its mode has changed from the opposite of your own mode on that side, you
+	 * For clarity of state tracking, on a tile update from another IEnergyTransport, if its mode has changed from the opposite of your own mode on that side, you
 	 * should change your mode to the opposite of its mode.
 	 * <p>
 	 * When the user alters your mode and your state is:<br>
@@ -98,9 +98,9 @@ public interface IFluxTransport extends IEnergyProvider, IEnergyReceiver {
 	InterfaceType getTransportState(ForgeDirection from);
 
 	/**
-	 * This method is provided primarily for the purposes of automation tools, and should not need to be called by another IFluxTransport.
+	 * This method is provided primarily for the purposes of automation tools, and should not need to be called by another IEnergyTransport.
 	 * <p>
-	 * Calls to this method may fail if this IFluxTransport has been secured by a user.
+	 * Calls to this method may fail if this IEnergyTransport has been secured by a user.
 	 *
 	 * @return Whether or not state was successfully altered.
 	 */
