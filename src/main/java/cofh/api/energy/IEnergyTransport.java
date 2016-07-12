@@ -104,6 +104,6 @@ public interface IEnergyTransport extends IEnergyProvider, IEnergyReceiver {
 	 *
 	 * @return Whether or not state was successfully altered.
 	 */
-	boolean setTransportState(ForgeDirection from);
+	boolean setTransportState(InterfaceType state, ForgeDirection from);
 
 }
