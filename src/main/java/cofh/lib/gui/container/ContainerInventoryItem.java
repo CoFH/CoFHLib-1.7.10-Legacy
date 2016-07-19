@@ -2,6 +2,7 @@ package cofh.lib.gui.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
 
 public abstract class ContainerInventoryItem extends ContainerBase {
@@ -77,9 +78,9 @@ public abstract class ContainerInventoryItem extends ContainerBase {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int clickedButton, ClickType mode, EntityPlayer player) {
 
-		if (mode == 2 && clickedButton == containerIndex) {
+		if (mode == ClickType.SWAP && clickedButton == containerIndex) {
 			return null;
 		}
 		return super.slotClick(slotId, clickedButton, mode, player);
