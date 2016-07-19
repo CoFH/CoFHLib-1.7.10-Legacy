@@ -7,8 +7,9 @@ import cofh.lib.gui.GuiBase;
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
@@ -128,29 +129,29 @@ public abstract class ElementBase {
 
 	public void drawStencil(int x1, int y1, int x2, int y2, int flag) {
 
-		glDisable(GL_TEXTURE_2D);
+        GlStateManager.disableTexture2D();
 		glStencilFunc(GL_ALWAYS, flag, flag);
 		glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
 		glStencilMask(flag);
-		glColorMask(false, false, false, false);
-		glDepthMask(false);
+        GlStateManager.colorMask(false, false, false, false);
+        GlStateManager.depthMask(false);
 		glClearStencil(0);
-		glClear(GL_STENCIL_BUFFER_BIT);
+        GlStateManager.clear(GL_STENCIL_BUFFER_BIT);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-		worldrenderer.pos(x1, y2, 0.0D).endVertex();
-		worldrenderer.pos(x2, y2, 0.0D).endVertex();
-		worldrenderer.pos(x2, y1, 0.0D).endVertex();
-		worldrenderer.pos(x1, y1, 0.0D).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, 0.0D).endVertex();
+		buffer.pos(x2, y2, 0.0D).endVertex();
+		buffer.pos(x2, y1, 0.0D).endVertex();
+		buffer.pos(x1, y1, 0.0D).endVertex();
 		tessellator.draw();
 
-		glEnable(GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 		glStencilFunc(GL_EQUAL, flag, flag);
 		glStencilMask(0);
-		glColorMask(true, true, true, true);
-		glDepthMask(true);
+        GlStateManager.colorMask(true, true, true, true);
+        GlStateManager.depthMask(true);
 	}
 
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {

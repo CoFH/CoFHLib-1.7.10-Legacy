@@ -6,6 +6,7 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
 import cofh.lib.gui.element.listbox.IListBoxElement;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -161,23 +162,22 @@ public class ElementListBox extends ElementBase {
 		int heightDrawn = 0;
 		int nextElement = _firstIndexDisplayed;
 
-		glPushMatrix();
-		glDisable(GL_LIGHTING);
-
+        GlStateManager.pushMatrix();
+        GlStateManager.disableLighting();
 		glEnable(GL_STENCIL_TEST);
 		drawStencil(getContentLeft(), getContentTop(), getContentRight(), getContentBottom(), 1);
 
-		glPushMatrix();
-		glTranslated(-scrollHoriz, 0, 0);
+        GlStateManager.pushMatrix();
+		GlStateManager.translate(-scrollHoriz, 0, 0);
 
 		int e = _elements.size();
 		while (nextElement < e && heightDrawn <= getContentHeight()) {
 			heightDrawn += drawElement(nextElement, getContentLeft(), getContentTop() + heightDrawn);
 			nextElement++;
 		}
-		glPopMatrix();
+		GlStateManager.popMatrix();
 		glDisable(GL_STENCIL_TEST);
-		glPopMatrix();
+        GlStateManager.popMatrix();
 	}
 
 	protected int drawElement(int elementIndex, int x, int y) {

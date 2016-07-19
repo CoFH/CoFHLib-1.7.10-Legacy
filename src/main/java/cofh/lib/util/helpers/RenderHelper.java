@@ -1,11 +1,10 @@
 package cofh.lib.util.helpers;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 /**
  * Contains various helper functions to assist with rendering.
@@ -38,17 +37,17 @@ public final class RenderHelper {
 
 	public static void setColor3ub(int color) {
 
-		GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+		GlStateManager.color((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
 	}
 
 	public static void setColor4ub(int color) {
 
-		GL11.glColor4ub((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+        GlStateManager.color((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
 	}
 
 	public static void resetColor() {
 
-		GL11.glColor4f(1F, 1F, 1F, 1F);
+        GlStateManager.color(1F, 1F, 1F, 1F);
 	}
 
 }

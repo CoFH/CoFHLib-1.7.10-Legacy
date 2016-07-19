@@ -3,6 +3,7 @@ package cofh.lib.gui.slot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 
 /**
  * Slot that will only accept Potion Ingredients.
@@ -17,7 +18,7 @@ public class SlotPotionIngredient extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && stack.getItem().isPotionIngredient(stack);
+		return stack != null && BrewingRecipeRegistry.isValidIngredient(stack);
 	}
 
 }

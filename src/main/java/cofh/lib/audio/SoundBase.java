@@ -1,9 +1,15 @@
 package cofh.lib.audio;
 
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundEventAccessor;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * Generic ISound class with lots of constructor functionality. Required because - of course - Mojang has no generic that lets you specify *any* arguments for
@@ -129,7 +135,23 @@ public class SoundBase implements ISound {
 		return sound;
 	}
 
-	@Override
+    @Nullable
+    @Override
+    public SoundEventAccessor createAccessor(SoundHandler handler) {
+        return null;//TODO
+    }
+
+    @Override
+    public Sound getSound() {
+        return null;//TODO
+    }
+
+    @Override
+    public SoundCategory getCategory() {
+        return null;//TODO
+    }
+
+    @Override
 	public float getVolume() {
 
 		return volume;

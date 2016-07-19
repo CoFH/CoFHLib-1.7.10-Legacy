@@ -4,7 +4,7 @@ import cofh.api.item.IToolHammer;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 // TODO: Update for 1.8.9 APIs.
 public final class WrenchHelper {
@@ -15,9 +15,9 @@ public final class WrenchHelper {
 
 	public static boolean isHoldingUsableWrench(EntityPlayer player, BlockPos pos) {
 
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		Item equipped = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().getItem() : null;
 		if (equipped instanceof IToolHammer) {
-			return ((IToolHammer) equipped).isUsable(player.getCurrentEquippedItem(), player, pos);
+			return ((IToolHammer) equipped).isUsable(player.getHeldItemMainhand(), player, pos);
 		} else if (bcWrenchExists) {
 			// return canHandleBCWrench(equipped, player, pos);
 		}
@@ -26,9 +26,9 @@ public final class WrenchHelper {
 
 	public static void usedWrench(EntityPlayer player, BlockPos pos) {
 
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		Item equipped = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().getItem() : null;
 		if (equipped instanceof IToolHammer) {
-			((IToolHammer) equipped).toolUsed(player.getCurrentEquippedItem(), player, pos);
+			((IToolHammer) equipped).toolUsed(player.getHeldItemMainhand(), player, pos);
 		} else if (bcWrenchExists) {
 			// bcWrenchUsed(equipped, player, pos);
 		}

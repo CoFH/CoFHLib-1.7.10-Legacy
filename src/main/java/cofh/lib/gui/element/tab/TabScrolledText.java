@@ -6,9 +6,8 @@ import cofh.lib.util.helpers.MathHelper;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
 
 public abstract class TabScrolledText extends TabBase {
 
@@ -52,7 +51,7 @@ public abstract class TabScrolledText extends TabBase {
 		for (int i = firstLine; i < firstLine + numLines; i++) {
 			getFontRenderer().drawString(myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

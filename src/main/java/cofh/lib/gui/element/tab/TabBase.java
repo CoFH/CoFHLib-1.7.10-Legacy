@@ -9,10 +9,10 @@ import cofh.lib.util.Rectangle4i;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
@@ -99,9 +99,9 @@ public abstract class TabBase extends ElementBase {
 		mouseX -= this.posX();
 		mouseY -= this.posY;
 
-		GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
-		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		drawTabBackground();
 
@@ -111,7 +111,7 @@ public abstract class TabBase extends ElementBase {
 				element.drawBackground(mouseX, mouseY, gameTicks);
 			}
 		}
-		GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -120,9 +120,9 @@ public abstract class TabBase extends ElementBase {
 		mouseX -= this.posX();
 		mouseY -= this.posY;
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		drawTabForeground();
 
@@ -132,7 +132,7 @@ public abstract class TabBase extends ElementBase {
 				element.drawForeground(mouseX, mouseY);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -185,7 +185,7 @@ public abstract class TabBase extends ElementBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F;
 		float colorB = (backgroundColor & 255) / 255.0F;
 
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+        GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
 		gui.bindTexture(texture);
 
@@ -194,7 +194,7 @@ public abstract class TabBase extends ElementBase {
 		gui.drawTexturedModalRect(0, 0, 0, 0, 4, 4);
 		gui.drawTexturedModalRect(0 + 4, 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	protected void drawTabForeground() {
@@ -203,7 +203,7 @@ public abstract class TabBase extends ElementBase {
 
 	protected void drawTabIcon(ResourceLocation icon) {
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		gui.drawIcon(icon, sideOffset(), 3);
 	}
 

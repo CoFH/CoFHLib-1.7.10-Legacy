@@ -1,6 +1,5 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
@@ -10,6 +9,9 @@ import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -863,8 +865,8 @@ public class ElementTextField extends ElementBase {
 				enableStencil = false;
 				break l;
 			}
-			glEnable(GL_STENCIL_TEST);
-			drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1 << bit);
+			GL11.glEnable(GL11.GL_STENCIL_TEST);
+            drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1 << bit);
 		}
 
 		FontRenderer font = getFontRenderer();
@@ -932,10 +934,10 @@ public class ElementTextField extends ElementBase {
 					caretEnd = width + charW;
 				}
 
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ZERO);
 				gui.drawSizedRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, -1);
-				GL11.glDisable(GL11.GL_BLEND);
+				GlStateManager.disableBlend();
 			}
 
 			if (c == '\n') {
@@ -953,7 +955,7 @@ public class ElementTextField extends ElementBase {
 		}
 
 		if (enableStencil) {
-			glDisable(GL_STENCIL_TEST);
+            GL11.glDisable(GL11.GL_STENCIL_TEST);
 			MinecraftForgeClient.releaseStencilBit(bit);
 		}
 	}

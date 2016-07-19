@@ -38,21 +38,21 @@ public class EnergyHelper {
 
 	public static int extractEnergyFromHeldContainer(EntityPlayer player, int maxExtract, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
 	}
 
 	public static int insertEnergyIntoHeldContainer(EntityPlayer player, int maxReceive, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
 	}
 
 	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
-		return isEnergyContainerItem(player.getCurrentEquippedItem());
+		return isEnergyContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isEnergyContainerItem(ItemStack container) {

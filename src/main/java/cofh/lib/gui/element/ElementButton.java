@@ -5,7 +5,7 @@ import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 public class ElementButton extends ElementButtonBase {
 
@@ -90,7 +90,7 @@ public class ElementButton extends ElementButtonBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		GL11.glColor4f(1, 1, 1, 1);
+		GlStateManager.color(1, 1, 1, 1);
 		gui.bindTexture(texture);
 		if (isEnabled()) {
 			if (intersectsWith(mouseX, mouseY)) {

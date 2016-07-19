@@ -17,22 +17,25 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
@@ -107,7 +110,7 @@ public abstract class GuiBase extends GuiContainer {
 			fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		}
 		if (drawInventory) {
-			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
+			fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
 		drawElements(0, true);
 		drawTabs(0, true);
@@ -116,18 +119,18 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(guiLeft, guiTop, 0.0F);
 		drawElements(partialTick, false);
 		drawTabs(partialTick, false);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -251,7 +254,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
 			if (lastIndex != slot.slotNumber) {
 				lastIndex = slot.slotNumber;
-				handleMouseClick(slot, slot.slotNumber, 0, 0);
+				handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
 			}
 		} else {
 			lastIndex = -1;
@@ -496,10 +499,10 @@ public abstract class GuiBase extends GuiContainer {
 
 	public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
 
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+		GlStateManager.enableDepth();
+		GlStateManager.enableLighting();
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0.0F, 0.0F, 32.0F);
 		zLevel = 200.0F;
 		itemRender.zLevel = 200.0F;
 
@@ -518,8 +521,8 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
-		GL11.glPopMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.popMatrix();
+		GlStateManager.disableLighting();
 	}
 
 	/**
@@ -530,7 +533,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (fluid == null || fluid.getFluid() == null) {
 			return;
 		}
-		bindTexture(TextureMap.locationBlocksTexture);
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 
 		drawTiledTexture(x, y, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString()), width, height);
@@ -551,7 +554,7 @@ public abstract class GuiBase extends GuiContainer {
 				drawScaledTexturedModalRect(x + i, y + j, icon, drawWidth, drawHeight);
 			}
 		}
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
 	}
 
 	public void drawSizedModalRect(int x1, int y1, int x2, int y2, int color) {
@@ -574,22 +577,22 @@ public abstract class GuiBase extends GuiContainer {
 		float g = (color >> 8 & 255) / 255.0F;
 		float b = (color & 255) / 255.0F;
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(r, g, b, a);
+        GlStateManager.disableBlend();
+		GlStateManager.disableTexture2D();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.color(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-		worldrenderer.pos(x1, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y1, zLevel).endVertex();
-		worldrenderer.pos(x1, y1, zLevel).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, zLevel).endVertex();
+		buffer.pos(x2, y2, zLevel).endVertex();
+		buffer.pos(x2, y1, zLevel).endVertex();
+		buffer.pos(x1, y1, zLevel).endVertex();
 		tessellator.draw();
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableBlend();
 	}
 
 	public void drawSizedRect(int x1, int y1, int x2, int y2, int color) {
@@ -612,19 +615,19 @@ public abstract class GuiBase extends GuiContainer {
 		float g = (color >> 8 & 255) / 255.0F;
 		float b = (color & 255) / 255.0F;
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(r, g, b, a);
+		GlStateManager.disableTexture2D();
+		GlStateManager.color(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-		worldrenderer.pos(x1, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y1, zLevel).endVertex();
-		worldrenderer.pos(x1, y1, zLevel).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, zLevel).endVertex();
+		buffer.pos(x2, y2, zLevel).endVertex();
+		buffer.pos(x2, y1, zLevel).endVertex();
+		buffer.pos(x1, y1, zLevel).endVertex();
 		tessellator.draw();
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 	}
 
 	public void drawSizedTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
@@ -633,12 +636,12 @@ public abstract class GuiBase extends GuiContainer {
 		float texV = 1 / texH;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		worldrenderer.pos(x + 0, y + height, zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
-		worldrenderer.pos(x + width, y + height, zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
-		worldrenderer.pos(x + width, y + 0, zLevel).tex((u + width) * texU, (v + 0) * texV).endVertex();
-		worldrenderer.pos(x + 0, y + 0, zLevel).tex((u + 0) * texU, (v + 0) * texV).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x + 0, y + height, zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x + width, y + height, zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x + width, y + 0, zLevel).tex((u + width) * texU, (v + 0) * texV).endVertex();
+		buffer.pos(x + 0, y + 0, zLevel).tex((u + 0) * texU, (v + 0) * texV).endVertex();
 		tessellator.draw();
 	}
 
@@ -653,12 +656,12 @@ public abstract class GuiBase extends GuiContainer {
 		double maxV = icon.getMaxV();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		worldrenderer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
-		worldrenderer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-		worldrenderer.pos(x + width, y + 0, zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
-		worldrenderer.pos(x + 0, y + 0, zLevel).tex(minU, minV);
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
+		buffer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
+		buffer.pos(x + width, y + 0, zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
+		buffer.pos(x + 0, y + 0, zLevel).tex(minU, minV);
 		tessellator.draw();
 	}
 
@@ -674,9 +677,9 @@ public abstract class GuiBase extends GuiContainer {
 		if (list == null || list.isEmpty()) {
 			return;
 		}
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableRescaleNormal();
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
 		int k = 0;
 		Iterator iterator = list.iterator();
 
@@ -727,9 +730,9 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableLighting();
+		GlStateManager.enableDepth();
+		GlStateManager.enableRescaleNormal();
 	}
 
 	/**

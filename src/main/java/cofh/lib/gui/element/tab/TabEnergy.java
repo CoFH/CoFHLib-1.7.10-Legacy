@@ -7,9 +7,9 @@ import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
 
 public class TabEnergy extends TabBase {
 
@@ -63,7 +63,7 @@ public class TabEnergy extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", sideOffset() + 6, 66, subheaderColor);
 		getFontRenderer().drawString(myContainer.getInfoEnergyStored() + " RF", sideOffset() + 14, 78, textColor);
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

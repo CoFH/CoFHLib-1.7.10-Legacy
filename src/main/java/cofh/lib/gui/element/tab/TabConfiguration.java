@@ -10,11 +10,13 @@ import cofh.lib.util.helpers.StringHelper;
 import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
 
 public class TabConfiguration extends TabBase {
 
@@ -104,9 +106,9 @@ public class TabConfiguration extends TabBase {
 		float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 		gui.drawTexturedModalRect(16, 20, 16, 20, 64, 64);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -117,12 +119,12 @@ public class TabConfiguration extends TabBase {
 			return;
 		}
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		gui.bindTexture(TextureMap.locationBlocksTexture);
+		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.enableDepth();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		//		for (int i = 0; i < 2; i++) {
 		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_ABOVE[myTile.getFacing()], i), posX() + 40, 24);
@@ -132,7 +134,7 @@ public class TabConfiguration extends TabBase {
 		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_BELOW[myTile.getFacing()], i), posX() + 40, 64);
 		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_OPPOSITE[myTile.getFacing()], i), posX() + 60, 64);
 		//		}
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.disableBlend();
 	}
 
 	void handleSideChange(int side, int mouseButton) {
