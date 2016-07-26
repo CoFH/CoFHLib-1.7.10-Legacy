@@ -3,10 +3,11 @@ package cofh.lib.gui.container;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
 import cofh.lib.util.helpers.MathHelper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -78,8 +79,8 @@ public abstract class ContainerBase extends Container {
 			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
-			for (int j = 0; j < this.crafters.size(); ++j) {
-				this.crafters.get(j).sendSlotContents(this, start, itemstack1);
+			for (IContainerListener listener : this.listeners) {
+				listener.sendSlotContents(this, start, itemstack1);
 			}
 		}
 	}
@@ -126,7 +127,7 @@ public abstract class ContainerBase extends Container {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int clickedButton, ClickType mode, EntityPlayer player) {
 
 		Slot slot = slotId < 0 ? null : (Slot) this.inventorySlots.get(slotId);
 		if (slot instanceof SlotFalseCopy) {

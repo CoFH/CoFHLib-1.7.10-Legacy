@@ -1,27 +1,28 @@
 package cofh.lib.render.particle;
 
 import cofh.lib.util.helpers.MathHelper;
-
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.util.BlockPos;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityDropParticleFX extends EntityFX {
+public class EntityDropParticleFX extends Particle {
 
 	private int bobTimer;
 
-	public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
+	public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen,
+			float particleBlue) {
 
 		this(world, x, y, z, particleRed, particleGreen, particleBlue, -1);
 	}
 
-	public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue, int gravityMod) {
+	public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen,
+			float particleBlue, int gravityMod) {
 
 		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.motionX = this.motionY = this.motionZ = 0.0D;
@@ -61,9 +62,9 @@ public class EntityDropParticleFX extends EntityFX {
 		this.motionZ *= 0.9800000190734863D;
 
 		if (this.particleMaxAge-- <= 0) {
-			this.setDead();
+			this.setExpired();
 		}
-		if (this.onGround) {
+		if (this.isCollided) {
 			this.setParticleTextureIndex(114);
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;
@@ -72,20 +73,22 @@ public class EntityDropParticleFX extends EntityFX {
 		IBlockState state = this.worldObj.getBlockState(pos);
 
 		if (this.particleGravity > 0) {
-			Material material = state.getBlock().getMaterial();
+			Material material = state.getMaterial();
 			if (material.isLiquid() || material.isSolid()) {
-				double d0 = MathHelper.floor(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+				double d0 = MathHelper.floor(this.posY) + 1 -
+						BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
 				if (this.posY < d0) {
-					this.setDead();
+					this.setExpired();
 				}
 			}
 		} else {
-			Material material = state.getBlock().getMaterial();
+			Material material = state.getMaterial();
 
 			if (material.isLiquid() || material.isSolid()) {
-				double d0 = MathHelper.ceil(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+				double d0 = MathHelper.ceil(this.posY) + 1 -
+						BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
 				if (this.posY > d0) {
-					this.setDead();
+					this.setExpired();
 				}
 			}
 		}

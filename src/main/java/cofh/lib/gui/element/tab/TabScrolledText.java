@@ -3,12 +3,10 @@ package cofh.lib.gui.element.tab;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.MathHelper;
-
-import java.util.List;
-
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.opengl.GL11;
+import java.util.List;
 
 public abstract class TabScrolledText extends TabBase {
 
@@ -50,9 +48,10 @@ public abstract class TabScrolledText extends TabBase {
 		}
 		getFontRenderer().drawStringWithShadow(getTitle(), sideOffset() + 18, 6, headerColor);
 		for (int i = firstLine; i < firstLine + numLines; i++) {
-			getFontRenderer().drawString(myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
+			getFontRenderer()
+					.drawString(myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

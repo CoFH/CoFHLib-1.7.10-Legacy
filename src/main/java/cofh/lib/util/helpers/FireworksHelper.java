@@ -1,13 +1,13 @@
 package cofh.lib.util.helpers;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains helper functions to assist with working with fireworks.
@@ -77,12 +77,14 @@ public final class FireworksHelper {
 			e.setType(MathHelper.RANDOM.nextInt(5));
 
 			for (int i = 0; i < primaryColors; i++) {
-				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+				Color color = new Color(
+						Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
 				e.addPrimaryColor(color.getRed(), color.getGreen(), color.getBlue());
 			}
 
 			for (int i = 0; i < fadeColors; i++) {
-				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+				Color color = new Color(
+						Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
 				e.addFadeColor(color.getRed(), color.getGreen(), color.getBlue());
 			}
 
@@ -221,7 +223,7 @@ public final class FireworksHelper {
 			NBTTagCompound explosionTag = this.getTagCompound();
 			tags.setTag("Explosion", explosionTag);
 
-			ItemStack stack = new ItemStack(Items.firework_charge);
+			ItemStack stack = new ItemStack(Items.FIREWORK_CHARGE);
 			stack.setTagCompound(tags);
 			return stack;
 		}
@@ -256,7 +258,7 @@ public final class FireworksHelper {
 		fireworksTag.setTag("Explosions", explosionsList);
 		tags.setTag("Fireworks", fireworksTag);
 
-		ItemStack stack = new ItemStack(Items.fireworks);
+		ItemStack stack = new ItemStack(Items.FIREWORKS);
 		stack.setTagCompound(tags);
 		return stack;
 	}

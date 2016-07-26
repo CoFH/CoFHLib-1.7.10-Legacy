@@ -1,18 +1,17 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -356,7 +355,7 @@ public class ElementTextField extends ElementBase {
 		FontRenderer font = getFontRenderer();
 		int widthLeft = 0;
 		int breaksAbove = 0;
-		for (int i = caret; i-- > 0;) {
+		for (int i = caret; i-- > 0; ) {
 			char c = text[i];
 			if (c == '\n') {
 				for (; i > 0; --i) {
@@ -552,7 +551,7 @@ public class ElementTextField extends ElementBase {
 			case Keyboard.KEY_BACK: // backspace
 				changed = false;
 				boolean calledEntered = true,
-				onBreak = false;
+						onBreak = false;
 				if (selectionStart != selectionEnd) {
 					clearSelection();
 				} else if (GuiScreen.isCtrlKeyDown()) {
@@ -648,32 +647,32 @@ public class ElementTextField extends ElementBase {
 					selectionStart = selectionEnd = caret;
 				}
 
-				{
-					int t = caret;
-					caret = MathHelper.clamp(caret + size, 0, textLength);
-					size = caret - t;
+			{
+				int t = caret;
+				caret = MathHelper.clamp(caret + size, 0, textLength);
+				size = caret - t;
+			}
+
+			if (GuiScreen.isShiftKeyDown()) {
+				if (caret == selectionStart + size) {
+					selectionStart = caret;
+				} else if (caret == selectionEnd + size) {
+					selectionEnd = caret;
 				}
 
-				if (GuiScreen.isShiftKeyDown()) {
-					if (caret == selectionStart + size) {
-						selectionStart = caret;
-					} else if (caret == selectionEnd + size) {
-						selectionEnd = caret;
-					}
-
-					if (selectionStart > selectionEnd) {
-						int t = selectionStart;
-						selectionStart = selectionEnd;
-						selectionEnd = t;
-					}
+				if (selectionStart > selectionEnd) {
+					int t = selectionStart;
+					selectionStart = selectionEnd;
+					selectionEnd = t;
 				}
+			}
 
-				if (shiftCaret) {
-					caret = caret - size;
-				}
-				findRenderStart();
+			if (shiftCaret) {
+				caret = caret - size;
+			}
+			findRenderStart();
 
-				return true;
+			return true;
 			case Keyboard.KEY_UP:
 			case Keyboard.KEY_DOWN:
 				if (!multiline) {
@@ -686,7 +685,7 @@ public class ElementTextField extends ElementBase {
 				int dir = keyTyped == Keyboard.KEY_UP ? -1 : 1;
 				end = dir == -1 ? 0 : textLength;
 				int i = caret,
-				pos = caretX;
+						pos = caretX;
 				old = i;
 				for (; i != end; i += dir) {
 					if ((dir == -1 ? i != caret : true) && text[i] == '\n') {
@@ -698,7 +697,8 @@ public class ElementTextField extends ElementBase {
 						break;
 					}
 				}
-				l: if (dir == -1) {
+				l:
+				if (dir == -1) {
 					for (; i > 0 && text[i] != '\n'; --i) {
 						;
 					}
@@ -764,15 +764,17 @@ public class ElementTextField extends ElementBase {
 
 		pressed = mouseButton == 0;
 		selecting = mouseButton == 0 && isFocused();
-		l: if (selecting) {
+		l:
+		if (selecting) {
 			if (textLength == 0) {
 				selectionStart = selectionEnd = caret = 0;
 				break l;
 			}
 			FontRenderer font = getFontRenderer();
 			int posX = mouseX - this.posX - 1, posY = mouseY - this.posY - 1;
-			s: if (!multiline) {
-				for (int i = renderStartX, width = 0;;) {
+			s:
+			if (!multiline) {
+				for (int i = renderStartX, width = 0; ; ) {
 					int charW = font.getCharWidth(text[i]);
 					if ((width += charW) > posX || ++i >= textLength) {
 						selectionStart = selectionEnd = caret = i;
@@ -784,7 +786,7 @@ public class ElementTextField extends ElementBase {
 				posY += renderStartY;
 				int maxX = 0;
 				boolean found = false;
-				for (int i = 0, width = 0, height = font.FONT_HEIGHT; i < textLength;) {
+				for (int i = 0, width = 0, height = font.FONT_HEIGHT; i < textLength; ) {
 					char c = text[i];
 					int charW = 0;
 					if (c == '\n') {
@@ -857,13 +859,14 @@ public class ElementTextField extends ElementBase {
 
 		boolean enableStencil = this.enableStencil;
 		int bit = -1;
-		l: if (enableStencil) {
+		l:
+		if (enableStencil) {
 			bit = MinecraftForgeClient.reserveStencilBit();
 			if (bit == -1) {
 				enableStencil = false;
 				break l;
 			}
-			glEnable(GL_STENCIL_TEST);
+			GL11.glEnable(GL11.GL_STENCIL_TEST);
 			drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1 << bit);
 		}
 
@@ -894,7 +897,8 @@ public class ElementTextField extends ElementBase {
 					}
 					draw &= tWidth > renderStartX;
 				}
-				l: if (!enableStencil && tWidth > endX) {
+				l:
+				if (!enableStencil && tWidth > endX) {
 					draw = false;
 					if (multiline) {
 						if (c == '\n') {
@@ -912,8 +916,9 @@ public class ElementTextField extends ElementBase {
 				if (caretInsert) {
 					caretEnd = width + charW;
 				}
-				drawSizedModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, (0xFF000000 & defaultCaretColor)
-						| (~defaultCaretColor & 0xFFFFFF));
+				drawSizedModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height,
+						(0xFF000000 & defaultCaretColor)
+								| (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (draw && !end) {
@@ -932,10 +937,10 @@ public class ElementTextField extends ElementBase {
 					caretEnd = width + charW;
 				}
 
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ZERO);
 				gui.drawSizedRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, -1);
-				GL11.glDisable(GL11.GL_BLEND);
+				GlStateManager.disableBlend();
 			}
 
 			if (c == '\n') {
@@ -953,7 +958,7 @@ public class ElementTextField extends ElementBase {
 		}
 
 		if (enableStencil) {
-			glDisable(GL_STENCIL_TEST);
+			GL11.glDisable(GL11.GL_STENCIL_TEST);
 			MinecraftForgeClient.releaseStencilBit(bit);
 		}
 	}

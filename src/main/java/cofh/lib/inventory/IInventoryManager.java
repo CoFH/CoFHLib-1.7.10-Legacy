@@ -1,8 +1,8 @@
 package cofh.lib.inventory;
 
-import java.util.Map;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.Map;
 
 public interface IInventoryManager {
 

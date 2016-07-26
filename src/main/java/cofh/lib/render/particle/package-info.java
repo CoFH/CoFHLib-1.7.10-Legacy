@@ -6,6 +6,5 @@
 package cofh.lib.render.particle;
 
 import cofh.lib.CoFHLibProps;
-
 import net.minecraftforge.fml.common.API;
 

@@ -119,7 +119,7 @@ public final class NBTHelper {
 			return defaultValue;
 		}
 		return getTagCompound(stack).getFloat(key);
-	};
+	}
 
 	public static void setFloat(ItemStack stack, String key, float value) {
 

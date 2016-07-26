@@ -1,16 +1,15 @@
 package cofh.lib.util.helpers;
 
-import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.lwjgl.input.Keyboard;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Contains various helper functions to assist with String manipulation.
@@ -60,12 +59,12 @@ public final class StringHelper {
 
 	public static String localize(String key) {
 
-		return StatCollector.translateToLocal(key);
+		return I18n.translateToLocal(key);
 	}
 
 	public static String getKeyName(int key) {
 
-		return key < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);
+		return key < 0 ? I18n.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);
 	}
 
 	public static String getFluidName(FluidStack stack) {
@@ -124,8 +123,8 @@ public final class StringHelper {
 	public static String toNumerals(short v) {
 
 		String s = "potion.potency." + v;
-		if (StatCollector.canTranslate(s)) {
-			return StatCollector.translateToLocal(s);
+		if (I18n.canTranslate(s)) {
+			return I18n.translateToLocal(s);
 		}
 		StringBuilder r = new StringBuilder();
 		int i = v;
@@ -182,7 +181,8 @@ public final class StringHelper {
 
 	public static String shiftForDetails() {
 
-		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END + LIGHT_GRAY
+		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END +
+				LIGHT_GRAY
 				+ localize("info.cofh.forDetails") + END;
 	}
 

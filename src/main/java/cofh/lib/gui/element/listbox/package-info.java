@@ -6,6 +6,5 @@
 package cofh.lib.gui.element.listbox;
 
 import cofh.lib.CoFHLibProps;
-
 import net.minecraftforge.fml.common.API;
 

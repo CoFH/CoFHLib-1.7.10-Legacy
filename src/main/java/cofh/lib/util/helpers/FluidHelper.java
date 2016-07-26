@@ -1,12 +1,6 @@
 package cofh.lib.util.helpers;
 
 import cofh.lib.util.CompressedStreamUtils;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,13 +11,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidContainerItem;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.*;
+
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Contains various helper functions to assist with {@link Fluid} and Fluid-related manipulation and interaction.
@@ -48,9 +41,10 @@ public final class FluidHelper {
 	}
 
 	/* FluidContainerRegistry Interaction */
-	public static boolean fillContainerFromHandler(World world, IFluidHandler handler, EntityPlayer player, FluidStack tankFluid) {
+	public static boolean fillContainerFromHandler(World world, IFluidHandler handler, EntityPlayer player,
+			FluidStack tankFluid) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		if (FluidContainerRegistry.isEmptyContainer(container)) {
 			ItemStack returnStack = FluidContainerRegistry.fillFluidContainer(tankFluid, container);
@@ -70,9 +64,10 @@ public final class FluidHelper {
 						container = null;
 					}
 				} else {
-					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
 						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).updateCraftingInventory(player.openContainer, player.openContainer.getInventory());
+						((EntityPlayerMP) player)
+								.updateCraftingInventory(player.openContainer, player.openContainer.getInventory());
 					}
 				}
 			}
@@ -84,7 +79,7 @@ public final class FluidHelper {
 
 	public static boolean fillHandlerWithContainer(World world, IFluidHandler handler, EntityPlayer player) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(container);
 
 		if (fluid != null) {
@@ -94,10 +89,11 @@ public final class FluidHelper {
 					return true;
 				}
 				if (!player.capabilities.isCreativeMode) {
-					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
 						if (ServerHelper.isServerWorld(world)) {
 							player.openContainer.detectAndSendChanges();
-							((EntityPlayerMP) player).updateCraftingInventory(player.openContainer, player.openContainer.getInventory());
+							((EntityPlayerMP) player)
+									.updateCraftingInventory(player.openContainer, player.openContainer.getInventory());
 						}
 					}
 				}
@@ -111,33 +107,41 @@ public final class FluidHelper {
 	/* IFluidContainer Interaction */
 	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
-				: null;
+		return isFluidContainerItem(container) && container.stackSize == 1 ?
+				((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
+				:
+				null;
 	}
 
 	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+		return isFluidContainerItem(container) && container.stackSize == 1 ?
+				((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) :
+				0;
 	}
 
 	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
-				: null;
+		return isFluidContainerItem(container) && container.stackSize == 1 ?
+				((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
+				:
+				null;
 	}
 
 	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+		return isFluidContainerItem(container) && container.stackSize == 1 ?
+				((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) :
+				0;
 	}
 
 	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
 
-		return isFluidContainerItem(player.getCurrentEquippedItem());
+		return isFluidContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isFluidContainerItem(ItemStack container) {
@@ -247,10 +251,10 @@ public final class FluidHelper {
 
 	public static Fluid lookupFluidForBlock(Block block) {
 
-		if (block == Blocks.flowing_water) {
+		if (block == Blocks.FLOWING_WATER) {
 			return WATER_FLUID;
 		}
-		if (block == Blocks.flowing_lava) {
+		if (block == Blocks.FLOWING_LAVA) {
 			return LAVA_FLUID;
 		}
 		return FluidRegistry.lookupFluidForBlock(block);

@@ -4,14 +4,13 @@ import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import java.util.List;
 
 /**
  * This class contains helper functions related to Redstone Flux, the basis of the CoFH Energy System.
@@ -28,31 +27,39 @@ public class EnergyHelper {
 	/* IEnergyContainer Interaction */
 	public static int extractEnergyFromContainer(ItemStack container, int maxExtract, boolean simulate) {
 
-		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
+		return isEnergyContainerItem(container) ?
+				((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) :
+				0;
 	}
 
 	public static int insertEnergyIntoContainer(ItemStack container, int maxReceive, boolean simulate) {
 
-		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
+		return isEnergyContainerItem(container) ?
+				((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) :
+				0;
 	}
 
 	public static int extractEnergyFromHeldContainer(EntityPlayer player, int maxExtract, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
-		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
+		return isEnergyContainerItem(container) ?
+				((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) :
+				0;
 	}
 
 	public static int insertEnergyIntoHeldContainer(EntityPlayer player, int maxReceive, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
-		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
+		return isEnergyContainerItem(container) ?
+				((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) :
+				0;
 	}
 
 	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
-		return isEnergyContainerItem(player.getCurrentEquippedItem());
+		return isEnergyContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isEnergyContainerItem(ItemStack container) {
@@ -80,7 +87,8 @@ public class EnergyHelper {
 	public static void addEnergyInformation(ItemStack stack, List<String> list) {
 
 		if (stack.getItem() instanceof IEnergyContainerItem) {
-			list.add(StringHelper.localize("info.cofh.charge") + ": " + StringHelper.getScaledNumber(stack.getTagCompound().getInteger("Energy")) + " / "
+			list.add(StringHelper.localize("info.cofh.charge") + ": " +
+					StringHelper.getScaledNumber(stack.getTagCompound().getInteger("Energy")) + " / "
 					+ StringHelper.getScaledNumber(((IEnergyContainerItem) stack.getItem()).getMaxEnergyStored(stack)) + " RF");
 		}
 	}
@@ -90,14 +98,18 @@ public class EnergyHelper {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(side.getOpposite(), energy, simulate) : 0;
+		return handler instanceof IEnergyProvider ?
+				((IEnergyProvider) handler).extractEnergy(side.getOpposite(), energy, simulate) :
+				0;
 	}
 
 	public static int insertEnergyIntoAdjacentEnergyReceiver(TileEntity tile, EnumFacing side, int energy, boolean simulate) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate) : 0;
+		return handler instanceof IEnergyReceiver ?
+				((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate) :
+				0;
 	}
 
 	/* ADJACENT CHECKS - "FROM" */

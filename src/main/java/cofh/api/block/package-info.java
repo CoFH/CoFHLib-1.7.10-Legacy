@@ -6,6 +6,5 @@
 package cofh.api.block;
 
 import cofh.api.CoFHAPIProps;
-
 import net.minecraftforge.fml.common.API;
 
