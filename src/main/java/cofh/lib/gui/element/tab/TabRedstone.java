@@ -4,11 +4,10 @@ import cofh.api.tileentity.IRedstoneControl;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.util.List;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
 
 public class TabRedstone extends TabBase {
 
@@ -112,10 +111,10 @@ public class TabRedstone extends TabBase {
 		float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        GlStateManager.color(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
 		gui.drawTexturedModalRect(24, 16, 16, 20, 64, 24);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (myContainer.getControl().isDisabled()) {
 			gui.drawIcon(GuiProps.ICON_BUTTON_HIGHLIGHT, 28, 20);
@@ -144,9 +143,12 @@ public class TabRedstone extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), sideOffset() + 18, 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", sideOffset() + 6, 42, subheaderColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", sideOffset() + 6, 66, subheaderColor);
+		getFontRenderer()
+				.drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), sideOffset() + 18, 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", sideOffset() + 6, 42,
+				subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", sideOffset() + 6, 66,
+				subheaderColor);
 
 		if (myContainer.getControl().isDisabled()) {
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor);
@@ -159,7 +161,7 @@ public class TabRedstone extends TabBase {
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), sideOffset() + 14, 78, textColor);
 			}
 		}
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 }

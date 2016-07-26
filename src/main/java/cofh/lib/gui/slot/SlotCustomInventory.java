@@ -1,7 +1,6 @@
 package cofh.lib.gui.slot;
 
 import cofh.api.core.ICustomInventory;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,7 +12,8 @@ public class SlotCustomInventory extends Slot {
 	int inventoryIndex = 0;
 	boolean canTake = true;
 
-	public SlotCustomInventory(ICustomInventory tile, int invIndex, IInventory inventory, int slotIndex, int x, int y, boolean lootable) {
+	public SlotCustomInventory(ICustomInventory tile, int invIndex, IInventory inventory, int slotIndex, int x, int y,
+			boolean lootable) {
 
 		super(inventory, slotIndex, x, y);
 		customInv = tile;

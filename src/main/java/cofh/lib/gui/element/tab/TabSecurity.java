@@ -4,12 +4,11 @@ import cofh.api.tileentity.ISecurable;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.UUID;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 
 public class TabSecurity extends TabBase {
 
@@ -24,7 +23,8 @@ public class TabSecurity extends TabBase {
 
 	public static final ResourceLocation TAB_ICON_PUBLIC = new ResourceLocation(GuiProps.PATH_ICONS + "icon_access_public.png");
 	public static final ResourceLocation TAB_ICON_GUILD = new ResourceLocation(GuiProps.PATH_ICONS + "icon_access_guild.png");
-	public static final ResourceLocation TAB_ICON_RESTRICTED = new ResourceLocation(GuiProps.PATH_ICONS + "icon_access_friends.png");
+	public static final ResourceLocation TAB_ICON_RESTRICTED = new ResourceLocation(
+			GuiProps.PATH_ICONS + "icon_access_friends.png");
 	public static final ResourceLocation TAB_ICON_PRIVATE = new ResourceLocation(GuiProps.PATH_ICONS + "icon_access_private.png");
 
 	ISecurable myContainer;
@@ -116,9 +116,9 @@ public class TabSecurity extends TabBase {
 		float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        GlStateManager.color(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -134,26 +134,31 @@ public class TabSecurity extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), sideOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", sideOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer()
+				.drawStringWithShadow(StringHelper.localize("info.cofh.security"), sideOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", sideOffset() + 6, posY + 42,
+				subheaderColor);
 
 		if (myContainer.getAccess().isPublic()) {
 			//			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 1);
 			//			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
 			//			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), sideOffset() + 14, posY + 54, textColor);
+			getFontRenderer()
+					.drawString(StringHelper.localize("info.cofh.accessPublic"), sideOffset() + 14, posY + 54, textColor);
 		} else if (myContainer.getAccess().isRestricted()) {
 			//			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
 			//			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 1);
 			//			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), sideOffset() + 14, posY + 54, textColor);
+			getFontRenderer()
+					.drawString(StringHelper.localize("info.cofh.accessRestricted"), sideOffset() + 14, posY + 54, textColor);
 		} else if (myContainer.getAccess().isPrivate()) {
 			//			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
 			//			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
 			//			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 1);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), sideOffset() + 14, posY + 54, textColor);
+			getFontRenderer()
+					.drawString(StringHelper.localize("info.cofh.accessPrivate"), sideOffset() + 14, posY + 54, textColor);
 		}
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

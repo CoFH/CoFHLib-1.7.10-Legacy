@@ -2,10 +2,9 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;
-
-import net.minecraft.client.renderer.GlStateManager;
 
 public class ElementButton extends ElementButtonBase {
 
@@ -19,7 +18,8 @@ public class ElementButton extends ElementButtonBase {
 	boolean managedClicks;
 	String tooltip;
 
-	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, String texture) {
+	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY,
+			String texture) {
 
 		super(gui, posX, posY, sizeX, sizeY);
 		setGuiManagedClicks(false);
@@ -30,7 +30,8 @@ public class ElementButton extends ElementButtonBase {
 		this.hoverY = hoverY;
 	}
 
-	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY,
+	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY,
+			int disabledX, int disabledY,
 			String texture) {
 
 		this(gui, posX, posY, sizeX, sizeY, sheetX, sheetY, hoverX, hoverY, texture);
@@ -38,7 +39,8 @@ public class ElementButton extends ElementButtonBase {
 		this.disabledY = disabledY;
 	}
 
-	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int sizeX, int sizeY, String texture) {
+	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int sizeX,
+			int sizeY, String texture) {
 
 		super(gui, posX, posY, sizeX, sizeY);
 		setGuiManagedClicks(true);
@@ -50,7 +52,8 @@ public class ElementButton extends ElementButtonBase {
 		this.hoverY = hoverY;
 	}
 
-	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, int sizeX,
+	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY,
+			int disabledX, int disabledY, int sizeX,
 			int sizeY, String texture) {
 
 		this(gui, posX, posY, name, sheetX, sheetY, hoverX, hoverY, sizeX, sizeY, texture);

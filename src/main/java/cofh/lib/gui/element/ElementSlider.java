@@ -1,11 +1,10 @@
 package cofh.lib.gui.element;
 
-import static cofh.lib.gui.element.ElementButtonBase.*;
-
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
-
 import net.minecraft.client.renderer.GlStateManager;
+
+import static cofh.lib.gui.element.ElementButtonBase.*;
 
 public abstract class ElementSlider extends ElementBase {
 
@@ -86,11 +85,12 @@ public abstract class ElementSlider extends ElementBase {
 		} else {
 			gui.bindTexture(ENABLED);
 		}
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		drawTexturedModalRect(sliderX, sliderY, 0, 0, sliderMidX, sliderMidY);
 		drawTexturedModalRect(sliderX, sliderY + sliderMidY, 0, 256 - sliderEndY, sliderMidX, sliderEndY);
 		drawTexturedModalRect(sliderX + sliderMidX, sliderY, 256 - sliderEndX, 0, sliderEndX, sliderMidY);
-		drawTexturedModalRect(sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX, sliderEndY);
+		drawTexturedModalRect(sliderX + sliderMidX, sliderY + sliderMidY, 256 - sliderEndX, 256 - sliderEndY, sliderEndX,
+				sliderEndY);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public abstract class ElementSlider extends ElementBase {
 		int sliderY = posY + getSliderY();
 
 		drawSlider(mouseX, mouseY, sliderX, sliderY);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	protected boolean isHovering(int x, int y) {

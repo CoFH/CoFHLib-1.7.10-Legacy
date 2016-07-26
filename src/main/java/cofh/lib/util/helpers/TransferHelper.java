@@ -1,7 +1,6 @@
 package cofh.lib.util.helpers;
 
 import cofh.api.tileentity.IItemDuct;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;

@@ -4,22 +4,21 @@ import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
-
-import java.util.List;
-import java.util.UUID;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import java.util.List;
+import java.util.UUID;
+
 public final class SecurityHelper {
 
-	public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
+	public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(
+			UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
 
 	private SecurityHelper() {
 
@@ -32,7 +31,8 @@ public final class SecurityHelper {
 
 	public static UUID getID(EntityPlayer player) {
 
-		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null && FMLCommonHandler.instance().getMinecraftServerInstance().isServerRunning()) {
+		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null &&
+				FMLCommonHandler.instance().getMinecraftServerInstance().isServerRunning()) {
 			return player.getGameProfile().getId();
 		}
 		return getClientId(player);
@@ -78,7 +78,8 @@ public final class SecurityHelper {
 				list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
 			} else {
 				if (hasUUID && stack.getTagCompound().hasKey("Owner")) {
-					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.getTagCompound().getString("Owner") + " \u0378");
+					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.getTagCompound().getString("Owner") +
+							" \u0378");
 				} else {
 					list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
 				}
@@ -177,7 +178,8 @@ public final class SecurityHelper {
 			if (!Strings.isNullOrEmpty(uuid)) {
 				return new GameProfile(UUID.fromString(uuid), name);
 			} else if (!Strings.isNullOrEmpty(name)) {
-				return new GameProfile(UUID.fromString(PreYggdrasilConverter.convertMobOwnerIfNeeded(FMLCommonHandler.instance().getMinecraftServerInstance(), name)), name);
+				return new GameProfile(UUID.fromString(PreYggdrasilConverter
+						.convertMobOwnerIfNeeded(FMLCommonHandler.instance().getMinecraftServerInstance(), name)), name);
 			}
 		}
 		return UNKNOWN_GAME_PROFILE;
@@ -185,12 +187,14 @@ public final class SecurityHelper {
 
 	public static GameProfile getProfile(UUID uuid, String name) {
 
-		GameProfile owner = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().getProfileByUUID(uuid);
+		GameProfile owner = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache()
+				.getProfileByUUID(uuid);
 		if (owner == null) {
 			GameProfile temp = new GameProfile(uuid, name);
-			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getMinecraftSessionService().fillProfileProperties(temp, true);
+			owner = FMLCommonHandler.instance().getMinecraftServerInstance().getMinecraftSessionService()
+					.fillProfileProperties(temp, true);
 			if (owner != temp) {
-                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().addEntry(owner);
+				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerProfileCache().addEntry(owner);
 			}
 		}
 		return owner;

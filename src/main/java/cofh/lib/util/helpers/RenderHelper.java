@@ -42,12 +42,13 @@ public final class RenderHelper {
 
 	public static void setColor4ub(int color) {
 
-        GlStateManager.color((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+		GlStateManager.color((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF),
+				(byte) (color & 0xFF));
 	}
 
 	public static void resetColor() {
 
-        GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.color(1F, 1F, 1F, 1F);
 	}
 
 }

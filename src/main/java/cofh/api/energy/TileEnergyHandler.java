@@ -28,7 +28,7 @@ public class TileEnergyHandler extends TileEntity implements IEnergyReceiver, IE
 
 		super.writeToNBT(nbt);
 		storage.writeToNBT(nbt);
-        return nbt;
+		return nbt;
 	}
 
 	/* IEnergyConnection */

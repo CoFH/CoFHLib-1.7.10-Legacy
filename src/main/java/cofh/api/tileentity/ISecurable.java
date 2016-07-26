@@ -1,7 +1,6 @@
 package cofh.api.tileentity;
 
 import com.mojang.authlib.GameProfile;
-
 import net.minecraft.entity.player.EntityPlayer;
 
 /**

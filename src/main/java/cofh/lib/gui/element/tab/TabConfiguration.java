@@ -6,9 +6,6 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.util.List;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -17,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
 
 public class TabConfiguration extends TabBase {
 
@@ -118,7 +116,8 @@ public class TabConfiguration extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
+		getFontRenderer()
+				.drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

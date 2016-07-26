@@ -1,16 +1,9 @@
 package cofh.lib.util.helpers;
 
-import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
-
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
 import com.google.common.base.Strings;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -31,6 +24,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
@@ -241,7 +240,8 @@ public final class ItemHelper {
 		return disposePlayerItem(stack, dropStack, player, allowDrop, true);
 	}
 
-	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer player, boolean allowDrop, boolean allowReplace) {
+	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer player, boolean allowDrop,
+			boolean allowReplace) {
 
 		if (player == null || player.capabilities.isCreativeMode) {
 			return true;
@@ -286,7 +286,8 @@ public final class ItemHelper {
 		}
 		if (dmgItems[0] == null || dmgItems[0].getItem() == null) {
 			return null;
-		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1
+		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 &&
+				dmgItems[1].stackSize == 1
 				&& dmgItems[0].getItem().isRepairable()) {
 			Item theItem = dmgItems[0].getItem();
 			int var13 = theItem.getMaxDamage() - dmgItems[0].getItemDamage();
@@ -1019,7 +1020,8 @@ public final class ItemHelper {
 	 */
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound()));
+		return itemsEqualWithoutMetadata(stackA, stackB) &&
+				(!checkNBT || doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound()));
 	}
 
 	/**
@@ -1035,7 +1037,8 @@ public final class ItemHelper {
 	 */
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound()));
+		return itemsEqualWithMetadata(stackA, stackB) &&
+				(!checkNBT || doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound()));
 	}
 
 	/**
@@ -1064,7 +1067,8 @@ public final class ItemHelper {
 	public static boolean itemsEqualForCrafting(ItemStack stackA, ItemStack stackB) {
 
 		return itemsEqualWithoutMetadata(stackA, stackB)
-				&& (!stackA.getHasSubtypes() || ((getItemDamage(stackA) == OreDictionary.WILDCARD_VALUE || getItemDamage(stackB) == OreDictionary.WILDCARD_VALUE) || getItemDamage(stackB) == getItemDamage(stackA)));
+				&& (!stackA.getHasSubtypes() || ((getItemDamage(stackA) == OreDictionary.WILDCARD_VALUE ||
+				getItemDamage(stackB) == OreDictionary.WILDCARD_VALUE) || getItemDamage(stackB) == getItemDamage(stackA)));
 	}
 
 	public static boolean craftingEquivalent(ItemStack checked, ItemStack source, String oreDict, ItemStack output) {
@@ -1096,7 +1100,9 @@ public final class ItemHelper {
 
 	public static String getItemNBTString(ItemStack theItem, String nbtKey, String invalidReturn) {
 
-		return theItem.getTagCompound() != null && theItem.getTagCompound().hasKey(nbtKey) ? theItem.getTagCompound().getString(nbtKey) : invalidReturn;
+		return theItem.getTagCompound() != null && theItem.getTagCompound().hasKey(nbtKey) ?
+				theItem.getTagCompound().getString(nbtKey) :
+				invalidReturn;
 	}
 
 	/**
@@ -1172,10 +1178,12 @@ public final class ItemHelper {
 				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" +
+							item.stackSize % maxStackSize
 							+ " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " +
+							StringHelper.getItemName(item));
 				}
 			}
 		}
@@ -1240,10 +1248,12 @@ public final class ItemHelper {
 				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" +
+							item.stackSize % maxStackSize
 							+ " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " +
+							StringHelper.getItemName(item));
 				}
 			}
 		}

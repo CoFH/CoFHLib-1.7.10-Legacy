@@ -1,16 +1,15 @@
 package cofh.lib.util.helpers;
 
-import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.lwjgl.input.Keyboard;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Contains various helper functions to assist with String manipulation.
@@ -182,7 +181,8 @@ public final class StringHelper {
 
 	public static String shiftForDetails() {
 
-		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END + LIGHT_GRAY
+		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END +
+				LIGHT_GRAY
 				+ localize("info.cofh.forDetails") + END;
 	}
 

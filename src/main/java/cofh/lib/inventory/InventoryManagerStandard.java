@@ -1,13 +1,12 @@
 package cofh.lib.inventory;
 
 import cofh.lib.util.helpers.ItemHelper;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class InventoryManagerStandard implements IInventoryManager {
 

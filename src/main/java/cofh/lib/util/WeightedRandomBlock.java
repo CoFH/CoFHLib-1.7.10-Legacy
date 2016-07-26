@@ -1,10 +1,10 @@
 package cofh.lib.util;
 
-import java.util.Collection;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
+
+import java.util.Collection;
 
 /**
  * This class essentially allows for ores to be generated in clusters, with Features randomly choosing one or more blocks from a weighted list.

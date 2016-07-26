@@ -16,23 +16,27 @@ public class SoundLocation extends SoundBase implements ITickableSound {
 	int fadeOut = 50;
 	float baseVolume = 1.0F;
 
-	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x,
+			double y, double z) {
 
 		this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x,
+			double y, double z,
 			AttenuationType attenuation) {
 
 		this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 	}
 
-	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay,
+			double x, double y, double z) {
 
 		this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay,
+			double x, double y, double z,
 			AttenuationType attenuation) {
 
 		super(sound, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);

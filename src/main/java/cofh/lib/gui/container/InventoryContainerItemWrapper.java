@@ -1,7 +1,6 @@
 package cofh.lib.gui.container;
 
 import cofh.api.item.IInventoryContainerItem;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -52,7 +51,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 
 	protected void loadStacks() {
 
-		for (int i = inventory.length; i-- > 0;) {
+		for (int i = inventory.length; i-- > 0; ) {
 			if (tag.hasKey("Slot" + i)) {
 				inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + i));
 			} else if (tag.hasKey("slot" + i)) {
@@ -65,7 +64,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 
 	protected void saveStacks() {
 
-		for (int i = inventory.length; i-- > 0;) {
+		for (int i = inventory.length; i-- > 0; ) {
 			if (inventory[i] == null) {
 				tag.removeTag("Slot" + i);
 			} else {

@@ -4,11 +4,10 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.util.List;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.IFluidTank;
+
+import java.util.List;
 
 public class ElementFluidTank extends ElementBase {
 
@@ -95,7 +94,9 @@ public class ElementFluidTank extends ElementBase {
 		}
 		long fraction = (long) tank.getFluidAmount() * sizeY / tank.getCapacity();
 
-		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
+		return alwaysShowMinimum && tank.getFluidAmount() > 0 ?
+				Math.max(1, MathHelper.round(fraction)) :
+				MathHelper.round(fraction);
 	}
 
 }

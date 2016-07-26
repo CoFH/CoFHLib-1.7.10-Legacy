@@ -1,7 +1,6 @@
 package cofh.lib.util;
 
 import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

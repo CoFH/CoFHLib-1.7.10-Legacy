@@ -1,7 +1,6 @@
 package cofh.lib.gui.container;
 
 import cofh.api.core.ICustomInventory;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;

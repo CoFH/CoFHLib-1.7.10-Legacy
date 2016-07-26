@@ -1,17 +1,12 @@
 package cofh.lib.util;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.io.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class CompressedStreamUtils {
 
@@ -21,7 +16,8 @@ public class CompressedStreamUtils {
 
 	public static NBTTagCompound read(byte[] bytes, NBTSizeTracker tracker) throws IOException {
 
-		DataInputStream input = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(bytes))));
+		DataInputStream input = new DataInputStream(
+				new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(bytes))));
 		NBTTagCompound tag;
 
 		try {

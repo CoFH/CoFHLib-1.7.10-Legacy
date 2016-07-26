@@ -13,80 +13,84 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EntityDropParticleFX extends Particle {
 
-    private int bobTimer;
+	private int bobTimer;
 
-    public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
+	public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen,
+			float particleBlue) {
 
-        this(world, x, y, z, particleRed, particleGreen, particleBlue, -1);
-    }
+		this(world, x, y, z, particleRed, particleGreen, particleBlue, -1);
+	}
 
-    public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue, int gravityMod) {
+	public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen,
+			float particleBlue, int gravityMod) {
 
-        super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        this.motionX = this.motionY = this.motionZ = 0.0D;
+		super(world, x, y, z, 0.0D, 0.0D, 0.0D);
+		this.motionX = this.motionY = this.motionZ = 0.0D;
 
-        this.particleRed = particleRed;
-        this.particleGreen = particleGreen;
-        this.particleBlue = particleBlue;
+		this.particleRed = particleRed;
+		this.particleGreen = particleGreen;
+		this.particleBlue = particleBlue;
 
-        this.setParticleTextureIndex(113);
-        this.setSize(0.01F, 0.01F);
-        this.particleGravity = -0.06F * gravityMod;
-        this.bobTimer = 40;
-        this.particleMaxAge = (int) (48.0D / (Math.random() * 0.8D + 0.2D));
-        this.motionX = this.motionY = this.motionZ = 0.0D;
-    }
+		this.setParticleTextureIndex(113);
+		this.setSize(0.01F, 0.01F);
+		this.particleGravity = -0.06F * gravityMod;
+		this.bobTimer = 40;
+		this.particleMaxAge = (int) (48.0D / (Math.random() * 0.8D + 0.2D));
+		this.motionX = this.motionY = this.motionZ = 0.0D;
+	}
 
-    @Override
-    public void onUpdate() {
+	@Override
+	public void onUpdate() {
 
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
 
-        this.motionY -= this.particleGravity;
+		this.motionY -= this.particleGravity;
 
-        if (this.bobTimer-- > 0) {
-            this.motionX *= 0.02D;
-            this.motionY *= 0.02D;
-            this.motionZ *= 0.02D;
-            this.setParticleTextureIndex(113);
-        } else {
-            this.setParticleTextureIndex(112);
-        }
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        this.motionX *= 0.9800000190734863D;
-        this.motionY *= 0.9800000190734863D;
-        this.motionZ *= 0.9800000190734863D;
+		if (this.bobTimer-- > 0) {
+			this.motionX *= 0.02D;
+			this.motionY *= 0.02D;
+			this.motionZ *= 0.02D;
+			this.setParticleTextureIndex(113);
+		} else {
+			this.setParticleTextureIndex(112);
+		}
+		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.motionX *= 0.9800000190734863D;
+		this.motionY *= 0.9800000190734863D;
+		this.motionZ *= 0.9800000190734863D;
 
-        if (this.particleMaxAge-- <= 0) {
-            this.setExpired();
-        }
-        if (this.isCollided) {
-            this.setParticleTextureIndex(114);
-            this.motionX *= 0.699999988079071D;
-            this.motionZ *= 0.699999988079071D;
-        }
-        BlockPos pos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY), MathHelper.floor(this.posZ));
-        IBlockState state = this.worldObj.getBlockState(pos);
+		if (this.particleMaxAge-- <= 0) {
+			this.setExpired();
+		}
+		if (this.isCollided) {
+			this.setParticleTextureIndex(114);
+			this.motionX *= 0.699999988079071D;
+			this.motionZ *= 0.699999988079071D;
+		}
+		BlockPos pos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY), MathHelper.floor(this.posZ));
+		IBlockState state = this.worldObj.getBlockState(pos);
 
-        if (this.particleGravity > 0) {
-            Material material = state.getMaterial();
-            if (material.isLiquid() || material.isSolid()) {
-                double d0 = MathHelper.floor(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
-                if (this.posY < d0) {
-                    this.setExpired();
-                }
-            }
-        } else {
-            Material material = state.getMaterial();
+		if (this.particleGravity > 0) {
+			Material material = state.getMaterial();
+			if (material.isLiquid() || material.isSolid()) {
+				double d0 = MathHelper.floor(this.posY) + 1 -
+						BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+				if (this.posY < d0) {
+					this.setExpired();
+				}
+			}
+		} else {
+			Material material = state.getMaterial();
 
-            if (material.isLiquid() || material.isSolid()) {
-                double d0 = MathHelper.ceil(this.posY) + 1 - BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
-                if (this.posY > d0) {
-                    this.setExpired();
-                }
-            }
-        }
-    }
+			if (material.isLiquid() || material.isSolid()) {
+				double d0 = MathHelper.ceil(this.posY) + 1 -
+						BlockLiquid.getLiquidHeightPercent(state.getBlock().getMetaFromState(state));
+				if (this.posY > d0) {
+					this.setExpired();
+				}
+			}
+		}
+	}
 }

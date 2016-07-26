@@ -6,6 +6,5 @@
 package cofh.lib.util.list;
 
 import cofh.lib.CoFHLibProps;
-
 import net.minecraftforge.fml.common.API;
 

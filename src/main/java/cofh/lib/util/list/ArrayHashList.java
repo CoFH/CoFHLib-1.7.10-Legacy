@@ -3,14 +3,7 @@ package cofh.lib.util.list;
 import com.google.common.base.Objects;
 import com.google.common.primitives.Ints;
 
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class ArrayHashList<E extends Object> extends AbstractCollection<E> implements List<E>, Cloneable, java.io.Serializable {
@@ -32,7 +25,9 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 
 	private static int roundUpToPowerOf2(int number) {
 
-		return number >= Ints.MAX_POWER_OF_TWO ? Ints.MAX_POWER_OF_TWO : (number > 2) ? Integer.highestOneBit((number - 1) << 1) : 2;
+		return number >= Ints.MAX_POWER_OF_TWO ?
+				Ints.MAX_POWER_OF_TWO :
+				(number > 2) ? Integer.highestOneBit((number - 1) << 1) : 2;
 	}
 
 	private transient Object[] elementData;
@@ -216,7 +211,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 
 		Object o = e.key;
 		Object[] data = elementData;
-		for (int i = size; i-- > 0;) {
+		for (int i = size; i-- > 0; ) {
 			if (data[i] == o) {
 				fastRemove(i);
 				break;
@@ -248,7 +243,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 			elementData[i] = null;
 		}
 
-		for (int i = hashTable.length; i-- > 0;) {
+		for (int i = hashTable.length; i-- > 0; ) {
 			hashTable[i] = null;
 		}
 
@@ -395,7 +390,8 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 
 	protected void delete(Entry entry) {
 
-		l: synchronized (hashTable) {
+		l:
+		synchronized (hashTable) {
 			int bucket = entry.hash & mask;
 			Entry prev = null, cur = hashTable[bucket];
 			if (cur == entry) {
@@ -420,7 +416,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 				int newTableSize = old.length * 2, newMask = newTableSize - 1;
 				newTable = new Entry[newTableSize];
 
-				for (int bucket = old.length; bucket-- > 0;) {
+				for (int bucket = old.length; bucket-- > 0; ) {
 					Entry entry = old[bucket];
 					while (entry != null) {
 						Entry nextEntry = entry.nextInBucket;

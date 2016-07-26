@@ -1,12 +1,12 @@
 package cofh.api.tileentity;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockAccess;
+
+import java.util.List;
 
 /**
  * Implement this interface on Tile Entities which can provide information about themselves.
@@ -32,6 +32,7 @@ public interface ITileInfo {
 	 * @param debug
 	 *            If true, the block should return "debug" information.
 	 */
-	void getTileInfo(List<ITextComponent> info, IBlockAccess world, BlockPos pos, EnumFacing side, EntityPlayer player, boolean debug);
+	void getTileInfo(List<ITextComponent> info, IBlockAccess world, BlockPos pos, EnumFacing side, EntityPlayer player,
+			boolean debug);
 
 }

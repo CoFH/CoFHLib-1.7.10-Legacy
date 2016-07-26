@@ -3,7 +3,6 @@ package cofh.lib.gui.container;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
 import cofh.lib.util.helpers.MathHelper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
@@ -80,9 +79,9 @@ public abstract class ContainerBase extends Container {
 			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
-            for (IContainerListener listener : this.listeners) {
-                listener.sendSlotContents(this, start, itemstack1);
-            }
+			for (IContainerListener listener : this.listeners) {
+				listener.sendSlotContents(this, start, itemstack1);
+			}
 		}
 	}
 

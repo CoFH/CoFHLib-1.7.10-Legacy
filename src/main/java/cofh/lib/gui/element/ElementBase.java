@@ -1,17 +1,16 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import cofh.lib.gui.GuiBase;
-
-import java.util.List;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
@@ -129,14 +128,14 @@ public abstract class ElementBase {
 
 	public void drawStencil(int x1, int y1, int x2, int y2, int flag) {
 
-        GlStateManager.disableTexture2D();
+		GlStateManager.disableTexture2D();
 		glStencilFunc(GL_ALWAYS, flag, flag);
 		glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
 		glStencilMask(flag);
-        GlStateManager.colorMask(false, false, false, false);
-        GlStateManager.depthMask(false);
+		GlStateManager.colorMask(false, false, false, false);
+		GlStateManager.depthMask(false);
 		glClearStencil(0);
-        GlStateManager.clear(GL_STENCIL_BUFFER_BIT);
+		GlStateManager.clear(GL_STENCIL_BUFFER_BIT);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();
@@ -150,8 +149,8 @@ public abstract class ElementBase {
 		GlStateManager.enableTexture2D();
 		glStencilFunc(GL_EQUAL, flag, flag);
 		glStencilMask(0);
-        GlStateManager.colorMask(true, true, true, true);
-        GlStateManager.depthMask(true);
+		GlStateManager.colorMask(true, true, true, true);
+		GlStateManager.depthMask(true);
 	}
 
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {

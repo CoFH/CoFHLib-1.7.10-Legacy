@@ -61,7 +61,8 @@ public class SoundBase implements ISound {
 		this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
+	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+			AttenuationType attenuation) {
 
 		this(new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 	}
@@ -91,12 +92,14 @@ public class SoundBase implements ISound {
 		this(sound, volume, pitch, false, 0, x, y, z);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y,
+			double z) {
 
 		this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y,
+			double z,
 			AttenuationType attenuation) {
 
 		this.attenuation = attenuation;
@@ -135,23 +138,26 @@ public class SoundBase implements ISound {
 		return sound;
 	}
 
-    @Nullable
-    @Override
-    public SoundEventAccessor createAccessor(SoundHandler handler) {
-        return null;//TODO
-    }
+	@Nullable
+	@Override
+	public SoundEventAccessor createAccessor(SoundHandler handler) {
 
-    @Override
-    public Sound getSound() {
-        return null;//TODO
-    }
+		return null;//TODO
+	}
 
-    @Override
-    public SoundCategory getCategory() {
-        return null;//TODO
-    }
+	@Override
+	public Sound getSound() {
 
-    @Override
+		return null;//TODO
+	}
+
+	@Override
+	public SoundCategory getCategory() {
+
+		return null;//TODO
+	}
+
+	@Override
 	public float getVolume() {
 
 		return volume;

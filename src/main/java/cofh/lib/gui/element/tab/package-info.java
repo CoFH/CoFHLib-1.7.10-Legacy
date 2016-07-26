@@ -6,6 +6,5 @@
 package cofh.lib.gui.element.tab;
 
 import cofh.lib.CoFHLibProps;
-
 import net.minecraftforge.fml.common.API;
 

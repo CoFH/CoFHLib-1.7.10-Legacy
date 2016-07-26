@@ -6,13 +6,6 @@ import cofh.lib.gui.element.tab.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
@@ -33,9 +26,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
-
 import org.lwjgl.input.Mouse;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
@@ -136,7 +133,7 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	protected void keyTyped(char characterTyped, int keyPressed) throws IOException {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled()) {
 				continue;
@@ -160,7 +157,7 @@ public abstract class GuiBase extends GuiContainer {
 		int wheelMovement = Mouse.getEventDWheel();
 
 		if (wheelMovement != 0) {
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = elements.size(); i-- > 0; ) {
 				ElementBase c = elements.get(i);
 				if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 					continue;
@@ -193,7 +190,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseX -= guiLeft;
 		mouseY -= guiTop;
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 				continue;
@@ -208,7 +205,7 @@ public abstract class GuiBase extends GuiContainer {
 			int tmouseX = mouseX;
 
 			if (!tab.onMousePressed(tmouseX, mouseY, mouseButton)) {
-				for (int i = tabs.size(); i-- > 0;) {
+				for (int i = tabs.size(); i-- > 0; ) {
 					TabBase other = tabs.get(i);
 					if (other != tab && other.open && other.side == tab.side) {
 						other.toggleOpen();
@@ -269,7 +266,7 @@ public abstract class GuiBase extends GuiContainer {
 		mouseY -= guiTop;
 
 		if (state >= 0 && state <= 2) { // 0:left, 1:right, 2:middle
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = elements.size(); i-- > 0; ) {
 				ElementBase clicked = elements.get(i);
 				if (!clicked.isVisible() || !clicked.isEnabled()) {
 					continue;
@@ -419,7 +416,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected ElementBase getElementAtPosition(int mouseX, int mouseY) {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase element = elements.get(i);
 			if (element.intersectsWith(mouseX, mouseY)) {
 				return element;
@@ -464,7 +461,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected final void updateElements() {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (c.isVisible() && c.isEnabled()) {
 				c.update(mouseX, mouseY);
@@ -536,7 +533,9 @@ public abstract class GuiBase extends GuiContainer {
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 
-		drawTiledTexture(x, y, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString()), width, height);
+		drawTiledTexture(x, y,
+				Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString()), width,
+				height);
 	}
 
 	public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
@@ -577,10 +576,10 @@ public abstract class GuiBase extends GuiContainer {
 		float g = (color >> 8 & 255) / 255.0F;
 		float b = (color & 255) / 255.0F;
 
-        GlStateManager.disableBlend();
+		GlStateManager.disableBlend();
 		GlStateManager.disableTexture2D();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color(r, g, b, a);
+		GlStateManager.color(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();

@@ -3,7 +3,6 @@ package cofh.lib.gui.element.tab;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.StringHelper;
-
 import net.minecraft.util.ResourceLocation;
 
 public class TabTutorial extends TabScrolledText {

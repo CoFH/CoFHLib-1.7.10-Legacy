@@ -1,12 +1,11 @@
 package cofh.lib.util;
 
 import cofh.lib.util.helpers.ItemHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * Don't instantiate this or call these methods in any way. Use the methods in {@link ItemHelper}.

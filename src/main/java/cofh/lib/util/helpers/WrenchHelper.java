@@ -1,7 +1,6 @@
 package cofh.lib.util.helpers;
 
 import cofh.api.item.IToolHammer;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;

@@ -4,12 +4,10 @@ import cofh.api.tileentity.IEnergyInfo;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.util.List;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
 
 public class TabEnergy extends TabBase {
 
@@ -58,12 +56,14 @@ public class TabEnergy extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energy"), sideOffset() + 20, 6, headerColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize(powerDirection) + ":", sideOffset() + 6, 18, subheaderColor);
 		getFontRenderer().drawString(myContainer.getInfoEnergyPerTick() + " RF/t", sideOffset() + 14, 30, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", sideOffset() + 6, 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", sideOffset() + 6, 42,
+				subheaderColor);
 		getFontRenderer().drawString(myContainer.getInfoMaxEnergyPerTick() + " RF/t", sideOffset() + 14, 54, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", sideOffset() + 6, 66, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", sideOffset() + 6, 66,
+				subheaderColor);
 		getFontRenderer().drawString(myContainer.getInfoEnergyStored() + " RF", sideOffset() + 14, 78, textColor);
 
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

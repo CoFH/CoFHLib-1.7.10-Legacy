@@ -2,7 +2,6 @@ package cofh.lib.inventory;
 
 import cofh.lib.util.ComparableItem;
 import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
