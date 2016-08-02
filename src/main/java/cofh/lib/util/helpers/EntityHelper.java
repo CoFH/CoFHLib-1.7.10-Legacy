@@ -83,7 +83,9 @@ public class EntityHelper {
 
 		if (entity.isEntityAlive()) {
 			entity.setLocationAndAngles(x, entity.posY, z, entity.rotationYaw, entity.rotationPitch);
+			entity.forceSpawn = true;
 			newWorld.spawnEntityInWorld(entity);
+			entity.forceSpawn = false;
 			newWorld.updateEntityWithOptionalForce(entity, false);
 		}
 
@@ -151,7 +153,9 @@ public class EntityHelper {
 
 		if (entity.isEntityAlive()) {
 			entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
+			entity.forceSpawn = true;
 			newWorld.spawnEntityInWorld(entity);
+			entity.forceSpawn = false;
 			newWorld.updateEntityWithOptionalForce(entity, false);
 		}
 
