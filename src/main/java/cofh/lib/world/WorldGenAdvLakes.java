@@ -41,9 +41,6 @@ public class WorldGenAdvLakes extends WorldGenerator {
 	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
 
 		int widthOff = width / 2;
-		xStart -= widthOff;
-		zStart -= widthOff;
-
 		int heightOff = height / 2 + 1;
 
 		while (yStart > heightOff && world.isAirBlock(xStart, yStart, zStart)) {
@@ -54,7 +51,9 @@ public class WorldGenAdvLakes extends WorldGenerator {
 			return false;
 		}
 
+		xStart -= widthOff;
 		yStart -= heightOff;
+		zStart -= widthOff;
 		boolean[] spawnBlock = new boolean[width * width * height];
 
 		int W = width - 1, H = height - 1;
