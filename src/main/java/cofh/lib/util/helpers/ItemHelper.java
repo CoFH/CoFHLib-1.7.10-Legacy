@@ -7,10 +7,12 @@ import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import cpw.mods.fml.common.event.FMLInterModComms;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +49,8 @@ public final class ItemHelper {
 	public static final String INGOT = "ingot";
 	public static final String NUGGET = "nugget";
 	public static final String LOG = "log";
+
+	public static final HashMap<Integer, ItemStack> cachedCraftingResults = Maps.newHashMap();
 
 	public static OreDictionaryProxy oreProxy = new OreDictionaryProxy();
 
@@ -266,10 +270,26 @@ public final class ItemHelper {
 		return Items.diamond.getDamage(stack);
 	}
 
+	public static int inventoryCraftingHashCode(InventoryCrafting inv) {
+		int code = inv.getSizeInventory();
+		for(int slot = 0; slot < inv.getSizeInventory(); slot++) {
+			ItemStack stackInSlot = inv.getStackInSlot(slot);
+			code = 31 * code + (stackInSlot != null ? stackInSlot.writeToNBT(new NBTTagCompound()).hashCode() : 1);
+		}
+		return code;
+	}
+
 	/**
 	 * Gets a vanilla CraftingManager result.
 	 */
 	public static ItemStack findMatchingRecipe(InventoryCrafting inv, World world) {
+
+		int invHashCode = inventoryCraftingHashCode(inv);
+		if(cachedCraftingResults.containsKey(invHashCode)) {
+			ItemStack cachedResult = cachedCraftingResults.get(invHashCode);
+			if (cachedResult != null)
+				return cachedResult;
+		}
 
 		ItemStack[] dmgItems = new ItemStack[2];
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -283,6 +303,7 @@ public final class ItemHelper {
 			}
 		}
 		if (dmgItems[0] == null || dmgItems[0].getItem() == null) {
+			cachedCraftingResults.put(invHashCode, null);
 			return null;
 		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1
 				&& dmgItems[0].getItem().isRepairable()) {
@@ -292,16 +313,21 @@ public final class ItemHelper {
 			int var9 = var13 + var8 + theItem.getMaxDamage() * 5 / 100;
 			int var10 = Math.max(0, theItem.getMaxDamage() - var9);
 
-			return new ItemStack(dmgItems[0].getItem(), 1, var10);
+			ItemStack itemStack = new ItemStack(dmgItems[0].getItem(), 1, var10);
+			cachedCraftingResults.put(invHashCode, itemStack);
+			return itemStack;
 		} else {
 			IRecipe recipe;
 			for (int i = 0; i < CraftingManager.getInstance().getRecipeList().size(); i++) {
 				recipe = (IRecipe) CraftingManager.getInstance().getRecipeList().get(i);
 
 				if (recipe.matches(inv, world)) {
-					return recipe.getCraftingResult(inv);
+					ItemStack craftingResult = recipe.getCraftingResult(inv);
+					cachedCraftingResults.put(invHashCode, craftingResult);
+					return craftingResult;
 				}
 			}
+			cachedCraftingResults.put(invHashCode, null);
 			return null;
 		}
 	}
