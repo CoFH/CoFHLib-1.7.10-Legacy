@@ -18,15 +18,17 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -59,9 +61,9 @@ public abstract class GuiBase extends GuiContainer {
 	protected List<String> tooltip = new LinkedList<String>();
 	protected boolean tooltips = true;
 
-	public static void playSound(String name, float volume, float pitch) {
+	public static void playSound(String name, SoundCategory category, float volume, float pitch) {
 
-		guiSoundManager.playSound(new SoundBase(name, volume, pitch));
+		guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
 	}
 
 	public GuiBase(Container container) {
@@ -107,7 +109,7 @@ public abstract class GuiBase extends GuiContainer {
 			fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		}
 		if (drawInventory) {
-			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
+			fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
 		drawElements(0, true);
 		drawTabs(0, true);
@@ -251,7 +253,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
 			if (lastIndex != slot.slotNumber) {
 				lastIndex = slot.slotNumber;
-				handleMouseClick(slot, slot.slotNumber, 0, 0);
+				handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
 			}
 		} else {
 			lastIndex = -1;
@@ -530,7 +532,7 @@ public abstract class GuiBase extends GuiContainer {
 		if (fluid == null || fluid.getFluid() == null) {
 			return;
 		}
-		bindTexture(TextureMap.locationBlocksTexture);
+		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 
 		drawTiledTexture(x, y, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString()), width, height);
@@ -580,12 +582,12 @@ public abstract class GuiBase extends GuiContainer {
 		GL11.glColor4f(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-		worldrenderer.pos(x1, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y1, zLevel).endVertex();
-		worldrenderer.pos(x1, y1, zLevel).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, zLevel).endVertex();
+		buffer.pos(x2, y2, zLevel).endVertex();
+		buffer.pos(x2, y1, zLevel).endVertex();
+		buffer.pos(x1, y1, zLevel).endVertex();
 		tessellator.draw();
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -616,12 +618,12 @@ public abstract class GuiBase extends GuiContainer {
 		GL11.glColor4f(r, g, b, a);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-		worldrenderer.pos(x1, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y2, zLevel).endVertex();
-		worldrenderer.pos(x2, y1, zLevel).endVertex();
-		worldrenderer.pos(x1, y1, zLevel).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, zLevel).endVertex();
+		buffer.pos(x2, y2, zLevel).endVertex();
+		buffer.pos(x2, y1, zLevel).endVertex();
+		buffer.pos(x1, y1, zLevel).endVertex();
 		tessellator.draw();
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -633,12 +635,12 @@ public abstract class GuiBase extends GuiContainer {
 		float texV = 1 / texH;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		worldrenderer.pos(x + 0, y + height, zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
-		worldrenderer.pos(x + width, y + height, zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
-		worldrenderer.pos(x + width, y + 0, zLevel).tex((u + width) * texU, (v + 0) * texV).endVertex();
-		worldrenderer.pos(x + 0, y + 0, zLevel).tex((u + 0) * texU, (v + 0) * texV).endVertex();
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x + 0, y + height, zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x + width, y + height, zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x + width, y + 0, zLevel).tex((u + width) * texU, (v + 0) * texV).endVertex();
+		buffer.pos(x + 0, y + 0, zLevel).tex((u + 0) * texU, (v + 0) * texV).endVertex();
 		tessellator.draw();
 	}
 
@@ -653,12 +655,12 @@ public abstract class GuiBase extends GuiContainer {
 		double maxV = icon.getMaxV();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-		worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		worldrenderer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
-		worldrenderer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-		worldrenderer.pos(x + width, y + 0, zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
-		worldrenderer.pos(x + 0, y + 0, zLevel).tex(minU, minV);
+		VertexBuffer buffer = tessellator.getBuffer();
+		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
+		buffer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
+		buffer.pos(x + width, y + 0, zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
+		buffer.pos(x + 0, y + 0, zLevel).tex(minU, minV);
 		tessellator.draw();
 	}
 

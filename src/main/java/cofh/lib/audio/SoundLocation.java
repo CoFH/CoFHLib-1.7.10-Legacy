@@ -2,6 +2,7 @@ package cofh.lib.audio;
 
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 /**
  * Simple location-based Sound class. Works well with Tile Entities.
@@ -16,26 +17,26 @@ public class SoundLocation extends SoundBase implements ITickableSound {
 	int fadeOut = 50;
 	float baseVolume = 1.0F;
 
-	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundLocation(ISoundSource source, String sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+		this(source, sound, category, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundLocation(ISoundSource source, String sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
 			AttenuationType attenuation) {
 
-		this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+		this(source, new ResourceLocation(sound), category, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 	}
 
-	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundLocation(ISoundSource source, ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+		this(source, sound, category, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundLocation(ISoundSource source, ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
 			AttenuationType attenuation) {
 
-		super(sound, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+		super(sound, category, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 		this.source = source;
 		this.baseVolume = volume;
 	}

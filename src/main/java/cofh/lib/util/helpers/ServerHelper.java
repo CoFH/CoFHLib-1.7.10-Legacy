@@ -3,8 +3,9 @@ package cofh.lib.util.helpers;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.util.BlockPos;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -52,7 +53,7 @@ public final class ServerHelper {
 			return;
 		}
 		NetHandlerPlayClient netClientHandler = (NetHandlerPlayClient) FMLClientHandler.instance().getClientPlayHandler();
-		netClientHandler.addToSendQueue(new C08PacketPlayerBlockPlacement(pos, side.ordinal(), player.inventory.getCurrentItem(), hitX, hitY, hitZ));
+		netClientHandler.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, side, player.getActiveHand(), hitX, hitY, hitZ));
 	}
 
 }

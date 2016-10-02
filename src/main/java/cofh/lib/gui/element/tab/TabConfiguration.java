@@ -119,7 +119,7 @@ public class TabConfiguration extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		gui.bindTexture(TextureMap.locationBlocksTexture);
+		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

@@ -5,7 +5,7 @@ import static net.minecraft.util.EnumFacing.*;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -42,7 +42,7 @@ public final class BlockHelper {
 
 	public static Block getAdjacentBlock(World world, BlockPos pos, EnumFacing direction) {
 
-		return world == null || !world.isBlockLoaded(pos) ? Blocks.air : world.getBlockState(pos.add(direction.getDirectionVec())).getBlock();
+		return world == null || !world.isBlockLoaded(pos) ? Blocks.AIR : world.getBlockState(pos.add(direction.getDirectionVec())).getBlock();
 	}
 
 	public static Block getAdjacentBlock(TileEntity refTile, EnumFacing direction) {

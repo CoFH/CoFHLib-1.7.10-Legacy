@@ -50,7 +50,8 @@ public final class FluidHelper {
 	/* FluidContainerRegistry Interaction */
 	public static boolean fillContainerFromHandler(World world, IFluidHandler handler, EntityPlayer player, FluidStack tankFluid) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		//TODO add support for off hand (maybe getActiveItemStack would be enough here, depends how this is called)
+		ItemStack container = player.getHeldItemMainhand();
 
 		if (FluidContainerRegistry.isEmptyContainer(container)) {
 			ItemStack returnStack = FluidContainerRegistry.fillFluidContainer(tankFluid, container);
@@ -70,7 +71,8 @@ public final class FluidHelper {
 						container = null;
 					}
 				} else {
-					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+					//TODO add support for off hand
+					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
 						player.openContainer.detectAndSendChanges();
 						((EntityPlayerMP) player).updateCraftingInventory(player.openContainer, player.openContainer.getInventory());
 					}
@@ -84,7 +86,8 @@ public final class FluidHelper {
 
 	public static boolean fillHandlerWithContainer(World world, IFluidHandler handler, EntityPlayer player) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		//TODO add support for off hand
+		ItemStack container = player.getHeldItemMainhand();
 		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(container);
 
 		if (fluid != null) {
@@ -94,7 +97,8 @@ public final class FluidHelper {
 					return true;
 				}
 				if (!player.capabilities.isCreativeMode) {
-					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+					//TODO add support for off hand
+					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
 						if (ServerHelper.isServerWorld(world)) {
 							player.openContainer.detectAndSendChanges();
 							((EntityPlayerMP) player).updateCraftingInventory(player.openContainer, player.openContainer.getInventory());
@@ -122,7 +126,8 @@ public final class FluidHelper {
 
 	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		//TODO add support for off hand
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
 				: null;
@@ -130,14 +135,16 @@ public final class FluidHelper {
 
 	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		//TODO add support for off hand
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
 	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
 
-		return isFluidContainerItem(player.getCurrentEquippedItem());
+		//TODO add support for off hand
+		return isFluidContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isFluidContainerItem(ItemStack container) {
@@ -247,10 +254,10 @@ public final class FluidHelper {
 
 	public static Fluid lookupFluidForBlock(Block block) {
 
-		if (block == Blocks.flowing_water) {
+		if (block == Blocks.FLOWING_WATER) {
 			return WATER_FLUID;
 		}
-		if (block == Blocks.flowing_lava) {
+		if (block == Blocks.FLOWING_LAVA) {
 			return LAVA_FLUID;
 		}
 		return FluidRegistry.lookupFluidForBlock(block);
