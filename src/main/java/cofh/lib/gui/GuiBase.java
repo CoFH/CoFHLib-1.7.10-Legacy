@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSound;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -24,6 +26,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -61,9 +64,10 @@ public abstract class GuiBase extends GuiContainer {
 	protected List<String> tooltip = new LinkedList<String>();
 	protected boolean tooltips = true;
 
-	public static void playSound(String name, SoundCategory category, float volume, float pitch) {
+	public static void playSound(SoundEvent sound, float pitch) {
 
-		guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
+		//TODO figure out if sound volume needs to be adjusted (was 1.0f everywhere, but getMasterRecord uses 0.25f, use constructor in that case)
+		guiSoundManager.playSound(PositionedSoundRecord.getMasterRecord(sound, pitch));
 	}
 
 	public GuiBase(Container container) {

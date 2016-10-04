@@ -15,6 +15,7 @@ public interface IReconfigurableFacing {
 	/**
 	 * Returns the current facing of the block.
 	 */
+	//TODO why does this need to be int? EnumFacing would make more sense
 	int getFacing();
 
 	/**

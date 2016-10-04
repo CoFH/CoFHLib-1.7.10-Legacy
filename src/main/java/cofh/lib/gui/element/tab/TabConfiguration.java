@@ -11,9 +11,11 @@ import java.util.List;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.util.SoundCategory;
 import org.lwjgl.opengl.GL11;
 
 public class TabConfiguration extends TabBase {
@@ -140,20 +142,20 @@ public class TabConfiguration extends TabBase {
 		if (GuiScreen.isShiftKeyDown()) {
 			if (side == myTile.getFacing()) {
 				if (myTileSides.resetSides()) {
-					GuiBase.playSound("random.click", 1.0F, 0.2F);
+					GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.2F);
 				}
 			} else if (myTileSides.setSide(EnumFacing.VALUES[side], 0)) {
-				GuiBase.playSound("random.click", 1.0F, 0.4F);
+				GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.4F);
 			}
 			return;
 		}
 		if (mouseButton == 0) {
 			if (myTileSides.incrSide(EnumFacing.VALUES[side])) {
-				GuiBase.playSound("random.click", 1.0F, 0.8F);
+				GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.8F);
 			}
 		} else if (mouseButton == 1) {
 			if (myTileSides.decrSide(EnumFacing.VALUES[side])) {
-				GuiBase.playSound("random.click", 1.0F, 0.6F);
+				GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.6F);
 			}
 		}
 	}
