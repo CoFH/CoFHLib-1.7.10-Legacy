@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public final class SecurityHelper {
@@ -33,7 +34,9 @@ public final class SecurityHelper {
 	public static UUID getID(EntityPlayer player) {
 
 		//TODO figure out if additional null checks are needed
-		if (player.getEntityWorld().getMinecraftServer().isServerRunning()) {
+		World world = player.getEntityWorld();
+
+		if (world != null && world.getMinecraftServer() != null && world.getMinecraftServer().isServerRunning()) {
 			return player.getGameProfile().getId();
 		}
 		return getClientId(player);

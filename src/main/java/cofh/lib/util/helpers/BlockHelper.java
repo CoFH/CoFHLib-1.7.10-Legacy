@@ -3,9 +3,11 @@ package cofh.lib.util.helpers;
 import static net.minecraft.util.EnumFacing.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -60,4 +62,35 @@ public final class BlockHelper {
 		return refTile == null ? null : getAdjacentTileEntity(refTile.getWorld(), refTile.getPos(), direction);
 	}
 
+	public static int determineXZPlaceFacing(EntityLivingBase living) {
+
+		int quadrant = MathHelper.floor_double(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+
+		switch (quadrant) {
+			case 0:
+				return 2;
+			case 1:
+				return 5;
+			case 2:
+				return 3;
+			case 3:
+				return 4;
+		}
+		return 3;
+	}
+
+	public static int getLeftSide(int side) {
+
+		return SIDE_LEFT[side];
+	}
+
+	public static int getRightSide(int side) {
+
+		return SIDE_RIGHT[side];
+	}
+
+	public static int getOppositeSide(int side) {
+
+		return SIDE_OPPOSITE[side];
+	}
 }
