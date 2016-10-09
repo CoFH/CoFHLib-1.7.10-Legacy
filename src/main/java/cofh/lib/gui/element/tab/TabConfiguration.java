@@ -2,6 +2,7 @@ package cofh.lib.gui.element.tab;
 
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
+import cofh.api.tileentity.ISidedTexture;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.BlockHelper;
@@ -32,7 +33,7 @@ public class TabConfiguration extends TabBase {
 	IReconfigurableFacing myTile;
 	IReconfigurableSides myTileSides;
 
-	//ISidedTexture myTileTexture;
+	ISidedTexture myTileTexture;
 
 	public TabConfiguration(GuiBase gui, IReconfigurableFacing theTile) {
 
@@ -52,7 +53,7 @@ public class TabConfiguration extends TabBase {
 		maxWidth = 100;
 		myTile = theTile;
 		myTileSides = (IReconfigurableSides) theTile;
-		//myTileTexture = (ISidedTexture) theTile;
+		myTileTexture = (ISidedTexture) theTile;
 	}
 
 	@Override
@@ -109,6 +110,18 @@ public class TabConfiguration extends TabBase {
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
 		gui.drawTexturedModalRect(16, 20, 16, 20, 64, 64);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+		for (int i = 0; i < 2; i++) {
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_ABOVE[myTile.getFacing()], i), 40, 24);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_LEFT[myTile.getFacing()], i), 20, 44);
+			gui.drawIcon(myTileTexture.getTexture(EnumFacing.VALUES[myTile.getFacing()], i), 40, 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_RIGHT[myTile.getFacing()], i), 60, 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_BELOW[myTile.getFacing()], i), 40, 64);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_OPPOSITE[myTile.getFacing()], i), 60, 64);
+		}
+
 	}
 
 	@Override
@@ -120,21 +133,6 @@ public class TabConfiguration extends TabBase {
 		}
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-		//		for (int i = 0; i < 2; i++) {
-		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_ABOVE[myTile.getFacing()], i), posX() + 40, 24);
-		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_LEFT[myTile.getFacing()], i), posX() + 20, 44);
-		//			gui.drawIcon(myTileTexture.getTexture(EnumFacing.VALUES[myTile.getFacing()], i), posX() + 40, 44);
-		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_RIGHT[myTile.getFacing()], i), posX() + 60, 44);
-		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_BELOW[myTile.getFacing()], i), posX() + 40, 64);
-		//			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_OPPOSITE[myTile.getFacing()], i), posX() + 60, 64);
-		//		}
-		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	void handleSideChange(int side, int mouseButton) {
