@@ -114,12 +114,12 @@ public class TabConfiguration extends TabBase {
 		gui.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		for (int i = 0; i < 2; i++) {
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_ABOVE[myTile.getFacing()], i), 40, 24);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_LEFT[myTile.getFacing()], i), 20, 44);
-			gui.drawIcon(myTileTexture.getTexture(EnumFacing.VALUES[myTile.getFacing()], i), 40, 44);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_RIGHT[myTile.getFacing()], i), 60, 44);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_BELOW[myTile.getFacing()], i), 40, 64);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_OPPOSITE[myTile.getFacing()], i), 60, 64);
+			gui.drawTextureMapIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_ABOVE[myTile.getFacing()], i), 40, 24);
+			gui.drawTextureMapIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_LEFT[myTile.getFacing()], i), 20, 44);
+			gui.drawTextureMapIcon(myTileTexture.getTexture(EnumFacing.VALUES[myTile.getFacing()], i), 40, 44);
+			gui.drawTextureMapIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_RIGHT[myTile.getFacing()], i), 60, 44);
+			gui.drawTextureMapIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_BELOW[myTile.getFacing()], i), 40, 64);
+			gui.drawTextureMapIcon(myTileTexture.getTexture(BlockHelper.ENUM_SIDE_OPPOSITE[myTile.getFacing()], i), 60, 64);
 		}
 
 	}

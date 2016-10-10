@@ -495,6 +495,14 @@ public abstract class GuiBase extends GuiContainer {
 		drawSizedTexturedModalRect(x, y, 0, 0, 16, 16, 16, 16);
 	}
 
+	public void drawTextureMapIcon(ResourceLocation icon, int x, int y) {
+
+		TextureMap textureMap = mc.getTextureMapBlocks();
+		bindTexture(textureMap.LOCATION_BLOCKS_TEXTURE);
+
+		drawTexturedModalRect(x, y, textureMap.getAtlasSprite(icon.toString()), 16, 16);
+	}
+
 	public void drawIcon(TextureAtlasSprite icon, int x, int y) {
 
 		drawScaledTexturedModalRect(x, y, icon, 16, 16);
