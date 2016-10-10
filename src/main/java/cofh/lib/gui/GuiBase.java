@@ -660,11 +660,11 @@ public abstract class GuiBase extends GuiContainer {
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();
-		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
-		buffer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-		buffer.pos(x + width, y + 0, zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
-		buffer.pos(x + 0, y + 0, zLevel).tex(minU, minV);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x + 0, y + 0, zLevel).tex(minU, minV).endVertex();
+		buffer.pos(x + 0, y + height, zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();;
+		buffer.pos(x + width, y + height, zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F).endVertex();;
+		buffer.pos(x + width, y + 0, zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();;
 		tessellator.draw();
 	}
 
