@@ -26,4 +26,7 @@ public class GuiProps {
 	public static final ResourceLocation ICON_RS_CONTROL_LOW = new ResourceLocation(PATH_ICONS + "icon_rs_control_low.png");
 	public static final ResourceLocation ICON_RS_CONTROL_HIGH = new ResourceLocation(PATH_ICONS + "icon_rs_control_high.png");
 
+	public static final ResourceLocation ICON_ACCEPT = new ResourceLocation(PATH_ICONS + "icon_accept.png");
+	public static final ResourceLocation ICON_ACCEPT_INACTIVE = new ResourceLocation(PATH_ICONS + "icon_accept_inactive.png");
+
 }

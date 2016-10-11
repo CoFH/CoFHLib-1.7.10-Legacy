@@ -4,6 +4,7 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.MathHelper;
 
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
@@ -65,7 +66,7 @@ public abstract class TabScrolledText extends TabBase {
 	}
 
 	@Override
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		int shiftedMouseX = mouseX - this.posX();
 		int shiftedMouseY = mouseY - this.posY;

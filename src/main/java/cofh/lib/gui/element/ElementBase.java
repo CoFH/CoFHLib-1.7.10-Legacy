@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import cofh.lib.gui.GuiBase;
 
+import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -163,7 +164,7 @@ public abstract class ElementBase {
 		fontRenderer.drawStringWithShadow(text, x - fontRenderer.getStringWidth(text) / 2, y, color);
 	}
 
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		return false;
 	}
