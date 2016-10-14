@@ -3,6 +3,7 @@ package cofh.lib.util.helpers;
 import static net.minecraft.util.EnumFacing.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -78,6 +79,38 @@ public final class BlockHelper {
 		}
 		return 3;
 	}
+
+	public static int getSurfaceBlockY(World world, BlockPos pos) {
+
+		int y = world.getChunkFromBlockCoords(pos).getTopFilledSegment() + 16;
+
+		Block block;
+		IBlockState state;
+		BlockPos blockPos;
+		do {
+			if (--y < 0) {
+				break;
+			}
+			blockPos = new BlockPos(pos.getX(), y, pos.getZ());
+			state = world.getBlockState(blockPos);
+			block = state.getBlock();
+		} while (world.isAirBlock(blockPos) || block.isReplaceable(world, blockPos) || block.isLeaves(state, world, blockPos) || block.isFoliage(world, blockPos)
+				|| block.canBeReplacedByLeaves(state, world, blockPos));
+		return y;
+	}
+
+	public static int getTopBlockY(World world, BlockPos pos) {
+
+		int y = world.getChunkFromBlockCoords(pos).getTopFilledSegment() + 16;
+
+		do {
+			if (--y < 0) {
+				break;
+			}
+		} while (world.isAirBlock(new BlockPos(pos.getX(), y, pos.getZ())));
+		return y;
+	}
+
 
 	public static int getLeftSide(int side) {
 

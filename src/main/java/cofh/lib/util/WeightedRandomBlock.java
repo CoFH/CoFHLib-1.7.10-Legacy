@@ -14,6 +14,7 @@ import net.minecraft.util.WeightedRandom;
  */
 public final class WeightedRandomBlock extends WeightedRandom.Item {
 
+	//TODO refactor this to blockstate
 	public final Block block;
 	public final int metadata;
 
