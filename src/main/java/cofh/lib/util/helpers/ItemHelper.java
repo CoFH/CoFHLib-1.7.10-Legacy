@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
+import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
@@ -906,6 +907,23 @@ public final class ItemHelper {
 	}
 
 	// }
+
+	/* EMPOWERED ITEM HELPERS */
+	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
+
+		//TODO revisit for empowerable items in offhand
+		Item equipped = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().getItem() : null;
+		return equipped instanceof IEmpowerableItem;
+	}
+
+	public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
+
+		//TODO revisit for empowerable items in offhand
+		ItemStack equipped = player.getHeldItemMainhand();
+		IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped.getItem();
+
+		return empowerableItem.setEmpoweredState(equipped, !empowerableItem.isEmpowered(equipped));
+	}
 
 	/* MULTIMODE ITEM HELPERS */
 	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {

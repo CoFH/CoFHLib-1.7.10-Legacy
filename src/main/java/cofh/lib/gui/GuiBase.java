@@ -495,6 +495,22 @@ public abstract class GuiBase extends GuiContainer {
 		drawSizedTexturedModalRect(x, y, 0, 0, 16, 16, 16, 16);
 	}
 
+	public void drawButton(ResourceLocation icon, int x, int y, ButtonMode mode) {
+
+		switch(mode) {
+			case ACTIVE:
+				drawIcon(GuiProps.ICON_BUTTON, x, y);
+				break;
+			case HIGHLIGHT:
+				drawIcon(GuiProps.ICON_BUTTON_HIGHLIGHT, x, y);
+				break;
+			case INACTIVE:
+				drawIcon(GuiProps.ICON_BUTTON_INACTIVE, x, y);
+				break;
+		}
+		drawIcon(icon, x, y);
+	}
+
 	public void drawTextureMapIcon(ResourceLocation icon, int x, int y) {
 
 		TextureMap textureMap = mc.getTextureMapBlocks();
@@ -791,6 +807,13 @@ public abstract class GuiBase extends GuiContainer {
 
 	public void overlayRecipe() {
 
+	}
+
+	public enum ButtonMode {
+
+		ACTIVE,
+		HIGHLIGHT,
+		INACTIVE
 	}
 
 }
