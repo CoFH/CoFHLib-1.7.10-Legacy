@@ -3,7 +3,6 @@ package cofh.lib.util.helpers;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
-import com.google.common.collect.BiMap;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +10,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.*;
+import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraftforge.common.MinecraftForge;
@@ -36,9 +38,9 @@ public class SecurityHelper {
             return;
         }
         //Hack packet registration.
-        Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;//TODO CCL Reflection pipe.
-        dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
-        dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
+//        Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;//TODO CCL Reflection pipe.
+//        dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
+//        dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
 
         //Hack class > state map.
         Map<Class<?>, EnumConnectionState> data;//TODO CCL Reflection pipe.
