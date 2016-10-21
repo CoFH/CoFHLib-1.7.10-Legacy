@@ -8,49 +8,44 @@ import net.minecraft.item.ItemStack;
  * them.
  *
  * @author King Lemming
- *
  */
 public interface IMultiModeItem {
 
-	/**
-	 * Get the current mode of an item.
-	 */
-	int getMode(ItemStack stack);
+    /**
+     * Get the current mode of an item.
+     */
+    int getMode(ItemStack stack);
 
-	/**
-	 * Attempt to set the empowered state of the item.
-	 *
-	 * @param stack
-	 *            ItemStack to set the mode on.
-	 * @param mode
-	 *            Desired mode.
-	 * @return TRUE if the operation was successful, FALSE if it was not.
-	 */
-	boolean setMode(ItemStack stack, int mode);
+    /**
+     * Attempt to set the empowered state of the item.
+     *
+     * @param stack ItemStack to set the mode on.
+     * @param mode  Desired mode.
+     * @return TRUE if the operation was successful, FALSE if it was not.
+     */
+    boolean setMode(ItemStack stack, int mode);
 
-	/**
-	 * Increment the current mode of an item.
-	 */
-	boolean incrMode(ItemStack stack);
+    /**
+     * Increment the current mode of an item.
+     */
+    boolean incrMode(ItemStack stack);
 
-	/**
-	 * Decrement the current mode of an item.
-	 */
-	boolean decrMode(ItemStack stack);
+    /**
+     * Decrement the current mode of an item.
+     */
+    boolean decrMode(ItemStack stack);
 
-	/**
-	 * Returns the number of possible modes.
-	 */
-	int getNumModes(ItemStack stack);
+    /**
+     * Returns the number of possible modes.
+     */
+    int getNumModes(ItemStack stack);
 
-	/**
-	 * Callback method for reacting to a state change. Useful in KeyBinding handlers.
-	 *
-	 * @param player
-	 *            Player holding the item, if applicable.
-	 * @param stack
-	 *            The item being held.
-	 */
-	void onModeChange(EntityPlayer player, ItemStack stack);
+    /**
+     * Callback method for reacting to a state change. Useful in KeyBinding handlers.
+     *
+     * @param player Player holding the item, if applicable.
+     * @param stack  The item being held.
+     */
+    void onModeChange(EntityPlayer player, ItemStack stack);
 
 }

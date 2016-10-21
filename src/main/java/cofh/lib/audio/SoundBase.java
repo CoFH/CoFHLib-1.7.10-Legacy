@@ -1,6 +1,5 @@
 package cofh.lib.audio;
 
-
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
@@ -10,131 +9,127 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-
 /**
  * Generic ISound class with lots of constructor functionality. Required because - of course - Mojang has no generic that lets you specify *any* arguments for
  * this.
  *
  * @author skyboy
- *
  */
 @SideOnly(Side.CLIENT)
 public class SoundBase implements ISound {
 
-	protected AttenuationType attenuation;
-	protected final ResourceLocation sound;
-	protected float volume;
-	protected float pitch;
-	protected float x;
-	protected float y;
-	protected float z;
-	protected boolean repeat;
-	protected int repeatDelay;
+    protected AttenuationType attenuation;
+    protected final ResourceLocation sound;
+    protected float volume;
+    protected float pitch;
+    protected float x;
+    protected float y;
+    protected float z;
+    protected boolean repeat;
+    protected int repeatDelay;
 
-	public SoundBase(String sound) {
+    public SoundBase(String sound) {
 
-		this(sound, 0);
-	}
+        this(sound, 0);
+    }
 
-	public SoundBase(String sound, float volume) {
+    public SoundBase(String sound, float volume) {
 
-		this(sound, volume, 0);
-	}
+        this(sound, volume, 0);
+    }
 
-	public SoundBase(String sound, float volume, float pitch) {
+    public SoundBase(String sound, float volume, float pitch) {
 
-		this(sound, volume, pitch, false, 0);
-	}
+        this(sound, volume, pitch, false, 0);
+    }
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay) {
+    public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
-	}
+        this(sound, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
+    }
 
-	public SoundBase(String sound, float volume, float pitch, double x, double y, double z) {
+    public SoundBase(String sound, float volume, float pitch, double x, double y, double z) {
 
-		this(sound, volume, pitch, false, 0, x, y, z);
-	}
+        this(sound, volume, pitch, false, 0, x, y, z);
+    }
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+    public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
-	}
+        this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+    }
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
+    public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
 
-		this(new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
-	}
+        this(new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+    }
 
-	public SoundBase(ResourceLocation sound) {
+    public SoundBase(ResourceLocation sound) {
 
-		this(sound, 0);
-	}
+        this(sound, 0);
+    }
 
-	public SoundBase(ResourceLocation sound, float volume) {
+    public SoundBase(ResourceLocation sound, float volume) {
 
-		this(sound, volume, 0);
-	}
+        this(sound, volume, 0);
+    }
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch) {
+    public SoundBase(ResourceLocation sound, float volume, float pitch) {
 
-		this(sound, volume, pitch, false, 0);
-	}
+        this(sound, volume, pitch, false, 0);
+    }
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay) {
+    public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
-	}
+        this(sound, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
+    }
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, double x, double y, double z) {
+    public SoundBase(ResourceLocation sound, float volume, float pitch, double x, double y, double z) {
 
-		this(sound, volume, pitch, false, 0, x, y, z);
-	}
+        this(sound, volume, pitch, false, 0, x, y, z);
+    }
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+    public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
-	}
+        this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+    }
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
-			AttenuationType attenuation) {
+    public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
 
-		this.attenuation = attenuation;
-		this.sound = sound;
-		this.volume = volume;
-		this.pitch = pitch;
-		this.x = (float) x;
-		this.y = (float) y;
-		this.z = (float) z;
-		this.repeat = repeat;
-		this.repeatDelay = repeatDelay;
-	}
+        this.attenuation = attenuation;
+        this.sound = sound;
+        this.volume = volume;
+        this.pitch = pitch;
+        this.x = (float) x;
+        this.y = (float) y;
+        this.z = (float) z;
+        this.repeat = repeat;
+        this.repeatDelay = repeatDelay;
+    }
 
-	public SoundBase(SoundBase other) {
+    public SoundBase(SoundBase other) {
 
-		this.attenuation = other.attenuation;
-		this.sound = other.sound;
-		this.volume = other.volume;
-		this.pitch = other.pitch;
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
-		this.repeat = other.repeat;
-		this.repeatDelay = other.repeatDelay;
-	}
+        this.attenuation = other.attenuation;
+        this.sound = other.sound;
+        this.volume = other.volume;
+        this.pitch = other.pitch;
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
+        this.repeat = other.repeat;
+        this.repeatDelay = other.repeatDelay;
+    }
 
-	@Override
-	public AttenuationType getAttenuationType() {
+    @Override
+    public AttenuationType getAttenuationType() {
 
-		return attenuation;
-	}
+        return attenuation;
+    }
 
-	@Override
-	public ResourceLocation getSoundLocation() {
+    @Override
+    public ResourceLocation getSoundLocation() {
 
-		return sound;
-	}
+        return sound;
+    }
 
     @Override//TODO
     public SoundEventAccessor createAccessor(SoundHandler handler) {
@@ -152,45 +147,45 @@ public class SoundBase implements ISound {
     }
 
     @Override
-	public float getVolume() {
+    public float getVolume() {
 
-		return volume;
-	}
+        return volume;
+    }
 
-	@Override
-	public float getPitch() {
+    @Override
+    public float getPitch() {
 
-		return pitch;
-	}
+        return pitch;
+    }
 
-	@Override
-	public float getXPosF() {
+    @Override
+    public float getXPosF() {
 
-		return x;
-	}
+        return x;
+    }
 
-	@Override
-	public float getYPosF() {
+    @Override
+    public float getYPosF() {
 
-		return y;
-	}
+        return y;
+    }
 
-	@Override
-	public float getZPosF() {
+    @Override
+    public float getZPosF() {
 
-		return z;
-	}
+        return z;
+    }
 
-	@Override
-	public boolean canRepeat() {
+    @Override
+    public boolean canRepeat() {
 
-		return repeat;
-	}
+        return repeat;
+    }
 
-	@Override
-	public int getRepeatDelay() {
+    @Override
+    public int getRepeatDelay() {
 
-		return repeatDelay;
-	}
+        return repeatDelay;
+    }
 
 }

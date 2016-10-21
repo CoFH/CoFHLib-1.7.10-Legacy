@@ -6,35 +6,34 @@ import cofh.lib.gui.element.TabBase;
  * Keeps track of which tabs should be open by default when a player opens a GUI.
  *
  * @author King Lemming
- *
  */
 public class TabTracker {
 
-	private static Class<? extends TabBase> openedLeftTab;
-	private static Class<? extends TabBase> openedRightTab;
-	
-	private TabTracker() {
-		
-	}
+    private static Class<? extends TabBase> openedLeftTab;
+    private static Class<? extends TabBase> openedRightTab;
 
-	public static Class<? extends TabBase> getOpenedLeftTab() {
+    private TabTracker() {
 
-		return openedLeftTab;
-	}
+    }
 
-	public static Class<? extends TabBase> getOpenedRightTab() {
+    public static Class<? extends TabBase> getOpenedLeftTab() {
 
-		return openedRightTab;
-	}
+        return openedLeftTab;
+    }
 
-	public static void setOpenedLeftTab(Class<? extends TabBase> tabClass) {
+    public static Class<? extends TabBase> getOpenedRightTab() {
 
-		openedLeftTab = tabClass;
-	}
+        return openedRightTab;
+    }
 
-	public static void setOpenedRightTab(Class<? extends TabBase> tabClass) {
+    public static void setOpenedLeftTab(Class<? extends TabBase> tabClass) {
 
-		openedRightTab = tabClass;
-	}
+        openedLeftTab = tabClass;
+    }
+
+    public static void setOpenedRightTab(Class<? extends TabBase> tabClass) {
+
+        openedRightTab = tabClass;
+    }
 
 }

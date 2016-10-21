@@ -2,27 +2,27 @@ package cofh.lib.util;
 
 public class CharacterSingleton implements CharSequence {
 
-	public char character;
+    public char character;
 
-	@Override
-	public int length() {
+    @Override
+    public int length() {
 
-		return 1;
-	}
+        return 1;
+    }
 
-	@Override
-	public char charAt(int index) {
+    @Override
+    public char charAt(int index) {
 
-		return character;
-	}
+        return character;
+    }
 
-	@Override
-	public CharSequence subSequence(int start, int end) {
+    @Override
+    public CharSequence subSequence(int start, int end) {
 
-		if (start == end) {
-			return "";
-		}
-		return this;
-	}
+        if (start == end) {
+            return "";
+        }
+        return this;
+    }
 
 }

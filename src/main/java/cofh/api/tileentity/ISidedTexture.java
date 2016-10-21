@@ -7,20 +7,17 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  * Entity.
  *
  * @author Zeldo Kavira
- *
  */
 @Deprecated
 public interface ISidedTexture {
 
-	/**
-	 * Returns the icon to use for a given side and render pass.
-	 *
-	 * @param side
-	 *            Block side to get the texture for.
-	 * @param pass
-	 *            Render pass.
-	 * @return The icon to use.
-	 */
-	TextureAtlasSprite getTexture(int side, int pass);
+    /**
+     * Returns the icon to use for a given side and render pass.
+     *
+     * @param side Block side to get the texture for.
+     * @param pass Render pass.
+     * @return The icon to use.
+     */
+    TextureAtlasSprite getTexture(int side, int pass);
 
 }

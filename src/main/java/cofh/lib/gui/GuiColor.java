@@ -2,141 +2,139 @@ package cofh.lib.gui;
 
 public class GuiColor extends Number {
 
-	private static final long serialVersionUID = 7024827242888861187L;
-	private final int _color;
+    private static final long serialVersionUID = 7024827242888861187L;
+    private final int _color;
 
-	public GuiColor(int argb) {
+    public GuiColor(int argb) {
 
-		_color = argb;
-	}
+        _color = argb;
+    }
 
-	public GuiColor(int rgba, Void dummy) {
+    public GuiColor(int rgba, Void dummy) {
 
-		this(rgba >>> 24, rgba >> 16, rgba >> 8, rgba);
-	}
+        this(rgba >>> 24, rgba >> 16, rgba >> 8, rgba);
+    }
 
-	public GuiColor(byte alpha, int argb) {
+    public GuiColor(byte alpha, int argb) {
 
-		this(argb >> 16, argb >> 8, argb, alpha);
-	}
+        this(argb >> 16, argb >> 8, argb, alpha);
+    }
 
-	public GuiColor(int rgba, byte alpha) {
+    public GuiColor(int rgba, byte alpha) {
 
-		this(rgba >>> 24, rgba >> 16, rgba >> 8, alpha);
-	}
+        this(rgba >>> 24, rgba >> 16, rgba >> 8, alpha);
+    }
 
-	public GuiColor(int r, int g, int b) {
+    public GuiColor(int r, int g, int b) {
 
-		this(r, g, b, 255);
-	}
+        this(r, g, b, 255);
+    }
 
-	public GuiColor(int r, int g, int b, int a) {
+    public GuiColor(int r, int g, int b, int a) {
 
-		_color = (b & 0xFF) | (g & 0xFF) << 8 | (r & 0xFF) << 16 | (a & 0xFF) << 24;
-	}
+        _color = (b & 0xFF) | (g & 0xFF) << 8 | (r & 0xFF) << 16 | (a & 0xFF) << 24;
+    }
 
-	public int getColor() {
+    public int getColor() {
 
-		return _color;
-	}
+        return _color;
+    }
 
-	public int getIntR() {
+    public int getIntR() {
 
-		return (_color >> 16) & 0xFF;
-	}
+        return (_color >> 16) & 0xFF;
+    }
 
-	public int getIntG() {
+    public int getIntG() {
 
-		return (_color >> 8) & 0xFF;
-	}
+        return (_color >> 8) & 0xFF;
+    }
 
-	public int getIntB() {
+    public int getIntB() {
 
-		return (_color >> 0) & 0xFF;
-	}
+        return (_color >> 0) & 0xFF;
+    }
 
-	public int getIntA() {
+    public int getIntA() {
 
-		return (_color >> 24) & 0xFF;
-	}
+        return (_color >> 24) & 0xFF;
+    }
 
-	public float getFloatR() {
+    public float getFloatR() {
 
-		return getIntR() / 255f;
-	}
+        return getIntR() / 255f;
+    }
 
-	public float getFloatG() {
+    public float getFloatG() {
 
-		return getIntG() / 255f;
-	}
+        return getIntG() / 255f;
+    }
 
-	public float getFloatB() {
+    public float getFloatB() {
 
-		return getIntB() / 255f;
-	}
+        return getIntB() / 255f;
+    }
 
-	public float getFloatA() {
+    public float getFloatA() {
 
-		return getIntA() / 255f;
-	}
+        return getIntA() / 255f;
+    }
 
-	// ///////////////////////////////////////////////////////// Math Methods ////////////////////////////////////////////
-	public GuiColor multiply(float amount) {
+    // ///////////////////////////////////////////////////////// Math Methods ////////////////////////////////////////////
+    public GuiColor multiply(float amount) {
 
-		return multiply(amount, amount, amount, amount);
-	}
+        return multiply(amount, amount, amount, amount);
+    }
 
-	public GuiColor multiply(float rgb, float a) {
+    public GuiColor multiply(float rgb, float a) {
 
-		return multiply(rgb, rgb, rgb, a);
-	}
+        return multiply(rgb, rgb, rgb, a);
+    }
 
-	public GuiColor multiply(float r, float g, float b) {
+    public GuiColor multiply(float r, float g, float b) {
 
-		return multiply(r, g, b, 1);
-	}
+        return multiply(r, g, b, 1);
+    }
 
-	public GuiColor multiply(float r, float g, float b, float a) {
+    public GuiColor multiply(float r, float g, float b, float a) {
 
-		return new GuiColor(Math.min((int) (getIntR() * r), 255), Math.min((int) (getIntG() * g), 255), Math.min((int) (getIntB() * b), 255));
-	}
+        return new GuiColor(Math.min((int) (getIntR() * r), 255), Math.min((int) (getIntG() * g), 255), Math.min((int) (getIntB() * b), 255));
+    }
 
-	public GuiColor add(int amount) {
+    public GuiColor add(int amount) {
 
-		return new GuiColor(Math.max(Math.min(getIntR() + amount, 255), 0), Math.max(Math.min(getIntG() + amount, 255), 0), Math.max(
-				Math.min(getIntB() + amount, 255), 0), Math.max(Math.min(getIntA() + amount, 255), 0));
-	}
+        return new GuiColor(Math.max(Math.min(getIntR() + amount, 255), 0), Math.max(Math.min(getIntG() + amount, 255), 0), Math.max(Math.min(getIntB() + amount, 255), 0), Math.max(Math.min(getIntA() + amount, 255), 0));
+    }
 
-	public GuiColor add(GuiColor color) {
+    public GuiColor add(GuiColor color) {
 
-		return new GuiColor(Math.max(Math.min(getIntR() + color.getIntR(), 255), 0), Math.max(Math.min(getIntG() + color.getIntG(), 255), 0), Math.max(
-				Math.min(getIntB() + color.getIntB(), 255), 0), Math.max(Math.min(getIntA() + color.getIntA(), 255), 0));
-	}
+        return new GuiColor(Math.max(Math.min(getIntR() + color.getIntR(), 255), 0), Math.max(Math.min(getIntG() + color.getIntG(), 255), 0), Math.max(Math.min(getIntB() + color.getIntB(), 255), 0), Math.max(Math.min(getIntA() + color.getIntA(), 255), 0));
+    }
 
-	// ///////////////////////////////////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Override
-	public int intValue() {
+    @Override
+    public int intValue() {
 
-		return getColor();
-	}
+        return getColor();
+    }
 
-	@Override
-	public long longValue() {
+    @Override
+    public long longValue() {
 
-		return getColor();
-	}
+        return getColor();
+    }
 
-	@Override
-	public float floatValue() {
+    @Override
+    public float floatValue() {
 
-		return getColor();
-	}
+        return getColor();
+    }
 
-	@Override
-	public double doubleValue() {
+    @Override
+    public double doubleValue() {
 
-		return getColor();
-	}
+        return getColor();
+    }
 
 }

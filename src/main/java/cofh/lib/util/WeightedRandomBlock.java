@@ -64,7 +64,7 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
         return false;
     }
 
-    public IBlockState getState(){
+    public IBlockState getState() {
         return block.getStateFromMeta(metadata);
     }
 
