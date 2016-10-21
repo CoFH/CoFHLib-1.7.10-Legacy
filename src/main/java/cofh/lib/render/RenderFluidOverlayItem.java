@@ -97,7 +97,7 @@ public class RenderFluidOverlayItem //implements IItemRenderer
 		int texture = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
 
 		if (type == ItemRenderType.INVENTORY) {
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GlStateManager.disableLighting();
 
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(0, 16, 0, iconMinX, iconMaxY);
@@ -130,7 +130,7 @@ public class RenderFluidOverlayItem //implements IItemRenderer
 				tessellator.draw();
 
 				GL11.glMatrixMode(GL11.GL_MODELVIEW);
-				GL11.glDepthMask(true);
+				GlStateManager.depthMask(true);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 
@@ -184,7 +184,7 @@ public class RenderFluidOverlayItem //implements IItemRenderer
 				tessellator.addVertexWithUV(0, 0, -0.0635, fluidMinX, fluidMaxY);
 				tessellator.draw();
 
-				GL11.glDepthMask(true);
+				GlStateManager.depthMask(true);
 				GL11.glDepthFunc(GL11.GL_LEQUAL);
 			}
 			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -192,8 +192,8 @@ public class RenderFluidOverlayItem //implements IItemRenderer
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
-		GL11.glPopMatrix();
+		GlStateManager.disableAlpha();
+		GlStateManager.popMatrix();
 	}
 
 	protected void bindTexture(TextureManager renderEngine, int spriteNumber) {

@@ -305,7 +305,7 @@ public final class BlockHelper {
     // ForgeDirection.values()[side]);
     // }
 
-    public static IBlockState getAdjacentBlock(World world, BlockPos pos,  EnumFacing dir) {
+    public static IBlockState getAdjacentBlock(World world, BlockPos pos, EnumFacing dir) {
         pos = pos.offset(dir);
         return world == null || !world.isBlockLoaded(pos) ? Blocks.AIR.getDefaultState() : world.getBlockState(pos);
     }
@@ -315,7 +315,7 @@ public final class BlockHelper {
     }
 
     /* Safe Tile Entity Retrieval */
-    public static TileEntity getAdjacentTileEntity(World world, BlockPos pos,  EnumFacing dir) {
+    public static TileEntity getAdjacentTileEntity(World world, BlockPos pos, EnumFacing dir) {
         pos = pos.offset(dir);
         return world == null || !world.isBlockLoaded(pos) ? null : world.getTileEntity(pos);
     }

@@ -9,15 +9,15 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotAcceptValid extends Slot {
 
-	public SlotAcceptValid(IInventory inventory, int index, int x, int y) {
+    public SlotAcceptValid(IInventory inventory, int index, int x, int y) {
 
-		super(inventory, index, x, y);
-	}
+        super(inventory, index, x, y);
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack stack) {
+    @Override
+    public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && this.inventory.isItemValidForSlot(this.slotNumber, stack);
-	}
+        return stack != null && this.inventory.isItemValidForSlot(this.slotNumber, stack);
+    }
 
 }

@@ -7,8 +7,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.Iterator;
-
 public abstract class ContainerInventoryItem extends ContainerBase {
 
     protected final InventoryContainerItemWrapper containerWrapper;

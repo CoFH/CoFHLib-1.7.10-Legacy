@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 
     private static final long serialVersionUID = 8671402745765780610L;
@@ -31,11 +32,27 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
         orientation = null;
     }
 
+    public BlockPosition(BlockPos pos) {
+
+        this.x = pos.getX();
+        this.y = pos.getY();
+        this.z = pos.getZ();
+        orientation = null;
+    }
+
     public BlockPosition(int x, int y, int z, EnumFacing orientation) {
 
         this.x = x;
         this.y = y;
         this.z = z;
+        this.orientation = orientation;
+    }
+
+    public BlockPosition(BlockPos pos, EnumFacing orientation) {
+
+        this.x = pos.getX();
+        this.y = pos.getY();
+        this.z = pos.getZ();
         this.orientation = orientation;
     }
 
@@ -75,6 +92,10 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
     public static <T extends TileEntity & IRotateableTile> BlockPosition fromRotateableTile(T te) {
 
         return new BlockPosition(te);
+    }
+
+    public BlockPos pos() {
+        return new BlockPos(x, y, z);
     }
 
     public BlockPosition copy() {

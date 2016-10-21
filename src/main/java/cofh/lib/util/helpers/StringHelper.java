@@ -232,7 +232,19 @@ public final class StringHelper {
     public static final String[] ROMAN_NUMERAL = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
     private static enum Numeral {
-        M(1000), CM(900), D(500), CD(400), C(100), XC(90), L(50), XL(40), X(10), IX(9), V(5), IV(4), I(1);
+        M(1000),
+        CM(900),
+        D(500),
+        CD(400),
+        C(100),
+        XC(90),
+        L(50),
+        XL(40),
+        X(10),
+        IX(9),
+        V(5),
+        IV(4),
+        I(1);
         public final String name = name();
         public final int value;
 

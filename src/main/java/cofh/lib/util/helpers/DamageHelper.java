@@ -9,83 +9,82 @@ import net.minecraft.util.EntityDamageSource;
  * This class contains helper functions related to Damage types that CoFH mods add.
  *
  * @author King Lemming
- *
  */
 public class DamageHelper {
 
-	private DamageHelper() {
+    private DamageHelper() {
 
-	}
+    }
 
-	/* DAMAGE SOURCES */
-	public static final DamageSourcePyrotheum pyrotheum = new DamageSourcePyrotheum();
-	public static final DamageSourceCryotheum cryotheum = new DamageSourceCryotheum();
-	public static final DamageSourcePetrotheum petrotheum = new DamageSourcePetrotheum();
-	public static final DamageSourceMana mana = new DamageSourceMana();
-	public static final DamageSourceFlux flux = new DamageSourceFlux();
+    /* DAMAGE SOURCES */
+    public static final DamageSourcePyrotheum pyrotheum = new DamageSourcePyrotheum();
+    public static final DamageSourceCryotheum cryotheum = new DamageSourceCryotheum();
+    public static final DamageSourcePetrotheum petrotheum = new DamageSourcePetrotheum();
+    public static final DamageSourceMana mana = new DamageSourceMana();
+    public static final DamageSourceFlux flux = new DamageSourceFlux();
 
-	/* DAMAGE SOURCE CLASSES */
-	public static class DamageSourcePyrotheum extends DamageSource {
+    /* DAMAGE SOURCE CLASSES */
+    public static class DamageSourcePyrotheum extends DamageSource {
 
-		protected DamageSourcePyrotheum() {
+        protected DamageSourcePyrotheum() {
 
-			super("pyrotheum");
-			this.setDamageBypassesArmor();
-			this.isFireDamage();
-		}
-	}
+            super("pyrotheum");
+            this.setDamageBypassesArmor();
+            this.isFireDamage();
+        }
+    }
 
-	public static class DamageSourceCryotheum extends DamageSource {
+    public static class DamageSourceCryotheum extends DamageSource {
 
-		protected DamageSourceCryotheum() {
+        protected DamageSourceCryotheum() {
 
-			super("cryotheum");
-			this.setDamageBypassesArmor();
-		}
-	}
+            super("cryotheum");
+            this.setDamageBypassesArmor();
+        }
+    }
 
-	public static class DamageSourcePetrotheum extends DamageSource {
+    public static class DamageSourcePetrotheum extends DamageSource {
 
-		protected DamageSourcePetrotheum() {
+        protected DamageSourcePetrotheum() {
 
-			super("petrotheum");
-			this.setDamageBypassesArmor();
-		}
-	}
+            super("petrotheum");
+            this.setDamageBypassesArmor();
+        }
+    }
 
-	public static class DamageSourceMana extends DamageSource {
+    public static class DamageSourceMana extends DamageSource {
 
-		protected DamageSourceMana() {
+        protected DamageSourceMana() {
 
-			super("mana");
-			this.setDamageBypassesArmor();
-			this.isMagicDamage();
-		}
-	}
+            super("mana");
+            this.setDamageBypassesArmor();
+            this.isMagicDamage();
+        }
+    }
 
-	public static class DamageSourceFlux extends DamageSource {
+    public static class DamageSourceFlux extends DamageSource {
 
-		protected DamageSourceFlux() {
+        protected DamageSourceFlux() {
 
-			super("flux");
-			this.setDamageBypassesArmor();
-		}
-	}
+            super("flux");
+            this.setDamageBypassesArmor();
+        }
+    }
 
-	/* ENTITY DAMAGE SOURCES */
-	public static class EntityDamageSourceFlux extends EntityDamageSource {
+    /* ENTITY DAMAGE SOURCES */
+    public static class EntityDamageSourceFlux extends EntityDamageSource {
 
-		public EntityDamageSourceFlux(String type, Entity entity) {
+        public EntityDamageSourceFlux(String type, Entity entity) {
 
-			super(type, entity);
-			this.setDamageBypassesArmor();
-		}
-	}
+            super(type, entity);
+            this.setDamageBypassesArmor();
+        }
+    }
 
-	/* HELPERS */
-	public static DamageSource causePlayerFluxDamage(EntityPlayer entityPlayer) {
+    /* HELPERS */
+    public static DamageSource causePlayerFluxDamage(EntityPlayer entityPlayer) {
 
-		return new EntityDamageSourceFlux("player", entityPlayer);
-	}
+        return new EntityDamageSourceFlux("player", entityPlayer);
+    }
 
 }

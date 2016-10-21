@@ -899,7 +899,7 @@ public final class ItemHelper {
 
     /* EMPOWERED ITEM HELPERS */
     public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack heldItem = ItemUtils.getHeldStack(player);
@@ -908,7 +908,7 @@ public final class ItemHelper {
     }
 
     public static boolean isPlayerHoldingEmpoweredItem(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack heldItem = ItemUtils.getHeldStack(player);
@@ -917,7 +917,7 @@ public final class ItemHelper {
     }
 
     public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack heldItem = ItemUtils.getHeldStack(player);
@@ -930,7 +930,7 @@ public final class ItemHelper {
     /* MULTIMODE ITEM HELPERS */
     public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
 
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack heldItem = ItemUtils.getHeldStack(player);
@@ -940,7 +940,7 @@ public final class ItemHelper {
 
     public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
 
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack heldItem = ItemUtils.getHeldStack(player);
@@ -951,7 +951,7 @@ public final class ItemHelper {
     }
 
     public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack equipped = ItemUtils.getHeldStack(player);
@@ -962,7 +962,7 @@ public final class ItemHelper {
 
     public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
 
-        if (!ItemUtils.isPlayerHoldingSomething(player)){
+        if (!ItemUtils.isPlayerHoldingSomething(player)) {
             return false;
         }
         ItemStack equipped = ItemUtils.getHeldStack(player);

@@ -68,7 +68,7 @@ public final class RenderHelper {
 			return;
 		}
 		renderer.setRenderBoundsFromBlock(block);
-		GL11.glTranslated(translateX, translateY, translateZ);
+		GlStateManager.translate(translateX, translateY, translateZ);
 		tessellator.startDrawingQuads();
 
 		tessellator.setNormal(0.0F, -1.0F, 0.0F);
@@ -101,7 +101,7 @@ public final class RenderHelper {
 			return;
 		}
 		renderer.setRenderBoundsFromBlock(block);
-		GL11.glTranslated(translateX, translateY, translateZ);
+		GlStateManager.translate(translateX, translateY, translateZ);
 		tessellator.startDrawingQuads();
 
 		switch (face) {
