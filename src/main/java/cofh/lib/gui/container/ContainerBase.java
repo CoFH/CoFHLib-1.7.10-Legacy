@@ -3,15 +3,16 @@ package cofh.lib.gui.container;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.InventoryHelper;
 import cofh.lib.util.helpers.MathHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class ContainerBase extends Container {
 
@@ -113,8 +114,8 @@ public abstract class ContainerBase extends Container {
 			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
-			for (int j = 0; j < this.crafters.size(); ++j) {
-				((ICrafting) this.crafters.get(j)).sendSlotContents(this, start, itemstack1);
+			for (int j = 0; j < this.listeners.size(); ++j) {
+				((IContainerListener) this.listeners.get(j)).sendSlotContents(this, start, itemstack1);
 			}
 		}
 	}
@@ -129,7 +130,7 @@ public abstract class ContainerBase extends Container {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int mouseButton, int modifier, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int mouseButton, ClickType modifier, EntityPlayer player) {
 
 		Slot slot = slotId < 0 ? null : (Slot) this.inventorySlots.get(slotId);
 		if (slot instanceof SlotFalseCopy) {

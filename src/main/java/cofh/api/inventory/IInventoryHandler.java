@@ -3,7 +3,7 @@ package cofh.api.inventory;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Implement this interface on TileEntities which should handle items.
@@ -27,7 +27,7 @@ public interface IInventoryHandler extends IInventoryConnection {
 	 *            If TRUE, the insertion will only be simulated.
 	 * @return An ItemStack representing how much is remaining after the item was inserted (or would have been, if simulated) into the container inventory.
 	 */
-	ItemStack insertItem(ForgeDirection from, ItemStack item, boolean simulate);
+	ItemStack insertItem(EnumFacing from, ItemStack item, boolean simulate);
 
 	/**
 	 * Extract an ItemStack from an IInventoryHandler, internal distribution is left entirely to the IInventoryHandler. This returns the resulting stack - a
@@ -42,7 +42,7 @@ public interface IInventoryHandler extends IInventoryConnection {
 	 *            If TRUE, the extraction will only be simulated.
 	 * @return An ItemStack representing how much was extracted (or would have been, if simulated) from the container inventory.
 	 */
-	ItemStack extractItem(ForgeDirection from, ItemStack item, boolean simulate);
+	ItemStack extractItem(EnumFacing from, ItemStack item, boolean simulate);
 
 	/**
 	 * Extract an ItemStack from an IInventoryHandler, internal distribution is left entirely to the IInventoryHandler. This returns the resulting stack - a
@@ -56,27 +56,27 @@ public interface IInventoryHandler extends IInventoryConnection {
 	 *            If TRUE, the extraction will only be simulated.
 	 * @return An ItemStack representing how much was extracted (or would have been, if simulated) from the container inventory.
 	 */
-	ItemStack extractItem(ForgeDirection from, int maxExtract, boolean simulate);
+	ItemStack extractItem(EnumFacing from, int maxExtract, boolean simulate);
 
 	/**
 	 * Get the contents of the IInventoryHandler's inventory. This returns a COPY. This should only return non-null ItemStacks, and an empty List if the
 	 * inventory has nothing.
 	 */
-	List<ItemStack> getInventoryContents(ForgeDirection from);
+	List<ItemStack> getInventoryContents(EnumFacing from);
 
 	/**
 	 * Get the size (number of internal slots) of the IInventoryHandler's inventory.
 	 */
-	int getSizeInventory(ForgeDirection from);
+	int getSizeInventory(EnumFacing from);
 
 	/**
 	 * Returns whether or not the IInventoryHandler's inventory is empty (for a given side).
 	 */
-	boolean isEmpty(ForgeDirection from);
+	boolean isEmpty(EnumFacing from);
 
 	/**
 	 * Returns whether or not the IInventoryHandler's inventory is full (for a given side).
 	 */
-	boolean isFull(ForgeDirection from);
+	boolean isFull(EnumFacing from);
 
 }

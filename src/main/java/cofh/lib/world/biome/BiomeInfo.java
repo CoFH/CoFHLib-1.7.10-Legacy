@@ -3,8 +3,8 @@ package cofh.lib.world.biome;
 import java.util.Collection;
 import java.util.Random;
 
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.TempCategory;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 
@@ -32,21 +32,21 @@ public class BiomeInfo {
 	}
 
 	@SuppressWarnings("unchecked")
-	public boolean isBiomeEqual(BiomeGenBase biome, Random rand) {
+	public boolean isBiomeEqual(Biome biome, Random rand) {
 
 		if (biome != null) {
 			switch (type) {
 			default:
 				break;
 			case 0:
-				String name = biome.biomeName;
+				String name = biome.getBiomeName();
 				return name.hashCode() == hash && name.equals(data);
 			case 1:
 				return biome.getTempCategory() == data == whitelist;
 			case 2:
 				return BiomeDictionary.isBiomeOfType(biome, (Type) data) == whitelist;
 			case 4:
-				return ((Collection<String>) data).contains(biome.biomeName);
+				return ((Collection<String>) data).contains(biome.getBiomeName());
 			case 5:
 				return ((Collection<TempCategory>) data).contains(biome.getTempCategory()) == whitelist;
 			case 6:

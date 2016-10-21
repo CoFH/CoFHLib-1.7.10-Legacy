@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -39,8 +38,8 @@ public class UtilLiquidMover {
 		FluidStack liquid = FluidContainerRegistry.getFluidForFilledItem(ci);
 		if (liquid != null) {
 			Item item = ci.getItem();
-			if (itcb.fill(ForgeDirection.UNKNOWN, liquid, false) == liquid.amount) {
-				itcb.fill(ForgeDirection.UNKNOWN, liquid, true);
+			if (itcb.fill(null, liquid, false) == liquid.amount) {
+				itcb.fill(null, liquid, true);
 
 				if (!player.capabilities.isCreativeMode) {
 					if (item.hasContainerItem(ci)) {
@@ -55,7 +54,7 @@ public class UtilLiquidMover {
 
 					if (!player.worldObj.isRemote) {
 						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+						((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
 					}
 				}
 				return true;
@@ -64,8 +63,8 @@ public class UtilLiquidMover {
 			Item item = ci.getItem();
 			IFluidContainerItem fluidContainer = (IFluidContainerItem) item;
 			liquid = fluidContainer.getFluid(ci);
-			if (itcb.fill(ForgeDirection.UNKNOWN, liquid, false) > 0) {
-				int amount = itcb.fill(ForgeDirection.UNKNOWN, liquid, true);
+			if (itcb.fill(null, liquid, false) > 0) {
+				int amount = itcb.fill(null, liquid, true);
 				ItemStack drop = ci.splitStack(1);
 				ci.stackSize++;
 				fluidContainer.drain(drop, amount, true);
@@ -81,7 +80,7 @@ public class UtilLiquidMover {
 
 					if (!player.worldObj.isRemote) {
 						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+						((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
 					}
 				}
 				return true;
@@ -105,7 +104,7 @@ public class UtilLiquidMover {
 		boolean isSmartContainer = false;
 		IFluidContainerItem fluidContainer;
 		if (ci != null && (FluidContainerRegistry.isEmptyContainer(ci) || (isSmartContainer = ci.getItem() instanceof IFluidContainerItem))) {
-			for (FluidTankInfo tank : itcb.getTankInfo(ForgeDirection.UNKNOWN)) {
+			for (FluidTankInfo tank : itcb.getTankInfo(null)) {
 				FluidStack tankLiquid = tank.fluid;
 				if (tankLiquid == null || tankLiquid.amount == 0) {
 					continue;
@@ -119,7 +118,7 @@ public class UtilLiquidMover {
 					if (fluidContainer.fill(filledBucket, tankLiquid, false) > 0) {
 						int amount = fluidContainer.fill(filledBucket, tankLiquid, true);
 						bucketLiquid = new FluidStack(tankLiquid, amount);
-						FluidStack l = itcb.drain(ForgeDirection.UNKNOWN, bucketLiquid, false);
+						FluidStack l = itcb.drain(null, bucketLiquid, false);
 						if (l == null || l.amount < amount) {
 							filledBucket = null;
 						}
@@ -130,7 +129,7 @@ public class UtilLiquidMover {
 					filledBucket = FluidContainerRegistry.fillFluidContainer(tankLiquid, ci);
 					if (FluidContainerRegistry.isFilledContainer(filledBucket)) {
 						bucketLiquid = FluidContainerRegistry.getFluidForFilledItem(filledBucket);
-						FluidStack l = itcb.drain(ForgeDirection.UNKNOWN, bucketLiquid, false);
+						FluidStack l = itcb.drain(null, bucketLiquid, false);
 						if (l == null || l.amount < bucketLiquid.amount) {
 							filledBucket = null;
 						}
@@ -142,9 +141,9 @@ public class UtilLiquidMover {
 						&& ItemHelper.disposePlayerItem(ci, filledBucket, player, true)) {
 					if (!player.worldObj.isRemote) {
 						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+						((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
 					}
-					itcb.drain(ForgeDirection.UNKNOWN, bucketLiquid, true);
+					itcb.drain(null, bucketLiquid, true);
 					return true;
 				}
 			}
@@ -160,7 +159,7 @@ public class UtilLiquidMover {
 			l.amount = amount;
 			for (BlockPosition adj : new BlockPosition(from).getAdjacent(true)) {
 
-				IFluidHandler tile = adj.getTileEntity(from.getWorldObj(), IFluidHandler.class);
+				IFluidHandler tile = adj.getTileEntity(from.getWorld(), IFluidHandler.class);
 				if (tile != null) {
 					if (!tile.canFill(adj.orientation.getOpposite(), l.getFluid())) {
 						continue;

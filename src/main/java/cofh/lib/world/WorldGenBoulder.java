@@ -7,6 +7,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -30,14 +31,16 @@ public class WorldGenBoulder extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xCenter, int yCenter, int zCenter) {
-
+	public boolean generate(World world, Random rand, BlockPos pos) {
+        int xCenter = pos.getX();
+        int yCenter = pos.getY();
+        int zCenter = pos.getZ();
 		final int minSize = size, var = sizeVariance;
 		boolean r = false;
 		int i = clusterVariance > 0 ? clusters + rand.nextInt(clusterVariance + 1) : clusters;
 		while (i-- > 0) {
 
-			while (yCenter > minSize && world.isAirBlock(xCenter, yCenter - 1, zCenter)) {
+			while (yCenter > minSize && world.isAirBlock(new BlockPos(xCenter, yCenter - 1, zCenter))) {
 				--yCenter;
 			}
 			if (yCenter <= (minSize + var + 1)) {
@@ -67,7 +70,7 @@ public class WorldGenBoulder extends WorldGenerator {
 								if (dist >= minDist) {
 									r |= generateBlock(world, xCenter + x, yCenter + y, zCenter + z, cluster);
 								} else {
-									r |= world.setBlockToAir(xCenter + x, yCenter + y, zCenter + z);
+									r |= world.setBlockToAir(new BlockPos(xCenter + x, yCenter + y, zCenter + z));
 								}
 							}
 						}

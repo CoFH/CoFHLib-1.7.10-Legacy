@@ -1,17 +1,17 @@
 package cofh.lib.util.position;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public interface IRotateableTile {
 
 	public boolean canRotate();
 
-	public boolean canRotate(ForgeDirection axis);
+	public boolean canRotate(EnumFacing axis);
 
-	public void rotate(ForgeDirection axis);
+	public void rotate(EnumFacing axis);
 
 	public void rotateDirectlyTo(int facing);
 
-	public ForgeDirection getDirectionFacing();
+	public EnumFacing getDirectionFacing();
 
 }

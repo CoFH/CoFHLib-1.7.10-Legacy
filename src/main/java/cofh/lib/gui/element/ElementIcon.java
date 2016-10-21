@@ -2,66 +2,51 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
-
-import net.minecraft.util.IIcon;
-
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.lwjgl.opengl.GL11;
 
 public class ElementIcon extends ElementBase {
 
-	protected IIcon icon;
-	protected int spriteSheet;
-	protected GuiColor color = new GuiColor(-1);
+    protected TextureAtlasSprite icon;
+    protected GuiColor color = new GuiColor(-1);
 
-	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon) {
+    public ElementIcon(GuiBase gui, int posX, int posY, TextureAtlasSprite icon) {
 
-		this(gui, posX, posY, icon, 0);
-	}
+        super(gui, posX, posY);
+        this.icon = icon;
+    }
 
-	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon, int spriteSheet) {
+    public ElementIcon setColor(Number color) {
 
-		super(gui, posX, posY);
-		this.icon = icon;
-		this.spriteSheet = spriteSheet;
-	}
+        this.color = new GuiColor(color.intValue());
+        return this;
+    }
 
-	public ElementIcon setColor(Number color) {
+    public ElementIcon setIcon(TextureAtlasSprite icon) {
 
-		this.color = new GuiColor(color.intValue());
-		return this;
-	}
+        this.icon = icon;
+        return this;
+    }
 
-	public ElementIcon setIcon(IIcon icon) {
+    public int getColor() {
 
-		this.icon = icon;
-		return this;
-	}
+        return color.getColor();
+    }
 
-	public ElementIcon setSpriteSheet(int spriteSheet) {
+    @Override
+    public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		this.spriteSheet = spriteSheet;
-		return this;
-	}
+        if (icon != null) {
+            GL11.glColor4f(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
+            gui.drawColorIcon(icon, posX, posY);
+            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+        }
+    }
 
-	public int getColor() {
+    @Override
+    public void drawForeground(int mouseX, int mouseY) {
 
-		return color.getColor();
-	}
-
-	@Override
-	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
-
-		if (icon != null) {
-			GL11.glColor4f(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
-			gui.drawColorIcon(icon, posX, posY, spriteSheet);
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-		}
-	}
-
-	@Override
-	public void drawForeground(int mouseX, int mouseY) {
-
-		return;
-	}
+        return;
+    }
 
 }

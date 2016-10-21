@@ -1,7 +1,7 @@
 package cofh.lib.util.helpers;
 
 import cofh.lib.audio.SoundBase;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;

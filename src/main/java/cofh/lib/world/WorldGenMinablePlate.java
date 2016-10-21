@@ -7,6 +7,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -27,7 +28,11 @@ public class WorldGenMinablePlate extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
+
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
 		++y;
 		int size = radius;

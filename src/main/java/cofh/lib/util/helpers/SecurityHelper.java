@@ -3,283 +3,280 @@ package cofh.lib.util.helpers;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
+import com.google.common.collect.BiMap;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class SecurityHelper {
 
-	public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
-	private static boolean setup = false;
+    public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
+    private static boolean setup = false;
 
-	public static void setup() {
+    public static void setup() {
 
-		if (setup) {
-			return;
-		}
-		EnumConnectionState.PLAY.func_150755_b().put(-26, Login.S__PacketSendUUID.class);
-		Map<Class<?>, EnumConnectionState> data;
-		data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
-		data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
-		FMLCommonHandler.instance().bus().register(new Login.S__PacketSendUUID());
-		setup = true;
-	}
+        if (setup) {
+            return;
+        }
+        //Hack packet registration.
+        Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;
+        dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h");
+        dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
 
-	static {
-		setup();
-	}
+        //Hack class > state map.
+        Map<Class<?>, EnumConnectionState> data;
+        data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
+        data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
+        MinecraftForge.EVENT_BUS.register(new Login.S__PacketSendUUID());
+        setup = true;
+    }
 
-	private SecurityHelper() {
+    static {
+        setup();
+    }
 
-	}
+    private SecurityHelper() {
 
-	public static boolean isDefaultUUID(UUID uuid) {
+    }
 
-		return uuid == null || (uuid.version() == 4 && uuid.variant() == 0);
-	}
+    public static boolean isDefaultUUID(UUID uuid) {
 
-	public static UUID getID(EntityPlayer player) {
+        return uuid == null || (uuid.version() == 4 && uuid.variant() == 0);
+    }
 
-		if (MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning()) {
-			return player.getGameProfile().getId();
-		}
-		return getClientId(player);
-	}
+    public static UUID getID(EntityPlayer player) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null && server.isServerRunning()) {
+            return player.getGameProfile().getId();
+        }
+        return getClientId(player);
+    }
 
-	private static UUID cachedId;
+    private static UUID cachedId;
 
-	private static UUID getClientId(EntityPlayer player) {
+    private static UUID getClientId(EntityPlayer player) {
 
-		if (player != Minecraft.getMinecraft().thePlayer) {
-			return player.getGameProfile().getId();
-		}
-		if (cachedId == null) {
-			cachedId = Minecraft.getMinecraft().thePlayer.getGameProfile().getId();
-		}
-		return cachedId;
-	}
+        if (player != Minecraft.getMinecraft().thePlayer) {
+            return player.getGameProfile().getId();
+        }
+        if (cachedId == null) {
+            cachedId = Minecraft.getMinecraft().thePlayer.getGameProfile().getId();
+        }
+        return cachedId;
+    }
 
-	/* NBT TAG HELPER */
-	public static NBTTagCompound setItemStackTagSecure(NBTTagCompound tag, ISecurable tile) {
+    /* NBT TAG HELPER */
+    public static NBTTagCompound setItemStackTagSecure(NBTTagCompound tag, ISecurable tile) {
 
-		if (tile == null) {
-			return null;
-		}
-		if (tag == null) {
-			tag = new NBTTagCompound();
-		}
-		tag.setBoolean("Secure", true);
-		tag.setByte("Access", (byte) tile.getAccess().ordinal());
-		tag.setString("OwnerUUID", tile.getOwner().getId().toString());
-		tag.setString("Owner", tile.getOwner().getName());
-		return tag;
-	}
+        if (tile == null) {
+            return null;
+        }
+        if (tag == null) {
+            tag = new NBTTagCompound();
+        }
+        tag.setBoolean("Secure", true);
+        tag.setByte("Access", (byte) tile.getAccess().ordinal());
+        tag.setString("OwnerUUID", tile.getOwner().getId().toString());
+        tag.setString("Owner", tile.getOwner().getName());
+        return tag;
+    }
 
-	/**
-	 * Adds Security information to ItemStacks.
-	 */
-	public static void addOwnerInformation(ItemStack stack, List<String> list) {
+    /**
+     * Adds Security information to ItemStacks.
+     */
+    public static void addOwnerInformation(ItemStack stack, List<String> list) {
 
-		if (SecurityHelper.isSecure(stack)) {
-			boolean hasUUID = stack.stackTagCompound.hasKey("OwnerUUID");
-			if (!stack.stackTagCompound.hasKey("Owner") && !hasUUID) {
-				list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
-			} else {
-				if (hasUUID && stack.stackTagCompound.hasKey("Owner")) {
-					list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.stackTagCompound.getString("Owner") + " \u0378");
-				} else {
-					list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
-				}
-			}
-		}
-	}
+        if (SecurityHelper.isSecure(stack)) {
+            boolean hasUUID = stack.getTagCompound().hasKey("OwnerUUID");
+            if (!stack.getTagCompound().hasKey("Owner") && !hasUUID) {
+                list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.none"));
+            } else {
+                if (hasUUID && stack.getTagCompound().hasKey("Owner")) {
+                    list.add(StringHelper.localize("info.cofh.owner") + ": " + stack.getTagCompound().getString("Owner") + " \u0378");
+                } else {
+                    list.add(StringHelper.localize("info.cofh.owner") + ": " + StringHelper.localize("info.cofh.anotherplayer"));
+                }
+            }
+        }
+    }
 
-	public static void addAccessInformation(ItemStack stack, List<String> list) {
+    public static void addAccessInformation(ItemStack stack, List<String> list) {
 
-		if (SecurityHelper.isSecure(stack)) {
-			String accessString = "";
-			switch (stack.stackTagCompound.getByte("Access")) {
-			case 0:
-				accessString = StringHelper.localize("info.cofh.accessPublic");
-				break;
-			case 1:
-				accessString = StringHelper.localize("info.cofh.accessRestricted");
-				break;
-			case 2:
-				accessString = StringHelper.localize("info.cofh.accessPrivate");
-				break;
-			}
-			list.add(StringHelper.localize("info.cofh.access") + ": " + accessString);
-		}
-	}
+        if (SecurityHelper.isSecure(stack)) {
+            String accessString = "";
+            switch (stack.getTagCompound().getByte("Access")) {
+                case 0:
+                    accessString = StringHelper.localize("info.cofh.accessPublic");
+                    break;
+                case 1:
+                    accessString = StringHelper.localize("info.cofh.accessRestricted");
+                    break;
+                case 2:
+                    accessString = StringHelper.localize("info.cofh.accessPrivate");
+                    break;
+            }
+            list.add(StringHelper.localize("info.cofh.access") + ": " + accessString);
+        }
+    }
 
-	/* ITEM HELPERS */
-	public static boolean isSecure(ItemStack stack) {
+    /* ITEM HELPERS */
+    public static boolean isSecure(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? false : stack.stackTagCompound.hasKey("Secure");
-	}
+        return stack.hasTagCompound() && stack.getTagCompound().hasKey("Secure");
+    }
 
-	public static ItemStack setSecure(ItemStack stack) {
+    public static ItemStack setSecure(ItemStack stack) {
 
-		if (isSecure(stack)) {
-			return stack;
-		}
-		if (stack.stackTagCompound == null) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-		stack.stackTagCompound.setBoolean("Secure", true);
-		stack.stackTagCompound.setByte("Access", (byte) 0);
-		return stack;
-	}
+        if (isSecure(stack)) {
+            return stack;
+        }
+        if (!stack.hasTagCompound()) {
+            stack.setTagCompound(new NBTTagCompound());
+        }
+        stack.getTagCompound().setBoolean("Secure", true);
+        stack.getTagCompound().setByte("Access", (byte) 0);
+        return stack;
+    }
 
-	public static ItemStack removeSecure(ItemStack stack) {
+    public static ItemStack removeSecure(ItemStack stack) {
 
-		if (!isSecure(stack)) {
-			return stack;
-		}
-		stack.stackTagCompound.removeTag("Secure");
-		stack.stackTagCompound.removeTag("Access");
-		stack.stackTagCompound.removeTag("OwnerUUID");
-		stack.stackTagCompound.removeTag("Owner");
+        if (!isSecure(stack)) {
+            return stack;
+        }
+        stack.getTagCompound().removeTag("Secure");
+        stack.getTagCompound().removeTag("Access");
+        stack.getTagCompound().removeTag("OwnerUUID");
+        stack.getTagCompound().removeTag("Owner");
 
-		if (stack.stackTagCompound.hasNoTags()) {
-			stack.stackTagCompound = null;
-		}
-		return stack;
-	}
+        if (stack.getTagCompound().hasNoTags()) {
+            stack.setTagCompound(null);
+        }
+        return stack;
+    }
 
-	public static boolean setAccess(ItemStack stack, AccessMode access) {
+    public static boolean setAccess(ItemStack stack, AccessMode access) {
 
-		if (!isSecure(stack)) {
-			return false;
-		}
-		stack.stackTagCompound.setByte("Access", (byte) access.ordinal());
-		return true;
-	}
+        if (!isSecure(stack)) {
+            return false;
+        }
+        stack.getTagCompound().setByte("Access", (byte) access.ordinal());
+        return true;
+    }
 
-	public static AccessMode getAccess(ItemStack stack) {
+    public static AccessMode getAccess(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? AccessMode.PUBLIC : AccessMode.values()[stack.stackTagCompound.getByte("Access")];
-	}
+        return !stack.hasTagCompound() ? AccessMode.PUBLIC : AccessMode.values()[stack.getTagCompound().getByte("Access")];
+    }
 
-	public static boolean setOwner(ItemStack stack, GameProfile name) {
+    public static boolean setOwner(ItemStack stack, GameProfile name) {
 
-		if (!isSecure(stack)) {
-			return false;
-		}
-		stack.setTagInfo("OwnerUUID", new NBTTagString(name.getId().toString()));
-		stack.setTagInfo("Owner", new NBTTagString(name.getName()));
-		return true;
-	}
+        if (!isSecure(stack)) {
+            return false;
+        }
+        stack.setTagInfo("OwnerUUID", new NBTTagString(name.getId().toString()));
+        stack.setTagInfo("Owner", new NBTTagString(name.getName()));
+        return true;
+    }
 
-	public static GameProfile getOwner(ItemStack stack) {
+    public static GameProfile getOwner(ItemStack stack) {
 
-		if (stack.stackTagCompound != null) {
-			NBTTagCompound nbt = stack.stackTagCompound;
+        if (stack.hasTagCompound()) {
+            NBTTagCompound nbt = stack.getTagCompound();
 
-			String uuid = nbt.getString("OwnerUUID");
-			String name = nbt.getString("Owner");
-			if (!Strings.isNullOrEmpty(uuid)) {
-				return new GameProfile(UUID.fromString(uuid), name);
-			} else if (!Strings.isNullOrEmpty(name)) {
-				return new GameProfile(UUID.fromString(PreYggdrasilConverter.func_152719_a(name)), name);
-			}
-		}
-		return UNKNOWN_GAME_PROFILE;
-	}
+            String uuid = nbt.getString("OwnerUUID");
+            String name = nbt.getString("Owner");
+            if (!Strings.isNullOrEmpty(uuid)) {
+                return new GameProfile(UUID.fromString(uuid), name);
+            } else if (!Strings.isNullOrEmpty(name)) {
+                return new GameProfile(UUID.fromString(PreYggdrasilConverter.convertMobOwnerIfNeeded(FMLCommonHandler.instance().getMinecraftServerInstance(), name)), name);
+            }
+        }
+        return UNKNOWN_GAME_PROFILE;
+    }
 
-	public static GameProfile getProfile(UUID uuid, String name) {
+    public static GameProfile getProfile(UUID uuid, String name) {
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        GameProfile owner = server.getPlayerProfileCache().getProfileByUUID(uuid);
+        if (owner == null) {
+            GameProfile temp = new GameProfile(uuid, name);
+            owner = server.getMinecraftSessionService().fillProfileProperties(temp, true);
+            if (owner != temp) {
+                server.getPlayerProfileCache().addEntry(owner);
+            }
+        }
+        return owner;
+    }
 
-		GameProfile owner = MinecraftServer.getServer().func_152358_ax().func_152652_a(uuid);
-		if (owner == null) {
-			GameProfile temp = new GameProfile(uuid, name);
-			owner = MinecraftServer.getServer().func_147130_as().fillProfileProperties(temp, true);
-			if (owner != temp) {
-				MinecraftServer.getServer().func_152358_ax().func_152649_a(owner);
-			}
-		}
-		return owner;
-	}
+    public static String getOwnerName(ItemStack stack) {
 
-	public static String getOwnerName(ItemStack stack) {
+        NBTTagCompound nbt = stack.getTagCompound();
+        boolean hasUUID;
+        if (nbt == null || (!(hasUUID = nbt.hasKey("OwnerUUID")) && !nbt.hasKey("Owner"))) {
+            return "[None]";
+        }
+        return hasUUID ? stack.getTagCompound().getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
+    }
 
-		NBTTagCompound nbt = stack.stackTagCompound;
-		boolean hasUUID;
-		if (nbt == null || (!(hasUUID = nbt.hasKey("OwnerUUID")) && !nbt.hasKey("Owner"))) {
-			return "[None]";
-		}
-		return hasUUID ? stack.stackTagCompound.getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
-	}
+    // this class is to avoid an illegal access error from FML's event handler
+    private static class Login {
 
-	// this class is to avoid an illegal access error from FML's event handler
-	private static class Login {
+        public static class S__PacketSendUUID implements Packet {
 
-		public static class S__PacketSendUUID extends Packet {
+            @SubscribeEvent
+            public void login(PlayerLoggedInEvent evt) {
 
-			@SubscribeEvent
-			public void login(PlayerLoggedInEvent evt) {
+                ((EntityPlayerMP) evt.player).connection.sendPacket(new S__PacketSendUUID(evt.player));
+            }
 
-				((EntityPlayerMP) evt.player).playerNetServerHandler.sendPacket(new S__PacketSendUUID(evt.player));
-			}
+            private UUID id;
 
-			private UUID id;
+            public S__PacketSendUUID() {
 
-			public S__PacketSendUUID() {
+            }
 
-			}
+            public S__PacketSendUUID(EntityPlayer player) {
 
-			public S__PacketSendUUID(EntityPlayer player) {
+                id = player.getGameProfile().getId();
+            }
 
-				id = player.getGameProfile().getId();
-			}
+            @Override
+            public void readPacketData(PacketBuffer buffer) throws IOException {
 
-			@Override
-			public void readPacketData(PacketBuffer buffer) throws IOException {
+                id = new UUID(buffer.readLong(), buffer.readLong());
+            }
 
-				id = new UUID(buffer.readLong(), buffer.readLong());
-			}
+            @Override
+            public void writePacketData(PacketBuffer buffer) throws IOException {
 
-			@Override
-			public void writePacketData(PacketBuffer buffer) throws IOException {
+                buffer.writeLong(id.getMostSignificantBits());
+                buffer.writeLong(id.getLeastSignificantBits());
+            }
 
-				buffer.writeLong(id.getMostSignificantBits());
-				buffer.writeLong(id.getLeastSignificantBits());
-			}
+            @Override
+            public void processPacket(INetHandler p_148833_1_) {
 
-			@Override
-			public boolean hasPriority() {
+                cachedId = id;
+            }
 
-				return true;
-			}
+        }
 
-			@Override
-			public void processPacket(INetHandler p_148833_1_) {
-
-				cachedId = id;
-			}
-
-		}
-
-	}
+    }
 
 }

@@ -24,7 +24,7 @@ public class OreDictionaryProxy {
 
 	public int getOreID(ItemStack stack) {
 
-		return OreDictionary.getOreID(stack);
+		return OreDictionary.getOreID(getOreName(stack));
 	}
 
 	public int getOreID(String oreName) {
@@ -34,7 +34,7 @@ public class OreDictionaryProxy {
 
 	public String getOreName(ItemStack stack) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack));
+		return OreDictionary.getOreName(OreDictionary.getOreIDs(stack)[0]);
 	}
 
 	public String getOreName(int oreID) {
@@ -44,12 +44,12 @@ public class OreDictionaryProxy {
 
 	public boolean isOreIDEqual(ItemStack stack, int oreID) {
 
-		return OreDictionary.getOreID(stack) == oreID;
+		return getOreID(stack) == oreID;
 	}
 
 	public boolean isOreNameEqual(ItemStack stack, String oreName) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack)).equals(oreName);
+		return OreDictionary.getOreName(getOreID(stack)).equals(oreName);
 	}
 
 	public boolean oreNameExists(String oreName) {

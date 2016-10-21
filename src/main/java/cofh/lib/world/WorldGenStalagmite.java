@@ -7,6 +7,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -65,9 +66,11 @@ public class WorldGenStalagmite extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
-
-		while (world.isAirBlock(xStart, yStart, zStart) && yStart > 0) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
+        int xStart = pos.getX();
+        int yStart = pos.getY();
+        int zStart = pos.getZ();
+		while (world.isAirBlock(new BlockPos(xStart, yStart, zStart)) && yStart > 0) {
 			--yStart;
 		}
 

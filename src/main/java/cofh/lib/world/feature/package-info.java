@@ -6,5 +6,5 @@
 package cofh.lib.world.feature;
 
 import cofh.lib.CoFHLibProps;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;
 

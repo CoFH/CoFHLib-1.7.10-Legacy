@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -449,8 +450,8 @@ public final class EnderRegistry {
 				} else {
 					return null;
 				}
-				if (world.blockExists(x, y, z)) {
-					TileEntity te = world.getTileEntity(x, y, z);
+				if (world.isBlockLoaded(new BlockPos(x, y, z))) {
+					TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 					if (te instanceof IEnderDestination) {
 						output = (IEnderDestination) te;
 					} else {

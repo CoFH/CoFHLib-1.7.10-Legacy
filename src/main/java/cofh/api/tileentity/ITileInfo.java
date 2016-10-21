@@ -3,8 +3,8 @@ package cofh.api.tileentity;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IChatComponent;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.ITextComponent;
 
 /**
  * Implement this interface on Tile Entities which can provide information about themselves.
@@ -26,6 +26,6 @@ public interface ITileInfo {
 	 * @param debug
 	 *            If true, the tile should return "debug" information.
 	 */
-	void getTileInfo(List<IChatComponent> info, ForgeDirection side, EntityPlayer player, boolean debug);
+	void getTileInfo(List<ITextComponent> info, EnumFacing side, EntityPlayer player, boolean debug);
 
 }

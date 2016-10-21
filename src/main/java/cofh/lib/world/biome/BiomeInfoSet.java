@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 
 public class BiomeInfoSet implements Set<BiomeInfo> {
 
@@ -59,8 +59,8 @@ public class BiomeInfoSet implements Set<BiomeInfo> {
 	public boolean contains(Object o) {
 
 		BiomeInfo[] oldData = elementData;
-		if (o instanceof BiomeGenBase) {
-			BiomeGenBase bgb = (BiomeGenBase) o;
+		if (o instanceof Biome) {
+			Biome bgb = (Biome) o;
 			for (int i = 0, e = size; i < e; ++i) {
 				if (oldData[i] != null && oldData[i].isBiomeEqual(bgb, null)) {
 					return true;
@@ -76,7 +76,7 @@ public class BiomeInfoSet implements Set<BiomeInfo> {
 		return false;
 	}
 
-	public boolean contains(BiomeGenBase bgb, Random rand) {
+	public boolean contains(Biome bgb, Random rand) {
 
 		BiomeInfo[] oldData = elementData;
 		for (int i = 0, e = size; i < e; ++i) {

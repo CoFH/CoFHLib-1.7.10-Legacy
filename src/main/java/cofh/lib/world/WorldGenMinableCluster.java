@@ -7,9 +7,12 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -46,7 +49,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize) {
 
-		this(resource, clusterSize, Blocks.stone);
+		this(resource, clusterSize, Blocks.STONE);
 	}
 
 	public WorldGenMinableCluster(ItemStack ore, int clusterSize, Block block) {
@@ -72,7 +75,10 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
 		int blocks = genClusterSize;
 		if (blocks < 4) { // HACK: at 1 and 2 no ores are ever generated. at 3 only 1/3 veins generate
@@ -158,17 +164,22 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		return r;
 	}
 
-	public static boolean canGenerateInBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat) {
+	@Deprecated
+    public static boolean canGenerateInBlock(World world, int x, int y, int z, WeightedRandomBlock[] mat) {
+        return canGenerateInBlock(world, new BlockPos(x,y,z), mat);
+    }
+
+	public static boolean canGenerateInBlock(World world, BlockPos pos, WeightedRandomBlock[] mat) {
 
 		if (mat == null || mat.length == 0) {
 			return true;
 		}
 
-		Block block = world.getBlock(x, y, z);
+		IBlockState state = world.getBlockState(pos);
 		for (int j = 0, e = mat.length; j < e; ++j) {
 			WeightedRandomBlock genBlock = mat[j];
-			if ((-1 == genBlock.metadata || genBlock.metadata == world.getBlockMetadata(x, y, z))
-					&& (block.isReplaceableOreGen(world, x, y, z, genBlock.block) || block.isAssociatedBlock(genBlock.block))) {
+			if ((-1 == genBlock.metadata || genBlock.metadata == state.getBlock().getMetaFromState(state))
+					&& (state.getBlock().isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(genBlock.block)) || state.getBlock().isAssociatedBlock(genBlock.block))) {
 				return true;
 			}
 		}
@@ -193,7 +204,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		if (ore == null) {
 			return false;
 		}
-		return world.setBlock(x, y, z, ore.block, ore.metadata, 2);
+		return world.setBlockState(new BlockPos(x, y, z), ore.getState(), 2);
 	}
 
 	public static WeightedRandomBlock selectBlock(World world, List<WeightedRandomBlock> o) {

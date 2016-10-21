@@ -2,6 +2,7 @@ package cofh.lib.world.feature;
 
 import java.util.Random;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -37,7 +38,7 @@ public class FeatureGenNormal extends FeatureBase {
 				continue;
 			}
 
-			generated |= worldGen.generate(world, random, x, y, z);
+			generated |= worldGen.generate(world, random, new BlockPos(x, y, z));
 		}
 		return generated;
 	}

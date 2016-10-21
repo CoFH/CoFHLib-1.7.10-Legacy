@@ -1,13 +1,13 @@
 package cofh.lib.util.helpers;
 
-import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Contains helper functions to assist with working with fireworks.
@@ -16,273 +16,260 @@ import net.minecraft.nbt.NBTTagList;
  */
 public final class FireworksHelper {
 
-	private FireworksHelper() {
-		
-	}
-	
-	/**
-	 * Represents a single explosion that a firework rocket can contain.
-	 *
-	 * @author Tonius
-	 */
-	public static final class Explosion {
+    private FireworksHelper() {
 
-		/**
-		 * The different shapes that an explosion can have.
-		 *
-		 * @author Tonius
-		 */
-		public static enum Type {
-			/** Small ball (default) */
-			BALL,
-			/** Large ball (made with Fire Charge) */
-			LARGE_BALL,
-			/** Star-shaped (made with Gold Nugget) */
-			STAR,
-			/** Creeper face (made with any Head) */
-			CREEPER,
-			/** Burst (made with Feather) */
-			BURST;
-		}
+    }
 
-		/**
-		 * Generates a randomized Explosion instance.
-		 *
-		 * @param primaryColors
-		 *            The amount of different primary colors that the Explosion will have.
-		 * @param fadeColors
-		 *            The amount of different fade colors that the Explosion will have.
-		 *
-		 * @return A random Explosion instance
-		 */
-		public static Explosion getRandom(int primaryColors, int fadeColors) {
+    /**
+     * Represents a single explosion that a firework rocket can contain.
+     *
+     * @author Tonius
+     */
+    public static final class Explosion {
 
-			primaryColors = MathHelper.clamp(primaryColors, 1, Integer.MAX_VALUE);
-			fadeColors = MathHelper.clamp(fadeColors, 1, Integer.MAX_VALUE);
+        /**
+         * The different shapes that an explosion can have.
+         *
+         * @author Tonius
+         */
+        public static enum Type {
+            /**
+             * Small ball (default)
+             */
+            BALL, /**
+             * Large ball (made with Fire Charge)
+             */
+            LARGE_BALL, /**
+             * Star-shaped (made with Gold Nugget)
+             */
+            STAR, /**
+             * Creeper face (made with any Head)
+             */
+            CREEPER, /**
+             * Burst (made with Feather)
+             */
+            BURST;
+        }
 
-			Explosion e = new Explosion();
+        /**
+         * Generates a randomized Explosion instance.
+         *
+         * @param primaryColors The amount of different primary colors that the Explosion will have.
+         * @param fadeColors    The amount of different fade colors that the Explosion will have.
+         * @return A random Explosion instance
+         */
+        public static Explosion getRandom(int primaryColors, int fadeColors) {
 
-			int v;
-			switch (v = MathHelper.RANDOM.nextInt(4)) {
-			case 2:
-			case 0:
-				e.setTwinkle(true);
-				if (v == 0) {
-					break;
-				}
-			case 1:
-				e.setTrail(true);
-			}
+            primaryColors = MathHelper.clamp(primaryColors, 1, Integer.MAX_VALUE);
+            fadeColors = MathHelper.clamp(fadeColors, 1, Integer.MAX_VALUE);
 
-			e.setType(MathHelper.RANDOM.nextInt(5));
+            Explosion e = new Explosion();
 
-			for (int i = 0; i < primaryColors; i++) {
-				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
-				e.addPrimaryColor(color.getRed(), color.getGreen(), color.getBlue());
-			}
+            int v;
+            switch (v = MathHelper.RANDOM.nextInt(4)) {
+                case 2:
+                case 0:
+                    e.setTwinkle(true);
+                    if (v == 0) {
+                        break;
+                    }
+                case 1:
+                    e.setTrail(true);
+            }
 
-			for (int i = 0; i < fadeColors; i++) {
-				Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
-				e.addFadeColor(color.getRed(), color.getGreen(), color.getBlue());
-			}
+            e.setType(MathHelper.RANDOM.nextInt(5));
 
-			return e;
-		}
+            for (int i = 0; i < primaryColors; i++) {
+                Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+                e.addPrimaryColor(color.getRed(), color.getGreen(), color.getBlue());
+            }
 
-		private boolean twinkle = false;
-		private boolean trail = false;
-		private List<Integer> primaryColors = new ArrayList<Integer>();
-		private List<Integer> fadeColors = new ArrayList<Integer>();
-		private Type type = Type.BALL;
+            for (int i = 0; i < fadeColors; i++) {
+                Color color = new Color(Color.HSBtoRGB(MathHelper.RANDOM.nextFloat() * 360, MathHelper.RANDOM.nextFloat() * 0.15F + 0.8F, 0.85F));
+                e.addFadeColor(color.getRed(), color.getGreen(), color.getBlue());
+            }
 
-		/**
-		 * Sets whether the explosion should have the 'twinkle' effect (made with Glowstone Dust).
-		 *
-		 * @param twinkle
-		 *            Whether to have the 'twinkle' effect.
-		 * @return The current Explosion instance.
-		 */
-		public Explosion setTwinkle(boolean twinkle) {
+            return e;
+        }
 
-			this.twinkle = twinkle;
-			return this;
-		}
+        private boolean twinkle = false;
+        private boolean trail = false;
+        private List<Integer> primaryColors = new ArrayList<Integer>();
+        private List<Integer> fadeColors = new ArrayList<Integer>();
+        private Type type = Type.BALL;
 
-		/**
-		 * Sets whether the explosion should have the 'trail' effect (made with Diamond).
-		 *
-		 * @param trail
-		 *            Whether to have the 'trail' effect.
-		 * @return The current Explosion instance.
-		 */
-		public Explosion setTrail(boolean trail) {
+        /**
+         * Sets whether the explosion should have the 'twinkle' effect (made with Glowstone Dust).
+         *
+         * @param twinkle Whether to have the 'twinkle' effect.
+         * @return The current Explosion instance.
+         */
+        public Explosion setTwinkle(boolean twinkle) {
 
-			this.trail = trail;
-			return this;
-		}
+            this.twinkle = twinkle;
+            return this;
+        }
 
-		/**
-		 * Sets the explosion type using the {@link Type} enum.
-		 *
-		 * @param type
-		 *            The explosion type to set.
-		 * @return The current Explosion instance.
-		 */
-		public Explosion setType(Type type) {
+        /**
+         * Sets whether the explosion should have the 'trail' effect (made with Diamond).
+         *
+         * @param trail Whether to have the 'trail' effect.
+         * @return The current Explosion instance.
+         */
+        public Explosion setTrail(boolean trail) {
 
-			this.type = type;
-			return this;
-		}
+            this.trail = trail;
+            return this;
+        }
 
-		/**
-		 * Sets the explosion type using an integer.
-		 *
-		 * @param type
-		 *            The explosion type as an integer.
-		 * @return The current Explosion instance.
-		 */
-		public Explosion setType(int type) {
+        /**
+         * Sets the explosion type using the {@link Type} enum.
+         *
+         * @param type The explosion type to set.
+         * @return The current Explosion instance.
+         */
+        public Explosion setType(Type type) {
 
-			this.setType(Type.values()[MathHelper.clamp(type, 0, Type.values().length - 1)]);
-			return this;
-		}
+            this.type = type;
+            return this;
+        }
 
-		/**
-		 * Adds a primary color to the explosion.
-		 *
-		 * @param red
-		 *            The RGB red value of the color to add (0 - 255).
-		 * @param green
-		 *            The RGB green value of the color to add (0 - 255).
-		 * @param blue
-		 *            The RGB blue value of the color to add (0 - 255).
-		 * @return The current Explosion instance.
-		 */
-		public Explosion addPrimaryColor(int red, int green, int blue) {
+        /**
+         * Sets the explosion type using an integer.
+         *
+         * @param type The explosion type as an integer.
+         * @return The current Explosion instance.
+         */
+        public Explosion setType(int type) {
 
-			this.primaryColors.add((red << 16) + (green << 8) + blue);
-			return this;
-		}
+            this.setType(Type.values()[MathHelper.clamp(type, 0, Type.values().length - 1)]);
+            return this;
+        }
 
-		/**
-		 * Adds a fade color to the explosion.
-		 *
-		 * @param red
-		 *            The RGB red value of the color to add (0 - 255).
-		 * @param green
-		 *            The RGB green value of the color to add (0 - 255).
-		 * @param blue
-		 *            The RGB blue value of the color to add (0 - 255).
-		 * @return The current Explosion instance.
-		 */
-		public Explosion addFadeColor(int red, int green, int blue) {
+        /**
+         * Adds a primary color to the explosion.
+         *
+         * @param red   The RGB red value of the color to add (0 - 255).
+         * @param green The RGB green value of the color to add (0 - 255).
+         * @param blue  The RGB blue value of the color to add (0 - 255).
+         * @return The current Explosion instance.
+         */
+        public Explosion addPrimaryColor(int red, int green, int blue) {
 
-			this.fadeColors.add((red << 16) + (green << 8) + blue);
-			return this;
-		}
+            this.primaryColors.add((red << 16) + (green << 8) + blue);
+            return this;
+        }
 
-		/**
-		 * Converts the Explosion to an {@link NBTTagCompound} for use in creating fireworks {@link ItemStack}s.
-		 *
-		 * @return An NBTTagCompound representing the Explosion.
-		 */
-		public NBTTagCompound getTagCompound() {
+        /**
+         * Adds a fade color to the explosion.
+         *
+         * @param red   The RGB red value of the color to add (0 - 255).
+         * @param green The RGB green value of the color to add (0 - 255).
+         * @param blue  The RGB blue value of the color to add (0 - 255).
+         * @return The current Explosion instance.
+         */
+        public Explosion addFadeColor(int red, int green, int blue) {
 
-			NBTTagCompound tag = new NBTTagCompound();
+            this.fadeColors.add((red << 16) + (green << 8) + blue);
+            return this;
+        }
 
-			tag.setBoolean("Flicker", this.twinkle);
-			tag.setBoolean("Trail", this.trail);
+        /**
+         * Converts the Explosion to an {@link NBTTagCompound} for use in creating fireworks {@link ItemStack}s.
+         *
+         * @return An NBTTagCompound representing the Explosion.
+         */
+        public NBTTagCompound getTagCompound() {
 
-			tag.setByte("Type", (byte) this.type.ordinal());
+            NBTTagCompound tag = new NBTTagCompound();
 
-			int[] colorArray = new int[this.primaryColors.size()];
-			for (int i = 0; i < this.primaryColors.size(); i++) {
-				colorArray[i] = this.primaryColors.get(i);
-			}
-			tag.setIntArray("Colors", colorArray);
+            tag.setBoolean("Flicker", this.twinkle);
+            tag.setBoolean("Trail", this.trail);
 
-			colorArray = new int[this.fadeColors.size()];
-			for (int i = 0; i < this.fadeColors.size(); i++) {
-				colorArray[i] = this.fadeColors.get(i);
-			}
-			tag.setIntArray("FadeColors", colorArray);
+            tag.setByte("Type", (byte) this.type.ordinal());
 
-			return tag;
-		}
+            int[] colorArray = new int[this.primaryColors.size()];
+            for (int i = 0; i < this.primaryColors.size(); i++) {
+                colorArray[i] = this.primaryColors.get(i);
+            }
+            tag.setIntArray("Colors", colorArray);
 
-		/**
-		 * Converts the Explosion to a Firework Star {@link ItemStack}.
-		 *
-		 * @return A Firework Star ItemStack representing the Explosion.
-		 */
-		public ItemStack getFireworkStarStack() {
+            colorArray = new int[this.fadeColors.size()];
+            for (int i = 0; i < this.fadeColors.size(); i++) {
+                colorArray[i] = this.fadeColors.get(i);
+            }
+            tag.setIntArray("FadeColors", colorArray);
 
-			NBTTagCompound tags = new NBTTagCompound();
-			NBTTagCompound explosionTag = this.getTagCompound();
-			tags.setTag("Explosion", explosionTag);
+            return tag;
+        }
 
-			ItemStack stack = new ItemStack(Items.firework_charge);
-			stack.setTagCompound(tags);
-			return stack;
-		}
+        /**
+         * Converts the Explosion to a Firework Star {@link ItemStack}.
+         *
+         * @return A Firework Star ItemStack representing the Explosion.
+         */
+        public ItemStack getFireworkStarStack() {
 
-	}
+            NBTTagCompound tags = new NBTTagCompound();
+            NBTTagCompound explosionTag = this.getTagCompound();
+            tags.setTag("Explosion", explosionTag);
 
-	/**
-	 * Creates a fireworks {@link ItemStack}, with the resulting fireworks having a certain flight duration and a variety of {@link Explosion}s.
-	 *
-	 * @param flightDuration
-	 *            The flight duration of the fireworks. Possible range is between 0 (inclusive) and 3 (inclusive).
-	 * @param explosions
-	 *            The explosions that will occur when the fireworks detonate.
-	 * @return A fireworks ItemStack.
-	 */
-	public static ItemStack getFireworksStack(int flightDuration, Explosion... explosions) {
+            ItemStack stack = new ItemStack(Items.FIREWORK_CHARGE);
+            stack.setTagCompound(tags);
+            return stack;
+        }
 
-		NBTTagCompound tags = new NBTTagCompound();
+    }
 
-		NBTTagCompound fireworksTag = new NBTTagCompound();
-		NBTTagList explosionsList = new NBTTagList();
-		if (explosions != null) {
-			for (Explosion e : explosions) {
-				if (e == null) {
-					continue;
-				}
-				explosionsList.appendTag(e.getTagCompound());
-			}
-		}
+    /**
+     * Creates a fireworks {@link ItemStack}, with the resulting fireworks having a certain flight duration and a variety of {@link Explosion}s.
+     *
+     * @param flightDuration The flight duration of the fireworks. Possible range is between 0 (inclusive) and 3 (inclusive).
+     * @param explosions     The explosions that will occur when the fireworks detonate.
+     * @return A fireworks ItemStack.
+     */
+    public static ItemStack getFireworksStack(int flightDuration, Explosion... explosions) {
 
-		fireworksTag.setByte("Flight", (byte) MathHelper.clamp(flightDuration, 0, 3));
-		fireworksTag.setTag("Explosions", explosionsList);
-		tags.setTag("Fireworks", fireworksTag);
+        NBTTagCompound tags = new NBTTagCompound();
 
-		ItemStack stack = new ItemStack(Items.fireworks);
-		stack.setTagCompound(tags);
-		return stack;
-	}
+        NBTTagCompound fireworksTag = new NBTTagCompound();
+        NBTTagList explosionsList = new NBTTagList();
+        if (explosions != null) {
+            for (Explosion e : explosions) {
+                if (e == null) {
+                    continue;
+                }
+                explosionsList.appendTag(e.getTagCompound());
+            }
+        }
 
-	/**
-	 * Creates a randomized fireworks {@link ItemStack}.
-	 *
-	 * @param flightDuration
-	 *            The flight duration of the fireworks. Possible range is between 0 (inclusive) and 3 (inclusive).
-	 * @param explosions
-	 *            The amount of {@link Explosion}s that will occur when the fireworks detonate.
-	 * @param primaryColors
-	 *            The amount of different primary colors that each Explosion will have.
-	 * @param fadeColors
-	 *            The amount of different fade colors that each Explosion will have.
-	 * @return A randomized fireworks ItemStack.
-	 */
-	public static ItemStack getRandomFireworks(int flightDuration, int explosions, int primaryColors, int fadeColors) {
+        fireworksTag.setByte("Flight", (byte) MathHelper.clamp(flightDuration, 0, 3));
+        fireworksTag.setTag("Explosions", explosionsList);
+        tags.setTag("Fireworks", fireworksTag);
 
-		explosions = MathHelper.clamp(explosions, 0, Integer.MAX_VALUE);
-		Explosion[] explosionsArray = new Explosion[explosions];
-		for (int i = 0; i < explosions; i++) {
-			explosionsArray[i] = Explosion.getRandom(primaryColors, fadeColors);
-		}
+        ItemStack stack = new ItemStack(Items.FIREWORKS);
+        stack.setTagCompound(tags);
+        return stack;
+    }
 
-		return getFireworksStack(flightDuration, explosionsArray);
-	}
+    /**
+     * Creates a randomized fireworks {@link ItemStack}.
+     *
+     * @param flightDuration The flight duration of the fireworks. Possible range is between 0 (inclusive) and 3 (inclusive).
+     * @param explosions     The amount of {@link Explosion}s that will occur when the fireworks detonate.
+     * @param primaryColors  The amount of different primary colors that each Explosion will have.
+     * @param fadeColors     The amount of different fade colors that each Explosion will have.
+     * @return A randomized fireworks ItemStack.
+     */
+    public static ItemStack getRandomFireworks(int flightDuration, int explosions, int primaryColors, int fadeColors) {
+
+        explosions = MathHelper.clamp(explosions, 0, Integer.MAX_VALUE);
+        Explosion[] explosionsArray = new Explosion[explosions];
+        for (int i = 0; i < explosions; i++) {
+            explosionsArray[i] = Explosion.getRandom(primaryColors, fadeColors);
+        }
+
+        return getFireworksStack(flightDuration, explosionsArray);
+    }
 
 }

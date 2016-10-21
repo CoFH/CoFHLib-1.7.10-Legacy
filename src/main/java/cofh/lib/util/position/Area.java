@@ -3,7 +3,7 @@ package cofh.lib.util.position;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class Area {
 
@@ -86,7 +86,7 @@ public class Area {
 
 	public AxisAlignedBB toAxisAlignedBB() {
 
-		return AxisAlignedBB.getBoundingBox(xMin, yMin, zMin, xMax + 1, yMax + 1, zMax + 1);
+		return new AxisAlignedBB(xMin, yMin, zMin, xMax + 1, yMax + 1, zMax + 1);
 	}
 
 }

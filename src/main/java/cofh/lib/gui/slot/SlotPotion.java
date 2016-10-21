@@ -18,7 +18,7 @@ public class SlotPotion extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && stack.getItem().equals(Items.potionitem);
+		return stack != null && stack.getItem().equals(Items.POTIONITEM);//TODO Other potion items.
 	}
 
 }

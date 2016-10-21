@@ -1,6 +1,6 @@
 package cofh.api.tileentity;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 /**
  * Implement this interface on Tile Entities which can change their block's texture based on the current render pass. The block must defer the call to its Tile
@@ -9,6 +9,7 @@ import net.minecraft.util.IIcon;
  * @author Zeldo Kavira
  *
  */
+@Deprecated
 public interface ISidedTexture {
 
 	/**
@@ -20,6 +21,6 @@ public interface ISidedTexture {
 	 *            Render pass.
 	 * @return The icon to use.
 	 */
-	IIcon getTexture(int side, int pass);
+	TextureAtlasSprite getTexture(int side, int pass);
 
 }

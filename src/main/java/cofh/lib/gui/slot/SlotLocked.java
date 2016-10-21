@@ -1,48 +1,47 @@
 package cofh.lib.gui.slot;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * A slot that can only be used to display an item, not edited. Can optionally not highlight when moused over.
  */
 public class SlotLocked extends Slot {
 
-	protected boolean showHighlight;
+    protected boolean showHighlight;
 
-	public SlotLocked(IInventory inventory, int index, int x, int y) {
+    public SlotLocked(IInventory inventory, int index, int x, int y) {
 
-		this(inventory, index, x, y, false);
-	}
+        this(inventory, index, x, y, false);
+    }
 
-	public SlotLocked(IInventory inventory, int index, int x, int y, boolean highlight) {
+    public SlotLocked(IInventory inventory, int index, int x, int y, boolean highlight) {
 
-		super(inventory, index, x, y);
-		showHighlight = highlight;
-	}
+        super(inventory, index, x, y);
+        showHighlight = highlight;
+    }
 
-	@Override
-	public boolean canTakeStack(EntityPlayer player) {
+    @Override
+    public boolean canTakeStack(EntityPlayer player) {
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack stack) {
+    @Override
+    public boolean isItemValid(ItemStack stack) {
 
-		return false;
-	}
+        return false;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean func_111238_b() {
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean canBeHovered() {
 
-		return showHighlight;
-	}
+        return showHighlight;
+    }
 
 }

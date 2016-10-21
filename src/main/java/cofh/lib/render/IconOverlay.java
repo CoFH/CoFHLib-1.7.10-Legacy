@@ -1,34 +1,42 @@
 package cofh.lib.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import net.minecraft.util.IIcon;
 
-public class IconOverlay implements IIcon {
+public class IconOverlay extends TextureAtlasSprite {
 
-	private IIcon overlayIcon;
+	private TextureAtlasSprite overlayIcon;
 	private float xSegments, ySegments;
 	private float selectedSegmentX, selectedSegmentY;
 
-	public IconOverlay(IIcon overlayIcon, int subX, int subY, int selectedX, int selectedY) {
-		this.overlayIcon = overlayIcon;
+    private IconOverlay(TextureAtlasSprite sprite){
+        super(sprite.getIconName());
+        this.overlayIcon = sprite;
+        for (int i = 0; i < sprite.getFrameCount(); i++) {
+            framesTextureData.add(sprite.getFrameTextureData(i));
+        }
+    }
+
+	public IconOverlay(TextureAtlasSprite overlayIcon, int subX, int subY, int selectedX, int selectedY) {
+        this(overlayIcon);
 		xSegments = subX;
 		ySegments = subY;
 		selectedSegmentX = selectedX;
 		selectedSegmentY = selectedY;
 	}
 
-	public IconOverlay(IIcon overlayIcon, int subX, int subY, int index) {
-		this.overlayIcon = overlayIcon;
+	public IconOverlay(TextureAtlasSprite overlayIcon, int subX, int subY, int index) {
+        this(overlayIcon);
 		xSegments = subX;
 		ySegments = subY;
 		selectedSegmentX = index % subX;
 		selectedSegmentY = index / subX;
 	}
 
-	public IconOverlay(IIcon overlayIcon, int subX, int subY, boolean ...sides) {
-		this.overlayIcon = overlayIcon;
+	public IconOverlay(TextureAtlasSprite overlayIcon, int subX, int subY, boolean ...sides) {
+        this(overlayIcon);
 		xSegments = subX;
 		ySegments = subY;
 		int parts = toInt(sides) & 255;

@@ -10,7 +10,8 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -32,7 +33,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize) {
 
-		this(resource, clusterSize, Blocks.stone);
+		this(resource, clusterSize, Blocks.STONE);
 	}
 
 	public WorldGenSparseMinableCluster(ItemStack ore, int clusterSize, Block block) {
@@ -58,7 +59,10 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
 
 		int blocks = genClusterSize;
 		float f = rand.nextFloat() * (float) Math.PI;

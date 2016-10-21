@@ -52,7 +52,7 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 
 		if (masterInv.getStackInSlot(invOffset + slot) != null) {
 			ItemStack stack = masterInv.getStackInSlot(invOffset + slot);
@@ -111,12 +111,12 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 

@@ -38,7 +38,7 @@ public class RedstoneControlHelper {
 	public static void addRSControlInformation(ItemStack stack, List<String> list) {
 
 		if (hasRSControl(stack)) {
-			switch (stack.stackTagCompound.getByte("RSControl")) {
+			switch (stack.getTagCompound().getByte("RSControl")) {
 			case 0:
 				list.add(StringHelper.localize("info.cofh.signal") + ": " + StringHelper.RED + StringHelper.localize("info.cofh.disabled") + StringHelper.END);
 				return;
@@ -57,21 +57,21 @@ public class RedstoneControlHelper {
 	/* ITEM HELPERS */
 	public static boolean hasRSControl(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? false : stack.stackTagCompound.hasKey("RSControl");
+		return stack.getTagCompound() != null && stack.getTagCompound().hasKey("RSControl");
 	}
 
 	public static boolean setControl(ItemStack stack, ControlMode control) {
 
-		if (stack.stackTagCompound == null) {
+		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
-		stack.stackTagCompound.setByte("RSControl", (byte) control.ordinal());
+		stack.getTagCompound().setByte("RSControl", (byte) control.ordinal());
 		return true;
 	}
 
 	public static ControlMode getControl(ItemStack stack) {
 
-		return stack.stackTagCompound == null ? ControlMode.DISABLED : ControlMode.values()[stack.stackTagCompound.getByte("RSControl")];
+		return stack.getTagCompound() == null ? ControlMode.DISABLED : ControlMode.values()[stack.getTagCompound().getByte("RSControl")];
 	}
 
 }

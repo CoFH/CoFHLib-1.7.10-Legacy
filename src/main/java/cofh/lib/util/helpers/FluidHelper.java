@@ -1,20 +1,19 @@
 package cofh.lib.util.helpers;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import java.io.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -60,7 +59,7 @@ public class FluidHelper {
 
 	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain)
 				: null;
@@ -68,14 +67,14 @@ public class FluidHelper {
 
 	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
 	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
 
-		return isFluidContainerItem(player.getCurrentEquippedItem());
+		return isFluidContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isFluidContainerItem(ItemStack container) {
@@ -92,7 +91,7 @@ public class FluidHelper {
 
 		container.setTagCompound(new NBTTagCompound());
 		NBTTagCompound fluidTag = resource.writeToNBT(new NBTTagCompound());
-		container.stackTagCompound.setTag("Fluid", fluidTag);
+		container.getTagCompound().setTag("Fluid", fluidTag);
 
 		return container;
 	}
@@ -102,14 +101,14 @@ public class FluidHelper {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IFluidHandler ? ((IFluidHandler) handler).drain(ForgeDirection.VALID_DIRECTIONS[side ^ 1], maxDrain, doDrain) : null;
+		return handler instanceof IFluidHandler ? ((IFluidHandler) handler).drain(EnumFacing.VALUES[side ^ 1], maxDrain, doDrain) : null;
 	}
 
 	public static int insertFluidIntoAdjacentFluidHandler(TileEntity tile, int side, FluidStack fluid, boolean doFill) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IFluidHandler ? ((IFluidHandler) handler).fill(ForgeDirection.VALID_DIRECTIONS[side ^ 1], fluid, doFill) : 0;
+		return handler instanceof IFluidHandler ? ((IFluidHandler) handler).fill(EnumFacing.VALUES[side ^ 1], fluid, doFill) : 0;
 	}
 
 	// TODO: Replace with sided version post-1.8 Fluid revamp
@@ -127,7 +126,7 @@ public class FluidHelper {
 	/* Fluid Container Registry Interaction */
 	public static boolean fillContainerFromHandler(World world, IFluidHandler handler, EntityPlayer player, FluidStack tankFluid) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		if (FluidContainerRegistry.isEmptyContainer(container)) {
 			ItemStack returnStack = FluidContainerRegistry.fillFluidContainer(tankFluid, container);
@@ -147,13 +146,13 @@ public class FluidHelper {
 						container = null;
 					}
 				} else {
-					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
 						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+						((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
 					}
 				}
 			}
-			handler.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
+			handler.drain(null, fluid.amount, true);
 			return true;
 		}
 		return false;
@@ -161,24 +160,24 @@ public class FluidHelper {
 
 	public static boolean fillHandlerWithContainer(World world, IFluidHandler handler, EntityPlayer player) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(container);
 
 		if (fluid != null) {
-			if (handler.fill(ForgeDirection.UNKNOWN, fluid, false) == fluid.amount || player.capabilities.isCreativeMode) {
+			if (handler.fill(null, fluid, false) == fluid.amount || player.capabilities.isCreativeMode) {
 				ItemStack returnStack = FluidContainerRegistry.drainFluidContainer(container);
 				if (ServerHelper.isClientWorld(world)) {
 					return true;
 				}
 				if (!player.capabilities.isCreativeMode) {
-					if (ItemHelper.disposePlayerItem(player.getCurrentEquippedItem(), returnStack, player, true)) {
+					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
 						if (ServerHelper.isServerWorld(world)) {
 							player.openContainer.detectAndSendChanges();
-							((EntityPlayerMP) player).sendContainerAndContentsToPlayer(player.openContainer, player.openContainer.getInventory());
+							((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
 						}
 					}
 				}
-				handler.fill(ForgeDirection.UNKNOWN, fluid, true);
+				handler.fill(null, fluid, true);
 				return true;
 			}
 		}
@@ -191,7 +190,9 @@ public class FluidHelper {
 		if (!isValidFluidStack(fluid)) {
 			data.writeShort(-1);
 		} else {
-			byte[] abyte = CompressedStreamTools.compress(fluid.writeToNBT(new NBTTagCompound()));
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(fluid.writeToNBT(new NBTTagCompound()), byteStream);
+			byte[] abyte = byteStream.toByteArray();
 			data.writeShort((short) abyte.length);
 			data.write(abyte);
 		}
@@ -206,7 +207,8 @@ public class FluidHelper {
 		} else {
 			byte[] abyte = new byte[length];
 			data.readFully(abyte);
-			return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L)));
+            ByteArrayInputStream byteStream = new ByteArrayInputStream(abyte);
+			return FluidStack.loadFluidStackFromNBT(CompressedStreamTools.readCompressed(byteStream));
 		}
 	}
 
@@ -226,18 +228,19 @@ public class FluidHelper {
 		return fluid == null ? 0 : fluid.getLuminosity();
 	}
 
-	public static FluidStack getFluidFromWorld(World world, int x, int y, int z, boolean doDrain) {
+	public static FluidStack getFluidFromWorld(World world, BlockPos pos,  boolean doDrain) {
 
-		Block bId = world.getBlock(x, y, z);
-		int bMeta = world.getBlockMetadata(x, y, z);
+        IBlockState state = world.getBlockState(pos);
+		Block bId = state.getBlock();
+		int bMeta = bId.getMetaFromState(state);
 
-		if (Block.isEqualTo(bId, Blocks.water)) {
+		if (Block.isEqualTo(bId, Blocks.WATER)) {
 			if (bMeta == 0) {
 				return WATER.copy();
 			} else {
 				return null;
 			}
-		} else if (Block.isEqualTo(bId, Blocks.lava) || Block.isEqualTo(bId, Blocks.flowing_lava)) {
+		} else if (Block.isEqualTo(bId, Blocks.LAVA) || Block.isEqualTo(bId, Blocks.FLOWING_LAVA)) {
 			if (bMeta == 0) {
 				return LAVA.copy();
 			} else {
@@ -245,22 +248,22 @@ public class FluidHelper {
 			}
 		} else if (bId instanceof IFluidBlock) {
 			IFluidBlock block = (IFluidBlock) bId;
-			return block.drain(world, x, y, z, doDrain);
+			return block.drain(world, pos, doDrain);
 		}
 		return null;
 	}
 
-	public static FluidStack getFluidFromWorld(World world, int x, int y, int z) {
+	public static FluidStack getFluidFromWorld(World world, BlockPos pos) {
 
-		return getFluidFromWorld(world, x, y, z, false);
+		return getFluidFromWorld(world, pos, false);
 	}
 
 	public static Fluid lookupFluidForBlock(Block block) {
 
-		if (block == Blocks.flowing_water) {
+		if (block == Blocks.FLOWING_WATER) {
 			return WATER_FLUID;
 		}
-		if (block == Blocks.flowing_lava) {
+		if (block == Blocks.FLOWING_LAVA) {
 			return LAVA_FLUID;
 		}
 		return FluidRegistry.lookupFluidForBlock(block);

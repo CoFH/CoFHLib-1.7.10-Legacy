@@ -1,7 +1,7 @@
 package cofh.api.modhelpers;
 
 import cofh.lib.util.helpers.ItemHelper;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

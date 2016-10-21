@@ -1,12 +1,11 @@
 package cofh.lib.util.helpers;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
 import net.minecraft.world.World;
 
 /**
@@ -21,22 +20,22 @@ public final class ServerHelper {
 
 	}
 
-	public static final boolean isClientWorld(World world) {
+	public static boolean isClientWorld(World world) {
 
 		return world.isRemote;
 	}
 
-	public static final boolean isServerWorld(World world) {
+	public static boolean isServerWorld(World world) {
 
 		return !world.isRemote;
 	}
 
-	public static final boolean isSinglePlayerServer() {
+	public static boolean isSinglePlayerServer() {
 
 		return FMLCommonHandler.instance().getMinecraftServerInstance() != null;
 	}
 
-	public static final boolean isMultiPlayerServer() {
+	public static boolean isMultiPlayerServer() {
 
 		return FMLCommonHandler.instance().getMinecraftServerInstance() == null;
 	}
@@ -44,14 +43,15 @@ public final class ServerHelper {
 	/**
 	 * This function circumvents a miserable failing.
 	 */
-	public static final void sendItemUsePacket(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int hitSide, float hitX, float hitY,
+	@Deprecated//packet has change / moved
+	public static void sendItemUsePacket(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int hitSide, float hitX, float hitY,
 			float hitZ) {
 
 		if (isServerWorld(world)) {
 			return;
 		}
 		NetHandlerPlayClient netClientHandler = (NetHandlerPlayClient) FMLClientHandler.instance().getClientPlayHandler();
-		netClientHandler.addToSendQueue(new C08PacketPlayerBlockPlacement(x, y, z, hitSide, player.inventory.getCurrentItem(), hitX, hitY, hitZ));
+		//netClientHandler.sendPacket(new C08PacketPlayerBlockPlacement(x, y, z, hitSide, player.inventory.getCurrentItem(), hitX, hitY, hitZ));
 	}
 
 }

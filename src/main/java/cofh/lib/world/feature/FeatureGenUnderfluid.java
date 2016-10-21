@@ -10,9 +10,13 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockMatcher;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class FeatureGenUnderfluid extends FeatureBase {
 
@@ -20,6 +24,7 @@ public class FeatureGenUnderfluid extends FeatureBase {
 	final WorldGenerator worldGen;
 	final int count;
 	final List<WeightedRandomBlock> matList;
+    @Deprecated
 	final int[] fluidList;
 
 	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes, boolean regen,
@@ -61,34 +66,34 @@ public class FeatureGenUnderfluid extends FeatureBase {
 
 			int y = BlockHelper.getSurfaceBlockY(world, x, z);
 			l: do {
-				Block block = world.getBlock(x, y, z);
+				IBlockState state = world.getBlockState(new BlockPos(x, y, z));
 				if (water) {
-					if (block.getMaterial() == Material.water) {
+					if (state.getMaterial() == Material.WATER) {
 						continue;
 					}
-					if (world.getBlock(x, y + 1, z).getMaterial() != Material.water) {
+					if (world.getBlockState(new BlockPos(x, y + 1, z)).getMaterial() != Material.WATER) {
 						continue;
 					}
 				} else {
-					Fluid fluid = FluidHelper.lookupFluidForBlock(block);
-					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getID()) >= 0) {
+					Fluid fluid = FluidHelper.lookupFluidForBlock(state.getBlock());
+					if (fluid != null && Arrays.binarySearch(fluidList, FluidRegistry.getFluidID(fluid)) >= 0) {
 						continue;
 					}
 
-					fluid = FluidHelper.lookupFluidForBlock(world.getBlock(x, y + 1, z));
-					if (fluid == null || Arrays.binarySearch(fluidList, fluid.getID()) < 0) {
+					fluid = FluidHelper.lookupFluidForBlock(world.getBlockState(new BlockPos(x, y + 1, z)).getBlock());
+					if (fluid == null || Arrays.binarySearch(fluidList, FluidRegistry.getFluidID(fluid)) < 0) {
 						continue;
 					}
 				}
 				for (WeightedRandomBlock mat : matList) {
-					if (block.isReplaceableOreGen(world, x, y, z, mat.block)) {
+					if (state.getBlock().isReplaceableOreGen(state, world, new BlockPos(x, y, z), BlockMatcher.forBlock(mat.block))) {
 						break l;
 					}
 				}
 			} while (y-- > 1);
 
 			if (y > 0) {
-				generated |= worldGen.generate(world, random, x, y, z);
+				generated |= worldGen.generate(world, random, new BlockPos(x, y, z));
 			}
 		}
 		return generated;

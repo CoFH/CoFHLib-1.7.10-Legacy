@@ -9,7 +9,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * This class contains helper functions related to Inventories and Inventory manipulation.
@@ -97,7 +97,7 @@ public class InventoryHelper {
 	// IInventoryHandler is not currently implemented or used. Possibly in the future.
 
 	/* IInventory Interaction */
-	public static ItemStack extractItemStackFromInventory(IInventory inventory, int side) {
+	public static ItemStack extractItemStackFromInventory(IInventory inventory, EnumFacing side) {
 
 		if (inventory == null) {
 			return null;
@@ -106,7 +106,7 @@ public class InventoryHelper {
 
 		if (inventory instanceof ISidedInventory) {
 			ISidedInventory sidedInv = (ISidedInventory) inventory;
-			int slots[] = sidedInv.getAccessibleSlotsFromSide(side);
+			int slots[] = sidedInv.getSlotsForFace(side);
 			for (int i = 0; i < slots.length && retStack == null; i++) {
 				if (sidedInv.getStackInSlot(i) != null && sidedInv.canExtractItem(i, sidedInv.getStackInSlot(i), side)) {
 					retStack = sidedInv.getStackInSlot(i).copy();
@@ -127,7 +127,7 @@ public class InventoryHelper {
 		return retStack;
 	}
 
-	public static ItemStack insertItemStackIntoInventory(IInventory inventory, ItemStack stack, int side) {
+	public static ItemStack insertItemStackIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side) {
 
 		if (stack == null || inventory == null) {
 			return null;
@@ -136,7 +136,7 @@ public class InventoryHelper {
 
 		if (inventory instanceof ISidedInventory) {
 			ISidedInventory sidedInv = (ISidedInventory) inventory;
-			int slots[] = sidedInv.getAccessibleSlotsFromSide(side);
+			int slots[] = sidedInv.getSlotsForFace(side);
 
 			if (slots == null) {
 				return stack;
@@ -174,14 +174,14 @@ public class InventoryHelper {
 		return stack;
 	}
 
-	public static ItemStack simulateInsertItemStackIntoInventory(IInventory inventory, ItemStack stack, int side) {
+	public static ItemStack simulateInsertItemStackIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side) {
 
 		if (stack == null || inventory == null) {
 			return null;
 		}
 		if (inventory instanceof ISidedInventory) {
 			ISidedInventory sidedInv = (ISidedInventory) inventory;
-			int slots[] = sidedInv.getAccessibleSlotsFromSide(side);
+			int slots[] = sidedInv.getSlotsForFace(side);
 
 			if (slots == null) {
 				return stack;
@@ -376,9 +376,9 @@ public class InventoryHelper {
 			return null;
 		}
 		if (tile instanceof IInventory) {
-			stack = insertItemStackIntoInventory((IInventory) tile, stack, BlockHelper.SIDE_OPPOSITE[side]);
+			stack = insertItemStackIntoInventory((IInventory) tile, stack, EnumFacing.VALUES[BlockHelper.SIDE_OPPOSITE[side]]);
 		} else {
-			stack = ((IItemDuct) tile).insertItem(ForgeDirection.VALID_DIRECTIONS[side ^ 1], stack);
+			stack = ((IItemDuct) tile).insertItem(EnumFacing.VALUES[side ^ 1], stack);
 		}
 		return stack;
 	}

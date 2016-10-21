@@ -36,7 +36,7 @@ public class AugmentHelper {
 		if (augments.length <= 0) {
 			return;
 		}
-		if (stack.stackTagCompound == null) {
+		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
 		NBTTagList list = new NBTTagList();
@@ -48,7 +48,7 @@ public class AugmentHelper {
 				list.appendTag(tag);
 			}
 		}
-		stack.stackTagCompound.setTag("Augments", list);
+		stack.getTagCompound().setTag("Augments", list);
 	}
 
 	public static boolean isAugmentItem(ItemStack stack) {
