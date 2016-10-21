@@ -224,23 +224,24 @@ public final class BlockHelper {
     }
 
     //TODO RayTracer
+    @Deprecated
     public static RayTraceResult getCurrentMovingObjectPosition(EntityPlayer player, double distance, boolean fluid) {
         Vec3d posVec = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
         Vec3d lookVec = player.getLook(1);
         lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
         return player.worldObj.rayTraceBlocks(posVec, lookVec, fluid);
     }
-
+    @Deprecated
     public static RayTraceResult getCurrentMovingObjectPosition(EntityPlayer player, double distance) {
 
         return getCurrentMovingObjectPosition(player, distance, false);
     }
-
+    @Deprecated
     public static RayTraceResult getCurrentMovingObjectPosition(EntityPlayer player, boolean fluid) {
 
         return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F, fluid);
     }
-
+    @Deprecated
     public static RayTraceResult getCurrentMovingObjectPosition(EntityPlayer player) {
 
         return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F, false);
@@ -393,44 +394,45 @@ public final class BlockHelper {
         return bId < MAX_ID ? rotateType[Block.getIdFromBlock(block)] != 0 : false;
     }
 
-    /*public static int rotateVanillaBlock(World world, Block block, int x, int y, int z) {//TODO
+    public static IBlockState rotateVanillaBlock(World world, IBlockState state, BlockPos pos) {
 
-        int bId = Block.getIdFromBlock(block), bMeta = world.getBlockMetadata(x, y, z);
+        int bId = Block.getIdFromBlock(state.getBlock()), bMeta = state.getBlock().getMetaFromState(state);
+        Block block = state.getBlock();
         switch (rotateType[bId]) {
             case RotationType.FOUR_WAY:
-                return SIDE_LEFT[bMeta];
+                return block.getStateFromMeta(SIDE_LEFT[bMeta]);
             case RotationType.SIX_WAY:
                 if (bMeta < 6) {
-                    return ++bMeta % 6;
+                    return block.getStateFromMeta(++bMeta % 6);
                 }
-                return bMeta;
+                return block.getStateFromMeta(bMeta);
             case RotationType.RAIL:
                 if (bMeta < 2) {
-                    return ++bMeta % 2;
+                    return block.getStateFromMeta(++bMeta % 2);
                 }
-                return bMeta;
+                return block.getStateFromMeta(bMeta);
             case RotationType.PUMPKIN:
-                return ++bMeta % 4;
+                return block.getStateFromMeta(++bMeta % 4);
             case RotationType.STAIRS:
-                return ++bMeta % 8;
+                return block.getStateFromMeta(++bMeta % 8);
             case RotationType.REDSTONE:
                 int upper = bMeta & 0xC;
                 int lower = bMeta & 0x3;
-                return upper + ++lower % 4;
+                return block.getStateFromMeta(upper + ++lower % 4);
             case RotationType.LOG:
-                return (bMeta + 4) % 12;
+                return block.getStateFromMeta((bMeta + 4) % 12);
             case RotationType.SLAB:
-                return (bMeta + 8) % 16;
+                return block.getStateFromMeta((bMeta + 8) % 16);
             case RotationType.CHEST:
-                int coords[] = new int[3];
-                for (int i = 2; i < 6; i++) {
-                    coords = getAdjacentCoordinatesForSide(x, y, z, i);
-                    if (isEqual(world.getBlock(coords[0], coords[1], coords[2]), block)) {
-                        world.setBlockMetadataWithNotify(coords[0], coords[1], coords[2], SIDE_OPPOSITE[bMeta], 1);
-                        return SIDE_OPPOSITE[bMeta];
+                BlockPos offsetPos;
+                for (EnumFacing facing: EnumFacing.HORIZONTALS) {
+                    offsetPos = pos.offset(facing);
+                    if (isEqual(world.getBlockState(offsetPos).getBlock(), state.getBlock())) {
+                        world.setBlockState(offsetPos, state.getBlock().getStateFromMeta(SIDE_OPPOSITE[bMeta]), 1);
+                        return block.getStateFromMeta(SIDE_OPPOSITE[bMeta]);
                     }
                 }
-                return SIDE_LEFT[bMeta];
+                return block.getStateFromMeta(SIDE_LEFT[bMeta]);
             case RotationType.LEVER:
                 int shift = 0;
                 if (bMeta > 7) {
@@ -438,61 +440,62 @@ public final class BlockHelper {
                     shift = 8;
                 }
                 if (bMeta == 5) {
-                    return 6 + shift;
+                    return block.getStateFromMeta(6 + shift);
                 } else if (bMeta == 6) {
-                    return 5 + shift;
+                    return block.getStateFromMeta(5 + shift);
                 } else if (bMeta == 7) {
-                    return 0 + shift;
+                    return block.getStateFromMeta(0 + shift);
                 } else if (bMeta == 0) {
-                    return 7 + shift;
+                    return block.getStateFromMeta(7 + shift);
                 }
-                return bMeta + shift;
+                return block.getStateFromMeta(bMeta + shift);
             case RotationType.SIGN:
-                return ++bMeta % 16;
+                return block.getStateFromMeta(++bMeta % 16);
             case RotationType.PREVENT:
             default:
-                return bMeta;
+                return block.getStateFromMeta(bMeta);
         }
-    }*/
+    }
 
-    /*public static int rotateVanillaBlockAlt(World world, Block block, int x, int y, int z) {
+    public static IBlockState rotateVanillaBlockAlt(World world, IBlockState state, BlockPos pos) {
+        int bId = Block.getIdFromBlock(state.getBlock()), bMeta = state.getBlock().getMetaFromState(state);
+        Block block = state.getBlock();
 
-        int bId = Block.getIdFromBlock(block), bMeta = world.getBlockMetadata(x, y, z);
         switch (rotateType[bId]) {
             case RotationType.FOUR_WAY:
-                return SIDE_RIGHT[bMeta];
+                return block.getStateFromMeta(SIDE_RIGHT[bMeta]);
             case RotationType.SIX_WAY:
                 if (bMeta < 6) {
-                    return (bMeta + 5) % 6;
+                    return block.getStateFromMeta((bMeta + 5) % 6);
                 }
-                return bMeta;
+                return block.getStateFromMeta(bMeta);
             case RotationType.RAIL:
                 if (bMeta < 2) {
-                    return ++bMeta % 2;
+                    return block.getStateFromMeta(++bMeta % 2);
                 }
-                return bMeta;
+                return block.getStateFromMeta(bMeta);
             case RotationType.PUMPKIN:
-                return (bMeta + 3) % 4;
+                return block.getStateFromMeta((bMeta + 3) % 4);
             case RotationType.STAIRS:
-                return (bMeta + 7) % 8;
+                return block.getStateFromMeta((bMeta + 7) % 8);
             case RotationType.REDSTONE:
                 int upper = bMeta & 0xC;
                 int lower = bMeta & 0x3;
-                return upper + (lower + 3) % 4;
+                return block.getStateFromMeta(upper + (lower + 3) % 4);
             case RotationType.LOG:
-                return (bMeta + 8) % 12;
+                return block.getStateFromMeta((bMeta + 8) % 12);
             case RotationType.SLAB:
-                return (bMeta + 8) % 16;
+                return block.getStateFromMeta((bMeta + 8) % 16);
             case RotationType.CHEST:
-                int coords[] = new int[3];
-                for (int i = 2; i < 6; i++) {
-                    coords = getAdjacentCoordinatesForSide(x, y, z, i);
-                    if (isEqual(world.getBlock(coords[0], coords[1], coords[2]), block)) {
-                        world.setBlockMetadataWithNotify(coords[0], coords[1], coords[2], SIDE_OPPOSITE[bMeta], 1);
-                        return SIDE_OPPOSITE[bMeta];
+                BlockPos offsetPos;
+                for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+                    offsetPos = pos.offset(facing);
+                    if (isEqual(world.getBlockState(offsetPos).getBlock(), block)) {
+                        world.setBlockState(pos, block.getStateFromMeta(SIDE_OPPOSITE[bMeta]), 1);
+                        return block.getStateFromMeta(SIDE_OPPOSITE[bMeta]);
                     }
                 }
-                return SIDE_RIGHT[bMeta];
+                return block.getStateFromMeta(SIDE_RIGHT[bMeta]);
             case RotationType.LEVER:
                 int shift = 0;
                 if (bMeta > 7) {
@@ -500,21 +503,21 @@ public final class BlockHelper {
                     shift = 8;
                 }
                 if (bMeta == 5) {
-                    return 6 + shift;
+                    return block.getStateFromMeta(6 + shift);
                 } else if (bMeta == 6) {
-                    return 5 + shift;
+                    return block.getStateFromMeta(5 + shift);
                 } else if (bMeta == 7) {
-                    return 0 + shift;
+                    return block.getStateFromMeta(0 + shift);
                 } else if (bMeta == 0) {
-                    return 7 + shift;
+                    return block.getStateFromMeta(7 + shift);
                 }
             case RotationType.SIGN:
-                return ++bMeta % 16;
+                return block.getStateFromMeta(++bMeta % 16);
             case RotationType.PREVENT:
             default:
-                return bMeta;
+                return block.getStateFromMeta(bMeta);
         }
-    }*///TODO
+    }
 
     public static List<ItemStack> breakBlock(World worldObj, BlockPos pos, IBlockState state, int fortune, boolean doBreak, boolean silkTouch) {
 

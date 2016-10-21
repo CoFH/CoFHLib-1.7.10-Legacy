@@ -362,15 +362,15 @@ public class InventoryHelper {
     }
 
     /* HELPERS */
-    public static ItemStack addToInsertion(Object tile, int side, ItemStack stack) {
+    public static ItemStack addToInsertion(Object tile, EnumFacing side, ItemStack stack) {
 
         if (stack == null) {
             return null;
         }
         if (tile instanceof IInventory) {
-            stack = insertItemStackIntoInventory((IInventory) tile, stack, EnumFacing.VALUES[BlockHelper.SIDE_OPPOSITE[side]]);
+            stack = insertItemStackIntoInventory((IInventory) tile, stack, side.getOpposite());
         } else {
-            stack = ((IItemDuct) tile).insertItem(EnumFacing.VALUES[side ^ 1], stack);
+            stack = ((IItemDuct) tile).insertItem(side.getOpposite(), stack);
         }
         return stack;
     }

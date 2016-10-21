@@ -2,6 +2,7 @@ package cofh.api.block;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 /**
@@ -20,5 +21,5 @@ public interface IBlockConfigGui {
      * @param player Player doing the configuring.
      * @return True if the GUI was opened.
      */
-    public boolean openConfigGui(IBlockAccess world, int x, int y, int z, EnumFacing side, EntityPlayer player);
+    public boolean openConfigGui(IBlockAccess world, BlockPos pos, EnumFacing side, EntityPlayer player);
 }
