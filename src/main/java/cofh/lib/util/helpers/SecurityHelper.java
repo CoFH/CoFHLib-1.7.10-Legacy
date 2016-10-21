@@ -36,13 +36,13 @@ public class SecurityHelper {
             return;
         }
         //Hack packet registration.
-        Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;
-        dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h");
+        Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;//TODO CCL Reflection pipe.
+        dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
         dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
 
         //Hack class > state map.
-        Map<Class<?>, EnumConnectionState> data;
-        data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f");
+        Map<Class<?>, EnumConnectionState> data;//TODO CCL Reflection pipe.
+        data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f", "STATES_BY_CLASS");
         data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
         MinecraftForge.EVENT_BUS.register(new Login.S__PacketSendUUID());
         setup = true;
