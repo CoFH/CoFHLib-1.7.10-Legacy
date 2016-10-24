@@ -31,8 +31,11 @@ public class OreDictionaryProxy {
     }
 
     public String getOreName(ItemStack stack) {
-
-        return OreDictionary.getOreName(OreDictionary.getOreIDs(stack)[0]);
+        int[] ids = OreDictionary.getOreIDs(stack);
+        if (ids != null && ids.length >= 1){
+            return OreDictionary.getOreName(ids[0]);
+        }
+        return "";
     }
 
     public String getOreName(int oreID) {

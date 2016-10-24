@@ -2,6 +2,7 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.lwjgl.opengl.GL11;
 
@@ -37,9 +38,9 @@ public class ElementIcon extends ElementBase {
     public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
         if (icon != null) {
-            GL11.glColor4f(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
+            GlStateManager.color(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
             gui.drawColorIcon(icon, posX, posY);
-            GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
         }
     }
 

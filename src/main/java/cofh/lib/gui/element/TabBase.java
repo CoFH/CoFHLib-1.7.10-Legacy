@@ -103,7 +103,7 @@ public abstract class TabBase extends ElementBase {
         float colorG = (backgroundColor >> 8 & 255) / 255.0F;
         float colorB = (backgroundColor & 255) / 255.0F;
 
-        GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+        GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
         RenderHelper.bindTexture(texture);
 
@@ -114,7 +114,7 @@ public abstract class TabBase extends ElementBase {
         gui.drawTexturedModalRect(xPosition, posY, 0, 0, 4, 4);
         gui.drawTexturedModalRect(xPosition + 4, posY + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -123,11 +123,11 @@ public abstract class TabBase extends ElementBase {
         mouseX -= this.posX();
         mouseY -= this.posY;
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
         drawBackground();
 
-        GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+        GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
         for (int i = 0; i < elements.size(); i++) {
             ElementBase element = elements.get(i);
@@ -144,11 +144,11 @@ public abstract class TabBase extends ElementBase {
         mouseX -= this.posX();
         mouseY -= this.posY;
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
         drawForeground();
 
-        GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+        GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
         for (int i = 0; i < elements.size(); i++) {
             ElementBase element = elements.get(i);

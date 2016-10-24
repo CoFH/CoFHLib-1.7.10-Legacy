@@ -13,8 +13,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class ElementTextField extends ElementBase {
 
     public int borderColor = new GuiColor(55, 55, 55).getColor();
@@ -908,7 +906,7 @@ public class ElementTextField extends ElementBase {
                 enableStencil = false;
                 break l;
             }
-            glEnable(GL_STENCIL_TEST);
+            GL11.glEnable(GL11.GL_STENCIL_TEST);
             drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1 << bit);
         }
 
@@ -975,10 +973,10 @@ public class ElementTextField extends ElementBase {
                     caretEnd = width + charW;
                 }
 
-                GL11.glEnable(GL11.GL_BLEND);
+                GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
                 gui.drawSizedRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, -1);
-                GL11.glDisable(GL11.GL_BLEND);
+                GlStateManager.disableBlend();
             }
 
             if (c == '\n') {
@@ -996,7 +994,7 @@ public class ElementTextField extends ElementBase {
         }
 
         if (enableStencil) {
-            glDisable(GL_STENCIL_TEST);
+            GL11.glDisable(GL11.GL_STENCIL_TEST);
             MinecraftForgeClient.releaseStencilBit(bit);
         }
     }
