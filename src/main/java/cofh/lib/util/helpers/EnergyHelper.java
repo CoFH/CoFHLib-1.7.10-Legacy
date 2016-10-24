@@ -38,21 +38,24 @@ public class EnergyHelper {
 
 	public static int extractEnergyFromHeldContainer(EntityPlayer player, int maxExtract, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		//TODO add support for off hand (probably just use main if something held there otherwise try offhand)
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
 	}
 
 	public static int insertEnergyIntoHeldContainer(EntityPlayer player, int maxReceive, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		//TODO add support for off hand
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
 	}
 
 	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
-		return isEnergyContainerItem(player.getCurrentEquippedItem());
+		//TODO add support for off hand
+		return isEnergyContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isEnergyContainerItem(ItemStack container) {

@@ -6,6 +6,7 @@ import cofh.lib.util.helpers.MathHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -78,8 +79,8 @@ public abstract class ContainerBase extends Container {
 			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
-			for (int j = 0; j < this.crafters.size(); ++j) {
-				this.crafters.get(j).sendSlotContents(this, start, itemstack1);
+			for (int j = 0; j < this.listeners.size(); ++j) {
+				this.listeners.get(j).sendSlotContents(this, start, itemstack1);
 			}
 		}
 	}
@@ -126,18 +127,18 @@ public abstract class ContainerBase extends Container {
 	}
 
 	@Override
-	public ItemStack slotClick(int slotId, int clickedButton, int mode, EntityPlayer player) {
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
 
-		Slot slot = slotId < 0 ? null : (Slot) this.inventorySlots.get(slotId);
+		Slot slot = slotId < 0 ? null : this.inventorySlots.get(slotId);
 		if (slot instanceof SlotFalseCopy) {
-			if (clickedButton == 2) {
+			if (dragType == 2) {
 				slot.putStack(null);
 			} else {
 				slot.putStack(player.inventory.getItemStack() == null ? null : player.inventory.getItemStack().copy());
 			}
 			return player.inventory.getItemStack();
 		}
-		return super.slotClick(slotId, clickedButton, mode, player);
+		return super.slotClick(slotId, dragType, clickType, player);
 	}
 
 	@Override

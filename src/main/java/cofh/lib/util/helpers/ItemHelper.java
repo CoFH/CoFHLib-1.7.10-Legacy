@@ -2,6 +2,7 @@ package cofh.lib.util.helpers;
 
 import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
+import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
@@ -265,7 +266,7 @@ public final class ItemHelper {
 	 */
 	public static int getItemDamage(ItemStack stack) {
 
-		return Items.diamond.getDamage(stack);
+		return Items.DIAMOND.getDamage(stack);
 	}
 
 	/**
@@ -907,16 +908,35 @@ public final class ItemHelper {
 
 	// }
 
+	/* EMPOWERED ITEM HELPERS */
+	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
+
+		//TODO revisit for empowerable items in offhand
+		Item equipped = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().getItem() : null;
+		return equipped instanceof IEmpowerableItem;
+	}
+
+	public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
+
+		//TODO revisit for empowerable items in offhand
+		ItemStack equipped = player.getHeldItemMainhand();
+		IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped.getItem();
+
+		return empowerableItem.setEmpoweredState(equipped, !empowerableItem.isEmpowered(equipped));
+	}
+
 	/* MULTIMODE ITEM HELPERS */
 	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
 
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		//TODO figure out off hand multimode items (this can easily return true if in either hand, but what should key bind do with items in both hands?)
+		Item equipped = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().getItem() : null;
 		return equipped instanceof IMultiModeItem;
 	}
 
 	public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
 
-		ItemStack equipped = player.getCurrentEquippedItem();
+		//TODO figure out off hand multimode items
+		ItemStack equipped = player.getHeldItemMainhand();
 		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
 		return multiModeItem.incrMode(equipped);
@@ -924,7 +944,8 @@ public final class ItemHelper {
 
 	public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
 
-		ItemStack equipped = player.getCurrentEquippedItem();
+		//TODO figure out off hand multimode items
+		ItemStack equipped = player.getHeldItemMainhand();
 		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
 		return multiModeItem.incrMode(equipped);
@@ -932,7 +953,8 @@ public final class ItemHelper {
 
 	public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
 
-		ItemStack equipped = player.getCurrentEquippedItem();
+		//TODO figure out off hand multimode items
+		ItemStack equipped = player.getHeldItemMainhand();
 		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
 		return multiModeItem.setMode(equipped, mode);
@@ -943,7 +965,8 @@ public final class ItemHelper {
 	 */
 	public static final boolean isPlayerHoldingFluidContainer(EntityPlayer player) {
 
-		return FluidContainerRegistry.isContainer(player.getCurrentEquippedItem());
+		//TODO add support for off hand
+		return FluidContainerRegistry.isContainer(player.getHeldItemMainhand());
 	}
 
 	//	public static final boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
@@ -958,7 +981,8 @@ public final class ItemHelper {
 
 	public static final boolean isPlayerHoldingNothing(EntityPlayer player) {
 
-		return player.getCurrentEquippedItem() == null;
+		//TODO add support for off hand
+		return player.getHeldItemMainhand() == null;
 	}
 
 	public static Item getItemFromStack(ItemStack theStack) {
@@ -976,7 +1000,8 @@ public final class ItemHelper {
 
 	public static final boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
 
-		return item.isInstance(getItemFromStack(player.getCurrentEquippedItem()));
+		//TODO add support for off hand
+		return item.isInstance(getItemFromStack(player.getHeldItemMainhand()));
 	}
 
 	/**
@@ -984,7 +1009,8 @@ public final class ItemHelper {
 	 */
 	public static final boolean isPlayerHoldingItem(Item item, EntityPlayer player) {
 
-		return areItemsEqual(item, getItemFromStack(player.getCurrentEquippedItem()));
+		//TODO add support for off hand
+		return areItemsEqual(item, getItemFromStack(player.getHeldItemMainhand()));
 	}
 
 	/**
@@ -992,7 +1018,8 @@ public final class ItemHelper {
 	 */
 	public static final boolean isPlayerHoldingItemStack(ItemStack stack, EntityPlayer player) {
 
-		return itemsEqualWithMetadata(stack, player.getCurrentEquippedItem());
+		//TODO add support for off hand
+		return itemsEqualWithMetadata(stack, player.getHeldItemMainhand());
 	}
 
 	/**
@@ -1089,9 +1116,9 @@ public final class ItemHelper {
 	public static boolean isBlacklist(ItemStack output) {
 
 		Item item = output.getItem();
-		return Item.getItemFromBlock(Blocks.birch_stairs) == item || Item.getItemFromBlock(Blocks.jungle_stairs) == item
-				|| Item.getItemFromBlock(Blocks.oak_stairs) == item || Item.getItemFromBlock(Blocks.spruce_stairs) == item
-				|| Item.getItemFromBlock(Blocks.planks) == item || Item.getItemFromBlock(Blocks.wooden_slab) == item;
+		return Item.getItemFromBlock(Blocks.BIRCH_STAIRS) == item || Item.getItemFromBlock(Blocks.JUNGLE_STAIRS) == item
+				|| Item.getItemFromBlock(Blocks.OAK_STAIRS) == item || Item.getItemFromBlock(Blocks.SPRUCE_STAIRS) == item
+				|| Item.getItemFromBlock(Blocks.PLANKS) == item || Item.getItemFromBlock(Blocks.WOODEN_SLAB) == item;
 	}
 
 	public static String getItemNBTString(ItemStack theItem, String nbtKey, String invalidReturn) {

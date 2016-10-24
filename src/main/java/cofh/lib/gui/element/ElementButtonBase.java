@@ -3,7 +3,9 @@ package cofh.lib.gui.element;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 public abstract class ElementButtonBase extends ElementBase {
 
@@ -37,7 +39,8 @@ public abstract class ElementButtonBase extends ElementBase {
 	protected void playSound(int button) {
 
 		if (button == 0) {
-			GuiBase.playSound("random.click", 1.0F, 1.0F);
+			//TODO is UI_BUTTON_CLICK sound ok? (was random.click which now has different variants for different blocks)
+			GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 1.0F);
 		}
 	}
 

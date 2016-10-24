@@ -1,7 +1,7 @@
 package cofh.api.tileentity;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Implement this interface on Tile Entities which can change their block's texture based on the current render pass. The block must defer the call to its Tile
@@ -21,6 +21,6 @@ public interface ISidedTexture {
 	 *            Render pass.
 	 * @return The icon to use.
 	 */
-	TextureAtlasSprite getTexture(EnumFacing side, int pass);
+	ResourceLocation getTexture(EnumFacing side, int pass);
 
 }

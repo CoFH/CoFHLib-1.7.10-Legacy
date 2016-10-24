@@ -195,5 +195,4 @@ public class TabAugment extends TabBase {
 
 		gui.drawSizedTexturedModalRect(sideOffset() + slotsBorderX1 + 3 + 9 * xOffset, slotsBorderY1 + 3 + 18 * yOffset, 0, 0, 18 * slots, 18, 96, 32);
 	}
-
 }

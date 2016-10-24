@@ -221,7 +221,7 @@ public final class FireworksHelper {
 			NBTTagCompound explosionTag = this.getTagCompound();
 			tags.setTag("Explosion", explosionTag);
 
-			ItemStack stack = new ItemStack(Items.firework_charge);
+			ItemStack stack = new ItemStack(Items.FIREWORK_CHARGE);
 			stack.setTagCompound(tags);
 			return stack;
 		}
@@ -256,7 +256,7 @@ public final class FireworksHelper {
 		fireworksTag.setTag("Explosions", explosionsList);
 		tags.setTag("Fireworks", fireworksTag);
 
-		ItemStack stack = new ItemStack(Items.fireworks);
+		ItemStack stack = new ItemStack(Items.FIREWORKS);
 		stack.setTagCompound(tags);
 		return stack;
 	}

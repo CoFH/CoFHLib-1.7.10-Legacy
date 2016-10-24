@@ -2,6 +2,8 @@ package cofh.lib.audio;
 
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 /**
  * Simple location-based Sound class. Works well with Tile Entities.
@@ -16,26 +18,26 @@ public class SoundLocation extends SoundBase implements ITickableSound {
 	int fadeOut = 50;
 	float baseVolume = 1.0F;
 
-	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundLocation(ISoundSource source, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+		this(source, sound, category, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundLocation(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundLocation(ISoundSource source, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
 			AttenuationType attenuation) {
 
-		this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+		this(source, sound.getSoundName(), category, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 	}
 
-	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundLocation(ISoundSource source, ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+		this(source, sound, category, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundLocation(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundLocation(ISoundSource source, ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
 			AttenuationType attenuation) {
 
-		super(sound, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+		super(sound, category, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 		this.source = source;
 		this.baseVolume = volume;
 	}
@@ -54,12 +56,12 @@ public class SoundLocation extends SoundBase implements ITickableSound {
 
 	public float getFadeInMultiplier() {
 
-		return ticks >= fadeIn ? 1 : (float) (ticks / (float) fadeIn);
+		return ticks >= fadeIn ? 1 : ticks / (float) fadeIn;
 	}
 
 	public float getFadeOutMultiplier() {
 
-		return ticks >= fadeOut ? 0 : (float) ((fadeOut - ticks) / (float) fadeOut);
+		return ticks >= fadeOut ? 0 : (fadeOut - ticks) / (float) fadeOut;
 	}
 
 	/* ITickableSound */
