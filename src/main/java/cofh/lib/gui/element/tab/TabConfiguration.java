@@ -81,17 +81,17 @@ public class TabConfiguration extends TabBase {
 			return false;
 		}
 		if (40 <= mouseX && mouseX < 56 && 24 <= mouseY && mouseY < 40) {
-			handleSideChange(BlockHelper.SIDE_ABOVE[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.ENUM_SIDE_ABOVE[myTile.getFacing()], mouseButton);
 		} else if (20 <= mouseX && mouseX < 36 && 44 <= mouseY && mouseY < 60) {
-			handleSideChange(BlockHelper.SIDE_LEFT[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.ENUM_SIDE_LEFT[myTile.getFacing()], mouseButton);
 		} else if (40 <= mouseX && mouseX < 56 && 44 <= mouseY && mouseY < 60) {
-			handleSideChange(myTile.getFacing(), mouseButton);
+			handleSideChange(EnumFacing.VALUES[myTile.getFacing()], mouseButton);
 		} else if (60 <= mouseX && mouseX < 76 && 44 <= mouseY && mouseY < 60) {
-			handleSideChange(BlockHelper.SIDE_RIGHT[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.ENUM_SIDE_RIGHT[myTile.getFacing()], mouseButton);
 		} else if (40 <= mouseX && mouseX < 56 && 64 <= mouseY && mouseY < 80) {
-			handleSideChange(BlockHelper.SIDE_BELOW[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.ENUM_SIDE_BELOW[myTile.getFacing()], mouseButton);
 		} else if (60 <= mouseX && mouseX < 76 && 64 <= mouseY && mouseY < 80) {
-			handleSideChange(BlockHelper.SIDE_OPPOSITE[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.ENUM_SIDE_OPPOSITE[myTile.getFacing()], mouseButton);
 		}
 		return true;
 	}
@@ -135,24 +135,24 @@ public class TabConfiguration extends TabBase {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	void handleSideChange(int side, int mouseButton) {
+	void handleSideChange(EnumFacing side, int mouseButton) {
 
 		if (GuiScreen.isShiftKeyDown()) {
-			if (side == myTile.getFacing()) {
+			if (side == EnumFacing.VALUES[myTile.getFacing()]) {
 				if (myTileSides.resetSides()) {
 					GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.2F);
 				}
-			} else if (myTileSides.setSide(EnumFacing.VALUES[side], 0)) {
+			} else if (myTileSides.setSide(side, 0)) {
 				GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.4F);
 			}
 			return;
 		}
 		if (mouseButton == 0) {
-			if (myTileSides.incrSide(EnumFacing.VALUES[side])) {
+			if (myTileSides.incrSide(side)) {
 				GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.8F);
 			}
 		} else if (mouseButton == 1) {
-			if (myTileSides.decrSide(EnumFacing.VALUES[side])) {
+			if (myTileSides.decrSide(side)) {
 				GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, 0.6F);
 			}
 		}
