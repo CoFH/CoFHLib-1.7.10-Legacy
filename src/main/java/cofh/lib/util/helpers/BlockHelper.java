@@ -357,6 +357,14 @@ public final class BlockHelper {
         return getAdjacentAABBForSide(pos.getX(), pos.getY(), pos.getZ(), trace.sideHit.ordinal());
     }
 
+    public static AxisAlignedBB getAdjacentAABBForSide(BlockPos pos, EnumFacing side){
+        return getAdjacentAABBForSide(pos, side.ordinal());
+    }
+
+    public static AxisAlignedBB getAdjacentAABBForSide(BlockPos pos, int side){
+        return getAdjacentAABBForSide(pos.getX(), pos.getY(), pos.getZ(), side);
+    }
+
     public static AxisAlignedBB getAdjacentAABBForSide(int x, int y, int z, int side) {
 
         return new AxisAlignedBB(x + SIDE_COORD_MOD[side][0], y + SIDE_COORD_MOD[side][1], z + SIDE_COORD_MOD[side][2], x + SIDE_COORD_AABB[side][0], y + SIDE_COORD_AABB[side][1], z + SIDE_COORD_AABB[side][2]);

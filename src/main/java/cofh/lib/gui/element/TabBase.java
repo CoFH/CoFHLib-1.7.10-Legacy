@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -375,7 +376,7 @@ public abstract class TabBase extends ElementBase {
     @Override
     /**
      * @return Whether the tab should stay open or not.
-     */ public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+     */ public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException{
 
         mouseX -= this.posX();
         mouseY -= this.posY;

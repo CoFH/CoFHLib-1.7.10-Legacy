@@ -116,4 +116,69 @@ public class EntityHelper {
         FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
     }
 
+    public static void transferEntityToDimension(Entity entity, double x, double y, double z, int dimension, PlayerList manager) {
+
+        if (entity instanceof EntityPlayerMP) {
+            transferPlayerToDimension((EntityPlayerMP) entity, dimension, manager);
+            return;
+        }
+        WorldServer worldserver = manager.getServerInstance().worldServerForDimension(entity.dimension);
+        entity.dimension = dimension;
+        WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(entity.dimension);
+        worldserver.removeEntityDangerously(entity);
+        if (entity.isBeingRidden()) {
+            entity.removePassengers();
+        }
+        if (entity.isRiding()) {
+            entity.dismountRidingEntity();
+        }
+        entity.isDead = false;
+        transferEntityToWorld(entity, x, y, z, worldserver, worldserver1);
+    }
+
+    public static void transferEntityToWorld(Entity entity, double x, double y, double z, WorldServer oldWorld, WorldServer newWorld) {
+
+        oldWorld.theProfiler.startSection("placing");
+        x = MathHelper.clamp_double(x, -29999872, 29999872);
+        z = MathHelper.clamp_double(z, -29999872, 29999872);
+
+        if (entity.isEntityAlive()) {
+            entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
+            newWorld.spawnEntityInWorld(entity);
+            newWorld.updateEntityWithOptionalForce(entity, false);
+        }
+
+        oldWorld.theProfiler.endSection();
+
+        entity.setWorld(newWorld);
+    }
+
+    public static void transferPlayerToDimension(EntityPlayerMP player, double x, double y, double z, int dimension, PlayerList manager) {
+
+        int oldDim = player.dimension;
+        WorldServer worldserver = manager.getServerInstance().worldServerForDimension(player.dimension);
+        player.dimension = dimension;
+        WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(player.dimension);
+        player.connection.sendPacket(new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), player.worldObj.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+        worldserver.removeEntityDangerously(player);
+        if (player.isBeingRidden()) {
+            player.removePassengers();
+        }
+        if (player.isRiding()) {
+            player.dismountRidingEntity();
+        }
+        player.isDead = false;
+        transferEntityToWorld(player, worldserver, worldserver1);
+        manager.preparePlayer(player, worldserver);
+        player.connection.setPlayerLocation(x, y, z, player.rotationYaw, player.rotationPitch);
+        player.interactionManager.setWorld(worldserver1);
+        manager.updateTimeAndWeatherForPlayer(player, worldserver1);
+        manager.syncPlayerInventory(player);
+
+        for (PotionEffect potioneffect : player.getActivePotionEffects()) {
+            player.connection.sendPacket(new SPacketEntityEffect(player.getEntityId(), potioneffect));
+        }
+        FMLCommonHandler.instance().firePlayerChangedDimensionEvent(player, oldDim, dimension);
+    }
+
 }
