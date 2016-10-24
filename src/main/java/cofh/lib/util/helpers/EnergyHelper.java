@@ -82,7 +82,7 @@ public class EnergyHelper {
 
         TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-        return handler instanceof IEnergyHandler ? ((IEnergyHandler) handler).extractEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
+        return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
     }
 
     @Deprecated
@@ -90,7 +90,7 @@ public class EnergyHelper {
 
         TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-        return handler instanceof IEnergyHandler ? ((IEnergyHandler) handler).receiveEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
+        return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
     }
 
     public static int extractEnergyFromAdjacentEnergyProvider(TileEntity tile, int side, int energy, boolean simulate) {
