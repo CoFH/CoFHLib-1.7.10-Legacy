@@ -126,4 +126,10 @@ public final class BlockHelper {
 
 		return SIDE_OPPOSITE[side];
 	}
+
+	public static EnumFacing determineAdjacentSide(TileEntity tile, BlockPos adjacentPos) {
+
+		return EnumFacing.getFacingFromVector(adjacentPos.getX() - tile.getPos().getX(), adjacentPos.getY() - tile.getPos().getY(),
+				adjacentPos.getZ() - tile.getPos().getZ());
+	}
 }
