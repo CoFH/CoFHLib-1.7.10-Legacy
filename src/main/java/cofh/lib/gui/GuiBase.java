@@ -1,5 +1,6 @@
 package cofh.lib.gui;
 
+import codechicken.lib.texture.TextureUtils;
 import cofh.lib.audio.SoundBase;
 import cofh.lib.gui.element.ElementBase;
 import cofh.lib.gui.element.TabBase;
@@ -564,7 +565,7 @@ public abstract class GuiBase extends GuiContainer {
     }
 
     public void drawIcon(TextureAtlasSprite icon, int x, int y) {
-
+        TextureUtils.bindBlockTexture();
         GlStateManager.color(1, 1, 1, 1);
         drawTexturedModalRect(x, y, icon, 16, 16);
     }

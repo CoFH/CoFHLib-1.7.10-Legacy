@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  *
  * @author Zeldo Kavira
  */
-@Deprecated
 public interface ISidedTexture {
 
     /**
