@@ -274,7 +274,8 @@ public abstract class GuiBase extends GuiContainer {
                 lastIndex = slot.slotNumber;
                 this.handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
             }
-        } else {
+        }
+        else {
             lastIndex = -1;
             super.mouseClickMove(mX, mY, lastClick, timeSinceClick);
         }
@@ -309,7 +310,8 @@ public abstract class GuiBase extends GuiContainer {
                     element.drawForeground(mouseX, mouseY);
                 }
             }
-        } else {
+        }
+        else {
             for (int i = 0; i < elements.size(); i++) {
                 ElementBase element = elements.get(i);
                 if (element.isVisible()) {
@@ -337,12 +339,14 @@ public abstract class GuiBase extends GuiContainer {
                 if (tab.side == TabBase.LEFT) {
                     tab.drawForeground(mouseX, mouseY);
                     yPosLeft += tab.currentHeight;
-                } else {
+                }
+                else {
                     tab.drawForeground(mouseX, mouseY);
                     yPosRight += tab.currentHeight;
                 }
             }
-        } else {
+        }
+        else {
             for (int i = 0; i < tabs.size(); i++) {
                 TabBase tab = tabs.get(i);
                 tab.update();
@@ -353,7 +357,8 @@ public abstract class GuiBase extends GuiContainer {
                     tab.setPosition(0, yPosLeft);
                     tab.drawBackground(mouseX, mouseY, partialTick);
                     yPosLeft += tab.currentHeight;
-                } else {
+                }
+                else {
                     tab.setPosition(xSize, yPosRight);
                     tab.drawBackground(mouseX, mouseY, partialTick);
                     yPosRight += tab.currentHeight;
@@ -408,7 +413,8 @@ public abstract class GuiBase extends GuiContainer {
 
         if (TabTracker.getOpenedLeftTab() != null && tab.getClass().equals(TabTracker.getOpenedLeftTab())) {
             tab.setFullyOpen();
-        } else if (TabTracker.getOpenedRightTab() != null && tab.getClass().equals(TabTracker.getOpenedRightTab())) {
+        }
+        else if (TabTracker.getOpenedRightTab() != null && tab.getClass().equals(TabTracker.getOpenedRightTab())) {
             tab.setFullyOpen();
         }
         return tab;
@@ -540,9 +546,9 @@ public abstract class GuiBase extends GuiContainer {
         if (fluid == null || fluid.getFluid() == null) {
             return;
         }
-        RenderHelper.setBlockTextureSheet();
-        RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
-
+        TextureUtils.bindBlockTexture();
+        int colour = fluid.getFluid().getColor(fluid);
+        GlStateManager.color((colour >> 16) & 0xFF, (colour >> 8) & 0xFF, colour & 0xFF, (colour >> 24) & 0xFF);
         drawTiledTexture(x, y, RenderHelper.getTexture(fluid.getFluid().getStill(fluid)), width, height);
     }
 
@@ -670,10 +676,10 @@ public abstract class GuiBase extends GuiContainer {
 
         VertexBuffer buffer = Tessellator.getInstance().getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(x + 0, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F);
-        buffer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-        buffer.pos(x + width, y + 0, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV);
-        buffer.pos(x + 0, y + 0, this.zLevel).tex(minU, minV);
+        buffer.pos(x + 0, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();
+        buffer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F).endVertex();
+        buffer.pos(x + width, y + 0, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();
+        buffer.pos(x + 0, y + 0, this.zLevel).tex(minU, minV).endVertex();
         Tessellator.getInstance().draw();
     }
 
