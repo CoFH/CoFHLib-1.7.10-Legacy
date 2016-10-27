@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ElementFluidTank extends ElementBase {
 
-    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "FluidTank.png");
+    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank.png");
     public static final int DEFAULT_SCALE = 60;
 
     protected IFluidTank tank;
