@@ -1,9 +1,12 @@
 package cofh.lib.audio;
 
+import codechicken.lib.vec.Vector3;
 import net.minecraft.client.audio.ITickableSound;
+import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
-public class SoundTile extends SoundBase implements ITickableSound {
+public class SoundTile extends PositionedSound implements ITickableSound {
 
     ISoundSource source;
     boolean beginFadeOut;
@@ -13,24 +16,32 @@ public class SoundTile extends SoundBase implements ITickableSound {
     int fadeOut = 50;
     float baseVolume = 1.0F;
 
-    public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+    public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, Vector3 pos) {
 
-        this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+        this(source, sound, volume, pitch, repeat, repeatDelay, pos, AttenuationType.LINEAR);
     }
 
-    public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
+    public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, Vector3 pos, AttenuationType attenuation) {
 
-        this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+        this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, pos, attenuation);
     }
 
-    public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+    public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, Vector3 pos) {
 
-        this(source, sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+        this(source, sound, volume, pitch, repeat, repeatDelay, pos, AttenuationType.LINEAR);
     }
 
-    public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
-
-        super(sound, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+    public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, Vector3 pos, AttenuationType attenuation) {
+        super(sound, SoundCategory.AMBIENT);
+        //super(sound, volume, pitch, repeat, repeatDelay, pos.x, pos.y, pos.z, attenuation);
+        this.xPosF = (float) pos.x;
+        this.yPosF = (float) pos.y;
+        this.zPosF = (float) pos.z;
+        this.volume = volume;
+        this.pitch = pitch;
+        this.repeat = repeat;
+        this.repeatDelay = repeatDelay;
+        this.attenuationType = attenuation;
         this.source = source;
         this.baseVolume = volume;
     }
