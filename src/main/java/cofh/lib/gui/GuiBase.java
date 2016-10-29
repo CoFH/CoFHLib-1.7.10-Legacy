@@ -7,6 +7,7 @@ import cofh.lib.gui.element.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -70,6 +72,10 @@ public abstract class GuiBase extends GuiContainer {
     public static void playSound(String name, SoundCategory category, float volume, float pitch) {
 
         guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
+    }
+
+    public static void playClickSound(float volume, float pitch){
+        guiSoundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, volume, pitch));
     }
 
     public GuiBase(Container container) {

@@ -36,7 +36,7 @@ public abstract class ElementButtonBase extends ElementBase {
     protected void playSound(int button) {
 
         if (button == 0) {
-            GuiBase.playSound("random.click", 1.0F, 1.0F);
+            GuiBase.playClickSound(1.0F, 1.0F);
         }
     }
 
