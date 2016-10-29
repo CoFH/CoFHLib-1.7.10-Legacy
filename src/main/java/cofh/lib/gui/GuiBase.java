@@ -22,6 +22,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -59,9 +60,16 @@ public abstract class GuiBase extends GuiContainer {
     protected List<String> tooltip = new LinkedList<String>();
     protected boolean tooltips = true;
 
+    /**Deprecated Use GuiBase.playSound(String name, SoundCategory category, float volume, float pitch)*/
+    @Deprecated
     public static void playSound(String name, float volume, float pitch) {
 
-        guiSoundManager.playSound(new SoundBase(name, volume, pitch));
+        playSound(name,SoundCategory.MASTER, volume, pitch);
+    }
+
+    public static void playSound(String name, SoundCategory category, float volume, float pitch) {
+
+        guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
     }
 
     public GuiBase(Container container) {
