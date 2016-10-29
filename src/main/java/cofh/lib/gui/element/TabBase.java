@@ -8,7 +8,6 @@ import cofh.lib.util.Rectangle4i;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,8 +50,8 @@ public abstract class TabBase extends ElementBase {
 
     protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
 
-    public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Tab_Left.png");
-    public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Tab_Right.png");
+    public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_left.png");
+    public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_right.png");
 
     public TabBase(GuiBase gui) {
 

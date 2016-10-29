@@ -3,6 +3,7 @@ package cofh.lib.util.helpers;
 import cofh.lib.audio.SoundBase;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 /**
@@ -33,9 +34,13 @@ public class SoundHelper {
         soundManager.playSound(sound);
     }
 
+    @Deprecated
     public static void playSound(String soundName, float x, float y, float z, float volume, float pitch) {
-
-        soundManager.playSound(new SoundBase(soundName, volume, pitch, x, y, z));
+        playSound(soundName, SoundCategory.MASTER, x, y, z, volume, pitch);
     }
 
+    public static void playSound(String soundName, SoundCategory category, float x, float y, float z, float volume, float pitch) {
+
+        soundManager.playSound(new SoundBase(soundName, category, volume, pitch, x, y, z));
+    }
 }
