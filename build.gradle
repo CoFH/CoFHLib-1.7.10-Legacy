@@ -125,8 +125,8 @@ uploadArchives {
 
                         licenses {
                             license {
-                                name 'GNU Lesser Public License (GPL), Version 2.1'
-                                url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                                name 'GNU Lesser Public License (GPL), Version 3'
+                                url 'https://github.com/TheCBProject/CoFHLib/blob/master/LICENSE%20-%20LGPLv3.txt'
                                 distribution 'repo'
                             }
                         }
