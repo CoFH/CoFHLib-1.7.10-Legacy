@@ -41,19 +41,19 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
     }
 
     @Override
-    public List<Frequency> getFrequencyList(String _) {
+    public List<Frequency> getFrequencyList(String s) {
 
         return list;
     }
 
     @Override
-    public String getFrequency(String _, int freq) {
+    public String getFrequency(String s, int freq) {
 
         return channel.get(freq);
     }
 
     @Override
-    public String setFrequency(String _, int freq, String name) {
+    public String setFrequency(String s, int freq, String name) {
 
         ++modCount;
         Frequency f = new Frequency(freq, name);
@@ -68,7 +68,7 @@ public class ClientEnderChannelRegistry implements IEnderChannelRegistry {
     }
 
     @Override
-    public String removeFrequency(String _, int freq) {
+    public String removeFrequency(String s, int freq) {
 
         ++modCount;
         list.remove(new Frequency(freq, ""));

@@ -2,6 +2,7 @@ package cofh.lib.render;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -38,6 +39,10 @@ public final class RenderHelper {
     public static Tessellator tessellator() {
 
         return Tessellator.getInstance();
+    }
+
+    public static RenderItem renderItem(){
+        return Minecraft.getMinecraft().getRenderItem();
     }
 
     public static void setColor3ub(int color) {

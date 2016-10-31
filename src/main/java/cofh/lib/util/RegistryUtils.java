@@ -79,7 +79,7 @@ public class RegistryUtils {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void _(WorldEvent.Load event) {
+    public void loadEvent(WorldEvent.Load event) {
 
         if (Repl.replacements.size() < 1) {
             return;
@@ -215,6 +215,7 @@ public class RegistryUtils {
     }
 
     @SideOnly(Side.CLIENT)
+    @Deprecated//Item sprite sheet no longer exists.
     public static int getItemTextureColor(String texture) {
 
         int i = texture.indexOf(':');

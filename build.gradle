@@ -1,83 +1,146 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 
-project.ext.buildnumber = "CUSTOM_BUILD" // referenced as project.buildnumber
-
-if (System.getenv().BUILD_NUMBER) // assuming jenkins ofcourse
-{
-    project.buildnumber = System.getenv().BUILD_NUMBER
-    println "Using build number ${project.buildnumber}..."
-} else {
-    println "!! No build number set !!"
-}
-
-version = "1.7.10R3.0.3"
 group = "cofh"
 archivesBaseName = "CoFHLib"
 
-minecraft {
-    version = "1.7.10-10.13.4.1448-1.7.10"
-    runDir = "eclipse/assets"
+// Define properties file
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    // Load config.  It shall from now be referenced as simply config or project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
 }
 
-processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+repositories {
+    maven {
+        name = "ChickenBones repo"
+        url = "http://chickenbones.net/maven/"
+    }
+}
 
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include 'mcmod.info'
+dependencies {
+    compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
+}
 
-                // replace version and mcversion
-                expand 'version': project.version, 'mcversion': project.minecraft.version
-            }
+version = "${project.config.mod_version}." + (System.getenv("BUILD_NUMBER") ?: "1")
 
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
-        }
+println config.mc_version + "-" + config.forge_version
+
+minecraft {
+    version = config.mc_version + "-" + config.forge_version
+    mappings = config.mappings
+    runDir = "run"
+	makeObfSourceJar = false
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mc_version", project.config.mc_version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mc_version': project.config.mc_version
+    }
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+version = "${project.minecraft.version}-${project.version}"
+def commonManifest = {
+    attributes 'FMLAT': 'CoFHLib_at.cfg'
+}
 
 jar {
-    version = minecraft.version + project.version
-    classifier = project.buildnumber
+    classifier = 'universal'
+    manifest commonManifest
 }
 
 task apiJar(type: Jar, dependsOn: 'sourceMainJava') {
     from('build/sources/java') {
         include "**/api/**/*"
     }
-    version = "API${minecraft.version}${project.version}"
-    classifier = project.buildnumber
+    classifier = 'API'
 }
 
-task devJar(type: Jar, dependsOn: 'classes') {
+task deobfJar(type: Jar) {
     from sourceSets.main.output
-    version = minecraft.version + project.version
-    classifier = "DEV-${project.buildnumber}"
+    classifier = 'deobf'
+    manifest commonManifest
+}
+
+task srcJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    manifest commonManifest
 }
 
 artifacts {
-    archives devJar
+    archives deobfJar
+	archives srcJar
     archives apiJar
 }
 
-project.tasks.build.dependsOn devJar, apiJar
+//project.tasks.build.dependsOn deobfJar, apiJar
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            if (project.hasProperty("local_maven")) {
+                repository(url: "file://${local_maven}")
+                pom {
+                    groupId = project.group
+                    // Force the maven upload to use the <mcversion>-<version> syntax preferred at files
+                    artifactId = project.archivesBaseName
+                    project {
+                        name project.archivesBaseName
+                        packaging 'jar'
+                        description 'CoFHLib'
+                        url 'https://github.com/TheCBProject/CoFHLib'
+
+                        scm {
+                            url 'https://github.com/TheCBProject/CoFHLib'
+                            connection 'scm:git:git://github.com/TheCBProject/CoFHLib.git'
+                            developerConnection 'scm:git:git@github.com:TheCBProject/CoFHLib.git'
+                        }
+
+                        issueManagement {
+                            system 'github'
+                            url 'https://github.com/TheCBProject/CoFHLib/issues'
+                        }
+
+                        licenses {
+                            license {
+                                name 'GNU Lesser Public License (GPL), Version 2.1'
+                                url 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt'
+                                distribution 'repo'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'TeamCoFH'
+                                name 'TeamCoFH'
+                                roles { role 'developer' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
