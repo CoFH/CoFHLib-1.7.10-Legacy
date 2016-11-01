@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ElementEnergyStored extends ElementBase {
 
-    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Energy.png");
+    public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "energy.png");
     public static final int DEFAULT_SCALE = 42;
 
     protected IEnergyStorage storage;
