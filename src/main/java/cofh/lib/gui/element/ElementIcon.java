@@ -1,5 +1,6 @@
 package cofh.lib.gui.element;
 
+import codechicken.lib.texture.TextureUtils;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,6 +39,7 @@ public class ElementIcon extends ElementBase {
     public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
         if (icon != null) {
+            TextureUtils.bindBlockTexture();
             GlStateManager.color(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
             gui.drawColorIcon(icon, posX, posY);
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
