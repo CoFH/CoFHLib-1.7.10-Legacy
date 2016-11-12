@@ -1275,4 +1275,46 @@ public final class ItemHelper {
         }
     }
 
+    /**
+     * Compares item, meta, size and nbt of two stacks while ignoring nbt tag keys provided.
+     * This is useful in shouldCauseReequipAnimation overrides.
+     *
+     * @param stackA          first stack to compare
+     * @param stackB          second stack to compare
+     * @param nbtTagsToIgnore tag keys to ignore when comparing the stacks
+     */
+    public static boolean areItemStacksEqualIgnoreTags(ItemStack stackA, ItemStack stackB, String... nbtTagsToIgnore) {
+
+        if (stackA == null && stackB == null) return true;
+        if (stackA == null && stackB != null) return false;
+        if (stackA != null && stackB == null) return false;
+        if (stackA.getItem() != stackB.getItem()) return false;
+        if (stackA.getItemDamage() != stackB.getItemDamage()) return false;
+        if (stackA.stackSize != stackB.stackSize) return false;
+        if (stackA.getTagCompound() == null && stackB.getTagCompound() == null) return true;
+        if (stackA.getTagCompound() == null && stackB.getTagCompound() != null) return false;
+        if (stackA.getTagCompound() != null && stackB.getTagCompound() == null) return false;
+        int numberOfKeys = stackA.getTagCompound().getKeySet().size();
+        if (numberOfKeys != stackB.getTagCompound().getKeySet().size()) return false;
+
+        NBTTagCompound tagA = stackA.getTagCompound();
+        NBTTagCompound tagB = stackB.getTagCompound();
+
+        String[] keys = new String[numberOfKeys];
+        keys = tagA.getKeySet().toArray(keys);
+
+        a: for (int i=0; i<numberOfKeys; i++) {
+            for (int j=0; j<nbtTagsToIgnore.length; j++) {
+                if (nbtTagsToIgnore[j].equals(keys[i])) {
+                    continue a;
+                }
+            }
+
+            if (!tagA.getTag(keys[i]).equals(tagB.getTag(keys[i]))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
