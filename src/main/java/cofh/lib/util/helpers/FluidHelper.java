@@ -108,6 +108,7 @@ public class FluidHelper {
     }
 
     // TODO: Replace with sided version post-1.8 Fluid revamp
+    @Deprecated
     public static boolean isFluidHandler(TileEntity tile) {
 
         return tile instanceof IFluidHandler;

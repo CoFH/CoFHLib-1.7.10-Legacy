@@ -1,5 +1,6 @@
 package cofh.lib.util.helpers;
 
+import codechicken.lib.inventory.InventoryUtils;
 import cofh.api.transport.IItemDuct;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -7,6 +8,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 
@@ -168,6 +172,15 @@ public class InventoryHelper {
         return stack;
     }
 
+    public static ItemStack insertStackIntoInventory(IItemHandler handler, ItemStack stack, boolean simulate) {
+        return insertStackIntoInventory(handler, stack, simulate, false);
+    }
+
+    public static ItemStack insertStackIntoInventory(IItemHandler handler, ItemStack stack, boolean simulate, boolean forceEmptySlot) {
+        return forceEmptySlot ? ItemHandlerHelper.insertItem(handler, stack, simulate) : ItemHandlerHelper.insertItemStacked(handler, stack, simulate);
+    }
+
+    @Deprecated
     public static ItemStack simulateInsertItemStackIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side) {
 
         if (stack == null || inventory == null) {
@@ -211,6 +224,7 @@ public class InventoryHelper {
     }
 
     /* Slot Interaction */
+    @Deprecated
     public static ItemStack addToEmptyInventorySlot(IInventory inventory, int slot, ItemStack stack) {
 
         if (!inventory.isItemValidForSlot(slot, stack)) {
@@ -221,6 +235,7 @@ public class InventoryHelper {
         return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
     }
 
+    @Deprecated
     public static ItemStack addToOccupiedInventorySlot(IInventory inventory, int slot, ItemStack stack) {
 
         int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
@@ -238,6 +253,7 @@ public class InventoryHelper {
         return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
     }
 
+    @Deprecated
     public static ItemStack addToOccupiedInventorySlot(IInventory inventory, int slot, ItemStack stack, ItemStack existingStack) {
 
         int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
@@ -362,24 +378,26 @@ public class InventoryHelper {
     }
 
     /* HELPERS */
-    public static ItemStack addToInsertion(Object tile, EnumFacing side, ItemStack stack) {
+    public static ItemStack addToInsertion(TileEntity tile, EnumFacing side, ItemStack stack) {
 
         if (stack == null) {
             return null;
         }
-        if (tile instanceof IInventory) {
-            stack = insertItemStackIntoInventory((IInventory) tile, stack, side.getOpposite());
+        if (InventoryUtils.hasItemHandlerCap(tile, side.getOpposite())) {
+            stack = insertStackIntoInventory(InventoryUtils.getItemHandlerCap(tile, side.getOpposite()), stack, false);
         } else {
             stack = ((IItemDuct) tile).insertItem(side.getOpposite(), stack);
         }
         return stack;
     }
 
+    @Deprecated
     public static boolean isInventory(TileEntity tile) {
 
         return tile instanceof IInventory;
     }
 
+    @Deprecated
     public static boolean isInsertion(Object tile) {
 
         return tile instanceof IInventory || tile instanceof IItemDuct;
