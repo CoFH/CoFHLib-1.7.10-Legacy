@@ -1,8 +1,11 @@
 package cofh.lib.util.helpers;
 
+import codechicken.lib.packet.PacketCustom;
+import codechicken.lib.packet.PacketCustom.IClientPacketHandler;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
+import com.google.common.collect.BiMap;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +13,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.*;
+import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,15 +41,20 @@ public class SecurityHelper {
             return;
         }
         //Hack packet registration.
-//        Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;//TODO CCL Reflection pipe.
-//        dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
-//        dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
+        //Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;//TODO CCL Reflection pipe.
+        //dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
+        //dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
 
         //Hack class > state map.
-        Map<Class<?>, EnumConnectionState> data;//TODO CCL Reflection pipe.
-        data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f", "STATES_BY_CLASS");
-        data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
-        MinecraftForge.EVENT_BUS.register(new Login.S__PacketSendUUID());
+        //Map<Class<?>, EnumConnectionState> data;//TODO CCL Reflection pipe.
+        //data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f", "STATES_BY_CLASS");
+        //data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
+        MinecraftForge.EVENT_BUS.register(new ServerHandler());
+
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            ClientHandler.setup();
+        }
+
         setup = true;
     }
 
@@ -236,15 +244,48 @@ public class SecurityHelper {
         return hasUUID ? stack.getTagCompound().getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
     }
 
+    @SideOnly(Side.CLIENT)
+    //TODO This is a highly temp fix.
+    public static class ClientHandler implements IClientPacketHandler {
+        private static boolean setup;
+
+        public static void setup() {
+            if (setup) {
+                return;
+            }
+            PacketCustom.assignHandler("CoFH:Security", new ClientHandler());
+            setup = true;
+        }
+
+        @Override
+        public void handlePacket(PacketCustom packetCustom, Minecraft mc, INetHandlerPlayClient handler) {
+            if (packetCustom.getType() == 1) {
+                cachedId = new UUID(packetCustom.readLong(), packetCustom.readLong());
+            }
+        }
+    }
+
+    //TODO This is a highly temp fix.
+    public static class ServerHandler {
+        @SubscribeEvent
+        public void login(PlayerLoggedInEvent evt) {
+            PacketCustom packetCustom = new PacketCustom("CoFH:Security", 1);
+            UUID uuid = evt.player.getGameProfile().getId();
+            packetCustom.writeLong(uuid.getMostSignificantBits());
+            packetCustom.writeLong(uuid.getLeastSignificantBits());
+            packetCustom.sendToPlayer(evt.player);
+        }
+    }
+
     // this class is to avoid an illegal access error from FML's event handler
+    //TODO This entire system needs to be re-thinked, Either CoFHLib needs a kickass packet system or this needs to be moved to CoFH core and use its packet system.
     private static class Login {
 
         public static class S__PacketSendUUID implements Packet {
 
-            @SubscribeEvent
             public void login(PlayerLoggedInEvent evt) {
 
-                ((EntityPlayerMP) evt.player).connection.sendPacket(new S__PacketSendUUID(evt.player));
+                //((EntityPlayerMP) evt.player).connection.sendPacket(new S__PacketSendUUID(evt.player));
             }
 
             private UUID id;
@@ -274,7 +315,7 @@ public class SecurityHelper {
             @Override
             public void processPacket(INetHandler p_148833_1_) {
 
-                cachedId = id;
+                //cachedId = id;
             }
 
         }
