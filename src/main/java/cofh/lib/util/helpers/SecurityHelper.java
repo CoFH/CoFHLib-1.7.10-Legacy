@@ -41,18 +41,18 @@ public class SecurityHelper {
             return;
         }
         //Hack packet registration.
-        //Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;//TODO CCL Reflection pipe.
+        //Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;
         //dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
         //dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
 
         //Hack class > state map.
-        //Map<Class<?>, EnumConnectionState> data;//TODO CCL Reflection pipe.
+        //Map<Class<?>, EnumConnectionState> data;
         //data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f", "STATES_BY_CLASS");
         //data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
         MinecraftForge.EVENT_BUS.register(new ServerHandler());
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
-            ClientHandler.setup();
+            initClienthandler();
         }
 
         setup = true;
@@ -244,7 +244,11 @@ public class SecurityHelper {
         return hasUUID ? stack.getTagCompound().getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
     }
 
-    @SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)//Bouncer method.
+    private static void initClienthandler() {
+        ClientHandler.setup();
+    }
+
     //TODO This is a highly temp fix.
     public static class ClientHandler implements IClientPacketHandler {
         private static boolean setup;
