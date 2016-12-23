@@ -37,7 +37,7 @@ public class FeatureGenCave extends FeatureBase {
             }
             int seaLevel = averageSeaLevel;
             if (seaLevel < 20) {
-                seaLevel = world.func_189649_b(x, z);
+                seaLevel = world.getHeightmapHeight(x, z);
             }
 
             int stopY = random.nextInt(1 + seaLevel / 2);

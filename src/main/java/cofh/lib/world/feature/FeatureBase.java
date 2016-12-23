@@ -121,7 +121,7 @@ public abstract class FeatureBase implements IFeatureGenerator {
     protected boolean canGenerateInBiome(World world, int x, int z, Random rand) {
 
         if (biomeRestriction != GenRestriction.NONE) {
-            Biome biome = world.getBiomeGenForCoords(new BlockPos(x, 0, z));
+            Biome biome = world.getBiome(new BlockPos(x, 0, z));
             return !(biomeRestriction == GenRestriction.BLACKLIST == biomes.contains(biome, rand));
         }
         return true;

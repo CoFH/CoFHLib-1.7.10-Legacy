@@ -130,7 +130,7 @@ public class WorldGenAdvLakes extends WorldGenerator {
             for (z = 0; z < width; ++z) {
                 for (y = 0; y < height; ++y) {
                     if (spawnBlock[(x * width + z) * height + y] && world.getBlockState(new BlockPos(xStart + x, yStart + y - 1, zStart + z)).getBlock().equals(Blocks.DIRT) && world.getLightFor(EnumSkyBlock.SKY, new BlockPos(xStart + x, yStart + y, zStart + z)) > 0) {
-                        Biome bgb = world.getBiomeGenForCoords(new BlockPos(xStart + x, 0, zStart + z));
+                        Biome bgb = world.getBiome(new BlockPos(xStart + x, 0, zStart + z));
                         world.setBlockState(new BlockPos(xStart + x, yStart + y - 1, zStart + z), bgb.topBlock, 2);
                     }
                 }
