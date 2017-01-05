@@ -570,6 +570,7 @@ public final class BlockHelper {
 			block = Blocks.redstone_lamp;
 		}
 		
+		Item item = Item.getItemFromBlock(block);
 		if (item.getHasSubtypes()) {
 			return new ItemStack(item, 1, bMeta);
 		}
