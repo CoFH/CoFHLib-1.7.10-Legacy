@@ -560,8 +560,16 @@ public final class BlockHelper {
 	}
 
 	public static ItemStack createStackedBlock(Block block, int bMeta) {
-
-		Item item = Item.getItemFromBlock(block);
+		if (block == Blocks.lit_redstone_ore) {
+			block = Blocks.redstone_ore;
+		}
+		else if (block == Blocks.unlit_redstone_torch) {
+			block = Blocks.redstone_torch;
+		}
+		else if (block == Blocks.lit_redstone_lamp) {
+			block = Blocks.redstone_lamp;
+		}
+		
 		if (item.getHasSubtypes()) {
 			return new ItemStack(item, 1, bMeta);
 		}
