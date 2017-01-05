@@ -1,13 +1,11 @@
 package cofh.lib.gui;
 
-import codechicken.lib.texture.TextureUtils;
 import cofh.lib.audio.SoundBase;
 import cofh.lib.gui.element.ElementBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -560,7 +558,7 @@ public abstract class GuiBase extends GuiContainer {
         if (fluid == null || fluid.getFluid() == null) {
             return;
         }
-        TextureUtils.bindBlockTexture();
+        RenderHelper.setBlockTextureSheet();
         int colour = fluid.getFluid().getColor(fluid);
         GlStateManager.color((colour >> 16) & 0xFF, (colour >> 8) & 0xFF, colour & 0xFF, (colour >> 24) & 0xFF);
         drawTiledTexture(x, y, RenderHelper.getTexture(fluid.getFluid().getStill(fluid)), width, height);
@@ -585,7 +583,7 @@ public abstract class GuiBase extends GuiContainer {
     }
 
     public void drawIcon(TextureAtlasSprite icon, int x, int y) {
-        TextureUtils.bindBlockTexture();
+        RenderHelper.setBlockTextureSheet();
         GlStateManager.color(1, 1, 1, 1);
         drawTexturedModalRect(x, y, icon, 16, 16);
     }

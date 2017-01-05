@@ -1,38 +1,36 @@
 package cofh.lib.util.helpers;
 
-import codechicken.lib.packet.PacketCustom;
-import codechicken.lib.packet.PacketCustom.IClientPacketHandler;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
-import com.google.common.collect.BiMap;
 import com.mojang.authlib.GameProfile;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.*;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class SecurityHelper {
 
     public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
+    private static final SimpleNetworkWrapper NET = NetworkRegistry.INSTANCE.newSimpleChannel("CoFH:Security");
     private static boolean setup = false;
 
     public static void setup() {
@@ -40,20 +38,9 @@ public class SecurityHelper {
         if (setup) {
             return;
         }
-        //Hack packet registration.
-        //Map<EnumPacketDirection, BiMap<Integer, Class<?>>> dirMap;
-        //dirMap = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_179247_h", "directionMaps");
-        //dirMap.get(EnumPacketDirection.CLIENTBOUND).put(-26, Login.S__PacketSendUUID.class);
 
-        //Hack class > state map.
-        //Map<Class<?>, EnumConnectionState> data;
-        //data = ReflectionHelper.getPrivateValue(EnumConnectionState.class, null, "field_150761_f", "STATES_BY_CLASS");
-        //data.put(Login.S__PacketSendUUID.class, EnumConnectionState.PLAY);
-        MinecraftForge.EVENT_BUS.register(new ServerHandler());
-
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            initClienthandler();
-        }
+        MinecraftForge.EVENT_BUS.register(new ServerHandler());//Register the event handler.
+        NET.registerMessage(UUID_MessageHandler.class, UUID_Message.class, 1, Side.CLIENT);//Use FML's Simple network wrapper.
 
         setup = true;
     }
@@ -244,86 +231,46 @@ public class SecurityHelper {
         return hasUUID ? stack.getTagCompound().getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
     }
 
-    @SideOnly(Side.CLIENT)//Bouncer method.
-    private static void initClienthandler() {
-        ClientHandler.setup();
-    }
+    public static class UUID_Message implements IMessage {
 
-    //TODO This is a highly temp fix.
-    public static class ClientHandler implements IClientPacketHandler {
-        private static boolean setup;
+        public UUID uuid;
 
-        public static void setup() {
-            if (setup) {
-                return;
-            }
-            PacketCustom.assignHandler("CoFH:Security", new ClientHandler());
-            setup = true;
+        public UUID_Message() {
+        }
+
+        private UUID_Message(UUID uuid) {
+            this.uuid = uuid;
         }
 
         @Override
-        public void handlePacket(PacketCustom packetCustom, Minecraft mc, INetHandlerPlayClient handler) {
-            if (packetCustom.getType() == 1) {
-                cachedId = new UUID(packetCustom.readLong(), packetCustom.readLong());
-            }
+        public void fromBytes(ByteBuf buf) {
+            uuid = new UUID(buf.readLong(), buf.readLong());
+        }
+
+        @Override
+        public void toBytes(ByteBuf buf) {
+            buf.writeLong(uuid.getMostSignificantBits());
+            buf.writeLong(uuid.getLeastSignificantBits());
         }
     }
 
-    //TODO This is a highly temp fix.
+    public static class UUID_MessageHandler implements IMessageHandler<UUID_Message, IMessage> {
+
+        @Override
+        public IMessage onMessage(UUID_Message message, MessageContext ctx) {
+            cachedId = message.uuid;
+            return null;
+        }
+    }
+
     public static class ServerHandler {
         @SubscribeEvent
         public void login(PlayerLoggedInEvent evt) {
-            PacketCustom packetCustom = new PacketCustom("CoFH:Security", 1);
-            UUID uuid = evt.player.getGameProfile().getId();
-            packetCustom.writeLong(uuid.getMostSignificantBits());
-            packetCustom.writeLong(uuid.getLeastSignificantBits());
-            packetCustom.sendToPlayer(evt.player);
+            if (evt.player instanceof EntityPlayerMP) {
+                UUID uuid = evt.player.getGameProfile().getId();
+                UUID_Message message = new UUID_Message(uuid);
+                NET.sendTo(message, (EntityPlayerMP) evt.player);
+            }
         }
     }
-
-    // this class is to avoid an illegal access error from FML's event handler
-    //TODO This entire system needs to be re-thinked, Either CoFHLib needs a kickass packet system or this needs to be moved to CoFH core and use its packet system.
-    private static class Login {
-
-        public static class S__PacketSendUUID implements Packet {
-
-            public void login(PlayerLoggedInEvent evt) {
-
-                //((EntityPlayerMP) evt.player).connection.sendPacket(new S__PacketSendUUID(evt.player));
-            }
-
-            private UUID id;
-
-            public S__PacketSendUUID() {
-
-            }
-
-            public S__PacketSendUUID(EntityPlayer player) {
-
-                id = player.getGameProfile().getId();
-            }
-
-            @Override
-            public void readPacketData(PacketBuffer buffer) throws IOException {
-
-                id = new UUID(buffer.readLong(), buffer.readLong());
-            }
-
-            @Override
-            public void writePacketData(PacketBuffer buffer) throws IOException {
-
-                buffer.writeLong(id.getMostSignificantBits());
-                buffer.writeLong(id.getLeastSignificantBits());
-            }
-
-            @Override
-            public void processPacket(INetHandler p_148833_1_) {
-
-                //cachedId = id;
-            }
-
-        }
-
-    }
-
 }

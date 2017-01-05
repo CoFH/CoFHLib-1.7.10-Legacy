@@ -1,6 +1,5 @@
 package cofh.lib.util.helpers;
 
-import codechicken.lib.util.ItemUtils;
 import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
@@ -51,6 +50,18 @@ public final class ItemHelper {
 
     private ItemHelper() {
 
+    }
+
+    public static boolean isPlayerHoldingSomething(EntityPlayer player) {
+        return player.getHeldItemMainhand() != null || player.getHeldItemOffhand() != null;
+    }
+
+    public static ItemStack getHeldStack(EntityPlayer player) {
+        ItemStack stack = player.getHeldItemMainhand();
+        if (stack == null) {
+            stack = player.getHeldItemOffhand();
+        }
+        return stack;
     }
 
     public static ItemStack cloneStack(Item item, int stackSize) {
@@ -899,28 +910,28 @@ public final class ItemHelper {
 
     /* EMPOWERED ITEM HELPERS */
     public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack heldItem = ItemUtils.getHeldStack(player);
+        ItemStack heldItem = getHeldStack(player);
         Item equipped = heldItem.getItem();
         return equipped instanceof IEmpowerableItem;
     }
 
     public static boolean isPlayerHoldingEmpoweredItem(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack heldItem = ItemUtils.getHeldStack(player);
+        ItemStack heldItem = getHeldStack(player);
         Item equipped = heldItem.getItem();
         return equipped instanceof IEmpowerableItem && ((IEmpowerableItem) equipped).isEmpowered(heldItem);
     }
 
     public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack heldItem = ItemUtils.getHeldStack(player);
+        ItemStack heldItem = getHeldStack(player);
         Item equipped = heldItem.getItem();
         IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped;
 
@@ -930,20 +941,20 @@ public final class ItemHelper {
     /* MULTIMODE ITEM HELPERS */
     public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
 
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack heldItem = ItemUtils.getHeldStack(player);
+        ItemStack heldItem = getHeldStack(player);
         Item equipped = heldItem.getItem();
         return equipped instanceof IMultiModeItem;
     }
 
     public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
 
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack heldItem = ItemUtils.getHeldStack(player);
+        ItemStack heldItem = getHeldStack(player);
         Item equipped = heldItem.getItem();
         IMultiModeItem multiModeItem = (IMultiModeItem) equipped;
 
@@ -951,10 +962,10 @@ public final class ItemHelper {
     }
 
     public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack equipped = ItemUtils.getHeldStack(player);
+        ItemStack equipped = getHeldStack(player);
         IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
         return multiModeItem.incrMode(equipped);
@@ -962,10 +973,10 @@ public final class ItemHelper {
 
     public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
 
-        if (!ItemUtils.isPlayerHoldingSomething(player)) {
+        if (!isPlayerHoldingSomething(player)) {
             return false;
         }
-        ItemStack equipped = ItemUtils.getHeldStack(player);
+        ItemStack equipped = getHeldStack(player);
         IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
         return multiModeItem.setMode(equipped, mode);
@@ -976,7 +987,7 @@ public final class ItemHelper {
      */
     public static boolean isPlayerHoldingFluidContainer(EntityPlayer player) {
 
-        return FluidContainerRegistry.isContainer(ItemUtils.getHeldStack(player));
+        return FluidContainerRegistry.isContainer(getHeldStack(player));
     }
 
     public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
@@ -991,7 +1002,7 @@ public final class ItemHelper {
 
     public static boolean isPlayerHoldingNothing(EntityPlayer player) {
 
-        return ItemUtils.getHeldStack(player) == null;
+        return getHeldStack(player) == null;
     }
 
     public static Item getItemFromStack(ItemStack theStack) {
@@ -1009,7 +1020,7 @@ public final class ItemHelper {
 
     public static boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
 
-        return item.isInstance(getItemFromStack(ItemUtils.getHeldStack(player)));
+        return item.isInstance(getItemFromStack(getHeldStack(player)));
     }
 
     /**
@@ -1017,7 +1028,7 @@ public final class ItemHelper {
      */
     public static boolean isPlayerHoldingItem(Item item, EntityPlayer player) {
 
-        return areItemsEqual(item, getItemFromStack(ItemUtils.getHeldStack(player)));
+        return areItemsEqual(item, getItemFromStack(getHeldStack(player)));
     }
 
     /**
@@ -1025,7 +1036,7 @@ public final class ItemHelper {
      */
     public static boolean isPlayerHoldingItemStack(ItemStack stack, EntityPlayer player) {
 
-        return itemsEqualWithMetadata(stack, ItemUtils.getHeldStack(player));
+        return itemsEqualWithMetadata(stack, getHeldStack(player));
     }
 
     /**

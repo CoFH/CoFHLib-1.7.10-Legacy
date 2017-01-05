@@ -16,9 +16,7 @@ public interface IBlockDebug {
      * This function debugs a block.
      *
      * @param world  Reference to the world.
-     * @param x      X coordinate of the block.
-     * @param y      Y coordinate of the block.
-     * @param z      Z coordinate of the block.
+     * @param pos    Position of the block.
      * @param side   The side of the block.
      * @param player Player doing the debugging.
      */

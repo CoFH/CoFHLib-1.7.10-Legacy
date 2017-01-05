@@ -1,6 +1,5 @@
 package cofh.lib.util.helpers;
 
-import codechicken.lib.inventory.InventoryUtils;
 import cofh.api.transport.IItemDuct;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -11,6 +10,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.wrapper.EmptyHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import java.util.List;
 
@@ -383,8 +385,8 @@ public class InventoryHelper {
         if (stack == null) {
             return null;
         }
-        if (InventoryUtils.hasItemHandlerCap(tile, side.getOpposite())) {
-            stack = insertStackIntoInventory(InventoryUtils.getItemHandlerCap(tile, side.getOpposite()), stack, false);
+        if (hasItemHandlerCap(tile, side.getOpposite())) {
+            stack = insertStackIntoInventory(getItemHandlerCap(tile, side.getOpposite()), stack, false);
         } else {
             stack = ((IItemDuct) tile).insertItem(side.getOpposite(), stack);
         }
@@ -401,6 +403,21 @@ public class InventoryHelper {
     public static boolean isInsertion(Object tile) {
 
         return tile instanceof IInventory || tile instanceof IItemDuct;
+    }
+
+    public static boolean hasItemHandlerCap(TileEntity tileEntity, EnumFacing face) {
+        return tileEntity != null && (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face) || tileEntity instanceof ISidedInventory || tileEntity instanceof IInventory);
+    }
+
+    public static IItemHandler getItemHandlerCap(TileEntity tileEntity, EnumFacing face) {
+        if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face)){
+            return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
+        } else if (tileEntity instanceof ISidedInventory) {
+            return new SidedInvWrapper(((ISidedInventory) tileEntity), face);
+        } else if (tileEntity instanceof IInventory) {
+            return new InvWrapper(((IInventory) tileEntity));
+        }
+        return new EmptyHandler();
     }
 
 }
