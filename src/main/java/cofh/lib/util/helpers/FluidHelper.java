@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import java.io.*;
 
@@ -87,31 +88,40 @@ public class FluidHelper {
     }
 
     /* IFluidHandler Interaction */
+    public static FluidStack extractFluidFromAdjacentFluidHandler(TileEntity tile, EnumFacing side, int maxDrain, boolean doDrain) {
+
+        TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
+        boolean isHandler = handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
+
+        return isHandler ? handler.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite()).drain(maxDrain, doDrain) : null;
+    }
+
+    public static int insertFluidIntoAdjacentFluidHandler(TileEntity tile, EnumFacing side, FluidStack fluid, boolean doFill) {
+        TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
+        boolean isHandler = handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
+        return isHandler ? handler.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite()).fill(fluid, doFill) : 0;
+    }
+
+    @Deprecated
     public static FluidStack extractFluidFromAdjacentFluidHandler(TileEntity tile, int side, int maxDrain, boolean doDrain) {
-
-        TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-        return handler instanceof IFluidHandler ? ((IFluidHandler) handler).drain(EnumFacing.VALUES[side ^ 1], maxDrain, doDrain) : null;
+        return extractFluidFromAdjacentFluidHandler(tile, EnumFacing.VALUES[side], maxDrain, doDrain);
     }
 
+    @Deprecated
     public static int insertFluidIntoAdjacentFluidHandler(TileEntity tile, int side, FluidStack fluid, boolean doFill) {
-
-        TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-        return handler instanceof IFluidHandler ? ((IFluidHandler) handler).fill(EnumFacing.VALUES[side ^ 1], fluid, doFill) : 0;
+        return insertFluidIntoAdjacentFluidHandler(tile, EnumFacing.VALUES[side], fluid, doFill);
     }
 
-    // TODO: Replace with sided version post-1.8 Fluid revamp
-    public static boolean isAdjacentFluidHandler(TileEntity tile, int side) {
-
-        return BlockHelper.getAdjacentTileEntity(tile, side) instanceof IFluidHandler;
+    public static boolean isAdjacentFluidHandler(TileEntity tile, EnumFacing side) {
+        TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
+        return handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
     }
 
     // TODO: Replace with sided version post-1.8 Fluid revamp
     @Deprecated
-    public static boolean isFluidHandler(TileEntity tile) {
+    public static boolean isFluidHandler(TileEntity handler) {
 
-        return tile instanceof IFluidHandler;
+        return handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
     }
 
     /* Fluid Container Registry Interaction */
