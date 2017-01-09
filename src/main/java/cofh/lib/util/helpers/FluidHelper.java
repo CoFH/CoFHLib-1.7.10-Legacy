@@ -10,11 +10,17 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
+import javax.annotation.Nullable;
 import java.io.*;
 
 /**
@@ -24,13 +30,16 @@ import java.io.*;
  */
 public class FluidHelper {
 
-    public static final int BUCKET_VOLUME = FluidContainerRegistry.BUCKET_VOLUME;
+    public static final int BUCKET_VOLUME = Fluid.BUCKET_VOLUME;
 
     public static final Fluid WATER_FLUID = FluidRegistry.WATER;
     public static final Fluid LAVA_FLUID = FluidRegistry.LAVA;
 
     public static final FluidStack WATER = new FluidStack(WATER_FLUID, BUCKET_VOLUME);
     public static final FluidStack LAVA = new FluidStack(LAVA_FLUID, BUCKET_VOLUME);
+
+    @CapabilityInject(IFluidHandler.class)
+    public static final Capability<IFluidHandler> FLUID_HANDLER = null;
 
     public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[] {};
 
@@ -78,6 +87,19 @@ public class FluidHelper {
         return ((IFluidContainerItem) container.getItem()).getFluid(container);
     }
 
+    /**
+     * Checks if an item has the FluidHandler capability.
+     *
+     * @param stack The ItemStack to check.
+     * @return If the ItemStack has the fluid cap.
+     */
+    public static boolean isFluidHandler(@Nullable ItemStack stack) {
+        if (stack == null) {
+            return false;
+        }
+        return stack.hasCapability(FLUID_HANDLER, null);
+    }
+
     public static ItemStack setDefaultFluidTag(ItemStack container, FluidStack resource) {
 
         container.setTagCompound(new NBTTagCompound());
@@ -91,41 +113,102 @@ public class FluidHelper {
     public static FluidStack extractFluidFromAdjacentFluidHandler(TileEntity tile, EnumFacing side, int maxDrain, boolean doDrain) {
 
         TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-        boolean isHandler = handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
+        boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
 
-        return isHandler ? handler.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite()).drain(maxDrain, doDrain) : null;
+        return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).drain(maxDrain, doDrain) : null;
     }
 
     public static int insertFluidIntoAdjacentFluidHandler(TileEntity tile, EnumFacing side, FluidStack fluid, boolean doFill) {
         TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-        boolean isHandler = handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
-        return isHandler ? handler.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite()).fill(fluid, doFill) : 0;
-    }
-
-    @Deprecated
-    public static FluidStack extractFluidFromAdjacentFluidHandler(TileEntity tile, int side, int maxDrain, boolean doDrain) {
-        return extractFluidFromAdjacentFluidHandler(tile, EnumFacing.VALUES[side], maxDrain, doDrain);
-    }
-
-    @Deprecated
-    public static int insertFluidIntoAdjacentFluidHandler(TileEntity tile, int side, FluidStack fluid, boolean doFill) {
-        return insertFluidIntoAdjacentFluidHandler(tile, EnumFacing.VALUES[side], fluid, doFill);
+        boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
+        return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).fill(fluid, doFill) : 0;
     }
 
     public static boolean isAdjacentFluidHandler(TileEntity tile, EnumFacing side) {
         TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-        return handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite());
+        return handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
     }
 
-    // TODO: Replace with sided version post-1.8 Fluid revamp
-    @Deprecated
-    public static boolean isFluidHandler(TileEntity handler) {
+    /**
+     * Checks if the tile has the fluid capability on a specific face.
+     *
+     * @param tile The tile to check.
+     * @param face The face of the block to check.
+     * @return If the face has the cap.
+     */
+    public static boolean isFluidHandler(TileEntity tile, EnumFacing face) {
 
-        return handler != null && handler.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+        return tile != null && tile.hasCapability(FLUID_HANDLER, face);
     }
+
+    /**
+     * Checks if the tile has the fluid capability on the "General" face.
+     * @param tile The tile to check.
+     * @return If the tile has the cap.
+     */
+    public static boolean isFluidHandler(TileEntity tile) {
+
+        return tile != null && tile.hasCapability(FLUID_HANDLER, null);
+    }
+
+
+    /**
+     * Attempts to drain the item to an IFluidHandler.
+     * TODO This is a bouncer for pre 1.11, 1.11 has immutable stacks, so this needs to change a little bit, here so we don't need to change 40 classes.
+     *
+     * @param stack   The stack to drain from.
+     * @param handler The IFluidHandler to fill.
+     * @param player  The player using the item.
+     * @param hand    The hand the player is holding the item in.
+     * @return If the interaction was successful.
+     */
+    public static boolean drainItemToHandler(ItemStack stack, IFluidHandler handler, EntityPlayer player, EnumHand hand) {
+        if (stack == null || handler == null || player == null) {
+            return false;
+        }
+
+        IItemHandler playerInv = new InvWrapper(player.inventory);
+        return FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
+    }
+
+    /**
+     * Attempts to fill the item from an IFluidHandler.
+     * TODO This is a bouncer for pre 1.11, 1.11 has immutable stacks, so this needs to change a little bit, here so we don't need to change 40 classes.
+     *
+     * @param stack   The stack to fill.
+     * @param handler The IFluidHandler to drain from.
+     * @param player  The player using the item.
+     * @param hand    The hand the player is holding the item in.
+     * @return If the interaction was successful.
+     */
+    public static boolean fillItemFromHandler(ItemStack stack, IFluidHandler handler, EntityPlayer player, EnumHand hand) {
+        if (stack == null || handler == null || player == null) {
+            return false;
+        }
+
+        IItemHandler playerInv = new InvWrapper(player.inventory);
+        return FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
+    }
+
+    /**
+     * Attempts to interact the item with an IFluidHandler.
+     * Interaction will always try and fill the item first, if this fails it will attempt to drain the item.
+     * TODO This is a bouncer for pre 1.11, 1.11 has immutable stacks, so this needs to change a little bit, here so we don't need to change 40 classes.
+     *
+     * @param stack The stack to interact with.
+     * @param handler The Handler to fill / drain.
+     * @param player The player using the item.
+     * @param hand The hand the player is holding the item in.
+     * @return If any interaction with the handler was successful.
+     */
+    public static boolean interactWithHandler(ItemStack stack, IFluidHandler handler, EntityPlayer player, EnumHand hand) {
+        return fillItemFromHandler(stack, handler, player, hand) || drainItemToHandler(stack, handler, player, hand);
+    }
+
 
     /* Fluid Container Registry Interaction */
-    public static boolean fillContainerFromHandler(World world, IFluidHandler handler, EntityPlayer player, FluidStack tankFluid) {
+    @Deprecated
+    public static boolean fillContainerFromHandler(World world, net.minecraftforge.fluids.IFluidHandler handler, EntityPlayer player, FluidStack tankFluid) {
 
         ItemStack container = player.getHeldItemMainhand();
 
@@ -159,7 +242,8 @@ public class FluidHelper {
         return false;
     }
 
-    public static boolean fillHandlerWithContainer(World world, IFluidHandler handler, EntityPlayer player) {
+    @Deprecated
+    public static boolean fillHandlerWithContainer(World world, net.minecraftforge.fluids.IFluidHandler handler, EntityPlayer player) {
 
         ItemStack container = player.getHeldItemMainhand();
         FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(container);
