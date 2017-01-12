@@ -1,4 +1,4 @@
-package cofh.api.transport;
+package cofh.api.tileentity;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;

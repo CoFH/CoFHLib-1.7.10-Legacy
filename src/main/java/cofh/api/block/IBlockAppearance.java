@@ -23,6 +23,6 @@ public interface IBlockAppearance {
     /**
      * This function returns whether the block's renderer will visually connect to other blocks implementing IBlockAppearance.
      */
-    public boolean supportsVisualConnections();
+    boolean supportsVisualConnections();
 
 }

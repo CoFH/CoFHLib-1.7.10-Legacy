@@ -14,19 +14,26 @@ import java.util.List;
  * function serve as a passthrough for {@link ITileInfo}.
  *
  * @author King Lemming
+ *
  */
 public interface IBlockInfo {
 
-    /**
-     * This function appends information to a list provided to it.
-     *
-     * @param world  Reference to the world.
-     * @param pos    Position of the block.
-     * @param side   The side of the block that is being queried.
-     * @param player Player doing the querying - this can be NULL.
-     * @param info   The list that the information should be appended to.
-     * @param debug  If true, the block should return "debug" information.
-     */
-    void getBlockInfo(IBlockAccess world, BlockPos pos, EnumFacing side, EntityPlayer player, List<ITextComponent> info, boolean debug);
+	/**
+	 * This function appends information to a list provided to it.
+	 *
+	 * @param info
+	 *            The list that the information should be appended to.
+	 * @param world
+	 *            Reference to the world.
+	 * @param pos
+	 *            Coordinates of the block.
+	 * @param side
+	 *            The side of the block that is being queried.
+	 * @param player
+	 *            Player doing the querying - this can be NULL.
+	 * @param debug
+	 *            If true, the block should return "debug" information.
+	 */
+	void getBlockInfo(List<ITextComponent> info, IBlockAccess world, BlockPos pos, EnumFacing side, EntityPlayer player, boolean debug);
 
 }
