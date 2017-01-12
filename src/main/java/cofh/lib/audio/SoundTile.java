@@ -8,93 +8,94 @@ import net.minecraft.util.math.Vec3d;
 
 public class SoundTile extends PositionedSound implements ITickableSound {
 
-    ISoundSource source;
-    boolean beginFadeOut;
-    boolean donePlaying;
-    int ticks = 0;
-    int fadeIn = 50;
-    int fadeOut = 50;
-    float baseVolume = 1.0F;
+	ISoundSource source;
+	boolean beginFadeOut;
+	boolean donePlaying;
+	int ticks = 0;
+	int fadeIn = 50;
+	int fadeOut = 50;
+	float baseVolume = 1.0F;
 
-    public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos) {
+	public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos) {
 
-        this(source, sound, volume, pitch, repeat, repeatDelay, pos, AttenuationType.LINEAR);
-    }
+		this(source, sound, volume, pitch, repeat, repeatDelay, pos, AttenuationType.LINEAR);
+	}
 
-    public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos, AttenuationType attenuation) {
+	public SoundTile(ISoundSource source, String sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos, AttenuationType attenuation) {
 
-        this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, pos, attenuation);
-    }
+		this(source, new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, pos, attenuation);
+	}
 
-    public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos) {
+	public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos) {
 
-        this(source, sound, volume, pitch, repeat, repeatDelay, pos, AttenuationType.LINEAR);
-    }
+		this(source, sound, volume, pitch, repeat, repeatDelay, pos, AttenuationType.LINEAR);
+	}
 
-    public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos, AttenuationType attenuation) {
-        super(sound, SoundCategory.AMBIENT);
-        //super(sound, volume, pitch, repeat, repeatDelay, pos.x, pos.y, pos.z, attenuation);
-        this.xPosF = (float) pos.xCoord;
-        this.yPosF = (float) pos.yCoord;
-        this.zPosF = (float) pos.zCoord;
-        this.volume = volume;
-        this.pitch = pitch;
-        this.repeat = repeat;
-        this.repeatDelay = repeatDelay;
-        this.attenuationType = attenuation;
-        this.source = source;
-        this.baseVolume = volume;
-    }
+	public SoundTile(ISoundSource source, ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, Vec3d pos, AttenuationType attenuation) {
 
-    public SoundTile setFadeIn(int fadeIn) {
+		super(sound, SoundCategory.AMBIENT);
+		//super(sound, volume, pitch, repeat, repeatDelay, pos.x, pos.y, pos.z, attenuation);
+		this.xPosF = (float) pos.xCoord;
+		this.yPosF = (float) pos.yCoord;
+		this.zPosF = (float) pos.zCoord;
+		this.volume = volume;
+		this.pitch = pitch;
+		this.repeat = repeat;
+		this.repeatDelay = repeatDelay;
+		this.attenuationType = attenuation;
+		this.source = source;
+		this.baseVolume = volume;
+	}
 
-        this.fadeIn = Math.min(0, fadeIn);
-        return this;
-    }
+	public SoundTile setFadeIn(int fadeIn) {
 
-    public SoundTile setFadeOut(int fadeOut) {
+		this.fadeIn = Math.min(0, fadeIn);
+		return this;
+	}
 
-        this.fadeOut = Math.min(0, fadeOut);
-        return this;
-    }
+	public SoundTile setFadeOut(int fadeOut) {
 
-    public float getFadeInMultiplier() {
+		this.fadeOut = Math.min(0, fadeOut);
+		return this;
+	}
 
-        return ticks >= fadeIn ? 1 : (float) (ticks / (float) fadeIn);
-    }
+	public float getFadeInMultiplier() {
 
-    public float getFadeOutMultiplier() {
+		return ticks >= fadeIn ? 1 : (float) (ticks / (float) fadeIn);
+	}
 
-        return ticks >= fadeOut ? 0 : (float) ((fadeOut - ticks) / (float) fadeOut);
-    }
+	public float getFadeOutMultiplier() {
 
-    /* ITickableSound */
-    @Override
-    public void update() {
+		return ticks >= fadeOut ? 0 : (float) ((fadeOut - ticks) / (float) fadeOut);
+	}
 
-        if (!beginFadeOut) {
-            if (ticks < fadeIn) {
-                ticks++;
-            }
-            if (!source.shouldPlaySound()) {
-                beginFadeOut = true;
-                ticks = 0;
-            }
-        } else {
-            ticks++;
-        }
-        float multiplier = beginFadeOut ? getFadeOutMultiplier() : getFadeInMultiplier();
-        volume = baseVolume * multiplier;
+	/* ITickableSound */
+	@Override
+	public void update() {
 
-        if (multiplier <= 0) {
-            donePlaying = true;
-        }
-    }
+		if (!beginFadeOut) {
+			if (ticks < fadeIn) {
+				ticks++;
+			}
+			if (!source.shouldPlaySound()) {
+				beginFadeOut = true;
+				ticks = 0;
+			}
+		} else {
+			ticks++;
+		}
+		float multiplier = beginFadeOut ? getFadeOutMultiplier() : getFadeInMultiplier();
+		volume = baseVolume * multiplier;
 
-    @Override
-    public boolean isDonePlaying() {
+		if (multiplier <= 0) {
+			donePlaying = true;
+		}
+	}
 
-        return donePlaying;
-    }
+	@Override
+	public boolean isDonePlaying() {
+
+		return donePlaying;
+	}
 
 }

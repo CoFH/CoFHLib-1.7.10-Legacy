@@ -13,21 +13,21 @@ import java.util.Random;
  */
 public interface IFeatureGenerator {
 
-    /**
-     * Returns the name of the feature, used for unique identification in configs and retrogen.
-     */
-    public String getFeatureName();
+	/**
+	 * Returns the name of the feature, used for unique identification in configs and retrogen.
+	 */
+	String getFeatureName();
 
-    /**
-     * Generates the world feature.
-     *
-     * @param random Random derived from the world seed.
-     * @param chunkX Minimum X chunk-coordinate of the chunk. (x16 for block coordinate)
-     * @param chunkZ Minimum Z chunk-coordinate of the chunk. (x16 for block coordinate)
-     * @param world  The world to generate in.
-     * @param newGen True on initial generation, false on retrogen.
-     * @return True if generation happened, false otherwise.
-     */
-    public boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen);
+	/**
+	 * Generates the world feature.
+	 *
+	 * @param random Random derived from the world seed.
+	 * @param chunkX Minimum X chunk-coordinate of the chunk. (x16 for block coordinate)
+	 * @param chunkZ Minimum Z chunk-coordinate of the chunk. (x16 for block coordinate)
+	 * @param world  The world to generate in.
+	 * @param newGen True on initial generation, false on retrogen.
+	 * @return True if generation happened, false otherwise.
+	 */
+	boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen);
 
 }

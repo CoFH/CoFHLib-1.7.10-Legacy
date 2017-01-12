@@ -13,34 +13,35 @@ import net.minecraftforge.fml.client.FMLClientHandler;
  */
 public class SoundHelper {
 
-    public static final SoundHandler soundManager = FMLClientHandler.instance().getClient().getSoundHandler();
+	public static final SoundHandler soundManager = FMLClientHandler.instance().getClient().getSoundHandler();
 
-    private SoundHelper() {
+	private SoundHelper() {
 
-    }
+	}
 
-    /**
-     * This allows you to have some tricky functionality with Tile Entities. Just be sure you aren't dumb.
-     */
-    public static void playSound(Object sound) {
+	/**
+	 * This allows you to have some tricky functionality with Tile Entities. Just be sure you aren't dumb.
+	 */
+	public static void playSound(Object sound) {
 
-        if (sound instanceof ISound) {
-            soundManager.playSound((ISound) sound);
-        }
-    }
+		if (sound instanceof ISound) {
+			soundManager.playSound((ISound) sound);
+		}
+	}
 
-    public static void playSound(ISound sound) {
+	public static void playSound(ISound sound) {
 
-        soundManager.playSound(sound);
-    }
+		soundManager.playSound(sound);
+	}
 
-    @Deprecated
-    public static void playSound(String soundName, float x, float y, float z, float volume, float pitch) {
-        playSound(soundName, SoundCategory.MASTER, x, y, z, volume, pitch);
-    }
+	@Deprecated
+	public static void playSound(String soundName, float x, float y, float z, float volume, float pitch) {
 
-    public static void playSound(String soundName, SoundCategory category, float x, float y, float z, float volume, float pitch) {
+		playSound(soundName, SoundCategory.MASTER, x, y, z, volume, pitch);
+	}
 
-        soundManager.playSound(new SoundBase(soundName, category, volume, pitch, x, y, z));
-    }
+	public static void playSound(String soundName, SoundCategory category, float x, float y, float z, float volume, float pitch) {
+
+		soundManager.playSound(new SoundBase(soundName, category, volume, pitch, x, y, z));
+	}
 }

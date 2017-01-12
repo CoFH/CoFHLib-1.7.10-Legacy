@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
  * Implement this interface on Tile Entities which can have access restrictions.
  *
  * @author King Lemming
- *
  */
 public interface ISecurable {
 
@@ -15,9 +14,8 @@ public interface ISecurable {
 	 * Enum for Access Modes - Guild allows Guild access, Restricted is Friends Only, Private is Owner only.
 	 *
 	 * @author King Lemming
-	 *
 	 */
-	public static enum AccessMode {
+	enum AccessMode {
 		PUBLIC, GUILD, RESTRICTED, PRIVATE;
 
 		public boolean isPublic() {

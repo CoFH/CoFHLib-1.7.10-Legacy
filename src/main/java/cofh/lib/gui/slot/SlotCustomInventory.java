@@ -8,70 +8,70 @@ import net.minecraft.item.ItemStack;
 
 public class SlotCustomInventory extends Slot {
 
-    ICustomInventory customInv;
-    int inventoryIndex = 0;
-    boolean canTake = true;
+	ICustomInventory customInv;
+	int inventoryIndex = 0;
+	boolean canTake = true;
 
-    public SlotCustomInventory(ICustomInventory tile, int invIndex, IInventory inventory, int slotIndex, int x, int y, boolean lootable) {
+	public SlotCustomInventory(ICustomInventory tile, int invIndex, IInventory inventory, int slotIndex, int x, int y, boolean lootable) {
 
-        super(inventory, slotIndex, x, y);
-        customInv = tile;
-        inventoryIndex = invIndex;
-        canTake = lootable;
-    }
+		super(inventory, slotIndex, x, y);
+		customInv = tile;
+		inventoryIndex = invIndex;
+		canTake = lootable;
+	}
 
-    @Override
-    public ItemStack getStack() {
+	@Override
+	public ItemStack getStack() {
 
-        return customInv.getInventorySlots(inventoryIndex)[getSlotIndex()];
-    }
+		return customInv.getInventorySlots(inventoryIndex)[getSlotIndex()];
+	}
 
-    @Override
-    public void putStack(ItemStack stack) {
+	@Override
+	public void putStack(ItemStack stack) {
 
-        customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] = stack;
-        onSlotChanged();
-    }
+		customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] = stack;
+		onSlotChanged();
+	}
 
-    @Override
-    public void onSlotChanged() {
+	@Override
+	public void onSlotChanged() {
 
-        customInv.onSlotUpdate();
-    }
+		customInv.onSlotUpdate();
+	}
 
-    @Override
-    public int getSlotStackLimit() {
+	@Override
+	public int getSlotStackLimit() {
 
-        return customInv.getSlotStackLimit(getSlotIndex());
-    }
+		return customInv.getSlotStackLimit(getSlotIndex());
+	}
 
-    @Override
-    public ItemStack decrStackSize(int amount) {
+	@Override
+	public ItemStack decrStackSize(int amount) {
 
-        if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] == null) {
-            return null;
-        }
-        if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize <= amount) {
-            amount = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize;
-        }
-        ItemStack stack = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].splitStack(amount);
+		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] == null) {
+			return null;
+		}
+		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize <= amount) {
+			amount = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize;
+		}
+		ItemStack stack = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].splitStack(amount);
 
-        if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize <= 0) {
-            customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] = null;
-        }
-        return stack;
-    }
+		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize <= 0) {
+			customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] = null;
+		}
+		return stack;
+	}
 
-    @Override
-    public boolean isHere(IInventory inventory, int slot) {
+	@Override
+	public boolean isHere(IInventory inventory, int slot) {
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
+	@Override
+	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
 
-        return canTake;
-    }
+		return canTake;
+	}
 
 }

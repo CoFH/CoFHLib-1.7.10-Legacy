@@ -21,44 +21,45 @@ import org.lwjgl.opengl.GL11;
  */
 public final class RenderHelper {
 
-    public static final double RENDER_OFFSET = 1.0D / 1024.0D;
-    public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
-    public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
-    public static final ResourceLocation MC_FONT_ALTERNATE = new ResourceLocation("textures/font/ascii_sga.png");
-    public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+	public static final double RENDER_OFFSET = 1.0D / 1024.0D;
+	public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
+	public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
+	public static final ResourceLocation MC_FONT_ALTERNATE = new ResourceLocation("textures/font/ascii_sga.png");
+	public static final ResourceLocation MC_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
 
-    private RenderHelper() {
+	private RenderHelper() {
 
-    }
+	}
 
-    public static TextureManager engine() {
+	public static TextureManager engine() {
 
-        return Minecraft.getMinecraft().renderEngine;
-    }
+		return Minecraft.getMinecraft().renderEngine;
+	}
 
-    public static Tessellator tessellator() {
+	public static Tessellator tessellator() {
 
-        return Tessellator.getInstance();
-    }
+		return Tessellator.getInstance();
+	}
 
-    public static RenderItem renderItem(){
-        return Minecraft.getMinecraft().getRenderItem();
-    }
+	public static RenderItem renderItem() {
 
-    public static void setColor3ub(int color) {
+		return Minecraft.getMinecraft().getRenderItem();
+	}
 
-        GlStateManager.color((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
-    }
+	public static void setColor3ub(int color) {
 
-    public static void setColor4ub(int color) {
+		GlStateManager.color((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+	}
 
-        GlStateManager.color((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
-    }
+	public static void setColor4ub(int color) {
 
-    public static void resetColor() {
+		GlStateManager.color((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+	}
 
-        GlStateManager.color(1F, 1F, 1F, 1F);
-    }
+	public static void resetColor() {
+
+		GlStateManager.color(1F, 1F, 1F, 1F);
+	}
 
 	/*public static void renderItemAsBlock(RenderBlocks renderer, ItemStack item, double translateX, double translateY, double translateZ) {
 
@@ -144,76 +145,83 @@ public final class RenderHelper {
         ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
     }*/
 
-    public static void renderIcon(TextureAtlasSprite icon, double z) {
-        VertexBuffer buffer = Tessellator.getInstance().getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(0, 16, z).tex(icon.getMinU(), icon.getMaxV());
-        buffer.pos(16, 16, z).tex(icon.getMaxU(), icon.getMaxV());
-        buffer.pos(16, 0, z).tex(icon.getMaxU(), icon.getMinV());
-        buffer.pos(0, 0, z).tex(icon.getMinU(), icon.getMinV());
-        Tessellator.getInstance().draw();
+	public static void renderIcon(TextureAtlasSprite icon, double z) {
 
-    }
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(0, 16, z).tex(icon.getMinU(), icon.getMaxV());
+		buffer.pos(16, 16, z).tex(icon.getMaxU(), icon.getMaxV());
+		buffer.pos(16, 0, z).tex(icon.getMaxU(), icon.getMinV());
+		buffer.pos(0, 0, z).tex(icon.getMinU(), icon.getMinV());
+		Tessellator.getInstance().draw();
 
-    public static void renderIcon(double x, double y, double z, TextureAtlasSprite icon, int width, int height) {
+	}
 
-        VertexBuffer buffer = Tessellator.getInstance().getBuffer();
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buffer.pos(x, y + height, z).tex(icon.getMinU(), icon.getMaxV());
-        buffer.pos(x + width, y + height, z).tex(icon.getMaxU(), icon.getMaxV());
-        buffer.pos(x + width, y, z).tex(icon.getMaxU(), icon.getMinV());
-        buffer.pos(x, y, z).tex(icon.getMinU(), icon.getMinV());
-        Tessellator.getInstance().draw();
-    }
+	public static void renderIcon(double x, double y, double z, TextureAtlasSprite icon, int width, int height) {
 
-    public static TextureAtlasSprite getFluidTexture(Fluid fluid) {
-        if (fluid == null) {
-            fluid = FluidRegistry.LAVA;
-        }
-        return getTexture(fluid.getStill());
-    }
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x, y + height, z).tex(icon.getMinU(), icon.getMaxV());
+		buffer.pos(x + width, y + height, z).tex(icon.getMaxU(), icon.getMaxV());
+		buffer.pos(x + width, y, z).tex(icon.getMaxU(), icon.getMinV());
+		buffer.pos(x, y, z).tex(icon.getMinU(), icon.getMinV());
+		Tessellator.getInstance().draw();
+	}
 
-    public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
+	public static TextureAtlasSprite getFluidTexture(Fluid fluid) {
 
-        if (fluid == null || fluid.getFluid() == null || fluid.getFluid().getStill(fluid) == null) {
-            fluid = new FluidStack(FluidRegistry.LAVA, 1);
-        }
-        return getTexture(fluid.getFluid().getStill(fluid));
-    }
+		if (fluid == null) {
+			fluid = FluidRegistry.LAVA;
+		}
+		return getTexture(fluid.getStill());
+	}
 
-    public static void bindTexture(ResourceLocation texture) {
-        engine().bindTexture(texture);
-    }
+	public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
 
-    public static void setBlockTextureSheet() {
-        bindTexture(MC_BLOCK_SHEET);
-    }
+		if (fluid == null || fluid.getFluid() == null || fluid.getFluid().getStill(fluid) == null) {
+			fluid = new FluidStack(FluidRegistry.LAVA, 1);
+		}
+		return getTexture(fluid.getFluid().getStill(fluid));
+	}
 
-    public static void setDefaultFontTextureSheet() {
-        bindTexture(MC_FONT_DEFAULT);
-    }
+	public static void bindTexture(ResourceLocation texture) {
 
-    public static TextureAtlasSprite getTexture(String location) {
-        return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location);
-    }
+		engine().bindTexture(texture);
+	}
 
-    public static TextureAtlasSprite getTexture(ResourceLocation location) {
-        return getTexture(location.toString());
-    }
+	public static void setBlockTextureSheet() {
 
-    public static void setSGAFontTextureSheet() {
+		bindTexture(MC_BLOCK_SHEET);
+	}
 
-        bindTexture(MC_FONT_ALTERNATE);
-    }
+	public static void setDefaultFontTextureSheet() {
 
-    public static void enableGUIStandardItemLighting() {
+		bindTexture(MC_FONT_DEFAULT);
+	}
 
-        net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
-    }
+	public static TextureAtlasSprite getTexture(String location) {
 
-    public static void enableStandardItemLighting() {
+		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location);
+	}
 
-        net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
-    }
+	public static TextureAtlasSprite getTexture(ResourceLocation location) {
+
+		return getTexture(location.toString());
+	}
+
+	public static void setSGAFontTextureSheet() {
+
+		bindTexture(MC_FONT_ALTERNATE);
+	}
+
+	public static void enableGUIStandardItemLighting() {
+
+		net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
+	}
+
+	public static void enableStandardItemLighting() {
+
+		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
+	}
 
 }

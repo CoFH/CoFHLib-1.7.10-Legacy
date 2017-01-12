@@ -6,7 +6,6 @@ package cofh.api.tileentity;
  * This is used for reporting purposes - Energy transactions are handled via the RF API!
  *
  * @author King Lemming
- *
  */
 public interface IEnergyInfo {
 

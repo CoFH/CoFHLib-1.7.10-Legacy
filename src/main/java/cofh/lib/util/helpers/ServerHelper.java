@@ -1,8 +1,6 @@
 package cofh.lib.util.helpers;
 
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -18,39 +16,40 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
  */
 public final class ServerHelper {
 
-    private ServerHelper() {
+	private ServerHelper() {
 
-    }
+	}
 
-    public static boolean isClientWorld(World world) {
+	public static boolean isClientWorld(World world) {
 
-        return world.isRemote;
-    }
+		return world.isRemote;
+	}
 
-    public static boolean isServerWorld(World world) {
+	public static boolean isServerWorld(World world) {
 
-        return !world.isRemote;
-    }
+		return !world.isRemote;
+	}
 
-    public static boolean isSinglePlayerServer() {
+	public static boolean isSinglePlayerServer() {
 
-        return FMLCommonHandler.instance().getMinecraftServerInstance() != null;
-    }
+		return FMLCommonHandler.instance().getMinecraftServerInstance() != null;
+	}
 
-    public static boolean isMultiPlayerServer() {
+	public static boolean isMultiPlayerServer() {
 
-        return FMLCommonHandler.instance().getMinecraftServerInstance() == null;
-    }
+		return FMLCommonHandler.instance().getMinecraftServerInstance() == null;
+	}
 
-    /**
-     * This function circumvents a miserable failing.
-     */
-    public static void sendItemUsePacket(World world, BlockPos pos, EnumFacing hitSide, EnumHand hand, float hitX, float hitY, float hitZ) {
-        if (isServerWorld(world)) {
-            return;
-        }
-        NetHandlerPlayClient netClientHandler = (NetHandlerPlayClient) FMLClientHandler.instance().getClientPlayHandler();
-        netClientHandler.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, hitSide, hand, hitX, hitY, hitZ));
-    }
+	/**
+	 * This function circumvents a miserable failing.
+	 */
+	public static void sendItemUsePacket(World world, BlockPos pos, EnumFacing hitSide, EnumHand hand, float hitX, float hitY, float hitZ) {
+
+		if (isServerWorld(world)) {
+			return;
+		}
+		NetHandlerPlayClient netClientHandler = (NetHandlerPlayClient) FMLClientHandler.instance().getClientPlayHandler();
+		netClientHandler.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, hitSide, hand, hitX, hitY, hitZ));
+	}
 
 }

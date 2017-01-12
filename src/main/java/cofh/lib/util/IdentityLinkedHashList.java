@@ -2,47 +2,47 @@ package cofh.lib.util;
 
 import java.util.Collection;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings ("unchecked")
 public class IdentityLinkedHashList<E extends Object> extends LinkedHashList<E> {
 
-    private static final long serialVersionUID = 4893829808146776641L;
+	private static final long serialVersionUID = 4893829808146776641L;
 
-    public IdentityLinkedHashList() {
+	public IdentityLinkedHashList() {
 
-        super();
-    }
+		super();
+	}
 
-    public IdentityLinkedHashList(int size) {
+	public IdentityLinkedHashList(int size) {
 
-        super(size);
-    }
+		super(size);
+	}
 
-    public IdentityLinkedHashList(Collection<E> col) {
+	public IdentityLinkedHashList(Collection<E> col) {
 
-        super(col);
-    }
+		super(col);
+	}
 
-    @Override
-    protected int hash(Object o) {
+	@Override
+	protected int hash(Object o) {
 
-        return System.identityHashCode(o);
-    }
+		return System.identityHashCode(o);
+	}
 
-    @Override
-    protected Entry seek(Object obj, int hash) {
+	@Override
+	protected Entry seek(Object obj, int hash) {
 
-        for (Entry entry = hashTable[hash & mask]; entry != null; entry = entry.nextInBucket) {
-            if (obj == entry.key) {
-                return entry;
-            }
-        }
+		for (Entry entry = hashTable[hash & mask]; entry != null; entry = entry.nextInBucket) {
+			if (obj == entry.key) {
+				return entry;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public IdentityLinkedHashList<E> clone() {
+	@Override
+	public IdentityLinkedHashList<E> clone() {
 
-        return new IdentityLinkedHashList<E>(this);
-    }
+		return new IdentityLinkedHashList<E>(this);
+	}
 }

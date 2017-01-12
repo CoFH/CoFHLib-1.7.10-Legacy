@@ -3,11 +3,11 @@ package cofh.lib.render;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@SideOnly (Side.CLIENT)
 public class RenderFluidOverlayItem //implements IItemRenderer
 {
 /*TODO
-    private final boolean canFlip;
+	private final boolean canFlip;
 
 	public RenderFluidOverlayItem() {
 

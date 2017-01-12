@@ -5,6 +5,6 @@ package cofh.api.core;
  */
 public interface IConfigCallback {
 
-	public void configUpdate();
+	void configUpdate();
 
 }

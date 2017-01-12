@@ -12,18 +12,18 @@ import java.util.Random;
 
 public class WorldGenMulti extends WorldGenerator {
 
-    private final List<WeightedRandomWorldGenerator> generators;
+	private final List<WeightedRandomWorldGenerator> generators;
 
-    public WorldGenMulti(ArrayList<WeightedRandomWorldGenerator> values) {
+	public WorldGenMulti(ArrayList<WeightedRandomWorldGenerator> values) {
 
-        generators = values;
-    }
+		generators = values;
+	}
 
-    @Override
-    public boolean generate(World world, Random random, BlockPos pos) {
+	@Override
+	public boolean generate(World world, Random random, BlockPos pos) {
 
-        WeightedRandomWorldGenerator gen = WeightedRandom.getRandomItem(random, generators);
-        return gen.generator.generate(world, random, pos);
-    }
+		WeightedRandomWorldGenerator gen = WeightedRandom.getRandomItem(random, generators);
+		return gen.generator.generate(world, random, pos);
+	}
 
 }

@@ -12,47 +12,47 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class SlotViewOnly extends Slot {
 
-    protected boolean showHighlight;
+	protected boolean showHighlight;
 
-    public SlotViewOnly(IInventory inventory, int index, int x, int y) {
+	public SlotViewOnly(IInventory inventory, int index, int x, int y) {
 
-        this(inventory, index, x, y, false);
-    }
+		this(inventory, index, x, y, false);
+	}
 
-    public SlotViewOnly(IInventory inventory, int index, int x, int y, boolean highlight) {
+	public SlotViewOnly(IInventory inventory, int index, int x, int y, boolean highlight) {
 
-        super(inventory, index, x, y);
-        showHighlight = highlight;
-    }
+		super(inventory, index, x, y);
+		showHighlight = highlight;
+	}
 
-    @Override
-    public void putStack(ItemStack stack) {
+	@Override
+	public void putStack(ItemStack stack) {
 
-    }
+	}
 
-    @Override
-    public ItemStack decrStackSize(int i) {
+	@Override
+	public ItemStack decrStackSize(int i) {
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public boolean canTakeStack(EntityPlayer player) {
+	@Override
+	public boolean canTakeStack(EntityPlayer player) {
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
+	@Override
+	public boolean isItemValid(ItemStack stack) {
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean canBeHovered() {
+	@Override
+	@SideOnly (Side.CLIENT)
+	public boolean canBeHovered() {
 
-        return showHighlight;
-    }
+		return showHighlight;
+	}
 
 }

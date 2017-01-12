@@ -13,64 +13,64 @@ import java.util.List;
  */
 public class ElementSimpleToolTip extends ElementBase {
 
-    int texU = 0;
-    int texV = 0;
-    boolean tooltipLocalized = false;
-    String tooltip;
+	int texU = 0;
+	int texV = 0;
+	boolean tooltipLocalized = false;
+	String tooltip;
 
-    public ElementSimpleToolTip(GuiBase gui, int posX, int posY) {
+	public ElementSimpleToolTip(GuiBase gui, int posX, int posY) {
 
-        super(gui, posX, posY);
-    }
+		super(gui, posX, posY);
+	}
 
-    public ElementSimpleToolTip setTextureOffsets(int u, int v) {
+	public ElementSimpleToolTip setTextureOffsets(int u, int v) {
 
-        texU = u;
-        texV = v;
-        return this;
-    }
+		texU = u;
+		texV = v;
+		return this;
+	}
 
-    public ElementSimpleToolTip clearToolTip() {
+	public ElementSimpleToolTip clearToolTip() {
 
-        this.tooltip = null;
-        return this;
-    }
+		this.tooltip = null;
+		return this;
+	}
 
-    public ElementSimpleToolTip setToolTip(String tooltip) {
+	public ElementSimpleToolTip setToolTip(String tooltip) {
 
-        this.tooltip = tooltip;
-        return this;
-    }
+		this.tooltip = tooltip;
+		return this;
+	}
 
-    public ElementSimpleToolTip setToolTipLocalized(boolean localized) {
+	public ElementSimpleToolTip setToolTipLocalized(boolean localized) {
 
-        this.tooltipLocalized = localized;
-        return this;
-    }
+		this.tooltipLocalized = localized;
+		return this;
+	}
 
-    @Override
-    public void drawBackground(int mouseX, int mouseY, float gameTicks) {
+	@Override
+	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-        RenderHelper.bindTexture(texture);
-        drawTexturedModalRect(posX, posY, texU, texV, sizeX, sizeY);
-    }
+		RenderHelper.bindTexture(texture);
+		drawTexturedModalRect(posX, posY, texU, texV, sizeX, sizeY);
+	}
 
-    @Override
-    public void drawForeground(int mouseX, int mouseY) {
+	@Override
+	public void drawForeground(int mouseX, int mouseY) {
 
-        return;
-    }
+		return;
+	}
 
-    @Override
-    public void addTooltip(List<String> list) {
+	@Override
+	public void addTooltip(List<String> list) {
 
-        if (tooltip != null) {
-            if (tooltipLocalized) {
-                list.add(tooltip);
-            } else {
-                list.add(StringHelper.localize(tooltip));
-            }
-        }
-    }
+		if (tooltip != null) {
+			if (tooltipLocalized) {
+				list.add(tooltip);
+			} else {
+				list.add(StringHelper.localize(tooltip));
+			}
+		}
+	}
 
 }

@@ -1,3 +1,5 @@
+import scala.tools.nsc.io.Jar
+
 buildscript {
     repositories {
         jcenter()
@@ -46,7 +48,7 @@ minecraft {
     version = config.mc_version + "-" + config.forge_version
     mappings = config.mappings
     runDir = "run"
-	makeObfSourceJar = false
+    makeObfSourceJar = false
 }
 
 processResources {
@@ -91,7 +93,7 @@ task srcJar(type: Jar) {
 
 artifacts {
     archives deobfJar
-	archives srcJar
+    archives srcJar
     archives apiJar
 }
 

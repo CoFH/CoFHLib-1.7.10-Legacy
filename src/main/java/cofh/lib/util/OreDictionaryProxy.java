@@ -9,53 +9,54 @@ import net.minecraftforge.oredict.OreDictionary;
  *
  * @author King Lemming
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings ("deprecation")
 public class OreDictionaryProxy {
 
-    public ItemStack getOre(String oreName) {
+	public ItemStack getOre(String oreName) {
 
-        if (!oreNameExists(oreName)) {
-            return null;
-        }
-        return ItemHelper.cloneStack(OreDictionary.getOres(oreName).get(0), 1);
-    }
+		if (!oreNameExists(oreName)) {
+			return null;
+		}
+		return ItemHelper.cloneStack(OreDictionary.getOres(oreName).get(0), 1);
+	}
 
-    public int getOreID(ItemStack stack) {
+	public int getOreID(ItemStack stack) {
 
-        return OreDictionary.getOreID(getOreName(stack));
-    }
+		return OreDictionary.getOreID(getOreName(stack));
+	}
 
-    public int getOreID(String oreName) {
+	public int getOreID(String oreName) {
 
-        return OreDictionary.getOreID(oreName);
-    }
+		return OreDictionary.getOreID(oreName);
+	}
 
-    public String getOreName(ItemStack stack) {
-        int[] ids = OreDictionary.getOreIDs(stack);
-        if (ids != null && ids.length >= 1){
-            return OreDictionary.getOreName(ids[0]);
-        }
-        return "";
-    }
+	public String getOreName(ItemStack stack) {
 
-    public String getOreName(int oreID) {
+		int[] ids = OreDictionary.getOreIDs(stack);
+		if (ids != null && ids.length >= 1) {
+			return OreDictionary.getOreName(ids[0]);
+		}
+		return "";
+	}
 
-        return OreDictionary.getOreName(oreID);
-    }
+	public String getOreName(int oreID) {
 
-    public boolean isOreIDEqual(ItemStack stack, int oreID) {
+		return OreDictionary.getOreName(oreID);
+	}
 
-        return getOreID(stack) == oreID;
-    }
+	public boolean isOreIDEqual(ItemStack stack, int oreID) {
 
-    public boolean isOreNameEqual(ItemStack stack, String oreName) {
+		return getOreID(stack) == oreID;
+	}
 
-        return OreDictionary.getOreName(getOreID(stack)).equals(oreName);
-    }
+	public boolean isOreNameEqual(ItemStack stack, String oreName) {
 
-    public boolean oreNameExists(String oreName) {
+		return OreDictionary.getOreName(getOreID(stack)).equals(oreName);
+	}
 
-        return OreDictionary.doesOreNameExist(oreName);
-    }
+	public boolean oreNameExists(String oreName) {
+
+		return OreDictionary.doesOreNameExist(oreName);
+	}
 
 }

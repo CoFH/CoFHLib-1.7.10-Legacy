@@ -9,72 +9,72 @@ import net.minecraft.block.Block;
  */
 public final class BlockWrapper {
 
-    public Block block;
-    public int metadata;
+	public Block block;
+	public int metadata;
 
-    public BlockWrapper(Block block, int metadata) {
+	public BlockWrapper(Block block, int metadata) {
 
-        this.block = block;
-        this.metadata = metadata;
-    }
+		this.block = block;
+		this.metadata = metadata;
+	}
 
-    public BlockWrapper set(Block block, int metadata) {
+	public BlockWrapper set(Block block, int metadata) {
 
-        if (block != null) {
-            this.block = block;
-            this.metadata = metadata;
-        } else {
-            this.block = null;
-            this.metadata = 0;
-        }
-        return this;
-    }
+		if (block != null) {
+			this.block = block;
+			this.metadata = metadata;
+		} else {
+			this.block = null;
+			this.metadata = 0;
+		}
+		return this;
+	}
 
-    public boolean isEqual(BlockWrapper other) {
+	public boolean isEqual(BlockWrapper other) {
 
-        if (other == null) {
-            return false;
-        }
-        if (metadata == other.metadata) {
-            if (block == other.block) {
-                return true;
-            }
-            if (block != null && other.block != null) {
-                return block.delegate.get() == other.block.delegate.get();
-            }
-        }
-        return false;
-    }
+		if (other == null) {
+			return false;
+		}
+		if (metadata == other.metadata) {
+			if (block == other.block) {
+				return true;
+			}
+			if (block != null && other.block != null) {
+				return block.delegate.get() == other.block.delegate.get();
+			}
+		}
+		return false;
+	}
 
-    final int getId() {
+	final int getId() {
 
-        return Block.getIdFromBlock(block);
-    }
+		return Block.getIdFromBlock(block);
+	}
 
-    @Override
-    public boolean equals(Object o) {
+	@Override
+	public boolean equals(Object o) {
 
-        if (!(o instanceof BlockWrapper)) {
-            return false;
-        }
-        return isEqual((BlockWrapper) o);
-    }
+		if (!(o instanceof BlockWrapper)) {
+			return false;
+		}
+		return isEqual((BlockWrapper) o);
+	}
 
-    @Override
-    public int hashCode() {
+	@Override
+	public int hashCode() {
 
-        return metadata | getId() << 16;
-    }
+		return metadata | getId() << 16;
+	}
 
-    @Override
-    public String toString() {
+	@Override
+	public String toString() {
 
-        StringBuilder b = new StringBuilder(getClass().getName());
-        b.append('@').append(System.identityHashCode(this)).append('{');
-        b.append("m:").append(metadata).append(", i:").append(block == null ? null : block.getClass().getName());
-        b.append('@').append(System.identityHashCode(block)).append(", v:");
-        b.append(getId()).append('}');
-        return b.toString();
-    }
+		StringBuilder b = new StringBuilder(getClass().getName());
+		b.append('@').append(System.identityHashCode(this)).append('{');
+		b.append("m:").append(metadata).append(", i:").append(block == null ? null : block.getClass().getName());
+		b.append('@').append(System.identityHashCode(block)).append(", v:");
+		b.append(getId()).append('}');
+		return b.toString();
+	}
 
 }

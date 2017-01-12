@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * Implemented on Blocks which have some method of being instantly dismantled.
  *
  * @author King Lemming
- *
  */
 public interface IDismantleable {
 

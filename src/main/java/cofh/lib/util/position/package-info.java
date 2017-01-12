@@ -1,8 +1,8 @@
 /**
- * (C) 2014 Team CoFH / CoFH / Cult of the Full Hub
+ * (C) 2014-2017 Team CoFH / CoFH / Cult of the Full Hub
  * http://www.teamcofh.com
  */
-@API(apiVersion = CoFHLibProps.VERSION, owner = "CoFHLib", provides = "CoFHLib|util|position")
+@API (apiVersion = CoFHLibProps.VERSION, owner = "CoFHLib", provides = "CoFHLib|util|position")
 package cofh.lib.util.position;
 
 import cofh.lib.CoFHLibProps;

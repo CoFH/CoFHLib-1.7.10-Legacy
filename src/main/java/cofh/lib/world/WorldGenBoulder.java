@@ -13,76 +13,77 @@ import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 
 public class WorldGenBoulder extends WorldGenerator {
 
-    private final List<WeightedRandomBlock> cluster;
-    private final WeightedRandomBlock[] genBlock;
-    private final int size;
-    public int sizeVariance = 2;
-    public int clusters = 3;
-    public int clusterVariance = 0;
-    public boolean hollow = false;
-    public float hollowAmt = 0.1665f;
-    public float hollowVar = 0;
+	private final List<WeightedRandomBlock> cluster;
+	private final WeightedRandomBlock[] genBlock;
+	private final int size;
+	public int sizeVariance = 2;
+	public int clusters = 3;
+	public int clusterVariance = 0;
+	public boolean hollow = false;
+	public float hollowAmt = 0.1665f;
+	public float hollowVar = 0;
 
-    public WorldGenBoulder(List<WeightedRandomBlock> resource, int minSize, List<WeightedRandomBlock> block) {
+	public WorldGenBoulder(List<WeightedRandomBlock> resource, int minSize, List<WeightedRandomBlock> block) {
 
-        cluster = resource;
-        size = minSize;
-        genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
-    }
+		cluster = resource;
+		size = minSize;
+		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
+	}
 
-    @Override
-    public boolean generate(World world, Random rand, BlockPos pos) {
-        int xCenter = pos.getX();
-        int yCenter = pos.getY();
-        int zCenter = pos.getZ();
-        final int minSize = size, var = sizeVariance;
-        boolean r = false;
-        int i = clusterVariance > 0 ? clusters + rand.nextInt(clusterVariance + 1) : clusters;
-        while (i-- > 0) {
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos) {
 
-            while (yCenter > minSize && world.isAirBlock(new BlockPos(xCenter, yCenter - 1, zCenter))) {
-                --yCenter;
-            }
-            if (yCenter <= (minSize + var + 1)) {
-                return false;
-            }
+		int xCenter = pos.getX();
+		int yCenter = pos.getY();
+		int zCenter = pos.getZ();
+		final int minSize = size, var = sizeVariance;
+		boolean r = false;
+		int i = clusterVariance > 0 ? clusters + rand.nextInt(clusterVariance + 1) : clusters;
+		while (i-- > 0) {
 
-            if (canGenerateInBlock(world, xCenter, yCenter - 1, zCenter, genBlock)) {
+			while (yCenter > minSize && world.isAirBlock(new BlockPos(xCenter, yCenter - 1, zCenter))) {
+				--yCenter;
+			}
+			if (yCenter <= (minSize + var + 1)) {
+				return false;
+			}
 
-                int xWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
-                int yWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
-                int zWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
-                float maxDist = (xWidth + yWidth + zWidth) * 0.333F + 0.5F;
-                maxDist *= maxDist;
-                float minDist = hollow ? (xWidth + yWidth + zWidth) * (hollowAmt * (1 - rand.nextFloat() * hollowVar)) : 0;
-                minDist *= minDist;
+			if (canGenerateInBlock(world, xCenter, yCenter - 1, zCenter, genBlock)) {
 
-                for (int x = -xWidth; x <= xWidth; ++x) {
-                    final int xDist = x * x;
+				int xWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
+				int yWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
+				int zWidth = minSize + (var > 1 ? rand.nextInt(var) : 0);
+				float maxDist = (xWidth + yWidth + zWidth) * 0.333F + 0.5F;
+				maxDist *= maxDist;
+				float minDist = hollow ? (xWidth + yWidth + zWidth) * (hollowAmt * (1 - rand.nextFloat() * hollowVar)) : 0;
+				minDist *= minDist;
 
-                    for (int z = -zWidth; z <= zWidth; ++z) {
-                        final int xzDist = xDist + z * z;
+				for (int x = -xWidth; x <= xWidth; ++x) {
+					final int xDist = x * x;
 
-                        for (int y = -yWidth; y <= yWidth; ++y) {
-                            final int dist = xzDist + y * y;
+					for (int z = -zWidth; z <= zWidth; ++z) {
+						final int xzDist = xDist + z * z;
 
-                            if (dist <= maxDist) {
-                                if (dist >= minDist) {
-                                    r |= generateBlock(world, xCenter + x, yCenter + y, zCenter + z, cluster);
-                                } else {
-                                    r |= world.setBlockToAir(new BlockPos(xCenter + x, yCenter + y, zCenter + z));
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+						for (int y = -yWidth; y <= yWidth; ++y) {
+							final int dist = xzDist + y * y;
 
-            xCenter += rand.nextInt(var + minSize * 2) - (minSize + var / 2);
-            zCenter += rand.nextInt(var + minSize * 2) - (minSize + var / 2);
-            yCenter += rand.nextInt((var + 1) * 3) - (var + 1);
-        }
+							if (dist <= maxDist) {
+								if (dist >= minDist) {
+									r |= generateBlock(world, xCenter + x, yCenter + y, zCenter + z, cluster);
+								} else {
+									r |= world.setBlockToAir(new BlockPos(xCenter + x, yCenter + y, zCenter + z));
+								}
+							}
+						}
+					}
+				}
+			}
 
-        return r;
-    }
+			xCenter += rand.nextInt(var + minSize * 2) - (minSize + var / 2);
+			zCenter += rand.nextInt(var + minSize * 2) - (minSize + var / 2);
+			yCenter += rand.nextInt((var + 1) * 3) - (var + 1);
+		}
+
+		return r;
+	}
 }

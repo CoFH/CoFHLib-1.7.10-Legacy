@@ -9,31 +9,31 @@ import cofh.lib.gui.element.TabBase;
  */
 public class TabTracker {
 
-    private static Class<? extends TabBase> openedLeftTab;
-    private static Class<? extends TabBase> openedRightTab;
+	private static Class<? extends TabBase> openedLeftTab;
+	private static Class<? extends TabBase> openedRightTab;
 
-    private TabTracker() {
+	private TabTracker() {
 
-    }
+	}
 
-    public static Class<? extends TabBase> getOpenedLeftTab() {
+	public static Class<? extends TabBase> getOpenedLeftTab() {
 
-        return openedLeftTab;
-    }
+		return openedLeftTab;
+	}
 
-    public static Class<? extends TabBase> getOpenedRightTab() {
+	public static Class<? extends TabBase> getOpenedRightTab() {
 
-        return openedRightTab;
-    }
+		return openedRightTab;
+	}
 
-    public static void setOpenedLeftTab(Class<? extends TabBase> tabClass) {
+	public static void setOpenedLeftTab(Class<? extends TabBase> tabClass) {
 
-        openedLeftTab = tabClass;
-    }
+		openedLeftTab = tabClass;
+	}
 
-    public static void setOpenedRightTab(Class<? extends TabBase> tabClass) {
+	public static void setOpenedRightTab(Class<? extends TabBase> tabClass) {
 
-        openedRightTab = tabClass;
-    }
+		openedRightTab = tabClass;
+	}
 
 }

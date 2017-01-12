@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
  * with them.
  *
  * @author King Lemming
- *
  */
 public interface IMultiModeItem {
 
@@ -20,10 +19,8 @@ public interface IMultiModeItem {
 	/**
 	 * Attempt to set the empowered state of the item.
 	 *
-	 * @param stack
-	 *            ItemStack to set the mode on.
-	 * @param mode
-	 *            Desired mode.
+	 * @param stack ItemStack to set the mode on.
+	 * @param mode  Desired mode.
 	 * @return TRUE if the operation was successful, FALSE if it was not.
 	 */
 	boolean setMode(ItemStack stack, int mode);
@@ -46,10 +43,8 @@ public interface IMultiModeItem {
 	/**
 	 * Callback method for reacting to a state change. Useful in KeyBinding handlers.
 	 *
-	 * @param player
-	 *            Player holding the item, if applicable.
-	 * @param stack
-	 *            The item being held.
+	 * @param player Player holding the item, if applicable.
+	 * @param stack  The item being held.
 	 */
 	void onModeChange(EntityPlayer player, ItemStack stack);
 

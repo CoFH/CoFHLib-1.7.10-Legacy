@@ -5,6 +5,6 @@ package cofh.api.core;
  */
 public interface IBakeable {
 
-	public void bake();
+	void bake();
 
 }

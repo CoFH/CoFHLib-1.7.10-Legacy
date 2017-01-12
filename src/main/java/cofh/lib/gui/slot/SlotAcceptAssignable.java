@@ -10,18 +10,18 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotAcceptAssignable extends Slot {
 
-    protected Class<? extends Item> clazz;
+	protected Class<? extends Item> clazz;
 
-    public SlotAcceptAssignable(IInventory inventory, int index, int x, int y, Class<? extends Item> c) {
+	public SlotAcceptAssignable(IInventory inventory, int index, int x, int y, Class<? extends Item> c) {
 
-        super(inventory, index, x, y);
-        clazz = c;
-    }
+		super(inventory, index, x, y);
+		clazz = c;
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
+	@Override
+	public boolean isItemValid(ItemStack stack) {
 
-        return stack != null && clazz.isInstance(stack.getItem());
-    }
+		return stack != null && clazz.isInstance(stack.getItem());
+	}
 
 }

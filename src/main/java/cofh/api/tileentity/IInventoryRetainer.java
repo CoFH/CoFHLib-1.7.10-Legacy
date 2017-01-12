@@ -4,7 +4,6 @@ package cofh.api.tileentity;
  * Marks a Tile Entity which can optionally retain its inventory when broken.
  *
  * @author King Lemming
- *
  */
 public interface IInventoryRetainer {
 

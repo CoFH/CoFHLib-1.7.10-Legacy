@@ -13,33 +13,33 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotSpecificItem extends Slot {
 
-    protected final ComparableItemStack stack;
-    protected ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.STONE));
-    protected int slotStackLimit = -1;
+	protected final ComparableItemStack stack;
+	protected ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.STONE));
+	protected int slotStackLimit = -1;
 
-    public SlotSpecificItem(IInventory inventory, int index, int x, int y, ItemStack stack) {
+	public SlotSpecificItem(IInventory inventory, int index, int x, int y, ItemStack stack) {
 
-        super(inventory, index, x, y);
+		super(inventory, index, x, y);
 
-        this.stack = new ComparableItemStack(stack);
-    }
+		this.stack = new ComparableItemStack(stack);
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
+	@Override
+	public boolean isItemValid(ItemStack stack) {
 
-        return this.stack.isItemEqual(query.set(stack));
-    }
+		return this.stack.isItemEqual(query.set(stack));
+	}
 
-    public SlotSpecificItem setSlotStackLimit(int slotStackLimit) {
+	public SlotSpecificItem setSlotStackLimit(int slotStackLimit) {
 
-        this.slotStackLimit = slotStackLimit;
-        return this;
-    }
+		this.slotStackLimit = slotStackLimit;
+		return this;
+	}
 
-    @Override
-    public int getSlotStackLimit() {
+	@Override
+	public int getSlotStackLimit() {
 
-        return slotStackLimit <= 0 ? inventory.getInventoryStackLimit() : slotStackLimit;
-    }
+		return slotStackLimit <= 0 ? inventory.getInventoryStackLimit() : slotStackLimit;
+	}
 
 }

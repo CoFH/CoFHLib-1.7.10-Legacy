@@ -13,10 +13,8 @@ public interface ISpecialFilterFluid {
 	/**
 	 * This method is called to find out if the given FluidStack should be matched by the given Filter ItemStack.
 	 *
-	 * @param filter
-	 *            ItemStack representing the filter.
-	 * @param fluid
-	 *            FluidStack representing the queried fluid.
+	 * @param filter ItemStack representing the filter.
+	 * @param fluid  FluidStack representing the queried fluid.
 	 * @return True if the filter should match the FluidStack. False if the default matching should be used.
 	 */
 	public boolean matchesFluid(ItemStack filter, FluidStack fluid);

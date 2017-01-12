@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
  * This is typically for the purposes of being transferred to a similar object (Tile Entity/Entity).
  *
  * @author King Lemming
- *
  */
 public interface IPortableData {
 

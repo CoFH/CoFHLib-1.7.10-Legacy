@@ -12,15 +12,15 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotEnergy extends Slot {
 
-    public SlotEnergy(IInventory inventory, int index, int x, int y) {
+	public SlotEnergy(IInventory inventory, int index, int x, int y) {
 
-        super(inventory, index, x, y);
-    }
+		super(inventory, index, x, y);
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
+	@Override
+	public boolean isItemValid(ItemStack stack) {
 
-        return EnergyHelper.isEnergyContainerItem(stack);
-    }
+		return EnergyHelper.isEnergyContainerItem(stack);
+	}
 
 }

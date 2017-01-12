@@ -1,9 +1,8 @@
 /**
- * (C) 2014 Team CoFH / CoFH / Cult of the Full Hub
+ * (C) 2014-2017 Team CoFH / CoFH / Cult of the Full Hub
  * http://www.teamcofh.com
  */
-@API(apiVersion = CoFHLibProps.VERSION, owner = "CoFHCore", provides = "CoFHLib")
+@API (apiVersion = CoFHLibProps.VERSION, owner = "CoFHCore", provides = "CoFHLib")
 package cofh.lib;
 
 import net.minecraftforge.fml.common.API;
-

@@ -8,13 +8,12 @@ import net.minecraft.util.EnumFacing;
 public interface IInventoryConnection {
 
 	/**
-	 * @param from
-	 *            Side to which a connector would connect
+	 * @param from Side to which a connector would connect
 	 * @return DEFAULT if the connector should decide how to connect; FORCE if the connector should always connect; DENY if the connector should never connect.
 	 */
-	public ConnectionType canConnectInventory(EnumFacing from);
+	ConnectionType canConnectInventory(EnumFacing from);
 
-	public static enum ConnectionType {
+	enum ConnectionType {
 		DEFAULT, FORCE, DENY;
 
 		public final boolean canConnect = ordinal() != 2;

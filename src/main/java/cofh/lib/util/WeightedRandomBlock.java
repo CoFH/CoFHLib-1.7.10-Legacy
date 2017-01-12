@@ -14,58 +14,59 @@ import java.util.Collection;
  */
 public final class WeightedRandomBlock extends WeightedRandom.Item {
 
-    public final Block block;
-    public final int metadata;
+	public final Block block;
+	public final int metadata;
 
-    public WeightedRandomBlock(ItemStack ore) {
+	public WeightedRandomBlock(ItemStack ore) {
 
-        this(ore, 100);
-    }
+		this(ore, 100);
+	}
 
-    public WeightedRandomBlock(ItemStack ore, int weight) {
+	public WeightedRandomBlock(ItemStack ore, int weight) {
 
-        this(Block.getBlockFromItem(ore.getItem()), ore.getItemDamage(), weight);
-    }
+		this(Block.getBlockFromItem(ore.getItem()), ore.getItemDamage(), weight);
+	}
 
-    public WeightedRandomBlock(Block ore) {
+	public WeightedRandomBlock(Block ore) {
 
-        this(ore, 0, 100); // some blocks do not have associated items
-    }
+		this(ore, 0, 100); // some blocks do not have associated items
+	}
 
-    public WeightedRandomBlock(Block ore, int metadata) {
+	public WeightedRandomBlock(Block ore, int metadata) {
 
-        this(ore, metadata, 100);
-    }
+		this(ore, metadata, 100);
+	}
 
-    public WeightedRandomBlock(Block ore, int metadata, int weight) {
+	public WeightedRandomBlock(Block ore, int metadata, int weight) {
 
-        super(weight);
-        this.block = ore;
-        this.metadata = metadata;
-    }
+		super(weight);
+		this.block = ore;
+		this.metadata = metadata;
+	}
 
-    public static boolean isBlockContained(Block block, int metadata, Collection<WeightedRandomBlock> list) {
+	public static boolean isBlockContained(Block block, int metadata, Collection<WeightedRandomBlock> list) {
 
-        for (WeightedRandomBlock rb : list) {
-            if (block.equals(rb.block) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
-                return true;
-            }
-        }
-        return false;
-    }
+		for (WeightedRandomBlock rb : list) {
+			if (block.equals(rb.block) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public static boolean isBlockContained(Block block, int metadata, WeightedRandomBlock[] list) {
+	public static boolean isBlockContained(Block block, int metadata, WeightedRandomBlock[] list) {
 
-        for (WeightedRandomBlock rb : list) {
-            if (block.equals(rb.block) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
-                return true;
-            }
-        }
-        return false;
-    }
+		for (WeightedRandomBlock rb : list) {
+			if (block.equals(rb.block) && (metadata == -1 || rb.metadata == -1 || rb.metadata == metadata)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public IBlockState getState() {
-        return block.getStateFromMeta(metadata);
-    }
+	public IBlockState getState() {
+
+		return block.getStateFromMeta(metadata);
+	}
 
 }

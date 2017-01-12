@@ -1,21 +1,24 @@
 package cofh.api.tileentity;
 
 /**
- * Implement this interface on Tile Entities which have Redstone Control functionality. This means that a tile can be set to ignore redstone entirely, or
- * respond to a low or high redstone state.
+ * Implement this interface on Tile Entities which have Redstone Control functionality. This means that a tile can be set to ignore redstone entirely, or respond to a low or high redstone state.
  *
  * @author King Lemming
- *
  */
 public interface IRedstoneControl extends IRedstoneCache {
 
-	public static enum ControlMode {
+	/**
+	 * Enum for Control Modes - Disabled (Ignored), Low (False), High (True).
+	 *
+	 * @author King Lemming
+	 */
+	enum ControlMode {
 
 		DISABLED(true), LOW(false), HIGH(true);
 
 		private final boolean state;
 
-		private ControlMode(boolean state) {
+		ControlMode(boolean state) {
 
 			this.state = state;
 		}

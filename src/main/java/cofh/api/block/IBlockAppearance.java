@@ -11,18 +11,18 @@ import net.minecraft.world.IBlockAccess;
  */
 public interface IBlockAppearance {
 
-    /**
-     * This function returns the state of the block that is being shown on a given side.
-     *
-     * @param world Reference to the world.
-     * @param pos   The Position of the block.
-     * @param side  The side of the block.
-     */
-    IBlockState getVisualState(IBlockAccess world, BlockPos pos, EnumFacing side);
+	/**
+	 * This function returns the state of the block that is being shown on a given side.
+	 *
+	 * @param world Reference to the world.
+	 * @param pos   The Position of the block.
+	 * @param side  The side of the block.
+	 */
+	IBlockState getVisualState(IBlockAccess world, BlockPos pos, EnumFacing side);
 
-    /**
-     * This function returns whether the block's renderer will visually connect to other blocks implementing IBlockAppearance.
-     */
-    boolean supportsVisualConnections();
+	/**
+	 * This function returns whether the block's renderer will visually connect to other blocks implementing IBlockAppearance.
+	 */
+	boolean supportsVisualConnections();
 
 }
