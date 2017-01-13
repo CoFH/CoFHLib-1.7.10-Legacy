@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
@@ -35,6 +36,11 @@ public final class RenderHelper {
 
 		return Minecraft.getMinecraft().renderEngine;
 	}
+
+	public static TextureMap textureMap() {
+
+	    return Minecraft.getMinecraft().getTextureMapBlocks();
+    }
 
 	public static Tessellator tessellator() {
 
@@ -201,7 +207,7 @@ public final class RenderHelper {
 
 	public static TextureAtlasSprite getTexture(String location) {
 
-		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location);
+		return textureMap().getAtlasSprite(location);
 	}
 
 	public static TextureAtlasSprite getTexture(ResourceLocation location) {
