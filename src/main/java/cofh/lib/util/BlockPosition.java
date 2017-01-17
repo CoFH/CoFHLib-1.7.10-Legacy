@@ -1,5 +1,6 @@
-package cofh.lib.util.position;
+package cofh.lib.util;
 
+import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.lib.util.helpers.BlockHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -82,16 +83,11 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 		x = tile.getPos().getX();
 		y = tile.getPos().getY();
 		z = tile.getPos().getZ();
-		if (tile instanceof IRotateableTile) {
-			orientation = ((IRotateableTile) tile).getDirectionFacing();
+		if (tile instanceof IReconfigurableFacing) {
+			orientation = EnumFacing.values()[((IReconfigurableFacing) tile).getFacing()];
 		} else {
 			orientation = null;
 		}
-	}
-
-	public static <T extends TileEntity & IRotateableTile> BlockPosition fromRotateableTile(T te) {
-
-		return new BlockPosition(te);
 	}
 
 	public BlockPos pos() {
