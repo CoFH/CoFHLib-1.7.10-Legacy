@@ -561,8 +561,8 @@ public final class BlockHelper {
 
 	public static ItemStack createStackedBlock(Block block, int bMeta) {
 
-		Item item = Item.getItemFromBlock(block);
-		if (item.getHasSubtypes()) {
+		Item item = Item.getItemFromBlock(block); // not all blocks that can be silked have an item. other method?
+		if (item != null && item.getHasSubtypes()) {
 			return new ItemStack(item, 1, bMeta);
 		}
 		return new ItemStack(item, 1, 0);
