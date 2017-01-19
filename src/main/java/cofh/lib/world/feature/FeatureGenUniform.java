@@ -36,7 +36,6 @@ public class FeatureGenUniform extends FeatureBase {
 			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
 			}
-
 			generated |= worldGen.generate(world, random, new BlockPos(x, y, z));
 		}
 		return generated;

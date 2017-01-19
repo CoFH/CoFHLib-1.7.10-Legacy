@@ -106,10 +106,10 @@ public class WorldGenMinableCluster extends WorldGenerator {
 			float zCenter = zMin + (zMax * i) / blocks;
 
 			// preserved as nextDouble to ensure the rand gets ticked the same amount
-			float size = ((float) rand.nextDouble() * blocks) / 16f;
+			float size = ((float) rand.nextDouble() * blocks) / 16F;
 
-			float hMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
-			float vMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
+			float hMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1F) * size + 1F) * 0.5F;
+			float vMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1F) * size + 1F) * 0.5F;
 
 			int xStart = MathHelper.floor_float(xCenter - hMod);
 			int yStart = MathHelper.floor_float(yCenter - vMod);
@@ -120,33 +120,29 @@ public class WorldGenMinableCluster extends WorldGenerator {
 			int zStop = MathHelper.floor_float(zCenter + hMod);
 
 			for (int blockX = xStart; blockX <= xStop; blockX++) {
-				float xDistSq = ((blockX + .5f) - xCenter) / hMod;
+				float xDistSq = ((blockX + .5F) - xCenter) / hMod;
 				xDistSq *= xDistSq;
-				if (xDistSq >= 1f) {
+				if (xDistSq >= 1F) {
 					continue;
 				}
-
 				for (int blockY = yStart; blockY <= yStop; blockY++) {
-					float yDistSq = ((blockY + .5f) - yCenter) / vMod;
+					float yDistSq = ((blockY + .5F) - yCenter) / vMod;
 					yDistSq *= yDistSq;
 					float xyDistSq = yDistSq + xDistSq;
-					if (xyDistSq >= 1f) {
+					if (xyDistSq >= 1F) {
 						continue;
 					}
-
 					for (int blockZ = zStart; blockZ <= zStop; blockZ++) {
-						float zDistSq = ((blockZ + .5f) - zCenter) / hMod;
+						float zDistSq = ((blockZ + .5F) - zCenter) / hMod;
 						zDistSq *= zDistSq;
-						if (zDistSq + xyDistSq >= 1f) {
+						if (zDistSq + xyDistSq >= 1F) {
 							continue;
 						}
-
 						r |= generateBlock(world, blockX, blockY, blockZ, genBlock, cluster);
 					}
 				}
 			}
 		}
-
 		return r;
 	}
 
