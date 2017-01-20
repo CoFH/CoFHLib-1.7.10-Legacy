@@ -39,8 +39,8 @@ public final class RenderHelper {
 
 	public static TextureMap textureMap() {
 
-	    return Minecraft.getMinecraft().getTextureMapBlocks();
-    }
+		return Minecraft.getMinecraft().getTextureMapBlocks();
+	}
 
 	public static Tessellator tessellator() {
 

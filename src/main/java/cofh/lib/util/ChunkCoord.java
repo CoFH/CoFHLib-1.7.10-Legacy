@@ -31,6 +31,7 @@ public final class ChunkCoord implements Comparable<ChunkCoord>, Serializable {
 
 	@Deprecated
 	public ChunkCoord(BlockPosition pos) {
+
 		this(pos.x >> 4, pos.z >> 4);
 	}
 
