@@ -11,26 +11,26 @@ import net.minecraft.entity.player.EntityPlayer;
 public interface ISecurable {
 
 	/**
-	 * Enum for Access Modes - Guild allows Guild access, Restricted is Friends Only, Private is Owner only.
+	 * Enum for Access Modes - TeamOnly allows Team access, FriendsOnly is Friends Only, Private is Owner only.
 	 *
 	 * @author King Lemming
 	 */
 	enum AccessMode {
-		PUBLIC, GUILD, RESTRICTED, PRIVATE;
+		PUBLIC, TEAM, FRIENDS, PRIVATE;
 
 		public boolean isPublic() {
 
 			return this == PUBLIC;
 		}
 
-		public boolean isGuild() {
+		public boolean isTeamOnly() {
 
-			return this == GUILD;
+			return this == TEAM;
 		}
 
-		public boolean isRestricted() {
+		public boolean isFriendsOnly() {
 
-			return this == RESTRICTED;
+			return this == FRIENDS;
 		}
 
 		public boolean isPrivate() {
@@ -40,12 +40,12 @@ public interface ISecurable {
 
 		public static AccessMode stepForward(AccessMode curAccess) {
 
-			return curAccess == PUBLIC ? GUILD : curAccess == GUILD ? RESTRICTED : curAccess == PRIVATE ? PUBLIC : PRIVATE;
+			return curAccess == PUBLIC ? TEAM : curAccess == TEAM ? FRIENDS : curAccess == PRIVATE ? PUBLIC : PRIVATE;
 		}
 
 		public static AccessMode stepBackward(AccessMode curAccess) {
 
-			return curAccess == PUBLIC ? PRIVATE : curAccess == PRIVATE ? RESTRICTED : curAccess == RESTRICTED ? GUILD : PUBLIC;
+			return curAccess == PUBLIC ? PRIVATE : curAccess == PRIVATE ? FRIENDS : curAccess == FRIENDS ? TEAM : PUBLIC;
 		}
 	}
 
