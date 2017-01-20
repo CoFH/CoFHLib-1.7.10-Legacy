@@ -6,18 +6,20 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class FeatureGenNormal extends FeatureBase {
+public class FeatureGenGaussian extends FeatureBase {
 
 	final WorldGenerator worldGen;
 	final int count;
+	final int rolls;
 	final int meanY;
 	final int maxVar;
 
-	public FeatureGenNormal(String name, WorldGenerator worldGen, int count, int meanY, int maxVar, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+	public FeatureGenGaussian(String name, WorldGenerator worldGen, int count, int smoothness, int meanY, int maxVar, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
+		this.rolls = smoothness;
 		this.meanY = meanY;
 		this.maxVar = maxVar;
 	}
@@ -31,7 +33,13 @@ public class FeatureGenNormal extends FeatureBase {
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
-			int y = maxVar <= 1 ? meanY : (random.nextInt(maxVar) + random.nextInt(maxVar) + meanY - maxVar);
+			int y = meanY;
+			if (maxVar > 1) {
+				for (int v = 0; v < rolls; ++v) {
+					y += random.nextInt(maxVar);
+				}
+				y = Math.round(y - (maxVar * (rolls * .5f)));
+			}
 			int z = blockZ + random.nextInt(16);
 			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
