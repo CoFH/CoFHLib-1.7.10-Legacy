@@ -16,6 +16,7 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 
 	public final Block block;
 	public final int metadata;
+	public final IBlockState state;
 
 	public WeightedRandomBlock(ItemStack ore) {
 
@@ -42,6 +43,15 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 		super(weight);
 		this.block = ore;
 		this.metadata = metadata;
+		this.state = null;
+	}
+
+	public WeightedRandomBlock(IBlockState ore, int weight) {
+
+		super(weight);
+		this.block = ore.getBlock();
+		this.metadata = block.getMetaFromState(ore);
+		this.state = ore;
 	}
 
 	public static boolean isBlockContained(Block block, int metadata, Collection<WeightedRandomBlock> list) {
@@ -66,7 +76,7 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 
 	public IBlockState getState() {
 
-		return block.getStateFromMeta(metadata);
+		return state == null ? block.getStateFromMeta(metadata) : state;
 	}
 
 }
