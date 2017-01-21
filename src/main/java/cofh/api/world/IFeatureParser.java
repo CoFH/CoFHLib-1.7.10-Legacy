@@ -1,6 +1,7 @@
 package cofh.api.world;
 
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import org.apache.logging.log4j.Logger;
 
 public interface IFeatureParser {
@@ -13,6 +14,6 @@ public interface IFeatureParser {
 	 * @param log         The {@link Logger} to log debug/error/etc. messages to.
 	 * @return The {@link IFeatureGenerator} to be registered with an IFeatureHandler
 	 */
-	IFeatureGenerator parseFeature(String featureName, JsonObject genObject, Logger log);
+	IFeatureGenerator parseFeature(String featureName, Config genObject, Logger log);
 
 }

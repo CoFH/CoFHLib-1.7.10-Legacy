@@ -2,6 +2,7 @@ package cofh.api.world;
 
 import cofh.lib.util.WeightedRandomBlock;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,6 @@ public interface IGeneratorParser {
 	 * @param matList       The processed list of materials to generate in
 	 * @return The {@link WorldGenerator} to be registered with an IFeatureGenerator
 	 */
-	WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList);
+	WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList);
 
 }
