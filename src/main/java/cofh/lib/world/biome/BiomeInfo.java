@@ -1,5 +1,6 @@
 package cofh.lib.world.biome;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
@@ -58,6 +59,11 @@ public class BiomeInfo {
 						}
 					}
 					return c == e == whitelist;
+				case 7:
+					ResourceLocation registry = Biome.REGISTRY.getNameForObject(biome);
+					return registry.hashCode() == hash && registry.equals(data);
+				case 8:
+					return ((Collection<ResourceLocation>) data).contains(Biome.REGISTRY.getNameForObject(biome));
 			}
 		}
 		return !whitelist;
