@@ -148,9 +148,9 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public boolean generateTiny(World world, Random random, int x, int y, int z) {
 
-		boolean r = false;
+		boolean r = generateBlock(world, x, y, z, genBlock, cluster);
 		// not <=; generating up to clusterSize blocks
-		for (int i = 0; i < genClusterSize; i++) {
+		for (int i = 1; i < genClusterSize; i++) {
 			int d0 = x + random.nextInt(2);
 			int d1 = y + random.nextInt(2);
 			int d2 = z + random.nextInt(2);
