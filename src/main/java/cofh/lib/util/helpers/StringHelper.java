@@ -50,11 +50,6 @@ public final class StringHelper {
 		return stringRows.size() * fontRenderer.FONT_HEIGHT;
 	}
 
-	public static String camelCase(String input) {
-
-		return input.substring(0, 1).toLowerCase(Locale.US) + input.substring(1);
-	}
-
 	public static String titleCase(String input) {
 
 		return input.substring(0, 1).toUpperCase(Locale.US) + input.substring(1);

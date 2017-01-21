@@ -126,10 +126,7 @@ public class ComparableItemStack extends ComparableItem {
 	@Override
 	public boolean equals(Object o) {
 
-		if (!(o instanceof ComparableItemStack)) {
-			return false;
-		}
-		return isItemEqual((ComparableItemStack) o);
+		return o instanceof ComparableItemStack && isItemEqual((ComparableItemStack) o);
 	}
 
 }
