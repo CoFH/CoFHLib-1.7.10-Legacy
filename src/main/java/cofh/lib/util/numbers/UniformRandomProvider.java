@@ -36,9 +36,9 @@ public class UniformRandomProvider extends ConstantProvider {
 		if (val == 0) {
 			return 0;
 		}
-		int low = (int)(val & Integer.MIN_VALUE);
-		int mid = (int)((val >>> 31) & Integer.MIN_VALUE);
-		int high = (int)((val >>> 62) & Integer.MIN_VALUE);
+		int low = (int)(val & Integer.MAX_VALUE);
+		int mid = (int)((val >>> 31) & Integer.MAX_VALUE);
+		int high = (int)((val >>> 62) & Integer.MAX_VALUE);
 
 		boolean mh = (mid | high) > 0;
 		long r = mh ? rand.nextInt() & Integer.MAX_VALUE : rand.nextInt(low);
