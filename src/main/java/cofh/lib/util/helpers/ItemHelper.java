@@ -1347,12 +1347,10 @@ public final class ItemHelper {
 					continue a;
 				}
 			}
-
 			if (!tagA.getTag(keys[i]).equals(tagB.getTag(keys[i]))) {
 				return false;
 			}
 		}
-
 		return true;
 	}
 }
