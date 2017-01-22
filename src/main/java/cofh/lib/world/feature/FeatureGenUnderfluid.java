@@ -3,6 +3,8 @@ package cofh.lib.world.feature;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.BlockHelper;
 import cofh.lib.util.helpers.FluidHelper;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
@@ -20,12 +22,22 @@ public class FeatureGenUnderfluid extends FeatureBase {
 
 	final boolean water;
 	final WorldGenerator worldGen;
-	final int count;
+	final INumberProvider count;
 	final List<WeightedRandomBlock> matList;
 	@Deprecated
 	final int[] fluidList;
 
 	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+
+		this(name, worldGen, matList, new ConstantProvider(count), biomeRes, regen, dimRes);
+	}
+
+	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int[] fluidList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+
+		this(name, worldGen, matList, fluidList, new ConstantProvider(count), biomeRes, regen, dimRes);
+	}
+
+	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, INumberProvider count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -35,7 +47,7 @@ public class FeatureGenUnderfluid extends FeatureBase {
 		fluidList = null;
 	}
 
-	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int[] fluidList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int[] fluidList, INumberProvider count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -51,6 +63,10 @@ public class FeatureGenUnderfluid extends FeatureBase {
 
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
+
+		BlockPos pos = new BlockPos(blockX, 64, blockZ);
+
+		final int count = this.count.intValue(world, random, pos);
 
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {

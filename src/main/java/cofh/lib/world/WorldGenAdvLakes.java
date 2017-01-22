@@ -1,6 +1,8 @@
 package cofh.lib.world;
 
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -21,12 +23,12 @@ public class WorldGenAdvLakes extends WorldGenerator {
 	private static final List<WeightedRandomBlock> GAP_BLOCK = Arrays.asList(new WeightedRandomBlock(Blocks.AIR, 0));
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
-	public List<WeightedRandomBlock> outlineBlock = null;
-	public List<WeightedRandomBlock> gapBlock = GAP_BLOCK;
-	public boolean solidOutline = false;
-	public boolean totalOutline = false;
-	public int width = 16;
-	public int height = 8;
+	private List<WeightedRandomBlock> outlineBlock = null;
+	private List<WeightedRandomBlock> gapBlock = GAP_BLOCK;
+	private boolean solidOutline = false;
+	private boolean totalOutline = false;
+	private INumberProvider width;
+	private INumberProvider height;
 
 	public WorldGenAdvLakes(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> block) {
 
@@ -36,6 +38,8 @@ public class WorldGenAdvLakes extends WorldGenerator {
 		} else {
 			genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 		}
+		this.setWidth(16);
+		this.setHeight(9);
 	}
 
 	@Override
@@ -44,11 +48,15 @@ public class WorldGenAdvLakes extends WorldGenerator {
 		int xStart = pos.getX();
 		int yStart = pos.getY();
 		int zStart = pos.getZ();
+
+		final int width = this.width.intValue(world, rand, pos);
+		final int height = this.height.intValue(world, rand, pos);
+
 		int widthOff = width / 2;
+		int heightOff = height / 2 + 1;
+
 		xStart -= widthOff;
 		zStart -= widthOff;
-
-		int heightOff = height / 2 + 1;
 
 		while (yStart > heightOff && world.isAirBlock(new BlockPos(xStart, yStart, zStart))) {
 			--yStart;
@@ -152,6 +160,54 @@ public class WorldGenAdvLakes extends WorldGenerator {
 		}
 
 		return true;
-
 	}
+
+	public WorldGenAdvLakes setWidth(int width) {
+
+		this.width = new ConstantProvider(width);
+		return this;
+	}
+
+	public WorldGenAdvLakes setWidth(INumberProvider width) {
+
+		this.width = width;
+		return this;
+	}
+
+	public WorldGenAdvLakes setHeight(int height) {
+
+		this.height = new ConstantProvider(height);
+		return this;
+	}
+
+	public WorldGenAdvLakes setHeight(INumberProvider height) {
+
+		this.height = height;
+		return this;
+	}
+
+	public WorldGenAdvLakes setSolidOutline(boolean outline) {
+
+		this.solidOutline = outline;
+		return this;
+	}
+
+	public WorldGenAdvLakes setTotalOutline(boolean outline) {
+
+		this.totalOutline = outline;
+		return this;
+	}
+
+	public WorldGenAdvLakes setOutlineBlock(List<WeightedRandomBlock> blocks) {
+
+		this.outlineBlock = blocks;
+		return this;
+	}
+
+	public WorldGenAdvLakes setGapBlock(List<WeightedRandomBlock> blocks) {
+
+		this.gapBlock = blocks;
+		return this;
+	}
+
 }

@@ -1,5 +1,7 @@
 package cofh.lib.world.feature;
 
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -10,10 +12,15 @@ import java.util.Random;
 public class FeatureGenCave extends FeatureBase {
 
 	final WorldGenerator worldGen;
-	final int count;
+	final INumberProvider count;
 	final boolean ceiling;
 
 	public FeatureGenCave(String name, WorldGenerator worldGen, boolean ceiling, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+
+		this(name, worldGen, ceiling, new ConstantProvider(count), biomeRes, regen, dimRes);
+	}
+
+	public FeatureGenCave(String name, WorldGenerator worldGen, boolean ceiling, INumberProvider count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -27,6 +34,10 @@ public class FeatureGenCave extends FeatureBase {
 		int averageSeaLevel = world.provider.getAverageGroundLevel() + 1;
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
+
+		BlockPos pos = new BlockPos(blockX, 64, blockZ);
+
+		final int count = this.count.intValue(world, random, pos);
 
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {

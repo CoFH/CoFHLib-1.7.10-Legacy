@@ -2,6 +2,8 @@ package cofh.lib.world.feature;
 
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.BlockHelper;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,10 +17,15 @@ import static cofh.lib.world.WorldGenMinableCluster.canGenerateInBlock;
 public class FeatureGenSurface extends FeatureBase {
 
 	final WorldGenerator worldGen;
-	final int count;
+	final INumberProvider count;
 	final WeightedRandomBlock[] matList;
 
 	public FeatureGenSurface(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+
+		this(name, worldGen, matList, new ConstantProvider(count), biomeRes, regen, dimRes);
+	}
+
+	public FeatureGenSurface(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, INumberProvider count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -31,6 +38,10 @@ public class FeatureGenSurface extends FeatureBase {
 
 		int blockX = chunkX * 16;
 		int blockZ = chunkZ * 16;
+
+		BlockPos pos = new BlockPos(blockX, 64, blockZ);
+
+		final int count = this.count.intValue(world, random, pos);
 
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {

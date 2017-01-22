@@ -1,6 +1,8 @@
 package cofh.lib.world;
 
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -16,16 +18,20 @@ public class WorldGenGeode extends WorldGenerator {
 	private final List<WeightedRandomBlock> cluster;
 	private final List<WeightedRandomBlock> outline;
 	private final WeightedRandomBlock[] genBlock;
-	public List<WeightedRandomBlock> fillBlock = null;
-	public boolean hollow = false;
-	public int width = 16;
-	public int height = 8;
+	private List<WeightedRandomBlock> fillBlock;
+	private boolean hollow;
+	private INumberProvider width;
+	private INumberProvider height;
 
 	public WorldGenGeode(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> material, List<WeightedRandomBlock> cover) {
 
 		cluster = resource;
 		genBlock = material.toArray(new WeightedRandomBlock[material.size()]);
 		outline = cover;
+		fillBlock = null;
+		hollow = false;
+		this.setWidth(16);
+		this.setHeight(8);
 	}
 
 	@Override
@@ -34,6 +40,10 @@ public class WorldGenGeode extends WorldGenerator {
 		int xStart = pos.getX();
 		int yStart = pos.getY();
 		int zStart = pos.getZ();
+
+		final int height = this.height.intValue(world, rand, pos);
+		final int width = this.width.intValue(world, rand, pos);
+
 		int heightOff = height / 2;
 		int widthOff = width / 2;
 		xStart -= widthOff;
@@ -126,4 +136,41 @@ public class WorldGenGeode extends WorldGenerator {
 
 		return r;
 	}
+
+	public WorldGenGeode setWidth(int width) {
+
+		this.width = new ConstantProvider(width);
+		return this;
+	}
+
+	public WorldGenGeode setWidth(INumberProvider width) {
+
+		this.width = width;
+		return this;
+	}
+
+	public WorldGenGeode setHeight(int height) {
+
+		this.height = new ConstantProvider(height);
+		return this;
+	}
+
+	public WorldGenGeode setHeight(INumberProvider height) {
+
+		this.height = height;
+		return this;
+	}
+
+	public WorldGenGeode setHollow(boolean hallow) {
+
+		this.hollow = hollow;
+		return this;
+	}
+
+	public WorldGenGeode setFillBlock(List<WeightedRandomBlock> blocks) {
+
+		this.fillBlock = blocks;
+		return this;
+	}
+
 }

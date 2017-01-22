@@ -1,5 +1,7 @@
 package cofh.lib.world.feature;
 
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -9,13 +11,18 @@ import java.util.Random;
 public class FeatureGenLargeVein extends FeatureBase {
 
 	final WorldGenerator worldGen;
-	final int count;
-	final int minY;
-	private int veinHeight, veinDiameter;
-	private int verticalDensity;
-	private int horizontalDensity;
+	final INumberProvider count;
+	final INumberProvider minY;
+	private INumberProvider veinHeight, veinDiameter;
+	private INumberProvider verticalDensity;
+	private INumberProvider horizontalDensity;
 
 	public FeatureGenLargeVein(String name, WorldGenerator worldGen, int count, int minY, GenRestriction biomeRes, boolean regen, GenRestriction dimRes, int height, int diameter, int vDensity, int hDensity) {
+
+		this(name, worldGen, new ConstantProvider(count), new ConstantProvider(minY), biomeRes, regen, dimRes, new ConstantProvider(height), new ConstantProvider(diameter), new ConstantProvider(vDensity), new ConstantProvider(hDensity));
+	}
+
+	public FeatureGenLargeVein(String name, WorldGenerator worldGen, INumberProvider count, INumberProvider minY, GenRestriction biomeRes, boolean regen, GenRestriction dimRes, INumberProvider height, INumberProvider diameter, INumberProvider vDensity, INumberProvider hDensity) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
@@ -43,8 +50,11 @@ public class FeatureGenLargeVein extends FeatureBase {
 	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
 
 		int blockX = chunkX * 16;
-		int blockY = minY;
 		int blockZ = chunkZ * 16;
+
+		BlockPos pos = new BlockPos(blockX, 64, blockZ);
+
+		final int count = this.count.intValue(world, random, pos);
 
 		Random dRand = new Random(world.getSeed());
 		long l = (dRand.nextLong() / 2L) * 2L + 1L;
@@ -53,6 +63,12 @@ public class FeatureGenLargeVein extends FeatureBase {
 
 		boolean generated = false;
 		for (int i = count; i-- > 0; ) {
+			final int blockY = minY.intValue(world, random, pos);
+			final int veinDiameter = this.veinDiameter.intValue(world, random, pos);
+			final int horizontalDensity = this.horizontalDensity.intValue(world, random, pos);
+			final int veinHeight = this.veinHeight.intValue(world, random, pos);
+			final int verticalDensity = this.verticalDensity.intValue(world, random, pos);
+
 			int x = blockX + getDensity(dRand, veinDiameter, horizontalDensity);
 			int y = blockY + getDensity(dRand, veinHeight, verticalDensity);
 			int z = blockZ + getDensity(dRand, veinDiameter, horizontalDensity);

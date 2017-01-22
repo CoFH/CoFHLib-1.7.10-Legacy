@@ -1,6 +1,8 @@
 package cofh.lib.world;
 
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -18,7 +20,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
-	private final int genVeinSize;
+	private final INumberProvider genVeinSize;
 	private final boolean sparse;
 
 	public WorldGenMinableLargeVein(ItemStack ore, int clusterSize) {
@@ -58,6 +60,11 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block, boolean sparze) {
 
+		this(resource, new ConstantProvider(clusterSize), block, sparze);
+	}
+
+	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, INumberProvider clusterSize, List<WeightedRandomBlock> block, boolean sparze) {
+
 		cluster = resource;
 		genVeinSize = clusterSize;
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
@@ -71,7 +78,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		final int veinSize = genVeinSize;
+		final int veinSize = genVeinSize.intValue(world, rand, pos);
 		final int branchSize = 1 + (veinSize / 30);
 		final int subBranchSize = 1 + (branchSize / 5);
 

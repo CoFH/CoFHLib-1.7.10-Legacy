@@ -1,6 +1,8 @@
 package cofh.lib.world;
 
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -18,7 +20,7 @@ import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
-	private final int genClusterSize;
+	private final INumberProvider genClusterSize;
 	private final WeightedRandomBlock[] genBlock;
 
 	public WorldGenSparseMinableCluster(ItemStack ore, int clusterSize) {
@@ -53,8 +55,13 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
+		this(resource, new ConstantProvider(clusterSize > 32 ? 32 : clusterSize), block);
+	}
+
+	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, INumberProvider clusterSize, List<WeightedRandomBlock> block) {
+
 		cluster = resource;
-		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
+		genClusterSize = clusterSize;
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 	}
 
@@ -65,7 +72,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		int blocks = genClusterSize;
+		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 32);
 		float f = rand.nextFloat() * (float) Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
 		float yMin = (y + rand.nextInt(3)) - 2;

@@ -1,6 +1,8 @@
 package cofh.lib.world;
 
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
@@ -33,7 +35,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	}
 
 	private final List<WeightedRandomBlock> cluster;
-	private final int genClusterSize;
+	private final INumberProvider genClusterSize;
 	private final WeightedRandomBlock[] genBlock;
 
 	public WorldGenMinableCluster(ItemStack ore, int clusterSize) {
@@ -68,8 +70,13 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
+		this(resource, new ConstantProvider(clusterSize > 32 ? 32 : clusterSize), block);
+	}
+
+	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, INumberProvider clusterSize, List<WeightedRandomBlock> block) {
+
 		cluster = resource;
-		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
+		genClusterSize = clusterSize;
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 	}
 
@@ -80,9 +87,9 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		int blocks = genClusterSize;
+		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 32);
 		if (blocks < 4) { // HACK: at 1 and 2 no ores are ever generated. at 3 only 1/3 veins generate
-			return generateTiny(world, rand, x, y, z);
+			return generateTiny(world, rand, blocks, x, y, z);
 		}
 		float f = rand.nextFloat() * (float) Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
@@ -146,11 +153,11 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		return r;
 	}
 
-	public boolean generateTiny(World world, Random random, int x, int y, int z) {
+	public boolean generateTiny(World world, Random random, int clusterSize, int x, int y, int z) {
 
 		boolean r = generateBlock(world, x, y, z, genBlock, cluster);
 		// not <=; generating up to clusterSize blocks
-		for (int i = 1; i < genClusterSize; i++) {
+		for (int i = 1; i < clusterSize; i++) {
 			int d0 = x + random.nextInt(2);
 			int d1 = y + random.nextInt(2);
 			int d2 = z + random.nextInt(2);
