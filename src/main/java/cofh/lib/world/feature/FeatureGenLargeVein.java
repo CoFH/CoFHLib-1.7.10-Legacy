@@ -55,6 +55,11 @@ public class FeatureGenLargeVein extends FeatureBase {
 		BlockPos pos = new BlockPos(blockX, 64, blockZ);
 
 		final int count = this.count.intValue(world, random, pos);
+		final int blockY = minY.intValue(world, random, pos);
+		final int veinDiameter = this.veinDiameter.intValue(world, random, pos);
+		final int horizontalDensity = this.horizontalDensity.intValue(world, random, pos);
+		final int veinHeight = this.veinHeight.intValue(world, random, pos);
+		final int verticalDensity = this.verticalDensity.intValue(world, random, pos);
 
 		Random dRand = new Random(world.getSeed());
 		long l = (dRand.nextLong() / 2L) * 2L + 1L;
@@ -63,11 +68,6 @@ public class FeatureGenLargeVein extends FeatureBase {
 
 		boolean generated = false;
 		for (int i = count; i-- > 0; ) {
-			final int blockY = minY.intValue(world, random, pos);
-			final int veinDiameter = this.veinDiameter.intValue(world, random, pos);
-			final int horizontalDensity = this.horizontalDensity.intValue(world, random, pos);
-			final int veinHeight = this.veinHeight.intValue(world, random, pos);
-			final int verticalDensity = this.verticalDensity.intValue(world, random, pos);
 
 			int x = blockX + getDensity(dRand, veinDiameter, horizontalDensity);
 			int y = blockY + getDensity(dRand, veinHeight, verticalDensity);

@@ -40,11 +40,12 @@ public class FeatureGenGaussian extends FeatureBase {
 		BlockPos pos = new BlockPos(blockX, 64, blockZ);
 
 		final int count = this.count.intValue(world, random, pos);
+		final int meanY = this.meanY.intValue(world, random, pos);
 
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
-			int y = meanY.intValue(world, random, pos);
+			int y = meanY;
 			final int maxVar = this.maxVar.intValue(world, random, pos);
 			if (maxVar > 1) {
 				final int rolls = this.rolls.intValue(world, random, pos);

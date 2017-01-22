@@ -38,11 +38,13 @@ public class FeatureGenUniform extends FeatureBase {
 		BlockPos pos = new BlockPos(blockX, 64, blockZ);
 
 		final int count = this.count.intValue(world, random, pos);
+		final int minY = Math.max(this.minY.intValue(world, random, pos), 0), maxY = this.maxY.intValue(world, random, pos);
+		if (minY > maxY)
+			return false;
 
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
-			final int minY = this.minY.intValue(world, random, pos), maxY = this.maxY.intValue(world, random, pos);
 			int y = minY + random.nextInt(maxY - minY);
 			int z = blockZ + random.nextInt(16);
 			if (!canGenerateInBiome(world, x, z, random)) {
