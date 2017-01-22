@@ -16,9 +16,19 @@ public class ConstantProvider implements INumberProvider {
 		this.min = value;
 	}
 
+	public int intValue(World world, Random rand, BlockPos pos) {
+
+		return (int) longValue(world, rand, pos);
+	}
+
 	public long longValue(World world, Random rand, BlockPos pos) {
 
 		return min.longValue();
+	}
+
+	public float floatValue(World world, Random rand, BlockPos pos) {
+
+		return (float) doubleValue(world, rand, pos);
 	}
 
 	public double doubleValue(World world, Random rand, BlockPos pos) {
