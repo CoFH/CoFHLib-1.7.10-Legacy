@@ -45,7 +45,7 @@ public class FeatureGenUniform extends FeatureBase {
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
 			int x = blockX + random.nextInt(16);
-			int y = minY + random.nextInt(maxY - minY);
+			int y = minY + (minY != maxY ? random.nextInt(maxY - minY) : 0);
 			int z = blockZ + random.nextInt(16);
 			if (!canGenerateInBiome(world, x, z, random)) {
 				continue;
