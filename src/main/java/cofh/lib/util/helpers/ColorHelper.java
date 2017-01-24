@@ -32,7 +32,7 @@ public final class ColorHelper {
 
 	// Yes, this list is pre-localized to en_US and has no spaces. There are times when this is useful, such as in a config file. Localization there is messy
 	// and not strictly required.
-	public static final String[] woolColorConfig = { "White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black" };
+	public static final String[] WOOL_COLOR_CONFIG = { "White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black" };
 
 	public static int getDyeColor(int color) {
 

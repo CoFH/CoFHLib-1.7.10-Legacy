@@ -1,6 +1,5 @@
 package cofh.lib.util.helpers;
 
-import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
@@ -909,39 +908,6 @@ public final class ItemHelper {
 	}
 
 	// }
-
-	/* EMPOWERED ITEM HELPERS */
-	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
-
-		if (!isPlayerHoldingSomething(player)) {
-			return false;
-		}
-		ItemStack heldItem = getHeldStack(player);
-		Item equipped = heldItem.getItem();
-		return equipped instanceof IEmpowerableItem;
-	}
-
-	public static boolean isPlayerHoldingEmpoweredItem(EntityPlayer player) {
-
-		if (!isPlayerHoldingSomething(player)) {
-			return false;
-		}
-		ItemStack heldItem = getHeldStack(player);
-		Item equipped = heldItem.getItem();
-		return equipped instanceof IEmpowerableItem && ((IEmpowerableItem) equipped).isEmpowered(heldItem);
-	}
-
-	public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
-
-		if (!isPlayerHoldingSomething(player)) {
-			return false;
-		}
-		ItemStack heldItem = getHeldStack(player);
-		Item equipped = heldItem.getItem();
-		IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped;
-
-		return empowerableItem.setEmpoweredState(heldItem, !empowerableItem.isEmpowered(heldItem));
-	}
 
 	/* MULTIMODE ITEM HELPERS */
 	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
