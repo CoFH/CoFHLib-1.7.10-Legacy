@@ -115,7 +115,7 @@ public class WorldGenSmallTree extends WorldGenerator {
 						}
 					}
 
-					if (genSurface != null && !canGenerateInBlock(world, x, y - 1, z, genSurface)) {
+					if (!canGenerateInBlock(world, x, y - 1, z, genSurface)) {
 						return false;
 					}
 					offsetPos = new BlockPos(x, y - 1, z);
