@@ -18,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -955,16 +954,11 @@ public final class ItemHelper {
 	}
 
 	/**
-	 * Determine if a player is holding a registered Fluid Container.
+	 * Determine if a player is holding a Fluid Handler.
 	 */
-	public static boolean isPlayerHoldingFluidContainer(EntityPlayer player) {
+	public static boolean isPlayerHoldingFluidHandler(EntityPlayer player) {
 
-		return FluidContainerRegistry.isContainer(getHeldStack(player));
-	}
-
-	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
-
-		return FluidHelper.isPlayerHoldingFluidContainerItem(player);
+		return FluidHelper.isPlayerHoldingFluidHandler(player);
 	}
 
 	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {

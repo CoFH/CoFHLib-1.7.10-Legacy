@@ -50,36 +50,31 @@ public class FluidHelper {
 	/* IFluidContainer Interaction */
 	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
 	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
+		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
 	}
 
 	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
 
 		ItemStack container = player.getHeldItemMainhand();
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
+		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
 	}
 
 	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
 
 		ItemStack container = player.getHeldItemMainhand();
 
-		return isFluidContainerItem(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
-	public static boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
+	public static boolean isPlayerHoldingFluidHandler(EntityPlayer player) {
 
-		return isFluidContainerItem(player.getHeldItemMainhand());
-	}
-
-	public static boolean isFluidContainerItem(ItemStack container) {
-
-		return container != null && container.getItem() instanceof IFluidContainerItem;
+		return isFluidHandler(player.getHeldItemMainhand());
 	}
 
 	public static FluidStack getFluidStackFromContainerItem(ItemStack container) {
@@ -95,10 +90,7 @@ public class FluidHelper {
 	 */
 	public static boolean isFluidHandler(@Nullable ItemStack stack) {
 
-		if (stack == null) {
-			return false;
-		}
-		return stack.hasCapability(FLUID_HANDLER, null);
+		return stack != null && stack.hasCapability(FLUID_HANDLER, null);
 	}
 
 	public static ItemStack setDefaultFluidTag(ItemStack container, FluidStack resource) {
@@ -115,7 +107,6 @@ public class FluidHelper {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 		boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
-
 		return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).drain(maxDrain, doDrain) : null;
 	}
 
@@ -170,8 +161,9 @@ public class FluidHelper {
 		if (stack == null || handler == null || player == null) {
 			return false;
 		}
-
 		IItemHandler playerInv = new InvWrapper(player.inventory);
+		System.out.println("in Helper");
+
 		return FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
 	}
 
@@ -190,7 +182,6 @@ public class FluidHelper {
 		if (stack == null || handler == null || player == null) {
 			return false;
 		}
-
 		IItemHandler playerInv = new InvWrapper(player.inventory);
 		return FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
 	}
