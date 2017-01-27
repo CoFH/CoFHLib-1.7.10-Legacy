@@ -70,7 +70,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
-		this(resource, new ConstantProvider(clusterSize > 32 ? 32 : clusterSize), block);
+		this(resource, new ConstantProvider(clusterSize), block);
 	}
 
 	public WorldGenMinableCluster(List<WeightedRandomBlock> resource, INumberProvider clusterSize, List<WeightedRandomBlock> block) {
@@ -87,7 +87,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 32);
+		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 42);
 		if (blocks < 4) { // HACK: at 1 and 2 no ores are ever generated. at 3 only 1/3 veins generate
 			return generateTiny(world, rand, blocks, x, y, z);
 		}
