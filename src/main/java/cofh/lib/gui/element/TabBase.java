@@ -6,6 +6,7 @@ import cofh.lib.gui.TabTracker;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.Rectangle4i;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Mouse;
 
@@ -202,7 +203,7 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
-	protected void drawTabIcon(String iconName) {
+	protected void drawTabIcon(TextureAtlasSprite iconName) {
 
 		gui.drawIcon(iconName, posXOffset(), posY + 3);
 	}

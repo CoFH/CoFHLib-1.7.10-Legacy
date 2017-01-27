@@ -499,24 +499,11 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	/**
-	 * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
-	 */
-	public TextureAtlasSprite getIcon(String name) {
-
-		return null;
-	}
-
-	/**
 	 * Essentially a placeholder method for tabs to use should they need to draw a button.
 	 */
 	public void drawButton(TextureAtlasSprite icon, int x, int y, int mode) {
 
 		drawIcon(icon, x, y);
-	}
-
-	public void drawButton(String iconName, int x, int y, int mode) {
-
-		drawButton(getIcon(iconName), x, y, mode);
 	}
 
 	public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
@@ -590,11 +577,6 @@ public abstract class GuiBase extends GuiContainer {
 	public void drawColorIcon(TextureAtlasSprite icon, int x, int y) {
 
 		drawTexturedModalRect(x, y, icon, 16, 16);
-	}
-
-	public void drawIcon(String iconName, int x, int y) {
-
-		drawIcon(getIcon(iconName), x, y);
 	}
 
 	public void drawSizedModalRect(int x1, int y1, int x2, int y2, int color) {
