@@ -77,34 +77,18 @@ public class EnergyHelper {
 	}
 
 	/* IEnergyHandler Interaction */
-	@Deprecated
-	public static int extractEnergyFromAdjacentEnergyHandler(TileEntity tile, int side, int energy, boolean simulate) {
+	public static int extractEnergyFromAdjacentEnergyProvider(TileEntity tile, EnumFacing side, int energy, boolean simulate) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
+		return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(side.getOpposite(), energy, simulate) : 0;
 	}
 
-	@Deprecated
-	public static int insertEnergyIntoAdjacentEnergyHandler(TileEntity tile, int side, int energy, boolean simulate) {
+	public static int insertEnergyIntoAdjacentEnergyReceiver(TileEntity tile, EnumFacing side, int energy, boolean simulate) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
-	}
-
-	public static int extractEnergyFromAdjacentEnergyProvider(TileEntity tile, int side, int energy, boolean simulate) {
-
-		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-		return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
-	}
-
-	public static int insertEnergyIntoAdjacentEnergyReceiver(TileEntity tile, int side, int energy, boolean simulate) {
-
-		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(EnumFacing.VALUES[side ^ 1], energy, simulate) : 0;
+		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate) : 0;
 	}
 
 	@Deprecated

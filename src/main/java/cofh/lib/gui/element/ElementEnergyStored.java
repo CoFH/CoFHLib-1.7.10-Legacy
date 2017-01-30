@@ -42,7 +42,6 @@ public class ElementEnergyStored extends ElementBase {
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		int amount = getScaled();
-
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
 		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - amount, 16, DEFAULT_SCALE - amount, sizeX, amount);

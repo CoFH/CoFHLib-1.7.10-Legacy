@@ -10,8 +10,8 @@ import cofh.lib.render.RenderHelper;
  */
 public class ElementSimple extends ElementBase {
 
-	int texU = 0;
-	int texV = 0;
+	protected int texU = 0;
+	protected int texV = 0;
 
 	public ElementSimple(GuiBase gui, int posX, int posY) {
 

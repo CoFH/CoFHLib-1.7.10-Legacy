@@ -60,15 +60,6 @@ public abstract class GuiBase extends GuiContainer {
 	protected List<String> tooltip = new LinkedList<String>();
 	protected boolean tooltips = true;
 
-	/**
-	 * Deprecated Use GuiBase.playSound(String name, SoundCategory category, float volume, float pitch)
-	 */
-	@Deprecated
-	public static void playSound(String name, float volume, float pitch) {
-
-		playSound(name, SoundCategory.MASTER, volume, pitch);
-	}
-
 	public static void playSound(String name, SoundCategory category, float volume, float pitch) {
 
 		guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));

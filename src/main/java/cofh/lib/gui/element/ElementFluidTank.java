@@ -13,6 +13,7 @@ import java.util.List;
 public class ElementFluidTank extends ElementBase {
 
 	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank.png");
+	public static final ResourceLocation THIN_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_thin.png");
 	public static final int DEFAULT_SCALE = 60;
 
 	protected IFluidTank tank;
@@ -23,23 +24,15 @@ public class ElementFluidTank extends ElementBase {
 
 	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank) {
 
-		super(gui, posX, posY);
-		this.tank = tank;
-
-		this.texture = DEFAULT_TEXTURE;
-		this.texW = 64;
-		this.texH = 64;
-
-		this.sizeX = 16;
-		this.sizeY = DEFAULT_SCALE;
+		this(gui, posX, posY, tank, DEFAULT_TEXTURE);
 	}
 
-	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank, String texture) {
+	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank, ResourceLocation texture) {
 
 		super(gui, posX, posY);
 		this.tank = tank;
 
-		this.texture = new ResourceLocation(texture);
+		this.texture = texture;
 		this.texW = 64;
 		this.texH = 64;
 
@@ -53,6 +46,13 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
+	public ElementFluidTank setThin() {
+
+		this.texture = THIN_TEXTURE;
+		this.sizeX = 7;
+		return this;
+	}
+
 	public ElementFluidTank setAlwaysShow(boolean show) {
 
 		alwaysShowMinimum = show;
@@ -63,7 +63,6 @@ public class ElementFluidTank extends ElementBase {
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		int amount = getScaled();
-
 		gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
@@ -77,7 +76,7 @@ public class ElementFluidTank extends ElementBase {
 	@Override
 	public void addTooltip(List<String> list) {
 
-		if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
+		if (tank.getFluid() != null) {
 			list.add(StringHelper.getFluidName(tank.getFluid()));
 		}
 		if (tank.getCapacity() < 0) {
