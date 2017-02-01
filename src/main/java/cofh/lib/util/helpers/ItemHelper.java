@@ -97,12 +97,7 @@ public final class ItemHelper {
 
 	public static ItemStack cloneStack(ItemStack stack) {
 
-		if (stack == null) {
-			return null;
-		}
-		ItemStack retStack = stack.copy();
-
-		return retStack;
+		return stack == null ? null : stack.copy();
 	}
 
 	public static ItemStack copyTag(ItemStack container, ItemStack other) {
