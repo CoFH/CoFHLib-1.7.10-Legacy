@@ -4,25 +4,14 @@ import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import com.google.common.base.Strings;
 import com.mojang.authlib.GameProfile;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,24 +19,6 @@ import java.util.UUID;
 public class SecurityHelper {
 
 	public static final GameProfile UNKNOWN_GAME_PROFILE = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
-	private static final SimpleNetworkWrapper NET = NetworkRegistry.INSTANCE.newSimpleChannel("CoFH:Security");
-	private static boolean setup = false;
-
-	public static void setup() {
-
-		if (setup) {
-			return;
-		}
-
-		MinecraftForge.EVENT_BUS.register(new ServerHandler());//Register the event handler.
-		NET.registerMessage(UUID_MessageHandler.class, UUID_Message.class, 1, Side.CLIENT);//Use FML's Simple network wrapper.
-
-		setup = true;
-	}
-
-	static {
-		setup();
-	}
 
 	private SecurityHelper() {
 
@@ -233,53 +204,4 @@ public class SecurityHelper {
 		return hasUUID ? stack.getTagCompound().getString("Owner") : StringHelper.localize("info.cofh.anotherplayer");
 	}
 
-	public static class UUID_Message implements IMessage {
-
-		public UUID uuid;
-
-		public UUID_Message() {
-
-		}
-
-		private UUID_Message(UUID uuid) {
-
-			this.uuid = uuid;
-		}
-
-		@Override
-		public void fromBytes(ByteBuf buf) {
-
-			uuid = new UUID(buf.readLong(), buf.readLong());
-		}
-
-		@Override
-		public void toBytes(ByteBuf buf) {
-
-			buf.writeLong(uuid.getMostSignificantBits());
-			buf.writeLong(uuid.getLeastSignificantBits());
-		}
-	}
-
-	public static class UUID_MessageHandler implements IMessageHandler<UUID_Message, IMessage> {
-
-		@Override
-		public IMessage onMessage(UUID_Message message, MessageContext ctx) {
-
-			cachedId = message.uuid;
-			return null;
-		}
-	}
-
-	public static class ServerHandler {
-
-		@SubscribeEvent
-		public void login(PlayerLoggedInEvent evt) {
-
-			if (evt.player instanceof EntityPlayerMP) {
-				UUID uuid = evt.player.getGameProfile().getId();
-				UUID_Message message = new UUID_Message(uuid);
-				NET.sendTo(message, (EntityPlayerMP) evt.player);
-			}
-		}
-	}
 }
