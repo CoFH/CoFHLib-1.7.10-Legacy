@@ -10,9 +10,9 @@ import net.minecraft.item.ItemStack;
 public interface IAugmentable {
 
 	/**
-	 * Attempt to reconfigure the (Tile) Entity based on the Augmentations present.
+	 * Attempt to install a specific augment in the (Tile) Entity.
 	 */
-	void installAugments();
+	boolean installAugment(ItemStack augment);
 
 	/**
 	 * Returns an array of the Augment slots for this (Tile) Entity.

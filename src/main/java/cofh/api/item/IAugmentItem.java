@@ -2,8 +2,6 @@ package cofh.api.item;
 
 import net.minecraft.item.ItemStack;
 
-import java.util.Set;
-
 public interface IAugmentItem {
 
 	/**
@@ -16,11 +14,11 @@ public interface IAugmentItem {
 	int getAugmentLevel(ItemStack stack, String type);
 
 	/**
-	 * Get the Augment Types for a given Augment. Set ensure that there are no duplicates.
+	 * Get the Augment Types for a given Augment.
 	 *
 	 * @param stack ItemStack representing the Augment.
-	 * @return Set of the Augmentation Types. Should return an empty set if there are none (but this would be really stupid to make). DO NOT RETURN NULL.
+	 * @return Augment Type of the stack.
 	 */
-	Set<String> getAugmentTypes(ItemStack stack);
+	String getAugmentType(ItemStack stack);
 
 }

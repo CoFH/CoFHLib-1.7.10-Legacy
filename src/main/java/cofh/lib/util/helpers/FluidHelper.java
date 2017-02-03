@@ -162,8 +162,6 @@ public class FluidHelper {
 			return false;
 		}
 		IItemHandler playerInv = new InvWrapper(player.inventory);
-		System.out.println("in Helper");
-
 		return FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
 	}
 

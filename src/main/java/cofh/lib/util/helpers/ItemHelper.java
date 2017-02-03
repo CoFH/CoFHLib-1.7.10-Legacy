@@ -186,7 +186,6 @@ public final class ItemHelper {
 		if (stack == null) {
 			return null;
 		}
-
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
@@ -205,7 +204,6 @@ public final class ItemHelper {
 			}
 			return ret;
 		}
-
 		return largerStack ? stack : null;
 	}
 
@@ -214,7 +212,6 @@ public final class ItemHelper {
 		if (stack == null) {
 			return null;
 		}
-
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
@@ -235,7 +232,6 @@ public final class ItemHelper {
 				player.dropItem(ret, false, true);
 			}
 		}
-
 		return largerStack ? stack : null;
 	}
 
