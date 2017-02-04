@@ -161,7 +161,7 @@ public class WorldGenGeode extends WorldGenerator {
 		return this;
 	}
 
-	public WorldGenGeode setHollow(boolean hallow) {
+	public WorldGenGeode setHollow(boolean hollow) {
 
 		this.hollow = hollow;
 		return this;
