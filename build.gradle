@@ -1,14 +1,14 @@
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-    }
+	repositories {
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+	}
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -21,17 +21,17 @@ archivesBaseName = "CoFHLib"
 ext.configFile = file "build.properties"
 
 configFile.withReader {
-    // Load config.  It shall from now be referenced as simply config or project.config
-    def prop = new Properties()
-    prop.load(it)
-    project.ext.config = new ConfigSlurper().parse prop
+	// Load config.  It shall from now be referenced as simply config or project.config
+	def prop = new Properties()
+	prop.load(it)
+	project.ext.config = new ConfigSlurper().parse prop
 }
 
 repositories {
-    maven {
-        name = "ChickenBones Maven"
-        url = "http://chickenbones.net/maven/"
-    }
+	maven {
+		name = "ChickenBones Maven"
+		url = "http://chickenbones.net/maven/"
+	}
 }
 
 dependencies {
@@ -43,104 +43,104 @@ version = "${project.config.mod_version}." + (System.getenv("BUILD_NUMBER") ?: "
 println config.mc_version + "-" + config.forge_version
 
 minecraft {
-    version = config.mc_version + "-" + config.forge_version
-    mappings = config.mappings
-    runDir = "run"
-    makeObfSourceJar = false
+	version = config.mc_version + "-" + config.forge_version
+	mappings = config.mappings
+	runDir = "run"
+	makeObfSourceJar = false
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "mc_version", project.config.mc_version
+	inputs.property "version", project.version
+	inputs.property "mc_version", project.config.mc_version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version': project.version, 'mc_version': project.config.mc_version
-    }
-    rename '(.+_at.cfg)', 'META-INF/$1'
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		expand 'version': project.version, 'mc_version': project.config.mc_version
+	}
+	rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 version = "${project.minecraft.version}-${project.version}"
 def commonManifest = {
-    attributes 'FMLAT': 'CoFHLib_at.cfg'
+	attributes 'FMLAT': 'cofh_at.cfg'
 }
 
 jar {
-    classifier = 'universal'
-    manifest commonManifest
+	classifier = 'universal'
+	manifest commonManifest
 }
 
 task apiJar(type: Jar, dependsOn: 'sourceMainJava') {
-    from('build/sources/java') {
-        include "**/api/**/*"
-    }
-    classifier = 'API'
+	from('build/sources/java') {
+		include "**/api/**/*"
+	}
+	classifier = 'API'
 }
 
 task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-    manifest commonManifest
+	from sourceSets.main.output
+	classifier = 'deobf'
+	manifest commonManifest
 }
 
 task srcJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-    manifest commonManifest
+	from sourceSets.main.allSource
+	classifier = 'sources'
+	manifest commonManifest
 }
 
 artifacts {
-    archives deobfJar
-    archives srcJar
-    archives apiJar
+	archives deobfJar
+	archives srcJar
+	archives apiJar
 }
 
 //project.tasks.build.dependsOn deobfJar, apiJar
 
 uploadArchives {
-    repositories {
-        mavenDeployer {
-            if (project.hasProperty("local_maven")) {
-                repository(url: "file://${local_maven}")
-                pom {
-                    groupId = project.group
-                    // Force the maven upload to use the <mcversion>-<version> syntax preferred at files
-                    artifactId = project.archivesBaseName
-                    project {
-                        name project.archivesBaseName
-                        packaging 'jar'
-                        description 'CoFHLib'
-                        url 'https://github.com/TheCBProject/CoFHLib'
+	repositories {
+		mavenDeployer {
+			if (project.hasProperty("local_maven")) {
+				repository(url: "file://${local_maven}")
+				pom {
+					groupId = project.group
+					// Force the maven upload to use the <mcversion>-<version> syntax preferred at files
+					artifactId = project.archivesBaseName
+					project {
+						name project.archivesBaseName
+						packaging 'jar'
+						description 'CoFHLib'
+						url 'https://github.com/TheCBProject/CoFHLib'
 
-                        scm {
-                            url 'https://github.com/TheCBProject/CoFHLib'
-                            connection 'scm:git:git://github.com/TheCBProject/CoFHLib.git'
-                            developerConnection 'scm:git:git@github.com:TheCBProject/CoFHLib.git'
-                        }
+						scm {
+							url 'https://github.com/TheCBProject/CoFHLib'
+							connection 'scm:git:git://github.com/TheCBProject/CoFHLib.git'
+							developerConnection 'scm:git:git@github.com:TheCBProject/CoFHLib.git'
+						}
 
-                        issueManagement {
-                            system 'github'
-                            url 'https://github.com/TheCBProject/CoFHLib/issues'
-                        }
+						issueManagement {
+							system 'github'
+							url 'https://github.com/TheCBProject/CoFHLib/issues'
+						}
 
-                        licenses {
-                            license {
-                                name 'GNU Lesser Public License (GPL), Version 3'
-                                url 'https://github.com/TheCBProject/CoFHLib/blob/master/LICENSE%20-%20LGPLv3.txt'
-                                distribution 'repo'
-                            }
-                        }
+						licenses {
+							license {
+								name 'GNU Lesser Public License (GPL), Version 3'
+								url 'https://github.com/TheCBProject/CoFHLib/blob/master/LICENSE%20-%20LGPLv3.txt'
+								distribution 'repo'
+							}
+						}
 
-                        developers {
-                            developer {
-                                id 'TeamCoFH'
-                                name 'TeamCoFH'
-                                roles { role 'developer' }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+						developers {
+							developer {
+								id 'TeamCoFH'
+								name 'TeamCoFH'
+								roles { role 'developer' }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }
