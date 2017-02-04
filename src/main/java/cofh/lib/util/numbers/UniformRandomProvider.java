@@ -15,8 +15,9 @@ public class UniformRandomProvider extends ConstantProvider {
 		this.max = max;
 		boolean longBad = min.longValue() >= max.longValue();
 		boolean doubleBad = min.doubleValue() >= max.doubleValue();
-		if (longBad && doubleBad)
+		if (longBad && doubleBad) {
 			throw new IllegalArgumentException("min >= max");
+		}
 	}
 
 	@Override
@@ -36,16 +37,18 @@ public class UniformRandomProvider extends ConstantProvider {
 		if (val == 0) {
 			return 0;
 		}
-		int low = (int)(val & Integer.MAX_VALUE);
-		int mid = (int)((val >>> 31) & Integer.MAX_VALUE);
-		int high = (int)((val >>> 62) & Integer.MAX_VALUE);
+		int low = (int) (val & Integer.MAX_VALUE);
+		int mid = (int) ((val >>> 31) & Integer.MAX_VALUE);
+		int high = (int) ((val >>> 62) & Integer.MAX_VALUE);
 
 		boolean mh = (mid | high) > 0;
 		long r = mh ? rand.nextInt() & Integer.MAX_VALUE : rand.nextInt(low);
-		if (mh)
+		if (mh) {
 			r |= (high > 0 ? rand.nextInt() & Integer.MAX_VALUE : rand.nextInt(mid)) << 31;
-		if (high > 0)
+		}
+		if (high > 0) {
 			r |= rand.nextInt(high) << 62;
+		}
 
 		return r;
 	}

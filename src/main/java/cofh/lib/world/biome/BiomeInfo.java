@@ -38,9 +38,9 @@ public class BiomeInfo {
 		boolean r = false;
 		if (biome != null) {
 			switch (type) {
-			default:
-				break;
-			case 0:
+				default:
+					break;
+				case 0:
 					String name = biome.getBiomeName();
 					r = name.hashCode() == hash && name.equals(data);
 					break;

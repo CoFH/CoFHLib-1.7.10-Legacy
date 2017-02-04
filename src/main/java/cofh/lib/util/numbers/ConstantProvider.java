@@ -11,8 +11,9 @@ public class ConstantProvider implements INumberProvider {
 
 	public ConstantProvider(Number value) {
 
-		if (value == null)
+		if (value == null) {
 			throw new IllegalArgumentException("Null value not allowed");
+		}
 		this.min = value;
 	}
 

@@ -1,14 +1,14 @@
 package cofh.lib.util.numbers;
 
-import static cofh.lib.util.numbers.UniformRandomProvider.*;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class SkellamRandomProvider extends ConstantProvider {
+import static cofh.lib.util.numbers.UniformRandomProvider.getRandomDouble;
+import static cofh.lib.util.numbers.UniformRandomProvider.getRandomLong;
 
+public class SkellamRandomProvider extends ConstantProvider {
 
 	public SkellamRandomProvider(Number value) {
 

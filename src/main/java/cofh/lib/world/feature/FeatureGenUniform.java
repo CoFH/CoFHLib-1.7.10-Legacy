@@ -39,8 +39,9 @@ public class FeatureGenUniform extends FeatureBase {
 
 		final int count = this.count.intValue(world, random, pos);
 		final int minY = Math.max(this.minY.intValue(world, random, pos), 0), maxY = this.maxY.intValue(world, random, pos);
-		if (minY > maxY)
+		if (minY > maxY) {
 			return false;
+		}
 
 		boolean generated = false;
 		for (int i = 0; i < count; i++) {
