@@ -111,10 +111,10 @@ public abstract class FeatureBase implements IFeatureGenerator {
 			return false;
 		}
 
-		return generateFeature(random, chunkX, chunkZ, world);
+		return generateFeature(random, chunkX * 16 + 8, chunkZ * 16 + 8, world);
 	}
 
-	protected abstract boolean generateFeature(Random random, int chunkX, int chunkZ, World world);
+	protected abstract boolean generateFeature(Random random, int blockX, int blockZ, World world);
 
 	protected boolean canGenerateInBiome(World world, int x, int z, Random rand) {
 

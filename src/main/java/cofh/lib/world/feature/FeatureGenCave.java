@@ -29,11 +29,9 @@ public class FeatureGenCave extends FeatureBase {
 	}
 
 	@Override
-	protected boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
+	protected boolean generateFeature(Random random, int blockX, int blockZ, World world) {
 
 		int averageSeaLevel = world.provider.getAverageGroundLevel() + 1;
-		int blockX = chunkX * 16;
-		int blockZ = chunkZ * 16;
 
 		BlockPos pos = new BlockPos(blockX, 64, blockZ);
 

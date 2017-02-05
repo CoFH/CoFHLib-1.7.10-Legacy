@@ -47,10 +47,7 @@ public class FeatureGenLargeVein extends FeatureBase {
 	}
 
 	@Override
-	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
-
-		int blockX = chunkX * 16;
-		int blockZ = chunkZ * 16;
+	public boolean generateFeature(Random random, int blockX, int blockZ, World world) {
 
 		BlockPos pos = new BlockPos(blockX, 64, blockZ);
 
@@ -64,7 +61,7 @@ public class FeatureGenLargeVein extends FeatureBase {
 		Random dRand = new Random(world.getSeed());
 		long l = (dRand.nextLong() / 2L) * 2L + 1L;
 		long l1 = (dRand.nextLong() / 2L) * 2L + 1L;
-		dRand.setSeed(chunkX * l + chunkZ * l1 ^ world.getSeed());
+		dRand.setSeed((blockX >> 4) * l + (blockZ >> 4) * l1 ^ world.getSeed());
 
 		boolean generated = false;
 		for (int i = count; i-- > 0; ) {

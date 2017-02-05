@@ -32,10 +32,7 @@ public class FeatureGenGaussian extends FeatureBase {
 	}
 
 	@Override
-	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world) {
-
-		int blockX = chunkX * 16;
-		int blockZ = chunkZ * 16;
+	public boolean generateFeature(Random random, int blockX, int blockZ, World world) {
 
 		BlockPos pos = new BlockPos(blockX, 64, blockZ);
 
