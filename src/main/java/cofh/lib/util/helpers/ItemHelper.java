@@ -69,9 +69,7 @@ public final class ItemHelper {
 		if (item == null) {
 			return null;
 		}
-		ItemStack stack = new ItemStack(item, stackSize);
-
-		return stack;
+		return new ItemStack(item, stackSize);
 	}
 
 	public static ItemStack cloneStack(Block item, int stackSize) {
@@ -79,9 +77,7 @@ public final class ItemHelper {
 		if (item == null) {
 			return null;
 		}
-		ItemStack stack = new ItemStack(item, stackSize);
-
-		return stack;
+		return new ItemStack(item, stackSize);
 	}
 
 	public static ItemStack cloneStack(ItemStack stack, int stackSize) {
