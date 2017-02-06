@@ -25,9 +25,10 @@ public interface IFeatureGenerator {
 	 * @param chunkX Minimum X chunk-coordinate of the chunk. (x16 for block coordinate)
 	 * @param chunkZ Minimum Z chunk-coordinate of the chunk. (x16 for block coordinate)
 	 * @param world  The world to generate in.
+	 * @param hasVillage True if this chunk contains a village
 	 * @param newGen True on initial generation, false on retrogen.
 	 * @return True if generation happened, false otherwise.
 	 */
-	boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen);
+	boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean hasVillage, boolean newGen);
 
 }

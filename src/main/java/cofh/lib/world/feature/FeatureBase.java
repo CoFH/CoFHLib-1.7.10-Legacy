@@ -29,10 +29,16 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	}
 
 	public final String name;
+
 	public final GenRestriction biomeRestriction;
 	public final GenRestriction dimensionRestriction;
+
 	public final boolean regen;
+
+	public boolean withVillage = true;
+
 	protected int rarity;
+
 	protected final BiomeInfoSet biomes = new BiomeInfoSet(1);
 	protected final Set<Integer> dimensions = new THashSet<Integer>();
 
@@ -99,9 +105,12 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	}
 
 	@Override
-	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+	public boolean generateFeature(Random random, int chunkX, int chunkZ, World world, boolean hasVillage, boolean newGen) {
 
 		if (!newGen && !regen) {
+			return false;
+		}
+		if (hasVillage && !withVillage) {
 			return false;
 		}
 		if (dimensionRestriction != GenRestriction.NONE && dimensionRestriction == GenRestriction.BLACKLIST == dimensions.contains(world.provider.getDimension())) {
