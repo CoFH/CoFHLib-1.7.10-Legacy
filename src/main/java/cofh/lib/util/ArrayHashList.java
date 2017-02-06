@@ -156,6 +156,12 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 		return index(index);
 	}
 
+	public E get(Object index) {
+
+		Entry e = seek(index, hash(index));
+		return (E) (e == null ? null : e.key);
+	}
+
 	@Override
 	public int indexOf(Object obj) {
 

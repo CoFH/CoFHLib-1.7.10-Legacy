@@ -167,6 +167,12 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 		return (E) index(index).key;
 	}
 
+	public E get(Object index) {
+
+		Entry v = seek(index, hash(index));
+		return (E) (v == null ? null : v.key);
+	}
+
 	@Override
 	public int indexOf(Object o) {
 
