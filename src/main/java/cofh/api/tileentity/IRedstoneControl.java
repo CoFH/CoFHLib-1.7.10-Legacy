@@ -54,8 +54,14 @@ public interface IRedstoneControl extends IRedstoneCache {
 		}
 	}
 
-	void setControl(ControlMode control);
+	/**
+	 * Attempt to set the Control Mode of a Tile Entity. Returns TRUE on successful change.
+	 */
+	boolean setControl(ControlMode control);
 
+	/**
+	 * Gets the current Control Mode of a Tile Entity.
+	 */
 	ControlMode getControl();
 
 }

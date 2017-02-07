@@ -9,15 +9,15 @@ import java.util.List;
 
 public class ElementButton extends ElementButtonBase {
 
-	int sheetX;
-	int sheetY;
-	int hoverX;
-	int hoverY;
-	int disabledX = 0;
-	int disabledY = 0;
-	boolean tooltipLocalized = false;
-	boolean managedClicks;
-	String tooltip;
+	private int sheetX;
+	private int sheetY;
+	private int hoverX;
+	private int hoverY;
+	private int disabledX = 0;
+	private int disabledY = 0;
+	private boolean tooltipLocalized = false;
+	private boolean managedClicks;
+	private String tooltip;
 
 	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, String texture) {
 
@@ -92,7 +92,6 @@ public class ElementButton extends ElementButtonBase {
 		RenderHelper.bindTexture(texture);
 		if (isEnabled()) {
 			if (intersectsWith(mouseX, mouseY)) {
-
 				drawTexturedModalRect(posX, posY, hoverX, hoverY, sizeX, sizeY);
 			} else {
 				drawTexturedModalRect(posX, posY, sheetX, sheetY, sizeX, sizeY);

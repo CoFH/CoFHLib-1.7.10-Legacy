@@ -76,7 +76,7 @@ public class ElementFluidTank extends ElementBase {
 	@Override
 	public void addTooltip(List<String> list) {
 
-		if (tank.getFluid() != null) {
+		if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
 			list.add(StringHelper.getFluidName(tank.getFluid()));
 		}
 		if (tank.getCapacity() < 0) {

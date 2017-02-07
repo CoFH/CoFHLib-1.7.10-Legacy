@@ -376,7 +376,8 @@ public abstract class TabBase extends ElementBase {
 	@Override
 	/**
 	 * @return Whether the tab should stay open or not.
-	 */ public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
+	 */
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		mouseX -= this.posX();
 		mouseY -= this.posY;
@@ -388,14 +389,12 @@ public abstract class TabBase extends ElementBase {
 			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 				continue;
 			}
-
 			shouldStayOpen = true;
 
 			if (c.onMousePressed(mouseX, mouseY, mouseButton)) {
 				return true;
 			}
 		}
-
 		return shouldStayOpen;
 	}
 
@@ -414,7 +413,7 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
-	private void updateElements() {
+	protected void updateElements() {
 
 		for (ElementBase element : elements) {
 			element.setVisible(this.isFullyOpened());

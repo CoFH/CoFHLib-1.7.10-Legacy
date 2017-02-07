@@ -1,6 +1,7 @@
 package cofh.lib.util.helpers;
 
 import cofh.api.item.IAugmentItem;
+import cofh.api.item.IUpgradeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -53,6 +54,11 @@ public class AugmentHelper {
 	public static boolean isAugmentItem(ItemStack stack) {
 
 		return stack != null && stack.getItem() instanceof IAugmentItem;
+	}
+
+	public static boolean isUpgradeItem(ItemStack stack) {
+
+		return stack != null && stack.getItem() instanceof IUpgradeItem;
 	}
 
 }
