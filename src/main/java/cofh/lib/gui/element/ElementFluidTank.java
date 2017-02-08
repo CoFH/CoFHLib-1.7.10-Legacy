@@ -13,11 +13,12 @@ import java.util.List;
 public class ElementFluidTank extends ElementBase {
 
 	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank.png");
+	public static final ResourceLocation SHORT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_short.png");
 	public static final ResourceLocation THIN_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_thin.png");
-	public static final int DEFAULT_SCALE = 60;
 
 	protected IFluidTank tank;
 	protected int gaugeType;
+	protected boolean drawTank;
 
 	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
 	protected boolean alwaysShowMinimum = false;
@@ -37,7 +38,7 @@ public class ElementFluidTank extends ElementBase {
 		this.texH = 64;
 
 		this.sizeX = 16;
-		this.sizeY = DEFAULT_SCALE;
+		this.sizeY = 60;
 	}
 
 	public ElementFluidTank setGauge(int gaugeType) {
@@ -53,6 +54,19 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
+	public ElementFluidTank setShort() {
+
+		this.texture = SHORT_TEXTURE;
+		this.sizeY = 29;
+		return this;
+	}
+
+	public ElementFluidTank drawTank(boolean drawTank) {
+
+		this.drawTank = drawTank;
+		return this;
+	}
+
 	public ElementFluidTank setAlwaysShow(boolean show) {
 
 		alwaysShowMinimum = show;
@@ -62,6 +76,10 @@ public class ElementFluidTank extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
+		if (drawTank) {
+			RenderHelper.bindTexture(texture);
+			drawTexturedModalRect(posX - 1, posY - 1, 0, 0, sizeX + 2, sizeY + 2);
+		}
 		int amount = getScaled();
 		gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
 		RenderHelper.bindTexture(texture);

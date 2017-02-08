@@ -20,6 +20,11 @@ public interface IAugmentable {
 	boolean installAugment(ItemStack augment);
 
 	/**
+	 * Returns TRUE if a given augment is valid for the (Tile) Entity.
+	 */
+	boolean isValidAugment(ItemStack augment);
+
+	/**
 	 * Returns an array of the Augment slots for this (Tile) Entity.
 	 */
 	ItemStack[] getAugmentSlots();
@@ -28,5 +33,10 @@ public interface IAugmentable {
 	 * Returns a status array for the Augmentations installed in the (Tile) Entity.
 	 */
 	boolean[] getAugmentStatus();
+
+	/**
+	 * Updates the status of Augments in the (Tile) Entity. Should be called to reset and re-baseline.
+	 */
+	void updateAugmentStatus();
 
 }
