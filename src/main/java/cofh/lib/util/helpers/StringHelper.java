@@ -60,6 +60,11 @@ public final class StringHelper {
 		return I18n.translateToLocal(key);
 	}
 
+	public static boolean canLocalize(String key) {
+
+		return I18n.canTranslate(key);
+	}
+
 	public static String getKeyName(int key) {
 
 		return key < 0 ? I18n.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);

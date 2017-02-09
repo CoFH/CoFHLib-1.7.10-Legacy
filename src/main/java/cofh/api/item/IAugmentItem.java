@@ -5,10 +5,17 @@ import net.minecraft.item.ItemStack;
 public interface IAugmentItem {
 
 	/**
-	 * Enum for Augment Types - general level of "power" of an Augment.
+	 * Enum for Augment Types.
+	 *
+	 * BASIC - Standard augment, can have multiple.
+	 * ADVANCED - Rare augment, multiples may or may not be allowed.
+	 * MODE - Changes functionality greatly. Only allow one.
+	 * ENDER - Integration with Ender Frequencies.
+	 * CREATIVE - Super-powerful augments which cannot normally be obtained.
+	 *
 	 */
 	enum AugmentType {
-		BASIC, ADVANCED, CREATIVE
+		BASIC, ADVANCED, MODE, ENDER, CREATIVE
 	}
 
 	/**
