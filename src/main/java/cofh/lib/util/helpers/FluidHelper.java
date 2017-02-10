@@ -117,6 +117,13 @@ public class FluidHelper {
 		return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).fill(fluid, doFill) : 0;
 	}
 
+	public static int insertFluidIntoAdjacentFluidHandler(World world, BlockPos pos, EnumFacing side, FluidStack fluid, boolean doFill) {
+
+		TileEntity handler = BlockHelper.getAdjacentTileEntity(world, pos, side);
+		boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
+		return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).fill(fluid, doFill) : 0;
+	}
+
 	public static boolean isAdjacentFluidHandler(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
