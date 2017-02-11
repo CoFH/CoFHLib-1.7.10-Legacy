@@ -1,23 +1,33 @@
 package cofh.lib.util.helpers;
 
-import cofh.api.energy.*;
+import cofh.api.energy.IEnergyConnection;
+import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
  * This class contains helper functions related to Redstone Flux, the basis of the CoFH Energy System.
  *
+ * Compatibility is also provide for the Forge Energy system.
+ *
  * @author King Lemming
  */
 public class EnergyHelper {
 
-	public static final int RF_PER_MJ = 10; // Official Ratio of RF to MJ (BuildCraft)
-	public static final int RF_PER_EU = 4; // Official Ratio of RF to EU (IndustrialCraft)
+	@CapabilityInject (IFluidHandler.class)
+	public static final Capability<IEnergyStorage> ENERGY_HANDLER = null;
 
 	private EnergyHelper() {
 
@@ -66,6 +76,17 @@ public class EnergyHelper {
 		return container != null && container.getItem() instanceof IEnergyContainerItem;
 	}
 
+	/**
+	 * Checks if an item has the EnergyHandler capability.
+	 *
+	 * @param stack The ItemStack to check.
+	 * @return If the ItemStack has the fluid cap.
+	 */
+	public static boolean isEnergyHandler(@Nullable ItemStack stack) {
+
+		return stack != null && stack.hasCapability(ENERGY_HANDLER, null);
+	}
+
 	public static ItemStack setDefaultEnergyTag(ItemStack container, int energy) {
 
 		if (!container.hasTagCompound()) {
@@ -89,20 +110,6 @@ public class EnergyHelper {
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
 		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate) : 0;
-	}
-
-	@Deprecated
-	public static boolean isAdjacentEnergyHandlerFromSide(TileEntity tile, int side) {
-
-		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-		return isEnergyHandlerFromSide(handler, EnumFacing.VALUES[side ^ 1]);
-	}
-
-	@Deprecated
-	public static boolean isEnergyHandlerFromSide(TileEntity tile, EnumFacing from) {
-
-		return tile instanceof IEnergyHandler && ((IEnergyHandler) tile).canConnectEnergy(from);
 	}
 
 	public static boolean isAdjacentEnergyConnectableFromSide(TileEntity tile, int side) {

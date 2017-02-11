@@ -411,8 +411,7 @@ public final class BlockHelper {
 	/* BLOCK ROTATION */
 	public static boolean canRotate(Block block) {
 
-		int bId = Block.getIdFromBlock(block);
-		return bId < MAX_ID ? rotateType[Block.getIdFromBlock(block)] != 0 : false;
+		return Block.getIdFromBlock(block) < MAX_ID && rotateType[Block.getIdFromBlock(block)] != 0;
 	}
 
 	public static IBlockState rotateVanillaBlock(World world, IBlockState state, BlockPos pos) {

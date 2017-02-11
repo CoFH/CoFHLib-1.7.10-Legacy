@@ -199,6 +199,11 @@ public final class StringHelper {
 		return localize("info.cofh.tutorial.tabAugment");
 	}
 
+	public static String tutorialTabAugmentUpgrade() {
+
+		return localize("info.cofh.tutorial.tabAugmentUpgrade");
+	}
+
 	public static String tutorialTabConfiguration() {
 
 		return localize("info.cofh.tutorial.tabConfiguration");
