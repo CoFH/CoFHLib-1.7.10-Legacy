@@ -2,7 +2,7 @@
  * (C) 2014-2017 Team CoFH / CoFH / Cult of the Full Hub
  * http://www.teamcofh.com
  */
-@API (apiVersion = CoFHLibProps.VERSION, owner = "CoFHLib", provides = "CoFHLib|world|feature")
+@API (apiVersion = CoFHLibProps.VERSION, owner = "cofhlib", provides = "cofhlib|world|feature")
 package cofh.lib.world.feature;
 
 import cofh.lib.CoFHLibProps;
