@@ -542,11 +542,11 @@ public abstract class GuiBase extends GuiContainer {
 
 	public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
-		int i = 0;
-		int j = 0;
+		int i;
+		int j;
 
-		int drawHeight = 0;
-		int drawWidth = 0;
+		int drawHeight;
+		int drawWidth;
 
 		for (i = 0; i < width; i += 16) {
 			for (j = 0; j < height; j += 16) {
