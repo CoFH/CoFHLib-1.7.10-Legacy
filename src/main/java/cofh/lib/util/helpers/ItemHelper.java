@@ -55,6 +55,16 @@ public final class ItemHelper {
 		return player.getHeldItemMainhand() != null || player.getHeldItemOffhand() != null;
 	}
 
+	public static ItemStack getMainhandStack(EntityPlayer player) {
+
+		return player.getHeldItemMainhand();
+	}
+
+	public static ItemStack getOffhandStack(EntityPlayer player) {
+
+		return player.getHeldItemOffhand();
+	}
+
 	public static ItemStack getHeldStack(EntityPlayer player) {
 
 		ItemStack stack = player.getHeldItemMainhand();
@@ -984,8 +994,18 @@ public final class ItemHelper {
 		return areItemsEqual(item, getItemFromStack(getHeldStack(player)));
 	}
 
+	public static boolean isPlayerHoldingMainhand(Item item, EntityPlayer player) {
+
+		return areItemsEqual(item, getItemFromStack(getMainhandStack(player)));
+	}
+
+	public static boolean isPlayerHoldingOffhand(Item item, EntityPlayer player) {
+
+		return areItemsEqual(item, getItemFromStack(getOffhandStack(player)));
+	}
+
 	/**
-	 * Determine if a player is holding an ItemStack with a specific Item ID, Metadata, and NBT.
+	 * Determine if a player is holding an ItemStack with a specific Item ID and Metadata.
 	 */
 	public static boolean isPlayerHoldingItemStack(ItemStack stack, EntityPlayer player) {
 
