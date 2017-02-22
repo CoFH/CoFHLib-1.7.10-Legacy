@@ -1181,12 +1181,12 @@ public final class ItemHelper {
 			int maxStackSize = item.getMaxStackSize();
 
 			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+				list.add("    " + StringHelper.ORANGE + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
@@ -1206,7 +1206,6 @@ public final class ItemHelper {
 		if (tag.hasKey("Inventory")) {
 			tag = tag.getCompoundTag("Inventory");
 		}
-
 		for (int i = minSlot; i < Math.min(invSize, maxSlot); i++) {
 			if (visited[i]) {
 				continue;
@@ -1248,12 +1247,12 @@ public final class ItemHelper {
 			int maxStackSize = item.getMaxStackSize();
 
 			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+				list.add("    " + StringHelper.ORANGE + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}

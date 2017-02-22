@@ -9,6 +9,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
  */
 public interface ISidedTexture {
 
+	int getNumLayers();
+
+	int getNumPasses(int layer);
+
 	/**
 	 * Returns the icon to use for a given side and render pass.
 	 *
