@@ -368,18 +368,6 @@ public abstract class GuiBase extends GuiContainer {
 		}
 	}
 
-	/**
-	 * Called by NEI if installed
-	 */
-	// @Override
-	public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
-
-		if (mc.thePlayer.inventory.getItemStack() == null) {
-			addTooltips(tooltip);
-		}
-		return tooltip;
-	}
-
 	public void addTooltips(List<String> tooltip) {
 
 		TabBase tab = getTabAtPosition(mouseX, mouseY);
