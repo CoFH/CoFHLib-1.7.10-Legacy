@@ -13,6 +13,11 @@ import net.minecraft.item.ItemStack;
 public interface IUpgradeable {
 
 	/**
+	 * Returns if an object can be upgraded by a given upgrade item.
+	 */
+	boolean canUpgrade(ItemStack upgrade);
+
+	/**
 	 * Attempt to install a specific upgrade in the (Tile) Entity.
 	 *
 	 * Returns TRUE if upgrade was installed properly.
