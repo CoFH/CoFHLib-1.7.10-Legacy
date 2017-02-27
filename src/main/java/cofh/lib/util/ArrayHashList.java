@@ -436,7 +436,7 @@ public class ArrayHashList<E extends Object> extends AbstractCollection<E> imple
 	@Override
 	public ArrayHashList<E> clone() {
 
-		return new ArrayHashList<E>(this);
+		return new ArrayHashList<>(this);
 	}
 
 	@Override

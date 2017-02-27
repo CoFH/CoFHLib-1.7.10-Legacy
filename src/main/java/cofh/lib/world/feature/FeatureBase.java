@@ -40,7 +40,7 @@ public abstract class FeatureBase implements IFeatureGenerator {
 	protected int rarity;
 
 	protected final BiomeInfoSet biomes = new BiomeInfoSet(1);
-	protected final Set<Integer> dimensions = new THashSet<Integer>();
+	protected final Set<Integer> dimensions = new THashSet<>();
 
 	/**
 	 * Shortcut to add a Feature with no biome or dimension restriction.

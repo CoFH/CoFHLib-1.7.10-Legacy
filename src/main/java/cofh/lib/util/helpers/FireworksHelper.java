@@ -94,8 +94,8 @@ public final class FireworksHelper {
 
 		private boolean twinkle = false;
 		private boolean trail = false;
-		private List<Integer> primaryColors = new ArrayList<Integer>();
-		private List<Integer> fadeColors = new ArrayList<Integer>();
+		private List<Integer> primaryColors = new ArrayList<>();
+		private List<Integer> fadeColors = new ArrayList<>();
 		private Type type = Type.BALL;
 
 		/**

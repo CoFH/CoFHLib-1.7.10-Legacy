@@ -195,7 +195,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 	@Override
 	public Map<Integer, ItemStack> getContents() {
 
-		Map<Integer, ItemStack> contents = new HashMap<Integer, ItemStack>();
+		Map<Integer, ItemStack> contents = new HashMap<>();
 		for (int i : getSlots()) {
 			contents.put(i, _inv.getStackInSlot(i));
 		}

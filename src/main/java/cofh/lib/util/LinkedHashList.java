@@ -440,7 +440,7 @@ public class LinkedHashList<E extends Object> extends AbstractCollection<E> impl
 	@Override
 	public LinkedHashList<E> clone() {
 
-		return new LinkedHashList<E>(this);
+		return new LinkedHashList<>(this);
 	}
 
 	@Override

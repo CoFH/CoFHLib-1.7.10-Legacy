@@ -282,7 +282,7 @@ public class BlockPosition implements Comparable<BlockPosition>, Serializable {
 
 	public List<BlockPosition> getAdjacent(boolean includeVertical) {
 
-		List<BlockPosition> a = new ArrayList<BlockPosition>(4 + (includeVertical ? 2 : 0));
+		List<BlockPosition> a = new ArrayList<>(4 + (includeVertical ? 2 : 0));
 		a.add(copy(EnumFacing.EAST).moveForwards(1));
 		a.add(copy(EnumFacing.WEST).moveForwards(1));
 		a.add(copy(EnumFacing.SOUTH).moveForwards(1));

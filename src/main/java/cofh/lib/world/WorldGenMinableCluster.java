@@ -22,14 +22,14 @@ public class WorldGenMinableCluster extends WorldGenerator {
 
 	public static final List<WeightedRandomBlock> fabricateList(WeightedRandomBlock resource) {
 
-		List<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+		List<WeightedRandomBlock> list = new ArrayList<>();
 		list.add(resource);
 		return list;
 	}
 
 	public static final List<WeightedRandomBlock> fabricateList(Block resource) {
 
-		List<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+		List<WeightedRandomBlock> list = new ArrayList<>();
 		list.add(new WeightedRandomBlock(new ItemStack(resource, 1, 0)));
 		return list;
 	}

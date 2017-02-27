@@ -548,11 +548,11 @@ public final class BlockHelper {
 	public static List<ItemStack> breakBlock(World worldObj, EntityPlayer player, BlockPos pos, IBlockState state, int fortune, boolean doBreak, boolean silkTouch) {
 
 		if (state.getBlockHardness(worldObj, pos) == -1) {
-			return new LinkedList<ItemStack>();
+			return new LinkedList<>();
 		}
 		List<ItemStack> stacks = null;
 		if (silkTouch && state.getBlock().canSilkHarvest(worldObj, pos, state, player)) {
-			stacks = new LinkedList<ItemStack>();
+			stacks = new LinkedList<>();
 			stacks.add(createStackedBlock(state));
 		} else {
 			stacks = state.getBlock().getDrops(worldObj, pos, state, fortune);

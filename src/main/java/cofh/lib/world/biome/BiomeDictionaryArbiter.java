@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class BiomeDictionaryArbiter {
 
-	private static HashMap<Biome, Type[]> types = new HashMap<Biome, Type[]>();
-	private static HashMap<Type, Biome[]> biomes = new HashMap<Type, Biome[]>();
+	private static HashMap<Biome, Type[]> types = new HashMap<>();
+	private static HashMap<Type, Biome[]> biomes = new HashMap<>();
 	private static boolean loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
 
 	public static Type[] getTypesForBiome(Biome biome) {

@@ -205,23 +205,6 @@ public class ThermalExpansionHelper {
 		FMLInterModComms.sendMessage("ThermalExpansion", "RemoveSmelterRecipe", toSend);
 	}
 
-	/**
-	 * Use this to register an Ore TYPE as a "Blast" recipe - it will require Pyrotheum Dust to smelt. Do not add the prefix. This is an opt-in for ores which
-	 * do NOT have vanilla furnace recipes.
-	 *
-	 * Ex: "Steel" or "ElectrumFlux", not "dustSteel" or "dustElectrumFlux"
-	 *
-	 * @param oreType
-	 */
-	public static void addSmelterBlastOre(String oreType) {
-
-		NBTTagCompound toSend = new NBTTagCompound();
-
-		toSend.setString("oreType", oreType);
-
-		FMLInterModComms.sendMessage("ThermalExpansion", "SmelterBlastOreType", toSend);
-	}
-
 	/* Crucible */
 	public static void addCrucibleRecipe(int energy, ItemStack input, FluidStack output) {
 

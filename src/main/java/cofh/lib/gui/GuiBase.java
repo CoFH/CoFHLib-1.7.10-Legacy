@@ -54,10 +54,10 @@ public abstract class GuiBase extends GuiContainer {
 	protected String name;
 	protected ResourceLocation texture;
 
-	public ArrayList<TabBase> tabs = new ArrayList<TabBase>();
-	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
+	public ArrayList<TabBase> tabs = new ArrayList<>();
+	protected ArrayList<ElementBase> elements = new ArrayList<>();
 
-	protected List<String> tooltip = new LinkedList<String>();
+	protected List<String> tooltip = new LinkedList<>();
 	protected boolean tooltips = true;
 
 	public static void playSound(String name, SoundCategory category, float volume, float pitch) {

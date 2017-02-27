@@ -1138,7 +1138,7 @@ public final class ItemHelper {
 		ItemStack curStack;
 		ItemStack curStack2;
 
-		ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> containedItems = new ArrayList<>();
 
 		boolean[] visited = new boolean[nbtList.tagCount()];
 
@@ -1198,7 +1198,7 @@ public final class ItemHelper {
 		ItemStack curStack;
 		ItemStack curStack2;
 
-		ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> containedItems = new ArrayList<>();
 
 		boolean[] visited = new boolean[invSize];
 

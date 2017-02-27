@@ -43,6 +43,6 @@ public class IdentityLinkedHashList<E extends Object> extends LinkedHashList<E> 
 	@Override
 	public IdentityLinkedHashList<E> clone() {
 
-		return new IdentityLinkedHashList<E>(this);
+		return new IdentityLinkedHashList<>(this);
 	}
 }

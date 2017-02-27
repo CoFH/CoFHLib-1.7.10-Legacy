@@ -68,7 +68,7 @@ public class RegistryUtils {
 
 		static {
 
-			replacements = new IdentityHashMap<RegistryNamespaced, Multimap<String, Object>>(2);
+			replacements = new IdentityHashMap<>(2);
 			MinecraftForge.EVENT_BUS.register(new RegistryUtils());
 			try {
 				DelegateClass = (Class<RegistryDelegate<?>>) Class.forName("net.minecraftforge.fml.common.registry.RegistryDelegate$Delegate");

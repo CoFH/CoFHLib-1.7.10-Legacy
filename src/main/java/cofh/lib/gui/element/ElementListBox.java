@@ -24,7 +24,7 @@ public class ElementListBox extends ElementBase {
 	protected int _marginRight = 2;
 	protected int _marginBottom = 2;
 
-	protected final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
+	protected final List<IListBoxElement> _elements = new LinkedList<>();
 
 	protected int _firstIndexDisplayed;
 	protected int _selectedIndex;

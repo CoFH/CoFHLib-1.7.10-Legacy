@@ -49,7 +49,7 @@ public abstract class TabBase extends ElementBase {
 	public int maxHeight = 22;
 	public int currentHeight = minHeight;
 
-	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
+	protected ArrayList<ElementBase> elements = new ArrayList<>();
 
 	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_left.png");
 	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_right.png");
