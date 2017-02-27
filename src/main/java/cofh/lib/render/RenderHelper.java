@@ -184,7 +184,7 @@ public final class RenderHelper {
 
 	public static TextureAtlasSprite getFluidTexture(FluidStack fluid) {
 
-		if (fluid == null || fluid.getFluid() == null || fluid.getFluid().getStill(fluid) == null) {
+		if (fluid == null || fluid.getFluid().getStill(fluid) == null) {
 			fluid = new FluidStack(FluidRegistry.LAVA, 1);
 		}
 		return getTexture(fluid.getFluid().getStill(fluid));
