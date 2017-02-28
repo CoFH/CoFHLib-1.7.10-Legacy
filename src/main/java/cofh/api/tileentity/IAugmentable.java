@@ -30,11 +30,6 @@ public interface IAugmentable {
 	ItemStack[] getAugmentSlots();
 
 	/**
-	 * Returns a status array for the Augmentations installed in the (Tile) Entity.
-	 */
-	boolean[] getAugmentStatus();
-
-	/**
 	 * Updates the status of Augments in the (Tile) Entity. Should be called to reset and re-baseline.
 	 */
 	void updateAugmentStatus();
