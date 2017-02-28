@@ -93,10 +93,10 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		}
 		float f = rand.nextFloat() * (float) Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
-		float xMin = x + 8 + (MathHelper.sin(f) * blocks) / 8F;
-		float xMax = x + 8 - (MathHelper.sin(f) * blocks) / 8F;
-		float zMin = z + 8 + (MathHelper.cos(f) * blocks) / 8F;
-		float zMax = z + 8 - (MathHelper.cos(f) * blocks) / 8F;
+		float xMin = x + (MathHelper.sin(f) * blocks) / 8F;
+		float xMax = x - (MathHelper.sin(f) * blocks) / 8F;
+		float zMin = z + (MathHelper.cos(f) * blocks) / 8F;
+		float zMax = z - (MathHelper.cos(f) * blocks) / 8F;
 		float yMin = (y + rand.nextInt(3)) - 2;
 		float yMax = (y + rand.nextInt(3)) - 2;
 
