@@ -16,11 +16,16 @@ public interface ISecurable {
 	 * @author King Lemming
 	 */
 	enum AccessMode {
-		PUBLIC, TEAM, FRIENDS, PRIVATE;
+		PUBLIC, FRIENDS, TEAM, PRIVATE;
 
 		public boolean isPublic() {
 
 			return this == PUBLIC;
+		}
+
+		public boolean isPrivate() {
+
+			return this == PRIVATE;
 		}
 
 		public boolean isTeamOnly() {
@@ -33,14 +38,9 @@ public interface ISecurable {
 			return this == FRIENDS;
 		}
 
-		public boolean isPrivate() {
-
-			return this == PRIVATE;
-		}
-
 		public static AccessMode stepForward(AccessMode curAccess) {
 
-			return curAccess == PUBLIC ? TEAM : curAccess == TEAM ? FRIENDS : curAccess == PRIVATE ? PUBLIC : PRIVATE;
+			return curAccess == PUBLIC ? TEAM : curAccess == TEAM ? FRIENDS : curAccess == FRIENDS ? PRIVATE : PUBLIC;
 		}
 
 		public static AccessMode stepBackward(AccessMode curAccess) {
