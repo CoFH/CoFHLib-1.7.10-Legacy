@@ -17,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
@@ -91,6 +92,44 @@ public class FluidHelper {
 	public static boolean isFluidHandler(@Nullable ItemStack stack) {
 
 		return stack != null && stack.hasCapability(FLUID_HANDLER, null);
+	}
+
+	public static boolean isFillableEmptyContainer(ItemStack empty) {
+
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(empty);
+		if (fluidHandler == null) {
+			return false;
+		}
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (!properties.canFill()) {
+				return false;
+			}
+			FluidStack contents = properties.getContents();
+			if (contents != null && contents.amount > 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean isDrainableFilledContainer(ItemStack container) {
+
+		IFluidHandler fluidHandler = FluidUtil.getFluidHandler(container);
+		if (fluidHandler == null) {
+			return false;
+		}
+		IFluidTankProperties[] tankProperties = fluidHandler.getTankProperties();
+		for (IFluidTankProperties properties : tankProperties) {
+			if (!properties.canDrain()) {
+				return false;
+			}
+			FluidStack contents = properties.getContents();
+			if (contents == null || contents.amount < properties.getCapacity()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static ItemStack setDefaultFluidTag(ItemStack container, FluidStack resource) {

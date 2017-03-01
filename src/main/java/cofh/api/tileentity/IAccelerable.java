@@ -9,9 +9,13 @@ package cofh.api.tileentity;
  */
 public interface IAccelerable {
 
+
+
 	/**
 	 * This method should be something small and low in CPU usage as it may be called multiple times per tick.
+	 *
+	 * The return is a measure of how much "work" was performed. In the case of an RF-using block, the amount of energy used.
 	 */
-	void updateAccelerable();
+	int updateAccelerable();
 
 }
