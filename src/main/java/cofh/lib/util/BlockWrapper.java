@@ -1,6 +1,9 @@
 package cofh.lib.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+
+import javax.annotation.Nonnull;
 
 /**
  * Wrapper for a Block/Metadata combination post 1.7. Quick and dirty, allows for Integer-based Hashes without collisions.
@@ -11,6 +14,11 @@ public final class BlockWrapper {
 
 	public Block block;
 	public int metadata;
+
+	public BlockWrapper(IBlockState state) {
+
+		this(state.getBlock(), state.getBlock().getMetaFromState(state));
+	}
 
 	public BlockWrapper(Block block, int metadata) {
 
@@ -28,6 +36,10 @@ public final class BlockWrapper {
 			this.metadata = 0;
 		}
 		return this;
+	}
+
+	public boolean isEqual(@Nonnull IBlockState state) {
+		return block == state.getBlock() && metadata == block.getMetaFromState(state);
 	}
 
 	public boolean isEqual(BlockWrapper other) {
