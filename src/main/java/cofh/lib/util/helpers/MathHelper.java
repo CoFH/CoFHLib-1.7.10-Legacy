@@ -25,7 +25,7 @@ public final class MathHelper {
 		SIN_TABLE[0] = 0;
 		SIN_TABLE[16384] = 1;
 		SIN_TABLE[32768] = 0;
-		SIN_TABLE[49152] = 1;
+		SIN_TABLE[49152] = -1;
 	}
 
 	public static double sin(double d) {
