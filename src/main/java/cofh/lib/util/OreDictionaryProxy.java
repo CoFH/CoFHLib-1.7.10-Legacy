@@ -1,6 +1,5 @@
 package cofh.lib.util;
 
-import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ItemHelper;
 import com.google.common.base.Strings;
 import net.minecraft.item.ItemStack;
@@ -30,7 +29,7 @@ public class OreDictionaryProxy {
 	public int getOreID(String oreName) {
 
 		if (Strings.isNullOrEmpty(oreName)) {
-			return OreDictionaryArbiter.UNKNOWN_ID;
+			return -1;
 		}
 		return OreDictionary.getOreID(oreName);
 	}
