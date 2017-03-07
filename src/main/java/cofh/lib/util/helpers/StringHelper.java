@@ -60,6 +60,11 @@ public final class StringHelper {
 		return I18n.translateToLocal(key);
 	}
 
+	public static String localizeFormat(String key, Object... format) {
+
+		return I18n.translateToLocalFormatted(key, format);
+	}
+
 	public static boolean canLocalize(String key) {
 
 		return I18n.canTranslate(key);
@@ -190,7 +195,7 @@ public final class StringHelper {
 
 	public static String shiftForDetails() {
 
-		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END + LIGHT_GRAY + localize("info.cofh.forDetails") + END;
+		return localize("info.cofh.holdShiftForDetails");
 	}
 
 	/* TUTORIAL TAB HELPERS */

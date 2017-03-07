@@ -39,13 +39,13 @@ public class RedstoneControlHelper {
 		if (hasRSControl(stack)) {
 			switch (stack.getTagCompound().getByte("RSControl")) {
 				case 0:
-					list.add(StringHelper.localize("info.cofh.signal") + ": " + StringHelper.RED + StringHelper.localize("info.cofh.disabled") + StringHelper.END);
+					list.add(StringHelper.localize("info.cofh.signalDisabled"));
 					return;
 				case 1:
-					list.add(StringHelper.localize("info.cofh.signal") + ": " + StringHelper.BRIGHT_GREEN + StringHelper.localize("info.cofh.enabled") + StringHelper.LIGHT_GRAY + ", " + StringHelper.localize("info.cofh.low") + StringHelper.END);
+					list.add(StringHelper.localize("info.cofh.signalEnabledLow"));
 					return;
 				case 2:
-					list.add(StringHelper.localize("info.cofh.signal") + ": " + StringHelper.BRIGHT_GREEN + StringHelper.localize("info.cofh.enabled") + StringHelper.LIGHT_GRAY + ", " + StringHelper.localize("info.cofh.high") + StringHelper.END);
+					list.add(StringHelper.localize("info.cofh.signalEnabledHigh"));
 					return;
 			}
 		}
