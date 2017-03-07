@@ -77,7 +77,6 @@ public class FeatureGenCave extends FeatureBase {
 				if (y == seaLevel) {
 					continue;
 				}
-				--y;
 			} else if (state.getBlock().isAir(state, world, new BlockPos(x, y - 1, z))) {
 				--y;
 				do {
@@ -86,7 +85,6 @@ public class FeatureGenCave extends FeatureBase {
 				if (y == -1) {
 					continue;
 				}
-				++y;
 			}
 
 			generated |= worldGen.generate(world, random, new BlockPos(x, y, z));
