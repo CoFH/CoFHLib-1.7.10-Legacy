@@ -183,7 +183,6 @@ public final class ItemHelper {
 				stack.setItemDamage(0);
 			}
 		}
-
 		return stack;
 	}
 
