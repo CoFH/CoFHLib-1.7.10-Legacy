@@ -12,7 +12,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -26,7 +25,7 @@ import java.util.List;
  */
 public class EnergyHelper {
 
-	@CapabilityInject (IFluidHandler.class)
+	@CapabilityInject (IEnergyStorage.class)
 	public static final Capability<IEnergyStorage> ENERGY_HANDLER = null;
 
 	private EnergyHelper() {
@@ -102,21 +101,31 @@ public class EnergyHelper {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(side.getOpposite(), energy, simulate) : 0;
+		if (handler instanceof IEnergyProvider) {
+			return ((IEnergyProvider) handler).extractEnergy(side.getOpposite(), energy, simulate);
+		} else if (handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite())) {
+			return handler.getCapability(ENERGY_HANDLER, side.getOpposite()).extractEnergy(energy, simulate);
+		}
+		return 0;
 	}
 
 	public static int insertEnergyIntoAdjacentEnergyReceiver(TileEntity tile, EnumFacing side, int energy, boolean simulate) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate) : 0;
+		if (handler instanceof IEnergyReceiver) {
+			return ((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate);
+		} else if (handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite())) {
+			return handler.getCapability(ENERGY_HANDLER, side.getOpposite()).receiveEnergy(energy, simulate);
+		}
+		return 0;
 	}
 
-	public static boolean isAdjacentEnergyConnectableFromSide(TileEntity tile, int side) {
+	public static boolean isAdjacentEnergyConnectableFromSide(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return isEnergyConnectableFromSide(handler, EnumFacing.VALUES[side ^ 1]);
+		return isEnergyConnectableFromSide(handler, side.getOpposite());
 	}
 
 	public static boolean isEnergyConnectableFromSide(TileEntity tile, EnumFacing from) {
@@ -124,11 +133,11 @@ public class EnergyHelper {
 		return tile instanceof IEnergyConnection && ((IEnergyConnection) tile).canConnectEnergy(from);
 	}
 
-	public static boolean isAdjacentEnergyReceiverFromSide(TileEntity tile, int side) {
+	public static boolean isAdjacentEnergyReceiverFromSide(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return isEnergyReceiverFromSide(handler, EnumFacing.VALUES[side ^ 1]);
+		return isEnergyReceiverFromSide(handler, side.getOpposite());
 	}
 
 	public static boolean isEnergyReceiverFromSide(TileEntity tile, EnumFacing from) {
@@ -136,16 +145,34 @@ public class EnergyHelper {
 		return tile instanceof IEnergyReceiver && ((IEnergyReceiver) tile).canConnectEnergy(from);
 	}
 
-	public static boolean isAdjacentEnergyProviderFromSide(TileEntity tile, int side) {
+	public static boolean isAdjacentEnergyProviderFromSide(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return isEnergyProviderFromSide(handler, EnumFacing.VALUES[side ^ 1]);
+		return isEnergyProviderFromSide(handler, side.getOpposite());
 	}
 
 	public static boolean isEnergyProviderFromSide(TileEntity tile, EnumFacing from) {
 
 		return tile instanceof IEnergyProvider && ((IEnergyProvider) tile).canConnectEnergy(from);
+	}
+
+	public static boolean isAdjacentEnergyHandler(TileEntity tile, EnumFacing side) {
+
+		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
+		return handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite());
+	}
+
+	/**
+	 * Checks if the tile has the energy capability on a specific face.
+	 *
+	 * @param tile The tile to check.
+	 * @param face The face of the block to check.
+	 * @return If the face has the cap.
+	 */
+	public static boolean isEnergyHandler(TileEntity tile, EnumFacing face) {
+
+		return tile != null && tile.hasCapability(ENERGY_HANDLER, face);
 	}
 
 }
