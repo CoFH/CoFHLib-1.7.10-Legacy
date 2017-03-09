@@ -3,8 +3,10 @@ package cofh.lib.util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,6 +34,13 @@ public class RayTracer {
 		Vec3d startVec = getStartVec(player);
 		Vec3d endVec = getEndVec(player, reach);
 		return player.worldObj.rayTraceBlocks(startVec, endVec, stopOnFluids, false, true);
+	}
+
+	public static RayTraceResult retraceBlock(World world, EntityPlayer player, BlockPos pos) {
+
+		Vec3d startVec = getStartVec(player);
+		Vec3d endVec = getEndVec(player);
+		return world.getBlockState(pos).collisionRayTrace(world, pos, startVec, endVec);
 	}
 
 	public static Vec3d getStartVec(EntityPlayer player) {
