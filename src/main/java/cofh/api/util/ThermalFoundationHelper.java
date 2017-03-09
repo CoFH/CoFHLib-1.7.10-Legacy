@@ -28,7 +28,7 @@ public class ThermalFoundationHelper {
 		toSend.setTag("entry", new NBTTagCompound());
 
 		entry.writeToNBT(toSend.getCompoundTag("entry"));
-		FMLInterModComms.sendMessage("ThermalFoundation", "AddLexiconBlacklistEntry", toSend);
+		FMLInterModComms.sendMessage("thermalfoundation", "AddLexiconBlacklistEntry", toSend);
 	}
 
 	public static void removeBlacklistEntry(ItemStack entry) {
@@ -41,7 +41,7 @@ public class ThermalFoundationHelper {
 		toSend.setTag("entry", new NBTTagCompound());
 
 		entry.writeToNBT(toSend.getCompoundTag("entry"));
-		FMLInterModComms.sendMessage("ThermalFoundation", "RemoveLexiconBlacklistEntry", toSend);
+		FMLInterModComms.sendMessage("thermalfoundation", "RemoveLexiconBlacklistEntry", toSend);
 	}
 
 }
