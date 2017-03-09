@@ -26,6 +26,14 @@ public class WorldGenAdvLakes extends WorldGenerator {
 	public boolean totalOutline = false;
 	public int width = 16;
 	public int height = 8;
+	public double blobMinWidth = 3.0d;
+	public double blobMinHeight = 2.0d;
+	public double blobWidthVariance = 6.0d;
+	public double blobHeightVariance = 4.0d;
+	public int minBlobs = 4;
+	public int blobVariance = 4;
+	public double boxOffsetHorizontal = 0.0d;
+	public double boxOffsetVertical = 0.0d;
 
 	public WorldGenAdvLakes(List<WeightedRandomBlock> resource, List<WeightedRandomBlock> block) {
 
@@ -55,14 +63,20 @@ public class WorldGenAdvLakes extends WorldGenerator {
 		}
 
 		yStart -= heightOff;
+
+		// custom offset applied after finding appropriate spawn location
+		xStart += (rand.nextDouble() * 2 - 1) * boxOffsetHorizontal;
+		yStart += (rand.nextDouble() * 2 - 1) * boxOffsetVertical;
+		zStart += (rand.nextDouble() * 2 - 1) * boxOffsetHorizontal;
+
 		boolean[] spawnBlock = new boolean[width * width * height];
 
 		int W = width - 1, H = height - 1;
 
-		for (int i = 0, e = rand.nextInt(4) + 4; i < e; ++i) {
-			double xSize = rand.nextDouble() * 6.0D + 3.0D;
-			double ySize = rand.nextDouble() * 4.0D + 2.0D;
-			double zSize = rand.nextDouble() * 6.0D + 3.0D;
+		for (int i = 0, e = rand.nextInt(blobVariance) + minBlobs; i < e; ++i) {
+			double xSize = rand.nextDouble() * blobWidthVariance + blobMinWidth;
+			double ySize = rand.nextDouble() * blobHeightVariance + blobMinHeight;
+			double zSize = rand.nextDouble() * blobWidthVariance + blobMinWidth;
 			double xCenter = rand.nextDouble() * (width - xSize - 2.0D) + 1.0D + xSize / 2.0D;
 			double yCenter = rand.nextDouble() * (height - ySize - 4.0D) + 2.0D + ySize / 2.0D;
 			double zCenter = rand.nextDouble() * (width - zSize - 2.0D) + 1.0D + zSize / 2.0D;
@@ -148,7 +162,7 @@ public class WorldGenAdvLakes extends WorldGenerator {
 										|| (y < H && spawnBlock[(x * width + z) * height + (y + 1)]) || (y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
 						if (flag && (solidOutline | y < heightOff || rand.nextInt(2) != 0)
-								&& (totalOutline || world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial().isSolid())) {
+								&& (totalOutline || world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial() .isSolid())) {
 							generateBlock(world, xStart + x, yStart + y, zStart + z, outlineBlock);
 						}
 					}
