@@ -98,7 +98,7 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
 
-		if (drawTitle & name != null) {
+		if (drawTitle && name != null) {
 			fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		}
 		if (drawInventory) {

@@ -89,7 +89,7 @@ public class BiomeInfoSet implements Set<BiomeInfo> {
 
 	public BiomeInfo get(int i) {
 
-		if ((i < 0) | i >= size) {
+		if ((i < 0) || i >= size) {
 			throw new IndexOutOfBoundsException();
 		}
 		return elementData[i];

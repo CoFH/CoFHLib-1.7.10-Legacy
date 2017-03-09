@@ -470,7 +470,7 @@ public class ElementTextField extends ElementBase {
 				boolean dig = Character.isLetterOrDigit(curChar) != Character.isLetterOrDigit(prevChar);
 				boolean caze = !dig && Character.isUpperCase(curChar) != Character.isUpperCase(prevChar);
 				boolean space = Character.isWhitespace(prevChar) != Character.isWhitespace(curChar);
-				if (dig || (caze & smartCaretCase) || space) {
+				if (dig || (caze && smartCaretCase) || space) {
 					int o = 0;
 					if (smartCaretCase && caze) {
 						o = originalCase && Character.isUpperCase(prevChar) ? -dir : 0;
@@ -959,7 +959,7 @@ public class ElementTextField extends ElementBase {
 			}
 
 			if (draw && !end) {
-				boolean selected = i >= selectionStart & i < selectionEnd;
+				boolean selected = i >= selectionStart && i < selectionEnd;
 				if (selected) {
 					drawModalRect(startX + width, startY + height, startX + width + charW, endY + height, selectedLineColor);
 				}

@@ -147,7 +147,7 @@ public class WorldGenAdvLakes extends WorldGenerator {
 										|| (z > 0 && spawnBlock[(x * width + (z - 1)) * height + y])
 										|| (y < H && spawnBlock[(x * width + z) * height + (y + 1)]) || (y > 0 && spawnBlock[(x * width + z) * height + (y - 1)]));
 
-						if (flag && (solidOutline | y < heightOff || rand.nextInt(2) != 0)
+						if (flag && (solidOutline || y < heightOff || rand.nextInt(2) != 0)
 								&& (totalOutline || world.getBlock(xStart + x, yStart + y, zStart + z).getMaterial().isSolid())) {
 							generateBlock(world, xStart + x, yStart + y, zStart + z, outlineBlock);
 						}

@@ -138,7 +138,7 @@ public final class ByteBufHelper {
 		/* use charAt instead of copying String to char array */
 		for (int i = 0; i < strlen; ++i) {
 			c = str.charAt(i);
-			if ((c >= 0x0001) & (c <= 0x007F)) {
+			if ((c >= 0x0001) && (c <= 0x007F)) {
 				utflen++;
 			} else if (c < 0x0800) {
 				utflen += 2;
@@ -165,7 +165,7 @@ public final class ByteBufHelper {
 
 		for (; i < strlen; ++i) {
 			c = str.charAt(i);
-			if ((c >= 0x0001) & (c <= 0x007F)) {
+			if ((c >= 0x0001) && (c <= 0x007F)) {
 				bytearr[count++] = (byte) c;
 
 			} else if (c < 0x0800) {
