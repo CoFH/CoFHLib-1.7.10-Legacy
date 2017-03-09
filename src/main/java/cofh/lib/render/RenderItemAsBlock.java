@@ -14,7 +14,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class RenderItemAsBlock implements IItemRenderer {
 
-	public static RenderItemAsBlock instance = new RenderItemAsBlock();
+	public static RenderItemAsBlock INSTANCE = new RenderItemAsBlock();
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
