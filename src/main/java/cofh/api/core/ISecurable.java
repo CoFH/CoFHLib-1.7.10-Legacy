@@ -1,10 +1,10 @@
-package cofh.api.tileentity;
+package cofh.api.core;
 
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**
- * Implement this interface on Tile Entities which can have access restrictions.
+ * Implement this interface on Objects which can have access restrictions.
  *
  * @author King Lemming
  */

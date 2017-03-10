@@ -1,6 +1,6 @@
 package cofh.lib.gui.slot;
 
-import cofh.api.core.ICustomInventory;
+import cofh.lib.gui.container.ICustomInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

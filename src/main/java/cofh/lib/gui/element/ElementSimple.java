@@ -1,7 +1,7 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 
 /**
  * Basic element which can render an arbitrary texture.

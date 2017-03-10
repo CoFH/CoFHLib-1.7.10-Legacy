@@ -1,4 +1,4 @@
-package cofh.api.tileentity;
+package cofh.api.core;
 
 /**
  * Implemented on objects which perform a function that can be sped up.
@@ -8,8 +8,6 @@ package cofh.api.tileentity;
  * @author King Lemming
  */
 public interface IAccelerable {
-
-
 
 	/**
 	 * This method should be something small and low in CPU usage as it may be called multiple times per tick.

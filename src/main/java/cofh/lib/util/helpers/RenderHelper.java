@@ -1,4 +1,4 @@
-package cofh.lib.render;
+package cofh.lib.util.helpers;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

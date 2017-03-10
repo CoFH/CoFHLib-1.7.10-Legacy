@@ -1,7 +1,6 @@
-package cofh.api.world;
+package cofh.lib.world;
 
 import cofh.lib.util.WeightedRandomBlock;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;

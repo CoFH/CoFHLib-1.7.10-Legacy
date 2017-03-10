@@ -1,10 +1,10 @@
-package cofh.api.tileentity;
+package cofh.api.core;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Implement this interface on things which can write a limited amount of data about themselves.
+ * Implement this interface on Objects which can write a limited amount of data about themselves.
  *
  * This is typically for the purposes of being transferred to a similar object (Tile Entity/Entity).
  *
@@ -13,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public interface IPortableData {
 
 	/**
-	 * Data identifier of the Tile Entity/Block. Used for display as well as verification purposes. Tiles with completely interchangeable data should return the
+	 * Data identifier of the Object. Used for display as well as verification purposes. Objects with completely interchangeable data should return the
 	 * same type.
 	 *
 	 * @return

@@ -1,4 +1,4 @@
-package cofh.api.core;
+package cofh.lib.gui.container;
 
 import net.minecraft.item.ItemStack;
 

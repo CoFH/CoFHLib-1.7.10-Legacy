@@ -1,7 +1,7 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 
 public class ElementDualScaled extends ElementBase {
 

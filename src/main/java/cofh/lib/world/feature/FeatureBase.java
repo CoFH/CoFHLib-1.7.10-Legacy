@@ -1,6 +1,6 @@
 package cofh.lib.world.feature;
 
-import cofh.api.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureGenerator;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoSet;
 import gnu.trove.set.hash.THashSet;

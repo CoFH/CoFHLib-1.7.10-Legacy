@@ -4,7 +4,7 @@ import cofh.lib.audio.SoundBase;
 import cofh.lib.gui.element.ElementBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;

@@ -1,4 +1,4 @@
-package cofh.api.world;
+package cofh.lib.world;
 
 import com.google.gson.JsonObject;
 import com.typesafe.config.Config;

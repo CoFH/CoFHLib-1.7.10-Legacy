@@ -1,4 +1,4 @@
-package cofh.api.world;
+package cofh.lib.world;
 
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
