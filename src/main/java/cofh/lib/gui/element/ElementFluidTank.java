@@ -57,7 +57,7 @@ public class ElementFluidTank extends ElementBase {
 	public ElementFluidTank setShort() {
 
 		this.texture = SHORT_TEXTURE;
-		this.sizeY = 29;
+		this.sizeY = 30;
 		return this;
 	}
 
@@ -111,7 +111,7 @@ public class ElementFluidTank extends ElementBase {
 		}
 		long fraction = (long) tank.getFluidAmount() * sizeY / tank.getCapacity();
 
-		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
+		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.ceil(fraction)) : MathHelper.ceil(fraction);
 	}
 
 }
