@@ -140,22 +140,6 @@ public final class BlockHelper {
 		return y;
 	}
 
-	//TODO RayTracer
-	@Deprecated
-	public static RayTraceResult getCurrentMovingObjectPosition(EntityPlayer player, double distance, boolean fluid) {
-
-		Vec3d posVec = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-		Vec3d lookVec = player.getLook(1);
-		lookVec = posVec.addVector(lookVec.xCoord * distance, lookVec.yCoord * distance, lookVec.zCoord * distance);
-		return player.worldObj.rayTraceBlocks(posVec, lookVec, fluid);
-	}
-
-	@Deprecated
-	public static RayTraceResult getCurrentMovingObjectPosition(EntityPlayer player, boolean fluid) {
-
-		return getCurrentMovingObjectPosition(player, player.capabilities.isCreativeMode ? 5.0F : 4.5F, fluid);
-	}
-
 	public static int determineXZPlaceFacing(EntityLivingBase living) {
 
 		int quadrant = MathHelper.floor_double(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
