@@ -47,6 +47,14 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
+	public ElementFluidTank setDefault() {
+
+		this.texture = DEFAULT_TEXTURE;
+		this.sizeX = 16;
+		this.sizeY = 60;
+		return this;
+	}
+
 	public ElementFluidTank setThin() {
 
 		this.texture = THIN_TEXTURE;
