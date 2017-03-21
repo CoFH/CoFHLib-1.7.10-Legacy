@@ -1,4 +1,4 @@
-package cofh.api.tileentity;
+package cofh.api.core;
 
 import cofh.api.item.IAugmentItem;
 import net.minecraft.item.ItemStack;
