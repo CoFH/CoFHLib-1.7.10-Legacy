@@ -3,8 +3,8 @@ package cofh.lib.gui.element;
 import cofh.api.energy.IEnergyStorage;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
-import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;

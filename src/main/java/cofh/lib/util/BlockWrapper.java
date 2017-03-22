@@ -39,6 +39,7 @@ public final class BlockWrapper {
 	}
 
 	public boolean isEqual(@Nonnull IBlockState state) {
+
 		return block == state.getBlock() && metadata == block.getMetaFromState(state);
 	}
 

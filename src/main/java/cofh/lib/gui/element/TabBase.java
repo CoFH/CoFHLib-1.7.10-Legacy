@@ -3,8 +3,8 @@ package cofh.lib.gui.element;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.TabTracker;
-import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.Rectangle4i;
+import cofh.lib.util.helpers.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
@@ -376,8 +376,7 @@ public abstract class TabBase extends ElementBase {
 	@Override
 	/**
 	 * @return Whether the tab should stay open or not.
-	 */
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
+	 */ public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		mouseX -= this.posX();
 		mouseY -= this.posY;

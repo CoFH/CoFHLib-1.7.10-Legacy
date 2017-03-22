@@ -12,7 +12,6 @@ public interface IAugmentItem {
 	 * MODE - Changes functionality greatly. Only allow one.
 	 * ENDER - Integration with Ender Frequencies.
 	 * CREATIVE - Super-powerful augments which cannot normally be obtained.
-	 *
 	 */
 	enum AugmentType {
 		BASIC, ADVANCED, MODE, ENDER, CREATIVE
@@ -25,7 +24,6 @@ public interface IAugmentItem {
 	 * @return Augment Type of the stack.
 	 */
 	AugmentType getAugmentType(ItemStack stack);
-
 
 	/**
 	 * Get the Augment Identifier for a given Augment. This is simply a string with some description of what the Augment does. Individual

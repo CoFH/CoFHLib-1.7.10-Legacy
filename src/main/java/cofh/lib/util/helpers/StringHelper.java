@@ -1,9 +1,9 @@
 package cofh.lib.util.helpers;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
