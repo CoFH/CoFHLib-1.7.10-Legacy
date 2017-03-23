@@ -8,6 +8,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.input.Keyboard;
 
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -149,10 +150,10 @@ public final class StringHelper {
 		return r.toString();
 	}
 
-	@Deprecated
-	public static String getScaledNumber(long number, int minDigits) {
+	public static String formatNumber(long number) {
 
-		return getScaledNumber(number);
+		// TODO: Add Forge Locale
+		return NumberFormat.getInstance().format(number);
 	}
 
 	/* ITEM TEXT HELPERS */

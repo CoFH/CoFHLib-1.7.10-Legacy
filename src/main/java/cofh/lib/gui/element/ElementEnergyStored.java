@@ -5,6 +5,7 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.RenderHelper;
+import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class ElementEnergyStored extends ElementBase {
 		if (storage.getMaxEnergyStored() < 0) {
 			list.add("Infinite RF");
 		} else {
-			list.add(storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
+			list.add(StringHelper.formatNumber(storage.getEnergyStored()) + " / " + StringHelper.formatNumber(storage.getMaxEnergyStored()) + " RF");
 		}
 	}
 

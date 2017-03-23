@@ -108,7 +108,7 @@ public class ElementFluidTank extends ElementBase {
 		if (tank.getCapacity() < 0) {
 			list.add("Infinite Fluid");
 		} else {
-			list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
+			list.add(StringHelper.formatNumber(tank.getFluidAmount()) + " / " + StringHelper.formatNumber(tank.getCapacity()) + " mB");
 		}
 	}
 
