@@ -288,7 +288,6 @@ public abstract class TabBase extends ElementBase {
 				TabTracker.setOpenedRightTab(this.getClass());
 			}
 		}
-
 		updateElements();
 	}
 
@@ -341,7 +340,6 @@ public abstract class TabBase extends ElementBase {
 				}
 			}
 		}
-
 		return true;
 	}
 

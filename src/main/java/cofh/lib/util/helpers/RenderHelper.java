@@ -52,104 +52,18 @@ public final class RenderHelper {
 		return Minecraft.getMinecraft().getRenderItem();
 	}
 
-	public static void setColor3ub(int color) {
+	public static void setGLColorFromInt(int color) {
 
-		GlStateManager.color((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
-	}
-
-	public static void setColor4ub(int color) {
-
-		GlStateManager.color((byte) (color >> 24 & 0xFF), (byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+		float red = (float) (color >> 16 & 255) / 255.0F;
+		float green = (float) (color >> 8 & 255) / 255.0F;
+		float blue = (float) (color & 255) / 255.0F;
+		GlStateManager.color(red, green, blue, 1.0F);
 	}
 
 	public static void resetColor() {
 
-		GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
-
-	/*public static void renderItemAsBlock(RenderBlocks renderer, ItemStack item, double translateX, double translateY, double translateZ) {
-
-		renderTextureAsBlock(renderer, item.getIconIndex(), translateX, translateY, translateZ);
-	}
-
-	public static void renderTextureAsBlock(RenderBlocks renderer, IIcon texture, double translateX, double translateY, double translateZ) {
-
-		Tessellator tessellator = Tessellator.instance;
-		Block block = Blocks.stone;
-
-		if (texture == null) {
-			return;
-		}
-		renderer.setRenderBoundsFromBlock(block);
-		GlStateManager.translate(translateX, translateY, translateZ);
-		tessellator.startDrawingQuads();
-
-		tessellator.setNormal(0.0F, -1.0F, 0.0F);
-		renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, texture);
-
-		tessellator.setNormal(0.0F, 1.0F, 0.0F);
-		renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, texture);
-
-		tessellator.setNormal(0.0F, 0.0F, -1.0F);
-		renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, texture);
-
-		tessellator.setNormal(0.0F, 0.0F, 1.0F);
-		renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, texture);
-
-		tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, texture);
-
-		tessellator.setNormal(1.0F, 0.0F, 0.0F);
-		renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
-
-		tessellator.draw();
-	}
-
-	public static void renderBlockFace(RenderBlocks renderer, IIcon texture, int face, double translateX, double translateY, double translateZ) {
-
-		Tessellator tessellator = Tessellator.instance;
-		Block block = Blocks.stone;
-
-		if (texture == null || face < 0 || face > 5) {
-			return;
-		}
-		renderer.setRenderBoundsFromBlock(block);
-		GlStateManager.translate(translateX, translateY, translateZ);
-		tessellator.startDrawingQuads();
-
-		switch (face) {
-		case 0:
-			tessellator.setNormal(0.0F, -1.0F, 0.0F);
-			renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, texture);
-			break;
-		case 1:
-			tessellator.setNormal(0.0F, 1.0F, 0.0F);
-			renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, texture);
-			break;
-		case 2:
-			tessellator.setNormal(0.0F, 0.0F, -1.0F);
-			renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, texture);
-			break;
-		case 3:
-			tessellator.setNormal(0.0F, 0.0F, 1.0F);
-			renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, texture);
-			break;
-		case 4:
-			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-			renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, texture);
-			break;
-		case 5:
-			tessellator.setNormal(1.0F, 0.0F, 0.0F);
-			renderer.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, texture);
-			break;
-		}
-		tessellator.draw();
-	}
-
-    public static void renderItemIn2D(IIcon icon) {
-
-        ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMaxU(), icon.getMinV(), icon.getMinU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
-    }*/
 
 	public static void renderIcon(TextureAtlasSprite icon, double z) {
 

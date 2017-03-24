@@ -523,8 +523,8 @@ public abstract class GuiBase extends GuiContainer {
 			return;
 		}
 		RenderHelper.setBlockTextureSheet();
-		int colour = fluid.getFluid().getColor(fluid);
-		GlStateManager.color((colour >> 16) & 0xFF, (colour >> 8) & 0xFF, colour & 0xFF, (colour >> 24) & 0xFF);
+		int color = fluid.getFluid().getColor(fluid);
+		RenderHelper.setGLColorFromInt(color);
 		drawTiledTexture(x, y, RenderHelper.getTexture(fluid.getFluid().getStill(fluid)), width, height);
 	}
 
@@ -543,7 +543,7 @@ public abstract class GuiBase extends GuiContainer {
 				drawScaledTexturedModelRectFromIcon(x + i, y + j, icon, drawWidth, drawHeight);
 			}
 		}
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	public void drawIcon(TextureAtlasSprite icon, int x, int y) {
