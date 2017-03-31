@@ -52,7 +52,6 @@ public class ElementDualScaled extends ElementBase {
 			case 2:
 				// horizontal right -> left
 				drawTexturedModalRect(posX + sizeX - quantity, posY, sizeX + sizeX - quantity, 0, quantity, sizeY);
-				return;
 		}
 	}
 

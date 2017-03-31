@@ -4,11 +4,12 @@ import cofh.lib.gui.element.ElementListBox;
 
 public interface IListBoxElement {
 
-	public int getHeight();
+	int getHeight();
 
-	public int getWidth();
+	int getWidth();
 
-	public Object getValue();
+	Object getValue();
 
-	public void draw(ElementListBox listBox, int x, int y, int backColor, int textColor);
+	void draw(ElementListBox listBox, int x, int y, int backColor, int textColor);
+
 }

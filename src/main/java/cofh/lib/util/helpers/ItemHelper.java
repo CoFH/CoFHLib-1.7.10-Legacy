@@ -301,7 +301,7 @@ public final class ItemHelper {
 		} else {
 			IRecipe recipe;
 			for (int i = 0; i < CraftingManager.getInstance().getRecipeList().size(); i++) {
-				recipe = (IRecipe) CraftingManager.getInstance().getRecipeList().get(i);
+				recipe = CraftingManager.getInstance().getRecipeList().get(i);
 
 				if (recipe.matches(inv, world)) {
 					return recipe.getCraftingResult(inv);

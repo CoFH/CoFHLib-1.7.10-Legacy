@@ -143,7 +143,7 @@ public final class StringHelper {
 		}
 		for (Numeral k : Numeral.values) {
 			for (int j = i / k.value; j-- > 0; r.append(k.name)) {
-				;
+
 			}
 			i %= k.value;
 		}
@@ -232,12 +232,12 @@ public final class StringHelper {
 
 	public static final String[] ROMAN_NUMERAL = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
-	private static enum Numeral {
+	private enum Numeral {
 		M(1000), CM(900), D(500), CD(400), C(100), XC(90), L(50), XL(40), X(10), IX(9), V(5), IV(4), I(1);
 		public final String name = name();
 		public final int value;
 
-		private Numeral(int val) {
+		Numeral(int val) {
 
 			value = val;
 		}

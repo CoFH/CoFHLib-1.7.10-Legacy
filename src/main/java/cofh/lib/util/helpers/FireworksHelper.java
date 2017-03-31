@@ -32,7 +32,7 @@ public final class FireworksHelper {
 		 *
 		 * @author Tonius
 		 */
-		public static enum Type {
+		public enum Type {
 			/**
 			 * Small ball (default)
 			 */
@@ -48,7 +48,7 @@ public final class FireworksHelper {
 			CREEPER, /**
 			 * Burst (made with Feather)
 			 */
-			BURST;
+			BURST
 		}
 
 		/**

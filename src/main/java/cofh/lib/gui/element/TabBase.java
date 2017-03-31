@@ -371,10 +371,11 @@ public abstract class TabBase extends ElementBase {
 		return super.onKeyTyped(characterTyped, keyPressed);
 	}
 
-	@Override
 	/**
 	 * @return Whether the tab should stay open or not.
-	 */ public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
+	 */
+	@Override
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		mouseX -= this.posX();
 		mouseY -= this.posY;

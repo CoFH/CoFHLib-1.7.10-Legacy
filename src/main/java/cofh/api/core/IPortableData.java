@@ -15,8 +15,6 @@ public interface IPortableData {
 	/**
 	 * Data identifier of the Object. Used for display as well as verification purposes. Objects with completely interchangeable data should return the
 	 * same type.
-	 *
-	 * @return
 	 */
 	String getDataType();
 

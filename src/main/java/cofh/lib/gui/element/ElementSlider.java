@@ -157,12 +157,10 @@ public abstract class ElementSlider extends ElementBase {
 
 	public void onValueChanged(int value) {
 
-		return;
 	}
 
 	public void onStopDragging() {
 
-		return;
 	}
 
 	public int getValue() {

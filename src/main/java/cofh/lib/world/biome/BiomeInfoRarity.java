@@ -25,7 +25,7 @@ public class BiomeInfoRarity extends BiomeInfo {
 
 		boolean r = super.isBiomeEqual(biome, rand);
 		if (rand != null) {
-			return r ? rarity <= 1 || rand.nextInt(rarity) == 0 : false;
+			return r && (rarity <= 1 || rand.nextInt(rarity) == 0);
 		}
 		return r;
 	}

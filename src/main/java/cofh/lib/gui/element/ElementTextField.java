@@ -604,7 +604,7 @@ public class ElementTextField extends ElementBase {
 						int old = caret;
 						if (!onBreak) {
 							for (int i = 3; i-- > 0 && caret > 1 && text[caret - 1] != '\n'; --caret) {
-								;
+
 							}
 						}
 						findRenderStart();
@@ -726,7 +726,7 @@ public class ElementTextField extends ElementBase {
 						int i = caret, pos = caretX;
 						old = i;
 						for (; i != end; i += dir) {
-							if ((dir == -1 ? i != caret : true) && text[i] == '\n') {
+							if ((dir != -1 || i != caret) && text[i] == '\n') {
 								if (i != end) {
 									i += dir;
 								} else {
@@ -738,7 +738,7 @@ public class ElementTextField extends ElementBase {
 						l:
 						if (dir == -1) {
 							for (; i > 0 && text[i] != '\n'; --i) {
-								;
+
 							}
 							if (i == 0) {
 								if (text[0] == '\n') {

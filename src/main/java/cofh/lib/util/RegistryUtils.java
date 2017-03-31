@@ -185,9 +185,9 @@ public class RegistryUtils {
 				v = (((r >> 8) & 255) + ((t >> 8) & 255)) / 2;
 				r &= 0xFFFF00FF;
 				r |= v << 8;
-				v = (((r >> 0) & 255) + ((t >> 0) & 255)) / 2;
+				v = ((r & 255) + (t & 255)) / 2;
 				r &= 0xFFFFFF00;
-				r |= v << 0;
+				r |= v;
 			}
 			return r;
 		} catch (Throwable t) { // pokemon!

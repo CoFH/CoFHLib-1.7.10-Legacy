@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -77,7 +76,7 @@ public abstract class ContainerBase extends Container {
 		}
 
 		ItemStack stack = null;
-		Slot slot = (Slot) inventorySlots.get(slotIndex);
+		Slot slot = inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stackInSlot = slot.getStack();
@@ -90,7 +89,7 @@ public abstract class ContainerBase extends Container {
 			slot.onSlotChange(stackInSlot, stack);
 
 			if (stackInSlot.stackSize <= 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(null);
 			} else {
 				slot.putStack(stackInSlot);
 			}
@@ -108,13 +107,13 @@ public abstract class ContainerBase extends Container {
 		start = MathHelper.clamp(start, 0, inventorySlots.size());
 		end = MathHelper.clamp(end, 0, inventorySlots.size());
 		for (; start < end; ++start) {
-			ItemStack itemstack = ((Slot) inventorySlots.get(start)).getStack();
+			ItemStack itemstack = inventorySlots.get(start).getStack();
 
 			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
 			for (int j = 0; j < this.listeners.size(); ++j) {
-				((IContainerListener) this.listeners.get(j)).sendSlotContents(this, start, itemstack1);
+				this.listeners.get(j).sendSlotContents(this, start, itemstack1);
 			}
 		}
 	}
@@ -131,7 +130,7 @@ public abstract class ContainerBase extends Container {
 	@Override
 	public ItemStack slotClick(int slotId, int mouseButton, ClickType modifier, EntityPlayer player) {
 
-		Slot slot = slotId < 0 ? null : (Slot) this.inventorySlots.get(slotId);
+		Slot slot = slotId < 0 ? null : this.inventorySlots.get(slotId);
 		if (slot instanceof SlotFalseCopy) {
 			if (mouseButton == 2) {
 				slot.putStack(null);

@@ -289,7 +289,7 @@ public abstract class GuiBase extends GuiContainer {
 	public Slot getSlotAtPosition(int xCoord, int yCoord) {
 
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
+			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
 			if (this.isMouseOverSlot(slot, xCoord, yCoord)) {
 				return slot;
@@ -631,10 +631,10 @@ public abstract class GuiBase extends GuiContainer {
 		float texV = 1 / texH;
 		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x + 0, y + height, this.zLevel).tex((u + 0) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x, y + height, this.zLevel).tex((u) * texU, (v + height) * texV).endVertex();
 		buffer.pos(x + width, y + height, this.zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
-		buffer.pos(x + width, y + 0, this.zLevel).tex((u + width) * texU, (v + 0) * texV).endVertex();
-		buffer.pos(x + 0, y + 0, this.zLevel).tex((u + 0) * texU, (v + 0) * texV).endVertex();
+		buffer.pos(x + width, y, this.zLevel).tex((u + width) * texU, (v) * texV).endVertex();
+		buffer.pos(x, y, this.zLevel).tex((u) * texU, (v) * texV).endVertex();
 		Tessellator.getInstance().draw();
 	}
 
@@ -650,10 +650,10 @@ public abstract class GuiBase extends GuiContainer {
 
 		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(x + 0, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();
+		buffer.pos(x, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();
 		buffer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F).endVertex();
-		buffer.pos(x + width, y + 0, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();
-		buffer.pos(x + 0, y + 0, this.zLevel).tex(minU, minV).endVertex();
+		buffer.pos(x + width, y, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();
+		buffer.pos(x, y, this.zLevel).tex(minU, minV).endVertex();
 		Tessellator.getInstance().draw();
 	}
 

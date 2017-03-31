@@ -168,7 +168,6 @@ public abstract class ElementBase {
 
 	public void onMouseReleased(int mouseX, int mouseY) {
 
-		return;
 	}
 
 	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
@@ -183,10 +182,7 @@ public abstract class ElementBase {
 
 	public boolean intersectsWith(int mouseX, int mouseY) {
 
-		if (mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY) {
-			return true;
-		}
-		return false;
+		return mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY;
 	}
 
 	public FontRenderer getFontRenderer() {

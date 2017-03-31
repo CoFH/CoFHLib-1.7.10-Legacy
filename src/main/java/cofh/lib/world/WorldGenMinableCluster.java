@@ -20,14 +20,14 @@ import java.util.Random;
 
 public class WorldGenMinableCluster extends WorldGenerator {
 
-	public static final List<WeightedRandomBlock> fabricateList(WeightedRandomBlock resource) {
+	public static List<WeightedRandomBlock> fabricateList(WeightedRandomBlock resource) {
 
 		List<WeightedRandomBlock> list = new ArrayList<>();
 		list.add(resource);
 		return list;
 	}
 
-	public static final List<WeightedRandomBlock> fabricateList(Block resource) {
+	public static List<WeightedRandomBlock> fabricateList(Block resource) {
 
 		List<WeightedRandomBlock> list = new ArrayList<>();
 		list.add(new WeightedRandomBlock(new ItemStack(resource, 1, 0)));
@@ -204,10 +204,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 	public static boolean generateBlock(World world, int x, int y, int z, List<WeightedRandomBlock> o) {
 
 		WeightedRandomBlock ore = selectBlock(world, o);
-		if (ore == null) {
-			return false;
-		}
-		return world.setBlockState(new BlockPos(x, y, z), ore.getState(), 2);
+		return ore != null && world.setBlockState(new BlockPos(x, y, z), ore.getState(), 2);
 	}
 
 	public static WeightedRandomBlock selectBlock(World world, List<WeightedRandomBlock> o) {
@@ -217,7 +214,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 			return null;
 		}
 		if (size > 1) {
-			return (WeightedRandomBlock) WeightedRandom.getRandomItem(world.rand, o);
+			return WeightedRandom.getRandomItem(world.rand, o);
 		}
 		return o.get(0);
 	}

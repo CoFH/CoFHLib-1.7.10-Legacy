@@ -35,7 +35,6 @@ public class ElementSimple extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		return;
 	}
 
 }

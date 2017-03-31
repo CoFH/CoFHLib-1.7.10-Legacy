@@ -340,7 +340,7 @@ public class FluidHelper {
 	/* HELPERS */
 	public static boolean isValidFluidStack(FluidStack fluid) {
 
-		return fluid == null ? false : FluidRegistry.getFluidName(fluid) != null;
+		return fluid != null && FluidRegistry.getFluidName(fluid) != null;
 	}
 
 	public static int getFluidLuminosity(FluidStack fluid) {

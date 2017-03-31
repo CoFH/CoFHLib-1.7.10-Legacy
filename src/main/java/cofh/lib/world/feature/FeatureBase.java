@@ -13,7 +13,7 @@ import java.util.Set;
 
 public abstract class FeatureBase implements IFeatureGenerator {
 
-	public static enum GenRestriction {
+	public enum GenRestriction {
 		NONE, BLACKLIST, WHITELIST;
 
 		public static GenRestriction get(String restriction) {

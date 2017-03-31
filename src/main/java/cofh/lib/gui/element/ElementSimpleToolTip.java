@@ -58,7 +58,6 @@ public class ElementSimpleToolTip extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		return;
 	}
 
 	@Override

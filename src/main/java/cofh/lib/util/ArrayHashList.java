@@ -6,7 +6,7 @@ import com.google.common.primitives.Ints;
 import java.util.*;
 
 @SuppressWarnings ("unchecked")
-public class ArrayHashList<E extends Object> extends AbstractCollection<E> implements List<E>, Cloneable, java.io.Serializable {
+public class ArrayHashList<E> extends AbstractCollection<E> implements List<E>, Cloneable, java.io.Serializable {
 
 	private static final long serialVersionUID = 3230581060536180693L;
 

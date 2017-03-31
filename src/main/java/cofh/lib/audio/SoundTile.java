@@ -61,12 +61,12 @@ public class SoundTile extends PositionedSound implements ITickableSound {
 
 	public float getFadeInMultiplier() {
 
-		return ticks >= fadeIn ? 1 : (float) (ticks / (float) fadeIn);
+		return ticks >= fadeIn ? 1 : ticks / (float) fadeIn;
 	}
 
 	public float getFadeOutMultiplier() {
 
-		return ticks >= fadeOut ? 0 : (float) ((fadeOut - ticks) / (float) fadeOut);
+		return ticks >= fadeOut ? 0 : (fadeOut - ticks) / (float) fadeOut;
 	}
 
 	/* ITickableSound */

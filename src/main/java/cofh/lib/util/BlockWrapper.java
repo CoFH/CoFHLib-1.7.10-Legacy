@@ -82,12 +82,8 @@ public final class BlockWrapper {
 	@Override
 	public String toString() {
 
-		StringBuilder b = new StringBuilder(getClass().getName());
-		b.append('@').append(System.identityHashCode(this)).append('{');
-		b.append("m:").append(metadata).append(", i:").append(block == null ? null : block.getClass().getName());
-		b.append('@').append(System.identityHashCode(block)).append(", v:");
-		b.append(getId()).append('}');
-		return b.toString();
+		String b = getClass().getName() + '@' + System.identityHashCode(this) + '{' + "m:" + metadata + ", i:" + (block == null ? null : block.getClass().getName()) + '@' + System.identityHashCode(block) + ", v:" + getId() + '}';
+		return b;
 	}
 
 }

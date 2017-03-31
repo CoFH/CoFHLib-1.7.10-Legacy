@@ -52,7 +52,7 @@ public class GuiColor extends Number {
 
 	public int getIntB() {
 
-		return (_color >> 0) & 0xFF;
+		return _color & 0xFF;
 	}
 
 	public int getIntA() {
