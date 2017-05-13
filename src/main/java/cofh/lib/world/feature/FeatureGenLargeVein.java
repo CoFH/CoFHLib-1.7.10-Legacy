@@ -36,8 +36,9 @@ public class FeatureGenLargeVein extends FeatureBase {
 
 	public int getDensity(Random rand, int oreDistance, float oreDensity) {
 
-		oreDensity = (oreDensity * 0.01f * (oreDistance >> 1)) + 1f;
+		oreDensity = oreDensity * 0.01f * (oreDistance >> 1);
 		int i = (int) oreDensity;
+		if (i == 0) ++i;
 		int rnd = oreDistance / i;
 		int r = 0;
 		for (; i > 0; --i) {
