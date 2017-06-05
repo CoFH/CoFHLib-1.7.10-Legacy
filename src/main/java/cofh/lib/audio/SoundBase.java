@@ -134,4 +134,5 @@ public class SoundBase extends PositionedSound {
 
 		this(other.getSoundLocation(), other.category, other.volume, other.pitch, other.repeat, other.repeatDelay, other.xPosF, other.yPosF, other.zPosF, other.attenuationType);
 	}
+
 }

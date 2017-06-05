@@ -29,12 +29,6 @@ public final class ChunkCoord implements Comparable<ChunkCoord>, Serializable {
 		this(pos.getX() >> 4, pos.getZ() >> 4);
 	}
 
-	@Deprecated
-	public ChunkCoord(BlockPosition pos) {
-
-		this(pos.x >> 4, pos.z >> 4);
-	}
-
 	public ChunkCoord(int x, int z) {
 
 		this.chunkX = x;
