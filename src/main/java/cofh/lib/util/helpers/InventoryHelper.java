@@ -416,7 +416,7 @@ public class InventoryHelper {
 
 		if (tileEntity.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face)) {
 			return tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face);
-		} else if (tileEntity instanceof ISidedInventory) {
+		} else if (tileEntity instanceof ISidedInventory && face != null) {
 			return new SidedInvWrapper(((ISidedInventory) tileEntity), face);
 		} else if (tileEntity instanceof IInventory) {
 			return new InvWrapper(((IInventory) tileEntity));
