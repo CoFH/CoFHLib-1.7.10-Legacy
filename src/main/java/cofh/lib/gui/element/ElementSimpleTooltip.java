@@ -11,38 +11,38 @@ import java.util.List;
  *
  * @author King Lemming
  */
-public class ElementSimpleToolTip extends ElementBase {
+public class ElementSimpleTooltip extends ElementBase {
 
 	int texU = 0;
 	int texV = 0;
 	boolean tooltipLocalized = false;
 	String tooltip;
 
-	public ElementSimpleToolTip(GuiBase gui, int posX, int posY) {
+	public ElementSimpleTooltip(GuiBase gui, int posX, int posY) {
 
 		super(gui, posX, posY);
 	}
 
-	public ElementSimpleToolTip setTextureOffsets(int u, int v) {
+	public ElementSimpleTooltip setTextureOffsets(int u, int v) {
 
 		texU = u;
 		texV = v;
 		return this;
 	}
 
-	public ElementSimpleToolTip clearToolTip() {
+	public ElementSimpleTooltip clearToolTip() {
 
 		this.tooltip = null;
 		return this;
 	}
 
-	public ElementSimpleToolTip setToolTip(String tooltip) {
+	public ElementSimpleTooltip settooltip(String tooltip) {
 
 		this.tooltip = tooltip;
 		return this;
 	}
 
-	public ElementSimpleToolTip setToolTipLocalized(boolean localized) {
+	public ElementSimpleTooltip settooltiplocalized(boolean localized) {
 
 		this.tooltipLocalized = localized;
 		return this;
