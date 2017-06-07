@@ -507,7 +507,6 @@ public abstract class GuiBase extends GuiContainer {
 		if (drawOverlay) {
 			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
 		}
-
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
 		GlStateManager.popMatrix();
@@ -768,10 +767,6 @@ public abstract class GuiBase extends GuiContainer {
 	public int getMouseY() {
 
 		return mouseY;
-	}
-
-	public void overlayRecipe() {
-
 	}
 
 }
