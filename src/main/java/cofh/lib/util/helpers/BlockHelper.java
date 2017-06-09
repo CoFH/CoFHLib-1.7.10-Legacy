@@ -334,4 +334,21 @@ public final class BlockHelper {
 		return new ItemStack(item, 1, 0);
 	}
 
+	/* BLOCK UPDATES */
+	public static void callBlockUpdate(World world, BlockPos pos) {
+
+		IBlockState state = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, state, state, 3);
+	}
+
+	public void callNeighborStateChange(World world, BlockPos pos) {
+
+		world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
+	}
+
+	public void callNeighborTileChange(World world, BlockPos pos) {
+
+		world.updateComparatorOutputLevel(pos, world.getBlockState(pos).getBlock());
+	}
+
 }
