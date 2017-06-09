@@ -1,6 +1,5 @@
 package cofh.lib.util.helpers;
 
-import cofh.api.tileentity.IItemDuct;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
@@ -90,88 +89,6 @@ public class InventoryHelper {
 	public static boolean addItemStackToInventory(ItemStack[] inventory, ItemStack stack) {
 
 		return addItemStackToInventory(inventory, stack, 0);
-	}
-
-	/* IInventoryHandler Interaction */
-
-	// IInventoryHandler is not currently implemented or used. Possibly in the future.
-
-	/* IInventory Interaction */
-	public static ItemStack extractItemStackFromInventory(IInventory inventory, EnumFacing side) {
-
-		if (inventory == null) {
-			return null;
-		}
-		ItemStack retStack = null;
-
-		if (inventory instanceof ISidedInventory) {
-			ISidedInventory sidedInv = (ISidedInventory) inventory;
-			int slots[] = sidedInv.getSlotsForFace(side);
-			for (int i = 0; i < slots.length && retStack == null; i++) {
-				if (sidedInv.getStackInSlot(i) != null && sidedInv.canExtractItem(i, sidedInv.getStackInSlot(i), side)) {
-					retStack = sidedInv.getStackInSlot(i).copy();
-					sidedInv.setInventorySlotContents(i, null);
-				}
-			}
-		} else {
-			for (int i = 0; i < inventory.getSizeInventory() && retStack == null; i++) {
-				if (inventory.getStackInSlot(i) != null) {
-					retStack = inventory.getStackInSlot(i).copy();
-					inventory.setInventorySlotContents(i, null);
-				}
-			}
-		}
-		if (retStack != null) {
-			inventory.markDirty();
-		}
-		return retStack;
-	}
-
-	public static ItemStack insertItemStackIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side) {
-
-		if (stack == null || inventory == null) {
-			return null;
-		}
-		int stackSize = stack.stackSize;
-
-		if (inventory instanceof ISidedInventory) {
-			ISidedInventory sidedInv = (ISidedInventory) inventory;
-			int slots[] = sidedInv.getSlotsForFace(side);
-
-			if (slots == null) {
-				return stack;
-			}
-			for (int i = 0; i < slots.length && stack != null; i++) {
-				if (sidedInv.canInsertItem(slots[i], stack, side)) {
-					ItemStack existingStack = inventory.getStackInSlot(slots[i]);
-					if (ItemHelper.itemsEqualWithMetadata(stack, existingStack, true)) {
-						stack = addToOccupiedInventorySlot(sidedInv, slots[i], stack, existingStack);
-					}
-				}
-			}
-			for (int i = 0; i < slots.length && stack != null; i++) {
-				if (inventory.getStackInSlot(slots[i]) == null && sidedInv.canInsertItem(slots[i], stack, side)) {
-					stack = addToEmptyInventorySlot(sidedInv, slots[i], stack);
-				}
-			}
-		} else {
-			int invSize = inventory.getSizeInventory();
-			for (int i = 0; i < invSize && stack != null; i++) {
-				ItemStack existingStack = inventory.getStackInSlot(i);
-				if (ItemHelper.itemsEqualWithMetadata(stack, existingStack, true)) {
-					stack = addToOccupiedInventorySlot(inventory, i, stack, existingStack);
-				}
-			}
-			for (int i = 0; i < invSize && stack != null; i++) {
-				if (inventory.getStackInSlot(i) == null) {
-					stack = addToEmptyInventorySlot(inventory, i, stack);
-				}
-			}
-		}
-		if (stack == null || stack.stackSize != stackSize) {
-			inventory.markDirty();
-		}
-		return stack;
 	}
 
 	public static ItemStack insertStackIntoInventory(IItemHandler handler, ItemStack stack, boolean simulate) {
@@ -389,22 +306,8 @@ public class InventoryHelper {
 		}
 		if (hasItemHandlerCap(tile, side.getOpposite())) {
 			stack = insertStackIntoInventory(getItemHandlerCap(tile, side.getOpposite()), stack, false);
-		} else {
-			stack = ((IItemDuct) tile).insertItem(side.getOpposite(), stack);
 		}
 		return stack;
-	}
-
-	@Deprecated
-	public static boolean isInventory(TileEntity tile) {
-
-		return tile instanceof IInventory;
-	}
-
-	@Deprecated
-	public static boolean isInsertion(Object tile) {
-
-		return tile instanceof IInventory || tile instanceof IItemDuct;
 	}
 
 	public static boolean hasItemHandlerCap(TileEntity tileEntity, EnumFacing face) {
