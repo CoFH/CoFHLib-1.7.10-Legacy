@@ -1,7 +1,6 @@
 package cofh.lib.inventory;
 
 import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -9,7 +8,6 @@ import net.minecraft.item.ItemStack;
  * This is basically a default "safe" implementation of a ComparableItemStack - the OreID will only be used for the 5 "basic" conventions.
  *
  * @author King Lemming
- *
  */
 public class ComparableItemStackSafe extends ComparableItemStack {
 

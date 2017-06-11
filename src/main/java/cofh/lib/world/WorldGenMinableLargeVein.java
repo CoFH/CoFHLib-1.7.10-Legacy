@@ -1,23 +1,26 @@
 package cofh.lib.world;
 
-import static cofh.lib.world.WorldGenMinableCluster.*;
-
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import static cofh.lib.world.WorldGenMinableCluster.fabricateList;
+import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 
 public class WorldGenMinableLargeVein extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
 	private final WeightedRandomBlock[] genBlock;
-	private final int genVeinSize;
+	private final INumberProvider genVeinSize;
 	private final boolean sparse;
 
 	public WorldGenMinableLargeVein(ItemStack ore, int clusterSize) {
@@ -32,7 +35,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, int clusterSize) {
 
-		this(resource, clusterSize, Blocks.stone);
+		this(resource, clusterSize, Blocks.STONE);
 	}
 
 	public WorldGenMinableLargeVein(ItemStack ore, int clusterSize, Block block) {
@@ -57,6 +60,11 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 
 	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block, boolean sparze) {
 
+		this(resource, new ConstantProvider(clusterSize), block, sparze);
+	}
+
+	public WorldGenMinableLargeVein(List<WeightedRandomBlock> resource, INumberProvider clusterSize, List<WeightedRandomBlock> block, boolean sparze) {
+
 		cluster = resource;
 		genVeinSize = clusterSize;
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
@@ -64,14 +72,18 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
 
-		final int veinSize = genVeinSize;
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+
+		final int veinSize = genVeinSize.intValue(world, rand, pos);
 		final int branchSize = 1 + (veinSize / 30);
 		final int subBranchSize = 1 + (branchSize / 5);
 
 		boolean r = false;
-		for (int blocksVein = 0; blocksVein <= veinSize;) {
+		for (int blocksVein = 0; blocksVein <= veinSize; ) {
 			int posX = x;
 			int posY = y;
 			int posZ = z;
@@ -87,7 +99,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 				directionZ1 += ~directionZ1 >>> 31;
 			}
 
-			for (int blocksBranch = 0; blocksBranch <= branchSize;) {
+			for (int blocksBranch = 0; blocksBranch <= branchSize; ) {
 				if (directionChange != 1) {
 					posX += rand.nextInt(2) * directionX1;
 				}
@@ -114,7 +126,7 @@ public class WorldGenMinableLargeVein extends WorldGenerator {
 						directionZ2 += ~directionZ2 >>> 31;
 					}
 
-					for (int blocksSubBranch = 0; blocksSubBranch <= subBranchSize;) {
+					for (int blocksSubBranch = 0; blocksSubBranch <= subBranchSize; ) {
 						if (directionChange2 != 0) {
 							posX2 += rand.nextInt(2) * directionX2;
 						}

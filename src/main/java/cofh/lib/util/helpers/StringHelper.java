@@ -1,27 +1,31 @@
 package cofh.lib.util.helpers;
 
-import java.util.List;
-import java.util.Locale;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.lwjgl.input.Keyboard;
+
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Contains various helper functions to assist with String manipulation.
  *
  * @author King Lemming
- *
  */
 public final class StringHelper {
 
 	private StringHelper() {
 
+	}
+
+	public static String toString(Object o, String nullDefault) {
+
+		return (o != null) ? o.toString() : nullDefault;
 	}
 
 	/* KEY HELPERS */
@@ -43,14 +47,8 @@ public final class StringHelper {
 	/* FORMAT HELPERS */
 	public static int getSplitStringHeight(FontRenderer fontRenderer, String input, int width) {
 
-		@SuppressWarnings("rawtypes")
-		List stringRows = fontRenderer.listFormattedStringToWidth(input, width);
+		@SuppressWarnings ("rawtypes") List stringRows = fontRenderer.listFormattedStringToWidth(input, width);
 		return stringRows.size() * fontRenderer.FONT_HEIGHT;
-	}
-
-	public static String camelCase(String input) {
-
-		return input.substring(0, 1).toLowerCase(Locale.US) + input.substring(1);
 	}
 
 	public static String titleCase(String input) {
@@ -60,12 +58,22 @@ public final class StringHelper {
 
 	public static String localize(String key) {
 
-		return StatCollector.translateToLocal(key);
+		return I18n.translateToLocal(key);
+	}
+
+	public static String localizeFormat(String key, Object... format) {
+
+		return I18n.translateToLocalFormatted(key, format);
+	}
+
+	public static boolean canLocalize(String key) {
+
+		return I18n.canTranslate(key);
 	}
 
 	public static String getKeyName(int key) {
 
-		return key < 0 ? StatCollector.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);
+		return key < 0 ? I18n.translateToLocalFormatted("key.mouseButton", key + 101) : Keyboard.getKeyName(key);
 	}
 
 	public static String getFluidName(FluidStack stack) {
@@ -73,11 +81,11 @@ public final class StringHelper {
 		Fluid fluid = stack.getFluid();
 
 		String name = "" + END;
-		if (fluid.getRarity() == EnumRarity.uncommon) {
+		if (fluid.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (fluid.getRarity() == EnumRarity.rare) {
+		} else if (fluid.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (fluid.getRarity() == EnumRarity.epic) {
+		} else if (fluid.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += fluid.getLocalizedName(stack) + END;
@@ -96,11 +104,11 @@ public final class StringHelper {
 	public static String getItemName(ItemStack stack) {
 
 		String name = "" + END;
-		if (stack.getRarity() == EnumRarity.uncommon) {
+		if (stack.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (stack.getRarity() == EnumRarity.rare) {
+		} else if (stack.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (stack.getRarity() == EnumRarity.epic) {
+		} else if (stack.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += stack.getDisplayName() + END;
@@ -124,8 +132,9 @@ public final class StringHelper {
 	public static String toNumerals(short v) {
 
 		String s = "potion.potency." + v;
-		if (StatCollector.canTranslate(s))
-			return StatCollector.translateToLocal(s);
+		if (I18n.canTranslate(s)) {
+			return I18n.translateToLocalFormatted(s);
+		}
 		StringBuilder r = new StringBuilder();
 		int i = v;
 		if (i < 0) {
@@ -133,16 +142,18 @@ public final class StringHelper {
 			r.append('-');
 		}
 		for (Numeral k : Numeral.values) {
-			for (int j = i / k.value; j-- > 0; r.append(k.name));
+			for (int j = i / k.value; j-- > 0; r.append(k.name)) {
+
+			}
 			i %= k.value;
 		}
 		return r.toString();
 	}
 
-	@Deprecated
-	public static String getScaledNumber(long number, int minDigits) {
+	public static String formatNumber(long number) {
 
-		return getScaledNumber(number);
+		// TODO: Add Forge Locale
+		return NumberFormat.getInstance().format(number);
 	}
 
 	/* ITEM TEXT HELPERS */
@@ -174,19 +185,18 @@ public final class StringHelper {
 	public static String getRarity(int level) {
 
 		switch (level) {
-		case 2:
-			return StringHelper.YELLOW;
-		case 3:
-			return StringHelper.BRIGHT_BLUE;
-		default:
-			return StringHelper.LIGHT_GRAY;
+			case 2:
+				return StringHelper.YELLOW;
+			case 3:
+				return StringHelper.BRIGHT_BLUE;
+			default:
+				return StringHelper.LIGHT_GRAY;
 		}
 	}
 
 	public static String shiftForDetails() {
 
-		return LIGHT_GRAY + localize("info.cofh.hold") + " " + YELLOW + ITALIC + localize("info.cofh.shift") + " " + END + LIGHT_GRAY
-				+ localize("info.cofh.forDetails") + END;
+		return localize("info.cofh.holdShiftForDetails");
 	}
 
 	/* TUTORIAL TAB HELPERS */
@@ -195,19 +205,14 @@ public final class StringHelper {
 		return localize("info.cofh.tutorial.tabAugment");
 	}
 
+	public static String tutorialTabAugmentUpgrade() {
+
+		return localize("info.cofh.tutorial.tabAugmentUpgrade");
+	}
+
 	public static String tutorialTabConfiguration() {
 
-		return localize("info.cofh.tutorial.tabConfiguration.0");
-	}
-
-	public static String tutorialTabConfigurationEnergy() {
-
-		return localize("info.cofh.tutorial.tabConfiguration.1");
-	}
-
-	public static String tutorialTabConfigurationOperation() {
-
-		return localize("info.cofh.tutorial.tabConfiguration.2");
+		return localize("info.cofh.tutorial.tabConfiguration");
 	}
 
 	public static String tutorialTabRedstone() {
@@ -227,17 +232,22 @@ public final class StringHelper {
 
 	public static final String[] ROMAN_NUMERAL = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X" };
 
-	private static enum Numeral {
+	private enum Numeral {
 		M(1000), CM(900), D(500), CD(400), C(100), XC(90), L(50), XL(40), X(10), IX(9), V(5), IV(4), I(1);
 		public final String name = name();
 		public final int value;
-		private Numeral(int val) {
+
+		Numeral(int val) {
+
 			value = val;
 		}
+
 		private static final Numeral[] values = values();
 	}
 
-	/** When formatting a string, always apply color before font modification. */
+	/**
+	 * When formatting a string, always apply color before font modification.
+	 */
 	public static final String BLACK = (char) 167 + "0";
 	public static final String BLUE = (char) 167 + "1";
 	public static final String GREEN = (char) 167 + "2";

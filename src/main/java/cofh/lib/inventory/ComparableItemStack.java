@@ -2,7 +2,6 @@ package cofh.lib.inventory;
 
 import cofh.lib.util.ComparableItem;
 import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -12,7 +11,6 @@ import net.minecraft.item.ItemStack;
  * The intended purpose of this is for things such as Recipe Handlers or HashMaps of ItemStacks.
  *
  * @author King Lemming
- *
  */
 public class ComparableItemStack extends ComparableItem {
 
@@ -128,10 +126,7 @@ public class ComparableItemStack extends ComparableItem {
 	@Override
 	public boolean equals(Object o) {
 
-		if (!(o instanceof ComparableItemStack)) {
-			return false;
-		}
-		return isItemEqual((ComparableItemStack) o);
+		return o instanceof ComparableItemStack && isItemEqual((ComparableItemStack) o);
 	}
 
 }

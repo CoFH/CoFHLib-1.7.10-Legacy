@@ -1,21 +1,22 @@
 package cofh.lib.util;
 
-import java.util.Collection;
-
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
+
+import java.util.Collection;
 
 /**
  * This class essentially allows for ores to be generated in clusters, with Features randomly choosing one or more blocks from a weighted list.
  *
  * @author King Lemming
- *
  */
 public final class WeightedRandomBlock extends WeightedRandom.Item {
 
 	public final Block block;
 	public final int metadata;
+	public final IBlockState state;
 
 	public WeightedRandomBlock(ItemStack ore) {
 
@@ -42,6 +43,15 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 		super(weight);
 		this.block = ore;
 		this.metadata = metadata;
+		this.state = null;
+	}
+
+	public WeightedRandomBlock(IBlockState ore, int weight) {
+
+		super(weight);
+		this.block = ore.getBlock();
+		this.metadata = block.getMetaFromState(ore);
+		this.state = ore;
 	}
 
 	public static boolean isBlockContained(Block block, int metadata, Collection<WeightedRandomBlock> list) {
@@ -62,6 +72,11 @@ public final class WeightedRandomBlock extends WeightedRandom.Item {
 			}
 		}
 		return false;
+	}
+
+	public IBlockState getState() {
+
+		return state == null ? block.getStateFromMeta(metadata) : state;
 	}
 
 }

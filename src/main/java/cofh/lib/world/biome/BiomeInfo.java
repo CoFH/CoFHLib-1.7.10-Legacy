@@ -1,12 +1,13 @@
 package cofh.lib.world.biome;
 
-import java.util.Collection;
-import java.util.Random;
-
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.TempCategory;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+
+import java.util.Collection;
+import java.util.Random;
 
 public class BiomeInfo {
 
@@ -31,37 +32,50 @@ public class BiomeInfo {
 		type = t;
 	}
 
-	@SuppressWarnings("unchecked")
-	public boolean isBiomeEqual(BiomeGenBase biome, Random rand) {
+	@SuppressWarnings ("unchecked")
+	public boolean isBiomeEqual(Biome biome, Random rand) {
 
+		boolean r = false;
 		if (biome != null) {
 			switch (type) {
-			default:
-				break;
-			case 0:
-				String name = biome.biomeName;
-				return name.hashCode() == hash && name.equals(data);
-			case 1:
-				return biome.getTempCategory() == data == whitelist;
-			case 2:
-				return BiomeDictionary.isBiomeOfType(biome, (Type) data) == whitelist;
-			case 4:
-				return ((Collection<String>) data).contains(biome.biomeName);
-			case 5:
-				return ((Collection<TempCategory>) data).contains(biome.getTempCategory()) == whitelist;
-			case 6:
-				Type[] d = (Type[]) data;
-				int c = 0,
-				e = d.length;
-				for (int i = 0; i < e; ++i) {
-					if (BiomeDictionary.isBiomeOfType(biome, d[i])) {
-						++c;
+				default:
+					break;
+				case 0:
+					String name = biome.getBiomeName();
+					r = name.hashCode() == hash && name.equals(data);
+					break;
+				case 1:
+					r = biome.getTempCategory() == data;
+					break;
+				case 2:
+					r = BiomeDictionary.isBiomeOfType(biome, (Type) data);
+					break;
+				case 4:
+					r = ((Collection<String>) data).contains(biome.getBiomeName());
+					break;
+				case 5:
+					r = ((Collection<TempCategory>) data).contains(biome.getTempCategory());
+					break;
+				case 6:
+					Type[] d = (Type[]) data;
+					int c = 0, e = d.length;
+					for (int i = 0; i < e; ++i) {
+						if (BiomeDictionary.isBiomeOfType(biome, d[i])) {
+							++c;
+						}
 					}
-				}
-				return c == e == whitelist;
+					r = c == e;
+					break;
+				case 7:
+					ResourceLocation registry = Biome.REGISTRY.getNameForObject(biome);
+					r = registry.hashCode() == hash && registry.equals(data);
+					break;
+				case 8:
+					r = ((Collection<ResourceLocation>) data).contains(Biome.REGISTRY.getNameForObject(biome));
+					break;
 			}
 		}
-		return !whitelist;
+		return r == whitelist;
 	}
 
 }

@@ -9,7 +9,6 @@ import net.minecraft.util.EntityDamageSource;
  * This class contains helper functions related to Damage types that CoFH mods add.
  *
  * @author King Lemming
- *
  */
 public class DamageHelper {
 

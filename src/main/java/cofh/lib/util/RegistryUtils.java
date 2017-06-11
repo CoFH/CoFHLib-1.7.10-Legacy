@@ -4,26 +4,25 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.Multimap;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.RegistryDelegate;
-import cpw.mods.fml.relauncher.ReflectionHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.RegistryDelegate;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
-import net.minecraft.util.RegistryNamespaced;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
 
 public class RegistryUtils {
 
@@ -36,12 +35,12 @@ public class RegistryUtils {
 		private static IdentityHashMap<RegistryNamespaced, Multimap<String, Object>> replacements;
 		private static Class<RegistryDelegate<?>> DelegateClass;
 
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings ({ "rawtypes", "unchecked" })
 		private static void overwrite_do(RegistryNamespaced registry, String name, Object object, Object oldThing) {
 
 			int id = registry.getIDForObject(oldThing);
 			BiMap map = ((BiMap) registry.registryObjects);
-			registry.underlyingIntegerMap.func_148746_a(object, id);
+			registry.underlyingIntegerMap.put(object, id);
 			map.remove(name);
 			map.forcePut(name, object);
 		}
@@ -69,18 +68,18 @@ public class RegistryUtils {
 
 		static {
 
-			replacements = new IdentityHashMap<RegistryNamespaced, Multimap<String, Object>>(2);
+			replacements = new IdentityHashMap<>(2);
 			MinecraftForge.EVENT_BUS.register(new RegistryUtils());
 			try {
-				DelegateClass = (Class<RegistryDelegate<?>>) Class.forName("cpw.mods.fml.common.registry.RegistryDelegate$Delegate");
+				DelegateClass = (Class<RegistryDelegate<?>>) Class.forName("net.minecraftforge.fml.common.registry.RegistryDelegate$Delegate");
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void _(WorldEvent.Load event) {
+	@SubscribeEvent (priority = EventPriority.HIGHEST)
+	public void loadEvent(WorldEvent.Load event) {
 
 		if (Repl.replacements.size() < 1) {
 			return;
@@ -106,7 +105,7 @@ public class RegistryUtils {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings ("unchecked")
 	public static void overwriteEntry(RegistryNamespaced registry, String name, Object object) {
 
 		Object oldThing = registry.getObject(name);
@@ -122,7 +121,7 @@ public class RegistryUtils {
 		Repl.alterDelegateChain(registry, name, object);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static boolean textureExists(ResourceLocation texture) {
 
 		try {
@@ -133,13 +132,13 @@ public class RegistryUtils {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static boolean textureExists(String texture) {
 
 		return textureExists(new ResourceLocation(texture));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static boolean blockTextureExists(String texture) {
 
 		int i = texture.indexOf(':');
@@ -152,7 +151,7 @@ public class RegistryUtils {
 		return textureExists(texture + ".png");
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static boolean itemTextureExists(String texture) {
 
 		int i = texture.indexOf(':');
@@ -165,7 +164,7 @@ public class RegistryUtils {
 		return textureExists(texture + ".png");
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static int getTextureColor(ResourceLocation texture) {
 
 		try {
@@ -175,7 +174,7 @@ public class RegistryUtils {
 			image.getRGB(0, 0, image.getWidth(), image.getHeight(), a, 0, image.getWidth());
 
 			int r = a[0];
-			for (int i = a.length; i-- > 1;) {
+			for (int i = a.length; i-- > 1; ) {
 				int t = a[i], v;
 				v = (((r >> 24) & 255) + ((t >> 24) & 255)) / 2;
 				r &= 0x00FFFFFF;
@@ -186,9 +185,9 @@ public class RegistryUtils {
 				v = (((r >> 8) & 255) + ((t >> 8) & 255)) / 2;
 				r &= 0xFFFF00FF;
 				r |= v << 8;
-				v = (((r >> 0) & 255) + ((t >> 0) & 255)) / 2;
+				v = ((r & 255) + (t & 255)) / 2;
 				r &= 0xFFFFFF00;
-				r |= v << 0;
+				r |= v;
 			}
 			return r;
 		} catch (Throwable t) { // pokemon!
@@ -196,13 +195,13 @@ public class RegistryUtils {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static int getTextureColor(String texture) {
 
 		return getTextureColor(new ResourceLocation(texture));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public static int getBlockTextureColor(String texture) {
 
 		int i = texture.indexOf(':');
@@ -215,7 +214,8 @@ public class RegistryUtils {
 		return getTextureColor(texture + ".png");
 	}
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
+	@Deprecated//Item sprite sheet no longer exists.
 	public static int getItemTextureColor(String texture) {
 
 		int i = texture.indexOf(':');

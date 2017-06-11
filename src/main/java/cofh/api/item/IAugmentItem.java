@@ -1,29 +1,36 @@
 package cofh.api.item;
 
-import java.util.Set;
-
 import net.minecraft.item.ItemStack;
 
 public interface IAugmentItem {
 
 	/**
-	 * Get the augmentation level for a given Augment and Augment Type.
+	 * Enum for Augment Types.
 	 *
-	 * @param stack
-	 *            ItemStack representing the Augment.
-	 * @param type
-	 *            String containing the Augment type name.
-	 * @return The Augment level of the stack for the requested type - 0 if it does not affect that attribute.
+	 * BASIC - Standard augment, can have multiple.
+	 * ADVANCED - Rare augment, multiples may or may not be allowed.
+	 * MODE - Changes functionality greatly. Only allow one.
+	 * ENDER - Integration with Ender Frequencies.
+	 * CREATIVE - Super-powerful augments which cannot normally be obtained.
 	 */
-	int getAugmentLevel(ItemStack stack, String type);
+	enum AugmentType {
+		BASIC, ADVANCED, MODE, ENDER, CREATIVE
+	}
 
 	/**
-	 * Get the Augment Types for a given Augment. Set ensure that there are no duplicates.
+	 * Get the Augment Type for a given Augment.
 	 *
-	 * @param stack
-	 *            ItemStack representing the Augment.
-	 * @return Set of the Augmentation Types. Should return an empty set if there are none (but this would be really stupid to make). DO NOT RETURN NULL.
+	 * @param stack ItemStack representing the Augment.
+	 * @return Augment Type of the stack.
 	 */
-	Set<String> getAugmentTypes(ItemStack stack);
+	AugmentType getAugmentType(ItemStack stack);
+
+	/**
+	 * Get the Augment Identifier for a given Augment. This is simply a string with some description of what the Augment does. Individual
+	 *
+	 * @param stack ItemStack representing the Augment.
+	 * @return Augment Type of the stack.
+	 */
+	String getAugmentIdentifier(ItemStack stack);
 
 }

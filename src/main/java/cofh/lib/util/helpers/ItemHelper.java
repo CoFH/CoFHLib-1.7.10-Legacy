@@ -1,19 +1,9 @@
 package cofh.lib.util.helpers;
 
-import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
-
-import cofh.api.item.IEmpowerableItem;
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
 import com.google.common.base.Strings;
-import cpw.mods.fml.common.event.FMLInterModComms;
-import cpw.mods.fml.common.registry.GameRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -28,16 +18,22 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
  *
  * @author King Lemming
- *
  */
 public final class ItemHelper {
 
@@ -54,14 +50,36 @@ public final class ItemHelper {
 
 	}
 
+	public static boolean isPlayerHoldingSomething(EntityPlayer player) {
+
+		return player.getHeldItemMainhand() != null || player.getHeldItemOffhand() != null;
+	}
+
+	public static ItemStack getMainhandStack(EntityPlayer player) {
+
+		return player.getHeldItemMainhand();
+	}
+
+	public static ItemStack getOffhandStack(EntityPlayer player) {
+
+		return player.getHeldItemOffhand();
+	}
+
+	public static ItemStack getHeldStack(EntityPlayer player) {
+
+		ItemStack stack = player.getHeldItemMainhand();
+		if (stack == null) {
+			stack = player.getHeldItemOffhand();
+		}
+		return stack;
+	}
+
 	public static ItemStack cloneStack(Item item, int stackSize) {
 
 		if (item == null) {
 			return null;
 		}
-		ItemStack stack = new ItemStack(item, stackSize);
-
-		return stack;
+		return new ItemStack(item, stackSize);
 	}
 
 	public static ItemStack cloneStack(Block item, int stackSize) {
@@ -69,9 +87,7 @@ public final class ItemHelper {
 		if (item == null) {
 			return null;
 		}
-		ItemStack stack = new ItemStack(item, stackSize);
-
-		return stack;
+		return new ItemStack(item, stackSize);
 	}
 
 	public static ItemStack cloneStack(ItemStack stack, int stackSize) {
@@ -87,18 +103,13 @@ public final class ItemHelper {
 
 	public static ItemStack cloneStack(ItemStack stack) {
 
-		if (stack == null) {
-			return null;
-		}
-		ItemStack retStack = stack.copy();
-
-		return retStack;
+		return stack == null ? null : stack.copy();
 	}
 
 	public static ItemStack copyTag(ItemStack container, ItemStack other) {
 
-		if (other != null && other.stackTagCompound != null) {
-			container.stackTagCompound = (NBTTagCompound) other.stackTagCompound.copy();
+		if (other != null && other.hasTagCompound()) {
+			container.setTagCompound(other.getTagCompound().copy());
 		}
 		return container;
 	}
@@ -126,7 +137,7 @@ public final class ItemHelper {
 		stack.setItemDamage(Math.max(0, nbt.getShort("Damage")));
 
 		if (nbt.hasKey("tag", 10)) {
-			stack.stackTagCompound = nbt.getCompoundTag("tag");
+			stack.setTagCompound(nbt.getCompoundTag("tag"));
 		}
 		return stack;
 	}
@@ -137,8 +148,8 @@ public final class ItemHelper {
 		nbt.setInteger("Count", stack.stackSize);
 		nbt.setShort("Damage", (short) getItemDamage(stack));
 
-		if (stack.stackTagCompound != null) {
-			nbt.setTag("tag", stack.stackTagCompound);
+		if (stack.hasTagCompound()) {
+			nbt.setTag("tag", stack.getTagCompound());
 		}
 		return nbt;
 	}
@@ -149,18 +160,18 @@ public final class ItemHelper {
 		nbt.setInteger("Count", amount);
 		nbt.setShort("Damage", (short) getItemDamage(stack));
 
-		if (stack.stackTagCompound != null) {
-			nbt.setTag("tag", stack.stackTagCompound);
+		if (stack.hasTagCompound()) {
+			nbt.setTag("tag", stack.getTagCompound());
 		}
 		return nbt;
 	}
 
 	public static String getNameFromItemStack(ItemStack stack) {
 
-		if (stack == null || stack.stackTagCompound == null || !stack.stackTagCompound.hasKey("display")) {
+		if (stack == null || !stack.hasTagCompound() || !stack.getTagCompound().hasKey("display")) {
 			return "";
 		}
-		return stack.stackTagCompound.getCompoundTag("display").getString("Name");
+		return stack.getTagCompound().getCompoundTag("display").getString("Name");
 	}
 
 	public static ItemStack damageItem(ItemStack stack, int amt, Random rand) {
@@ -172,7 +183,6 @@ public final class ItemHelper {
 				stack.setItemDamage(0);
 			}
 		}
-
 		return stack;
 	}
 
@@ -181,7 +191,6 @@ public final class ItemHelper {
 		if (stack == null) {
 			return null;
 		}
-
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
@@ -200,7 +209,6 @@ public final class ItemHelper {
 			}
 			return ret;
 		}
-
 		return largerStack ? stack : null;
 	}
 
@@ -209,7 +217,6 @@ public final class ItemHelper {
 		if (stack == null) {
 			return null;
 		}
-
 		Item item = stack.getItem();
 		boolean largerStack = stack.stackSize > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
@@ -227,10 +234,9 @@ public final class ItemHelper {
 				return ret;
 			}
 			if (ret != null && !player.inventory.addItemStackToInventory(ret)) {
-				player.func_146097_a(ret, false, true);
+				player.dropItem(ret, false, true);
 			}
 		}
-
 		return largerStack ? stack : null;
 	}
 
@@ -251,7 +257,7 @@ public final class ItemHelper {
 		} else if (allowDrop) {
 			stack.stackSize -= 1;
 			if (dropStack != null && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
-				entityplayer.func_146097_a(dropStack, false, true);
+				entityplayer.dropItem(dropStack, false, true);
 			}
 			return true;
 		}
@@ -263,7 +269,7 @@ public final class ItemHelper {
 	 */
 	public static int getItemDamage(ItemStack stack) {
 
-		return Items.diamond.getDamage(stack);
+		return Items.DIAMOND.getDamage(stack);
 	}
 
 	/**
@@ -284,11 +290,10 @@ public final class ItemHelper {
 		}
 		if (dmgItems[0] == null || dmgItems[0].getItem() == null) {
 			return null;
-		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1
-				&& dmgItems[0].getItem().isRepairable()) {
+		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1 && dmgItems[0].getItem().isRepairable()) {
 			Item theItem = dmgItems[0].getItem();
-			int var13 = theItem.getMaxDamage() - dmgItems[0].getItemDamageForDisplay();
-			int var8 = theItem.getMaxDamage() - dmgItems[1].getItemDamageForDisplay();
+			int var13 = theItem.getMaxDamage() - dmgItems[0].getItemDamage();
+			int var8 = theItem.getMaxDamage() - dmgItems[1].getItemDamage();
 			int var9 = var13 + var8 + theItem.getMaxDamage() * 5 / 100;
 			int var10 = Math.max(0, theItem.getMaxDamage() - var9);
 
@@ -296,7 +301,7 @@ public final class ItemHelper {
 		} else {
 			IRecipe recipe;
 			for (int i = 0; i < CraftingManager.getInstance().getRecipeList().size(); i++) {
-				recipe = (IRecipe) CraftingManager.getInstance().getRecipeList().get(i);
+				recipe = CraftingManager.getInstance().getRecipeList().get(i);
 
 				if (recipe.matches(inv, world)) {
 					return recipe.getCraftingResult(inv);
@@ -368,113 +373,113 @@ public final class ItemHelper {
 	}
 
 	/* CREATING ItemStacks */
-	public static final ItemStack stack(Item t) {
+	public static ItemStack stack(Item t) {
 
 		return new ItemStack(t);
 	}
 
-	public static final ItemStack stack(Item t, int s) {
+	public static ItemStack stack(Item t, int s) {
 
 		return new ItemStack(t, s);
 	}
 
-	public static final ItemStack stack(Item t, int s, int m) {
+	public static ItemStack stack(Item t, int s, int m) {
 
 		return new ItemStack(t, s, m);
 	}
 
-	public static final ItemStack stack(Block t) {
+	public static ItemStack stack(Block t) {
 
 		return new ItemStack(t);
 	}
 
-	public static final ItemStack stack(Block t, int s) {
+	public static ItemStack stack(Block t, int s) {
 
 		return new ItemStack(t, s);
 	}
 
-	public static final ItemStack stack(Block t, int s, int m) {
+	public static ItemStack stack(Block t, int s, int m) {
 
 		return new ItemStack(t, s, m);
 	}
 
-	public static final ItemStack stack2(Item t) {
+	public static ItemStack stack2(Item t) {
 
 		return new ItemStack(t, 1, WILDCARD_VALUE);
 	}
 
-	public static final ItemStack stack2(Item t, int s) {
+	public static ItemStack stack2(Item t, int s) {
 
 		return new ItemStack(t, s, WILDCARD_VALUE);
 	}
 
-	public static final ItemStack stack2(Block t) {
+	public static ItemStack stack2(Block t) {
 
 		return new ItemStack(t, 1, WILDCARD_VALUE);
 	}
 
-	public static final ItemStack stack2(Block t, int s) {
+	public static ItemStack stack2(Block t, int s) {
 
 		return new ItemStack(t, s, WILDCARD_VALUE);
 	}
 
 	/* CREATING OreRecipes */
-	public static final IRecipe ShapedRecipe(Block result, Object... recipe) {
+	public static IRecipe ShapedRecipe(Block result, Object... recipe) {
 
 		return new ShapedOreRecipe(result, recipe);
 	}
 
-	public static final IRecipe ShapedRecipe(Item result, Object... recipe) {
+	public static IRecipe ShapedRecipe(Item result, Object... recipe) {
 
 		return new ShapedOreRecipe(result, recipe);
 	}
 
-	public static final IRecipe ShapedRecipe(ItemStack result, Object... recipe) {
+	public static IRecipe ShapedRecipe(ItemStack result, Object... recipe) {
 
 		return new ShapedOreRecipe(result, recipe);
 	}
 
-	public static final IRecipe ShapedRecipe(Block result, int s, Object... recipe) {
+	public static IRecipe ShapedRecipe(Block result, int s, Object... recipe) {
 
 		return new ShapedOreRecipe(stack(result, s), recipe);
 	}
 
-	public static final IRecipe ShapedRecipe(Item result, int s, Object... recipe) {
+	public static IRecipe ShapedRecipe(Item result, int s, Object... recipe) {
 
 		return new ShapedOreRecipe(stack(result, s), recipe);
 	}
 
-	public static final IRecipe ShapedRecipe(ItemStack result, int s, Object... recipe) {
+	public static IRecipe ShapedRecipe(ItemStack result, int s, Object... recipe) {
 
 		return new ShapedOreRecipe(cloneStack(result, s), recipe);
 	}
 
-	public static final IRecipe ShapelessRecipe(Block result, Object... recipe) {
+	public static IRecipe ShapelessRecipe(Block result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
 	}
 
-	public static final IRecipe ShapelessRecipe(Item result, Object... recipe) {
+	public static IRecipe ShapelessRecipe(Item result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
 	}
 
-	public static final IRecipe ShapelessRecipe(ItemStack result, Object... recipe) {
+	public static IRecipe ShapelessRecipe(ItemStack result, Object... recipe) {
 
 		return new ShapelessOreRecipe(result, recipe);
 	}
 
-	public static final IRecipe ShapelessRecipe(Block result, int s, Object... recipe) {
+	public static IRecipe ShapelessRecipe(Block result, int s, Object... recipe) {
 
 		return new ShapelessOreRecipe(stack(result, s), recipe);
 	}
 
-	public static final IRecipe ShapelessRecipe(Item result, int s, Object... recipe) {
+	public static IRecipe ShapelessRecipe(Item result, int s, Object... recipe) {
 
 		return new ShapelessOreRecipe(stack(result, s), recipe);
 	}
 
-	public static final IRecipe ShapelessRecipe(ItemStack result, int s, Object... recipe) {
+	public static IRecipe ShapelessRecipe(ItemStack result, int s, Object... recipe) {
 
 		return new ShapelessOreRecipe(cloneStack(result, s), recipe);
 	}
@@ -730,7 +735,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0);
 		return true;
 	}
 
@@ -739,7 +744,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0);
 		return true;
 	}
 
@@ -748,7 +753,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0);
 		return true;
 	}
 
@@ -757,7 +762,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), XP);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), XP);
 		return true;
 	}
 
@@ -766,7 +771,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), XP);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), XP);
 		return true;
 	}
 
@@ -775,7 +780,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), XP);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), XP);
 		return true;
 	}
 
@@ -784,7 +789,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0.1f);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0.1f);
 		return true;
 	}
 
@@ -793,7 +798,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0.1f);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0.1f);
 		return true;
 	}
 
@@ -802,7 +807,7 @@ public final class ItemHelper {
 		if (out == null | in == null) {
 			return false;
 		}
-		FurnaceRecipes.smelting().func_151394_a(cloneStack(in, 1), cloneStack(out), 0.1f);
+		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0.1f);
 		return true;
 	}
 
@@ -821,7 +826,7 @@ public final class ItemHelper {
 	public static void registerWithHandlers(String oreName, ItemStack stack) {
 
 		OreDictionary.registerOre(oreName, stack);
-		GameRegistry.registerCustomItemStack(oreName, stack);
+		//GameRegistry.registerCustomItemStack(oreName, stack);
 		FMLInterModComms.sendMessage("ForgeMicroblock", "microMaterial", stack);
 	}
 
@@ -899,45 +904,35 @@ public final class ItemHelper {
 
 	// }
 
-	/* EMPOWERED ITEM HELPERS */
-	public static boolean isPlayerHoldingEmpowerableItem(EntityPlayer player) {
-
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
-		return equipped instanceof IEmpowerableItem;
-	}
-
-	public static boolean isPlayerHoldingEmpoweredItem(EntityPlayer player) {
-
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
-		return equipped instanceof IEmpowerableItem && ((IEmpowerableItem) equipped).isEmpowered(player.getCurrentEquippedItem());
-	}
-
-	public static boolean toggleHeldEmpowerableItemState(EntityPlayer player) {
-
-		ItemStack equipped = player.getCurrentEquippedItem();
-		IEmpowerableItem empowerableItem = (IEmpowerableItem) equipped.getItem();
-
-		return empowerableItem.setEmpoweredState(equipped, !empowerableItem.isEmpowered(equipped));
-	}
-
 	/* MULTIMODE ITEM HELPERS */
 	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
 
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
+		if (!isPlayerHoldingSomething(player)) {
+			return false;
+		}
+		ItemStack heldItem = getHeldStack(player);
+		Item equipped = heldItem.getItem();
 		return equipped instanceof IMultiModeItem;
 	}
 
 	public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
 
-		ItemStack equipped = player.getCurrentEquippedItem();
-		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
+		if (!isPlayerHoldingSomething(player)) {
+			return false;
+		}
+		ItemStack heldItem = getHeldStack(player);
+		Item equipped = heldItem.getItem();
+		IMultiModeItem multiModeItem = (IMultiModeItem) equipped;
 
-		return multiModeItem.incrMode(equipped);
+		return multiModeItem.incrMode(heldItem);
 	}
 
 	public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
 
-		ItemStack equipped = player.getCurrentEquippedItem();
+		if (!isPlayerHoldingSomething(player)) {
+			return false;
+		}
+		ItemStack equipped = getHeldStack(player);
 		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
 		return multiModeItem.incrMode(equipped);
@@ -945,33 +940,31 @@ public final class ItemHelper {
 
 	public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
 
-		ItemStack equipped = player.getCurrentEquippedItem();
+		if (!isPlayerHoldingSomething(player)) {
+			return false;
+		}
+		ItemStack equipped = getHeldStack(player);
 		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
 
 		return multiModeItem.setMode(equipped, mode);
 	}
 
 	/**
-	 * Determine if a player is holding a registered Fluid Container.
+	 * Determine if a player is holding a Fluid Handler.
 	 */
-	public static final boolean isPlayerHoldingFluidContainer(EntityPlayer player) {
+	public static boolean isPlayerHoldingFluidHandler(EntityPlayer player) {
 
-		return FluidContainerRegistry.isContainer(player.getCurrentEquippedItem());
+		return FluidHelper.isPlayerHoldingFluidHandler(player);
 	}
 
-	public static final boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
-
-		return FluidHelper.isPlayerHoldingFluidContainerItem(player);
-	}
-
-	public static final boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
+	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
 		return EnergyHelper.isPlayerHoldingEnergyContainerItem(player);
 	}
 
-	public static final boolean isPlayerHoldingNothing(EntityPlayer player) {
+	public static boolean isPlayerHoldingNothing(EntityPlayer player) {
 
-		return player.getCurrentEquippedItem() == null;
+		return getHeldStack(player) == null;
 	}
 
 	public static Item getItemFromStack(ItemStack theStack) {
@@ -987,25 +980,35 @@ public final class ItemHelper {
 		return itemA == itemB || itemA.equals(itemB);
 	}
 
-	public static final boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
+	public static boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
 
-		return item.isInstance(getItemFromStack(player.getCurrentEquippedItem()));
+		return item.isInstance(getItemFromStack(getHeldStack(player)));
 	}
 
 	/**
 	 * Determine if a player is holding an ItemStack of a specific Item type.
 	 */
-	public static final boolean isPlayerHoldingItem(Item item, EntityPlayer player) {
+	public static boolean isPlayerHoldingItem(Item item, EntityPlayer player) {
 
-		return areItemsEqual(item, getItemFromStack(player.getCurrentEquippedItem()));
+		return areItemsEqual(item, getItemFromStack(getHeldStack(player)));
+	}
+
+	public static boolean isPlayerHoldingMainhand(Item item, EntityPlayer player) {
+
+		return areItemsEqual(item, getItemFromStack(getMainhandStack(player)));
+	}
+
+	public static boolean isPlayerHoldingOffhand(Item item, EntityPlayer player) {
+
+		return areItemsEqual(item, getItemFromStack(getOffhandStack(player)));
 	}
 
 	/**
-	 * Determine if a player is holding an ItemStack with a specific Item ID, Metadata, and NBT.
+	 * Determine if a player is holding an ItemStack with a specific Item ID and Metadata.
 	 */
-	public static final boolean isPlayerHoldingItemStack(ItemStack stack, EntityPlayer player) {
+	public static boolean isPlayerHoldingItemStack(ItemStack stack, EntityPlayer player) {
 
-		return itemsEqualWithMetadata(stack, player.getCurrentEquippedItem());
+		return itemsEqualWithMetadata(stack, getHeldStack(player));
 	}
 
 	/**
@@ -1032,7 +1035,7 @@ public final class ItemHelper {
 	 */
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
+		return itemsEqualWithoutMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound()));
 	}
 
 	/**
@@ -1048,7 +1051,7 @@ public final class ItemHelper {
 	 */
 	public static boolean itemsEqualWithMetadata(ItemStack stackA, ItemStack stackB, boolean checkNBT) {
 
-		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound));
+		return itemsEqualWithMetadata(stackA, stackB) && (!checkNBT || doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound()));
 	}
 
 	/**
@@ -1056,8 +1059,7 @@ public final class ItemHelper {
 	 */
 	public static boolean itemsIdentical(ItemStack stackA, ItemStack stackB) {
 
-		return itemsEqualWithoutMetadata(stackA, stackB) && getItemDamage(stackA) == getItemDamage(stackB)
-				&& doNBTsMatch(stackA.stackTagCompound, stackB.stackTagCompound);
+		return itemsEqualWithoutMetadata(stackA, stackB) && getItemDamage(stackA) == getItemDamage(stackB) && doNBTsMatch(stackA.getTagCompound(), stackB.getTagCompound());
 	}
 
 	/**
@@ -1076,8 +1078,7 @@ public final class ItemHelper {
 
 	public static boolean itemsEqualForCrafting(ItemStack stackA, ItemStack stackB) {
 
-		return itemsEqualWithoutMetadata(stackA, stackB)
-				&& (!stackA.getHasSubtypes() || ((getItemDamage(stackA) == OreDictionary.WILDCARD_VALUE || getItemDamage(stackB) == OreDictionary.WILDCARD_VALUE) || getItemDamage(stackB) == getItemDamage(stackA)));
+		return itemsEqualWithoutMetadata(stackA, stackB) && (!stackA.getHasSubtypes() || ((getItemDamage(stackA) == OreDictionary.WILDCARD_VALUE || getItemDamage(stackB) == OreDictionary.WILDCARD_VALUE) || getItemDamage(stackB) == getItemDamage(stackA)));
 	}
 
 	public static boolean craftingEquivalent(ItemStack checked, ItemStack source, String oreDict, ItemStack output) {
@@ -1102,14 +1103,12 @@ public final class ItemHelper {
 	public static boolean isBlacklist(ItemStack output) {
 
 		Item item = output.getItem();
-		return Item.getItemFromBlock(Blocks.birch_stairs) == item || Item.getItemFromBlock(Blocks.jungle_stairs) == item
-				|| Item.getItemFromBlock(Blocks.oak_stairs) == item || Item.getItemFromBlock(Blocks.spruce_stairs) == item
-				|| Item.getItemFromBlock(Blocks.planks) == item || Item.getItemFromBlock(Blocks.wooden_slab) == item;
+		return Item.getItemFromBlock(Blocks.BIRCH_STAIRS) == item || Item.getItemFromBlock(Blocks.JUNGLE_STAIRS) == item || Item.getItemFromBlock(Blocks.OAK_STAIRS) == item || Item.getItemFromBlock(Blocks.SPRUCE_STAIRS) == item || Item.getItemFromBlock(Blocks.PLANKS) == item || Item.getItemFromBlock(Blocks.WOODEN_SLAB) == item;
 	}
 
 	public static String getItemNBTString(ItemStack theItem, String nbtKey, String invalidReturn) {
 
-		return theItem.stackTagCompound != null && theItem.stackTagCompound.hasKey(nbtKey) ? theItem.stackTagCompound.getString(nbtKey) : invalidReturn;
+		return theItem.getTagCompound() != null && theItem.getTagCompound().hasKey(nbtKey) ? theItem.getTagCompound().getString(nbtKey) : invalidReturn;
 	}
 
 	/**
@@ -1122,24 +1121,23 @@ public final class ItemHelper {
 
 	public static void addInventoryInformation(ItemStack stack, List<String> list, int minSlot, int maxSlot) {
 
-		if (stack.stackTagCompound == null) {
+		if (stack.getTagCompound() == null) {
 			list.add(StringHelper.localize("info.cofh.empty"));
 			return;
 		}
-		if (stack.getItem() instanceof IInventoryContainerItem && stack.stackTagCompound.hasKey("Accessible")) {
+		if (stack.getItem() instanceof IInventoryContainerItem && stack.getTagCompound().hasKey("Accessible")) {
 			addAccessibleInventoryInformation(stack, list, minSlot, maxSlot);
 			return;
 		}
-		if (!stack.stackTagCompound.hasKey("Inventory", Constants.NBT.TAG_LIST)
-				|| stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId()).tagCount() <= 0) {
+		if (!stack.getTagCompound().hasKey("Inventory", Constants.NBT.TAG_LIST) || stack.getTagCompound().getTagList("Inventory", stack.getTagCompound().getId()).tagCount() <= 0) {
 			list.add(StringHelper.localize("info.cofh.empty"));
 			return;
 		}
-		NBTTagList nbtList = stack.stackTagCompound.getTagList("Inventory", stack.stackTagCompound.getId());
+		NBTTagList nbtList = stack.getTagCompound().getTagList("Inventory", stack.getTagCompound().getId());
 		ItemStack curStack;
 		ItemStack curStack2;
 
-		ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> containedItems = new ArrayList<>();
 
 		boolean[] visited = new boolean[nbtList.tagCount()];
 
@@ -1182,13 +1180,12 @@ public final class ItemHelper {
 			int maxStackSize = item.getMaxStackSize();
 
 			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+				list.add("    " + StringHelper.ORANGE + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
-							+ " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
@@ -1200,15 +1197,14 @@ public final class ItemHelper {
 		ItemStack curStack;
 		ItemStack curStack2;
 
-		ArrayList<ItemStack> containedItems = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> containedItems = new ArrayList<>();
 
 		boolean[] visited = new boolean[invSize];
 
-		NBTTagCompound tag = stack.stackTagCompound;
+		NBTTagCompound tag = stack.getTagCompound();
 		if (tag.hasKey("Inventory")) {
 			tag = tag.getCompoundTag("Inventory");
 		}
-
 		for (int i = minSlot; i < Math.min(invSize, maxSlot); i++) {
 			if (visited[i]) {
 				continue;
@@ -1250,16 +1246,76 @@ public final class ItemHelper {
 			int maxStackSize = item.getMaxStackSize();
 
 			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-				list.add("    " + StringHelper.BRIGHT_GREEN + item.stackSize + " " + StringHelper.getItemName(item));
+				list.add("    " + StringHelper.ORANGE + item.stackSize + " " + StringHelper.getItemName(item));
 			} else {
 				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize
-							+ " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.BRIGHT_GREEN + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
 	}
 
+	/**
+	 * Compares item, meta, size and nbt of two stacks while ignoring nbt tag keys provided.
+	 * This is useful in shouldCauseReequipAnimation overrides.
+	 *
+	 * @param stackA          first stack to compare
+	 * @param stackB          second stack to compare
+	 * @param nbtTagsToIgnore tag keys to ignore when comparing the stacks
+	 */
+	public static boolean areItemStacksEqualIgnoreTags(ItemStack stackA, ItemStack stackB, String... nbtTagsToIgnore) {
+
+		if (stackA == null && stackB == null) {
+			return true;
+		}
+		if (stackA == null && stackB != null) {
+			return false;
+		}
+		if (stackA != null && stackB == null) {
+			return false;
+		}
+		if (stackA.getItem() != stackB.getItem()) {
+			return false;
+		}
+		if (stackA.getItemDamage() != stackB.getItemDamage()) {
+			return false;
+		}
+		if (stackA.stackSize != stackB.stackSize) {
+			return false;
+		}
+		if (stackA.getTagCompound() == null && stackB.getTagCompound() == null) {
+			return true;
+		}
+		if (stackA.getTagCompound() == null && stackB.getTagCompound() != null) {
+			return false;
+		}
+		if (stackA.getTagCompound() != null && stackB.getTagCompound() == null) {
+			return false;
+		}
+		int numberOfKeys = stackA.getTagCompound().getKeySet().size();
+		if (numberOfKeys != stackB.getTagCompound().getKeySet().size()) {
+			return false;
+		}
+
+		NBTTagCompound tagA = stackA.getTagCompound();
+		NBTTagCompound tagB = stackB.getTagCompound();
+
+		String[] keys = new String[numberOfKeys];
+		keys = tagA.getKeySet().toArray(keys);
+
+		a:
+		for (int i = 0; i < numberOfKeys; i++) {
+			for (int j = 0; j < nbtTagsToIgnore.length; j++) {
+				if (nbtTagsToIgnore[j].equals(keys[i])) {
+					continue a;
+				}
+			}
+			if (!tagA.getTag(keys[i]).equals(tagB.getTag(keys[i]))) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

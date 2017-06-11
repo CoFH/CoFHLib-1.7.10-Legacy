@@ -182,5 +182,6 @@ techne
 
 MFR-Forestry
 nbproject
+.idea/
 *.iml
 *.eml

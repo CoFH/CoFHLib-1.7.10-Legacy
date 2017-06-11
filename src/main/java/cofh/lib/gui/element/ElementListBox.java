@@ -1,7 +1,5 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
 import cofh.lib.gui.element.listbox.IListBoxElement;
@@ -10,6 +8,8 @@ import cofh.lib.util.helpers.StringHelper;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class ElementListBox extends ElementBase {
 
@@ -24,7 +24,7 @@ public class ElementListBox extends ElementBase {
 	protected int _marginRight = 2;
 	protected int _marginBottom = 2;
 
-	protected final List<IListBoxElement> _elements = new LinkedList<IListBoxElement>();
+	protected final List<IListBoxElement> _elements = new LinkedList<>();
 
 	protected int _firstIndexDisplayed;
 	protected int _selectedIndex;

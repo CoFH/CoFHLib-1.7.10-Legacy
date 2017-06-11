@@ -1,8 +1,7 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.renderer.GlStateManager;
 
 public abstract class ElementButtonManaged extends ElementButtonBase {
 
@@ -33,7 +32,7 @@ public abstract class ElementButtonManaged extends ElementButtonBase {
 		} else {
 			gui.bindTexture(ENABLED);
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 	}
 

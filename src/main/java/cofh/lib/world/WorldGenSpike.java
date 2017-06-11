@@ -1,15 +1,16 @@
 package cofh.lib.world;
 
-import static cofh.lib.world.WorldGenMinableCluster.*;
-
 import cofh.lib.util.WeightedRandomBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import static cofh.lib.world.WorldGenMinableCluster.canGenerateInBlock;
+import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 
 public class WorldGenSpike extends WorldGenerator {
 
@@ -32,9 +33,13 @@ public class WorldGenSpike extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
 
-		while (world.isAirBlock(xStart, yStart, zStart) && yStart > 2) {
+		int xStart = pos.getX();
+		int yStart = pos.getY();
+		int zStart = pos.getZ();
+
+		while (world.isAirBlock(new BlockPos(xStart, yStart, zStart)) && yStart > 2) {
 			--yStart;
 		}
 
@@ -69,8 +74,7 @@ public class WorldGenSpike extends WorldGenerator {
 				for (int z = -width; z <= width; ++z) {
 					float zDist = MathHelper.abs_int(z) - 0.25F;
 
-					if ((x == 0 && z == 0 || xDist * xDist + zDist * zDist <= layerSize * layerSize)
-							&& (x != -width && x != width && z != -width && z != width || rand.nextFloat() <= 0.75F)) {
+					if ((x == 0 && z == 0 || xDist * xDist + zDist * zDist <= layerSize * layerSize) && (x != -width && x != width && z != -width && z != width || rand.nextFloat() <= 0.75F)) {
 
 						generateBlock(world, xStart + x, yStart + y, zStart + z, genBlock, cluster);
 

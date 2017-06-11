@@ -6,7 +6,6 @@ import net.minecraft.world.World;
  * A basic time tracker class. Nothing surprising here.
  *
  * @author King Lemming
- *
  */
 public class TimeTracker {
 

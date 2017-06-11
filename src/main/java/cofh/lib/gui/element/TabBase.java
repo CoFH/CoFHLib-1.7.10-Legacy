@@ -3,22 +3,21 @@ package cofh.lib.gui.element;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.TabTracker;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.Rectangle4i;
+import cofh.lib.util.helpers.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
 /**
  * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
  *
  * @author King Lemming
- *
  */
 public abstract class TabBase extends ElementBase {
 
@@ -50,10 +49,10 @@ public abstract class TabBase extends ElementBase {
 	public int maxHeight = 22;
 	public int currentHeight = minHeight;
 
-	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
+	protected ArrayList<ElementBase> elements = new ArrayList<>();
 
-	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Tab_Left.png");
-	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Tab_Right.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_left.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_right.png");
 
 	public TabBase(GuiBase gui) {
 
@@ -104,7 +103,7 @@ public abstract class TabBase extends ElementBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F;
 		float colorB = (backgroundColor & 255) / 255.0F;
 
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
 		RenderHelper.bindTexture(texture);
 
@@ -115,7 +114,7 @@ public abstract class TabBase extends ElementBase {
 		gui.drawTexturedModalRect(xPosition, posY, 0, 0, 4, 4);
 		gui.drawTexturedModalRect(xPosition + 4, posY + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -124,11 +123,11 @@ public abstract class TabBase extends ElementBase {
 		mouseX -= this.posX();
 		mouseY -= this.posY;
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
 		drawBackground();
 
-		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		for (int i = 0; i < elements.size(); i++) {
 			ElementBase element = elements.get(i);
@@ -136,7 +135,7 @@ public abstract class TabBase extends ElementBase {
 				element.drawBackground(mouseX, mouseY, gameTicks);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -145,11 +144,11 @@ public abstract class TabBase extends ElementBase {
 		mouseX -= this.posX();
 		mouseY -= this.posY;
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
 		drawForeground();
 
-		GL11.glTranslatef(this.posX(), this.posY, 0.0F);
+		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		for (int i = 0; i < elements.size(); i++) {
 			ElementBase element = elements.get(i);
@@ -157,7 +156,7 @@ public abstract class TabBase extends ElementBase {
 				element.drawForeground(mouseX, mouseY);
 			}
 		}
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	@Override
@@ -168,7 +167,7 @@ public abstract class TabBase extends ElementBase {
 		mouseX -= this.posX();
 		mouseY -= this.posY;
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (c.isVisible() && c.isEnabled()) {
 				c.update(mouseX, mouseY);
@@ -204,9 +203,9 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
-	protected void drawTabIcon(String iconName) {
+	protected void drawTabIcon(TextureAtlasSprite iconName) {
 
-		gui.drawIcon(iconName, posXOffset(), posY + 3, 1);
+		gui.drawIcon(iconName, posXOffset(), posY + 3);
 	}
 
 	/**
@@ -289,7 +288,6 @@ public abstract class TabBase extends ElementBase {
 				TabTracker.setOpenedRightTab(this.getClass());
 			}
 		}
-
 		updateElements();
 	}
 
@@ -312,7 +310,7 @@ public abstract class TabBase extends ElementBase {
 
 	protected ElementBase getElementAtPosition(int mX, int mY) {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase element = elements.get(i);
 			if (element.intersectsWith(mX, mY)) {
 				return element;
@@ -332,7 +330,7 @@ public abstract class TabBase extends ElementBase {
 		mouseY -= this.posY;
 
 		if (wheelMovement != 0) {
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = elements.size(); i-- > 0; ) {
 				ElementBase c = elements.get(i);
 				if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 					continue;
@@ -342,7 +340,6 @@ public abstract class TabBase extends ElementBase {
 				}
 			}
 		}
-
 		return true;
 	}
 
@@ -362,7 +359,7 @@ public abstract class TabBase extends ElementBase {
 	@Override
 	public boolean onKeyTyped(char characterTyped, int keyPressed) {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled()) {
 				continue;
@@ -374,11 +371,11 @@ public abstract class TabBase extends ElementBase {
 		return super.onKeyTyped(characterTyped, keyPressed);
 	}
 
-	@Override
 	/**
 	 * @return Whether the tab should stay open or not.
 	 */
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+	@Override
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		mouseX -= this.posX();
 		mouseY -= this.posY;
@@ -390,14 +387,12 @@ public abstract class TabBase extends ElementBase {
 			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 				continue;
 			}
-
 			shouldStayOpen = true;
 
 			if (c.onMousePressed(mouseX, mouseY, mouseButton)) {
 				return true;
 			}
 		}
-
 		return shouldStayOpen;
 	}
 
@@ -407,7 +402,7 @@ public abstract class TabBase extends ElementBase {
 		mouseX -= this.posX();
 		mouseY -= this.posY;
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
 				continue;
@@ -416,7 +411,7 @@ public abstract class TabBase extends ElementBase {
 		}
 	}
 
-	private void updateElements() {
+	protected void updateElements() {
 
 		for (ElementBase element : elements) {
 			element.setVisible(this.isFullyOpened());

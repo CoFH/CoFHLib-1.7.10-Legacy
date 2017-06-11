@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
  * Wrapper for an Item/Metadata combination post 1.7. Quick and dirty, allows for Integer-based Hashes without collisions.
  *
  * @author King Lemming
- *
  */
 public final class ItemWrapper extends ComparableItem {
 

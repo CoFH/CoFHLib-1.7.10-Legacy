@@ -1,20 +1,21 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import cofh.lib.gui.GuiBase;
-
-import java.util.List;
-
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiBase} it is a part of.
  *
  * @author King Lemming
- *
  */
 public abstract class ElementBase {
 
@@ -126,27 +127,28 @@ public abstract class ElementBase {
 
 	public void drawStencil(int xStart, int yStart, int xEnd, int yEnd, int flag) {
 
-		glDisable(GL_TEXTURE_2D);
-		glStencilFunc(GL_ALWAYS, flag, flag);
-		glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
-		glStencilMask(flag);
-		glColorMask(false, false, false, false);
-		glDepthMask(false);
-		glClearStencil(0);
-		glClear(GL_STENCIL_BUFFER_BIT);
+		GlStateManager.disableTexture2D();
+		GL11.glStencilFunc(GL11.GL_ALWAYS, flag, flag);
+		GL11.glStencilOp(GL11.GL_ZERO, GL11.GL_ZERO, GL11.GL_REPLACE);
+		GL11.glStencilMask(flag);
+		GlStateManager.colorMask(false, false, false, false);
+		GlStateManager.depthMask(false);
+		GL11.glClearStencil(0);
+		GlStateManager.clear(GL11.GL_STENCIL_BUFFER_BIT);
 
-		Tessellator.instance.startDrawingQuads();
-		Tessellator.instance.addVertex(xStart, yEnd, 0);
-		Tessellator.instance.addVertex(xEnd, yEnd, 0);
-		Tessellator.instance.addVertex(xEnd, yStart, 0);
-		Tessellator.instance.addVertex(xStart, yStart, 0);
-		Tessellator.instance.draw();
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+		buffer.pos(xStart, yEnd, 0).endVertex();
+		buffer.pos(xEnd, yEnd, 0).endVertex();
+		buffer.pos(xEnd, yStart, 0).endVertex();
+		buffer.pos(xStart, yStart, 0).endVertex();
+		Tessellator.getInstance().draw();
 
-		glEnable(GL_TEXTURE_2D);
-		glStencilFunc(GL_EQUAL, flag, flag);
-		glStencilMask(0);
-		glColorMask(true, true, true, true);
-		glDepthMask(true);
+		GlStateManager.enableTexture2D();
+		GL11.glStencilFunc(GL11.GL_EQUAL, flag, flag);
+		GL11.glStencilMask(0);
+		GlStateManager.colorMask(true, true, true, true);
+		GlStateManager.depthMask(true);
 	}
 
 	public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {
@@ -159,14 +161,13 @@ public abstract class ElementBase {
 		fontRenderer.drawStringWithShadow(text, x - fontRenderer.getStringWidth(text) / 2, y, color);
 	}
 
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		return false;
 	}
 
 	public void onMouseReleased(int mouseX, int mouseY) {
 
-		return;
 	}
 
 	public boolean onMouseWheel(int mouseX, int mouseY, int movement) {
@@ -181,10 +182,7 @@ public abstract class ElementBase {
 
 	public boolean intersectsWith(int mouseX, int mouseY) {
 
-		if (mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY) {
-			return true;
-		}
-		return false;
+		return mouseX >= this.posX && mouseX <= this.posX + this.sizeX && mouseY >= this.posY && mouseY <= this.posY + this.sizeY;
 	}
 
 	public FontRenderer getFontRenderer() {

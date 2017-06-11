@@ -2,55 +2,76 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
-
-import java.util.List;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.IFluidTank;
 
+import java.util.List;
+
 public class ElementFluidTank extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "FluidTank.png");
-	public static final int DEFAULT_SCALE = 60;
+	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank.png");
+	public static final ResourceLocation SHORT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_short.png");
+	public static final ResourceLocation THIN_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_thin.png");
 
 	protected IFluidTank tank;
 	protected int gaugeType;
+	protected boolean drawTank;
 
 	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
 	protected boolean alwaysShowMinimum = false;
 
 	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank) {
 
-		super(gui, posX, posY);
-		this.tank = tank;
-
-		this.texture = DEFAULT_TEXTURE;
-		this.texW = 64;
-		this.texH = 64;
-
-		this.sizeX = 16;
-		this.sizeY = DEFAULT_SCALE;
+		this(gui, posX, posY, tank, DEFAULT_TEXTURE);
 	}
 
-	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank, String texture) {
+	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank, ResourceLocation texture) {
 
 		super(gui, posX, posY);
 		this.tank = tank;
 
-		this.texture = new ResourceLocation(texture);
+		this.texture = texture;
 		this.texW = 64;
 		this.texH = 64;
 
 		this.sizeX = 16;
-		this.sizeY = DEFAULT_SCALE;
+		this.sizeY = 60;
 	}
 
 	public ElementFluidTank setGauge(int gaugeType) {
 
 		this.gaugeType = gaugeType;
+		return this;
+	}
+
+	public ElementFluidTank setDefault() {
+
+		this.texture = DEFAULT_TEXTURE;
+		this.sizeX = 16;
+		this.sizeY = 60;
+		return this;
+	}
+
+	public ElementFluidTank setThin() {
+
+		this.texture = THIN_TEXTURE;
+		this.sizeX = 7;
+		return this;
+	}
+
+	public ElementFluidTank setShort() {
+
+		this.texture = SHORT_TEXTURE;
+		this.sizeY = 30;
+		return this;
+	}
+
+	public ElementFluidTank drawTank(boolean drawTank) {
+
+		this.drawTank = drawTank;
 		return this;
 	}
 
@@ -63,8 +84,11 @@ public class ElementFluidTank extends ElementBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
+		if (drawTank) {
+			RenderHelper.bindTexture(texture);
+			drawTexturedModalRect(posX - 1, posY - 1, 0, 0, sizeX + 2, sizeY + 2);
+		}
 		int amount = getScaled();
-
 		gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
@@ -84,7 +108,7 @@ public class ElementFluidTank extends ElementBase {
 		if (tank.getCapacity() < 0) {
 			list.add("Infinite Fluid");
 		} else {
-			list.add("" + tank.getFluidAmount() + " / " + tank.getCapacity() + " mB");
+			list.add(StringHelper.formatNumber(tank.getFluidAmount()) + " / " + StringHelper.formatNumber(tank.getCapacity()) + " mB");
 		}
 	}
 
@@ -95,7 +119,7 @@ public class ElementFluidTank extends ElementBase {
 		}
 		long fraction = (long) tank.getFluidAmount() * sizeY / tank.getCapacity();
 
-		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.round(fraction)) : MathHelper.round(fraction);
+		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.ceil(fraction)) : MathHelper.ceil(fraction);
 	}
 
 }

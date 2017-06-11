@@ -1,18 +1,15 @@
 package cofh.lib.gui.element;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ChatAllowedCharacters;
 import net.minecraftforge.client.MinecraftForgeClient;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -379,7 +376,7 @@ public class ElementTextField extends ElementBase {
 		FontRenderer font = getFontRenderer();
 		int widthLeft = 0;
 		int breaksAbove = 0;
-		for (int i = caret; i-- > 0;) {
+		for (int i = caret; i-- > 0; ) {
 			char c = text[i];
 			if (c == '\n') {
 				for (; i > 0; --i) {
@@ -508,298 +505,297 @@ public class ElementTextField extends ElementBase {
 		}
 
 		switch (charTyped) {
-		case 1: // ^A
-			selectionEnd = caret = textLength;
-			selectionStart = 0;
-			findRenderStart();
-			return true;
-		case 3: // ^C
-			if (selectionStart != selectionEnd) {
-				GuiScreen.setClipboardString(getSelectedText());
-			}
-			return true;
-		case 24: // ^X
-			if (selectionStart != selectionEnd) {
-				GuiScreen.setClipboardString(getSelectedText());
-				clearSelection();
-
-				resetCaretFlash();
-			}
-
-			return true;
-		case 22: // ^V
-			writeText(GuiScreen.getClipboardString());
-
-			resetCaretFlash();
-
-			return true;
-		default:
-			switch (keyTyped) {
-			case Keyboard.KEY_ESCAPE:
-				setFocused(false);
-				return !isFocused();
-			case Keyboard.KEY_RETURN:
-			case Keyboard.KEY_NUMPADENTER:
-				return onEnter();
-			case Keyboard.KEY_INSERT:
-				if (GuiScreen.isShiftKeyDown()) {
-					writeText(GuiScreen.getClipboardString());
-
-					resetCaretFlash();
-				} else {
-					caretInsert = !caretInsert;
-				}
-
+			case 1: // ^A
+				selectionEnd = caret = textLength;
+				selectionStart = 0;
+				findRenderStart();
 				return true;
-			case Keyboard.KEY_CLEAR: // mac only (clear selection)
-				clearSelection();
-
-				resetCaretFlash();
-
-				return true;
-			case Keyboard.KEY_DELETE: // delete
-				boolean changed = false;
-				if (!GuiScreen.isShiftKeyDown()) {
-					if (selectionStart != selectionEnd) {
-						clearSelection();
-					} else if (GuiScreen.isCtrlKeyDown()) {
-						int size = seekNextCaretLocation(caret, true) - caret;
-						selectionStart = caret;
-						selectionEnd = caret + size;
-						clearSelection();
-					} else {
-						if (caret < textLength && textLength > 0) {
-							--textLength;
-							System.arraycopy(text, caret + 1, text, caret, textLength - caret);
-							changed = true;
-						}
-						findRenderStart();
-
-						onCharacterEntered(changed);
-					}
-
-					resetCaretFlash();
-
-					return true;
-				}
-				// continue.. (shift+delete = backspace)
-			case Keyboard.KEY_BACK: // backspace
-				changed = false;
-				boolean calledEntered = true,
-				onBreak = false;
+			case 3: // ^C
 				if (selectionStart != selectionEnd) {
+					GuiScreen.setClipboardString(getSelectedText());
+				}
+				return true;
+			case 24: // ^X
+				if (selectionStart != selectionEnd) {
+					GuiScreen.setClipboardString(getSelectedText());
 					clearSelection();
-				} else if (GuiScreen.isCtrlKeyDown()) {
-					int size = seekNextCaretLocation(caret, false) - caret;
-					selectionStart = caret + size;
-					selectionEnd = caret;
-					clearSelection();
-				} else {
-					calledEntered = false;
-					if (caret > 0 && textLength > 0) {
-						if (caret != textLength) {
-							System.arraycopy(text, caret, text, caret - 1, textLength - caret);
-						}
-						onBreak = text[--caret] == '\n';
-						--textLength;
-						changed = true;
-					}
-				}
-				int old = caret;
-				if (!onBreak) {
-					for (int i = 3; i-- > 0 && caret > 1 && text[caret - 1] != '\n'; --caret) {
-						;
-					}
-				}
-				findRenderStart();
-				caret = old;
 
-				if (!calledEntered) {
-					onCharacterEntered(changed);
+					resetCaretFlash();
 				}
-
-				resetCaretFlash();
 
 				return true;
-			case Keyboard.KEY_HOME: // home
-				int begin = 0;
-				if (!GuiScreen.isCtrlKeyDown()) {
-					for (int i = caret - 1; i > 0; --i) {
-						if (text[i] == '\n') {
-							begin = Math.min(i + 1, textLength);
-							break;
-						}
-					}
-				}
-
-				if (GuiScreen.isShiftKeyDown()) {
-					if (caret >= selectionEnd) {
-						selectionEnd = selectionStart;
-					}
-					selectionStart = begin;
-				} else {
-					selectionStart = selectionEnd = begin;
-				}
-				caret = begin;
-				findRenderStart();
-
-				resetCaretFlash();
-
-				return true;
-			case Keyboard.KEY_END: // end
-				int end = textLength;
-				if (!GuiScreen.isCtrlKeyDown()) {
-					for (int i = caret; i < textLength; ++i) {
-						if (text[i] == '\n') {
-							end = i;
-							break;
-						}
-					}
-				}
-
-				if (GuiScreen.isShiftKeyDown()) {
-					if (caret <= selectionStart) {
-						selectionStart = selectionEnd;
-					}
-					selectionEnd = end;
-				} else {
-					selectionStart = selectionEnd = end;
-				}
-				caret = end;
-				findRenderStart();
-
-				resetCaretFlash();
-
-				return true;
-			case Keyboard.KEY_LEFT: // left arrow
-			case Keyboard.KEY_RIGHT: // right arrow
-				int size = keyTyped == 203 ? -1 : 1;
-				boolean shiftCaret = false;
-				if (GuiScreen.isCtrlKeyDown()) {
-					size = seekNextCaretLocation(caret, keyTyped == 205) - caret;
-				} else if (StringHelper.isAltKeyDown() && GuiScreen.isShiftKeyDown()) {
-					caret = seekNextCaretLocation(caret, keyTyped == 205);
-					selectionStart = selectionEnd = caret;
-					size = seekNextCaretLocation(caret, keyTyped != 205) - caret;
-					shiftCaret = true;
-				}
-
-				if (!GuiScreen.isShiftKeyDown()) {
-					selectionStart = selectionEnd = caret;
-				}
-
-				{
-					int t = caret;
-					caret = MathHelper.clamp(caret + size, 0, textLength);
-					size = caret - t;
-				}
-
-				if (GuiScreen.isShiftKeyDown()) {
-					if (caret == selectionStart + size) {
-						selectionStart = caret;
-					} else if (caret == selectionEnd + size) {
-						selectionEnd = caret;
-					}
-
-					if (selectionStart > selectionEnd) {
-						int t = selectionStart;
-						selectionStart = selectionEnd;
-						selectionEnd = t;
-					}
-				}
-
-				if (shiftCaret) {
-					caret = caret - size;
-				}
-				findRenderStart();
-
-				resetCaretFlash();
-
-				return true;
-			case Keyboard.KEY_UP:
-			case Keyboard.KEY_DOWN:
-				if (!multiline) {
-					return false;
-				}
-
-				if (!GuiScreen.isShiftKeyDown()) {
-					selectionStart = selectionEnd = caret;
-				}
-				int dir = keyTyped == Keyboard.KEY_UP ? -1 : 1;
-				end = dir == -1 ? 0 : textLength;
-				int i = caret,
-				pos = caretX;
-				old = i;
-				for (; i != end; i += dir) {
-					if ((dir == -1 ? i != caret : true) && text[i] == '\n') {
-						if (i != end) {
-							i += dir;
-						} else {
-							return true;
-						}
-						break;
-					}
-				}
-				l: if (dir == -1) {
-					for (; i > 0 && text[i] != '\n'; --i) {
-						;
-					}
-					if (i == 0) {
-						if (text[0] == '\n') {
-							caret = 0;
-							findRenderStart();
-							caretX = pos;
-						}
-						break l;
-					}
-					++i;
-				}
-				FontRenderer font = getFontRenderer();
-				for (int width = 0; i <= textLength; ++i) {
-					char c = i < textLength ? text[i] : 0;
-					if (i == textLength || c == '\n' || width >= pos) {
-						caret = i;
-						findRenderStart();
-						caretX = pos;
-						break;
-					} else {
-						width += font.getCharWidth(c);
-					}
-				}
-
-				size = caret - old;
-
-				if (GuiScreen.isShiftKeyDown()) {
-					if (selectionStart == selectionEnd) {
-						selectionStart = selectionEnd = old;
-					}
-					if (caret == selectionStart + size) {
-						selectionStart = caret;
-					} else if (caret == selectionEnd + size) {
-						selectionEnd = caret;
-					}
-
-					if (selectionStart > selectionEnd) {
-						int t = selectionStart;
-						selectionStart = selectionEnd;
-						selectionEnd = t;
-					}
-				}
+			case 22: // ^V
+				writeText(GuiScreen.getClipboardString());
 
 				resetCaretFlash();
 
 				return true;
 			default:
-				if (isAllowedCharacter(charTyped)) {
-					boolean typed = insertCharacter(charTyped);
-					clearSelection();
+				switch (keyTyped) {
+					case Keyboard.KEY_ESCAPE:
+						setFocused(false);
+						return !isFocused();
+					case Keyboard.KEY_RETURN:
+					case Keyboard.KEY_NUMPADENTER:
+						return onEnter();
+					case Keyboard.KEY_INSERT:
+						if (GuiScreen.isShiftKeyDown()) {
+							writeText(GuiScreen.getClipboardString());
+
+							resetCaretFlash();
+						} else {
+							caretInsert = !caretInsert;
+						}
+
+						return true;
+					case Keyboard.KEY_CLEAR: // mac only (clear selection)
+						clearSelection();
+
+						resetCaretFlash();
+
+						return true;
+					case Keyboard.KEY_DELETE: // delete
+						boolean changed = false;
+						if (!GuiScreen.isShiftKeyDown()) {
+							if (selectionStart != selectionEnd) {
+								clearSelection();
+							} else if (GuiScreen.isCtrlKeyDown()) {
+								int size = seekNextCaretLocation(caret, true) - caret;
+								selectionStart = caret;
+								selectionEnd = caret + size;
+								clearSelection();
+							} else {
+								if (caret < textLength && textLength > 0) {
+									--textLength;
+									System.arraycopy(text, caret + 1, text, caret, textLength - caret);
+									changed = true;
+								}
+								findRenderStart();
+
+								onCharacterEntered(changed);
+							}
+
+							resetCaretFlash();
+
+							return true;
+						}
+						// continue.. (shift+delete = backspace)
+					case Keyboard.KEY_BACK: // backspace
+						changed = false;
+						boolean calledEntered = true, onBreak = false;
+						if (selectionStart != selectionEnd) {
+							clearSelection();
+						} else if (GuiScreen.isCtrlKeyDown()) {
+							int size = seekNextCaretLocation(caret, false) - caret;
+							selectionStart = caret + size;
+							selectionEnd = caret;
+							clearSelection();
+						} else {
+							calledEntered = false;
+							if (caret > 0 && textLength > 0) {
+								if (caret != textLength) {
+									System.arraycopy(text, caret, text, caret - 1, textLength - caret);
+								}
+								onBreak = text[--caret] == '\n';
+								--textLength;
+								changed = true;
+							}
+						}
+						int old = caret;
+						if (!onBreak) {
+							for (int i = 3; i-- > 0 && caret > 1 && text[caret - 1] != '\n'; --caret) {
+
+							}
+						}
+						findRenderStart();
+						caret = old;
+
+						if (!calledEntered) {
+							onCharacterEntered(changed);
+						}
+
+						resetCaretFlash();
+
+						return true;
+					case Keyboard.KEY_HOME: // home
+						int begin = 0;
+						if (!GuiScreen.isCtrlKeyDown()) {
+							for (int i = caret - 1; i > 0; --i) {
+								if (text[i] == '\n') {
+									begin = Math.min(i + 1, textLength);
+									break;
+								}
+							}
+						}
+
+						if (GuiScreen.isShiftKeyDown()) {
+							if (caret >= selectionEnd) {
+								selectionEnd = selectionStart;
+							}
+							selectionStart = begin;
+						} else {
+							selectionStart = selectionEnd = begin;
+						}
+						caret = begin;
+						findRenderStart();
+
+						resetCaretFlash();
+
+						return true;
+					case Keyboard.KEY_END: // end
+						int end = textLength;
+						if (!GuiScreen.isCtrlKeyDown()) {
+							for (int i = caret; i < textLength; ++i) {
+								if (text[i] == '\n') {
+									end = i;
+									break;
+								}
+							}
+						}
+
+						if (GuiScreen.isShiftKeyDown()) {
+							if (caret <= selectionStart) {
+								selectionStart = selectionEnd;
+							}
+							selectionEnd = end;
+						} else {
+							selectionStart = selectionEnd = end;
+						}
+						caret = end;
+						findRenderStart();
+
+						resetCaretFlash();
+
+						return true;
+					case Keyboard.KEY_LEFT: // left arrow
+					case Keyboard.KEY_RIGHT: // right arrow
+						int size = keyTyped == 203 ? -1 : 1;
+						boolean shiftCaret = false;
+						if (GuiScreen.isCtrlKeyDown()) {
+							size = seekNextCaretLocation(caret, keyTyped == 205) - caret;
+						} else if (StringHelper.isAltKeyDown() && GuiScreen.isShiftKeyDown()) {
+							caret = seekNextCaretLocation(caret, keyTyped == 205);
+							selectionStart = selectionEnd = caret;
+							size = seekNextCaretLocation(caret, keyTyped != 205) - caret;
+							shiftCaret = true;
+						}
+
+						if (!GuiScreen.isShiftKeyDown()) {
+							selectionStart = selectionEnd = caret;
+						}
+
+					{
+						int t = caret;
+						caret = MathHelper.clamp(caret + size, 0, textLength);
+						size = caret - t;
+					}
+
+					if (GuiScreen.isShiftKeyDown()) {
+						if (caret == selectionStart + size) {
+							selectionStart = caret;
+						} else if (caret == selectionEnd + size) {
+							selectionEnd = caret;
+						}
+
+						if (selectionStart > selectionEnd) {
+							int t = selectionStart;
+							selectionStart = selectionEnd;
+							selectionEnd = t;
+						}
+					}
+
+					if (shiftCaret) {
+						caret = caret - size;
+					}
 					findRenderStart();
-					onCharacterEntered(typed);
+
+					resetCaretFlash();
+
 					return true;
-				} else {
-					return false;
+					case Keyboard.KEY_UP:
+					case Keyboard.KEY_DOWN:
+						if (!multiline) {
+							return false;
+						}
+
+						if (!GuiScreen.isShiftKeyDown()) {
+							selectionStart = selectionEnd = caret;
+						}
+						int dir = keyTyped == Keyboard.KEY_UP ? -1 : 1;
+						end = dir == -1 ? 0 : textLength;
+						int i = caret, pos = caretX;
+						old = i;
+						for (; i != end; i += dir) {
+							if ((dir != -1 || i != caret) && text[i] == '\n') {
+								if (i != end) {
+									i += dir;
+								} else {
+									return true;
+								}
+								break;
+							}
+						}
+						l:
+						if (dir == -1) {
+							for (; i > 0 && text[i] != '\n'; --i) {
+
+							}
+							if (i == 0) {
+								if (text[0] == '\n') {
+									caret = 0;
+									findRenderStart();
+									caretX = pos;
+								}
+								break l;
+							}
+							++i;
+						}
+						FontRenderer font = getFontRenderer();
+						for (int width = 0; i <= textLength; ++i) {
+							char c = i < textLength ? text[i] : 0;
+							if (i == textLength || c == '\n' || width >= pos) {
+								caret = i;
+								findRenderStart();
+								caretX = pos;
+								break;
+							} else {
+								width += font.getCharWidth(c);
+							}
+						}
+
+						size = caret - old;
+
+						if (GuiScreen.isShiftKeyDown()) {
+							if (selectionStart == selectionEnd) {
+								selectionStart = selectionEnd = old;
+							}
+							if (caret == selectionStart + size) {
+								selectionStart = caret;
+							} else if (caret == selectionEnd + size) {
+								selectionEnd = caret;
+							}
+
+							if (selectionStart > selectionEnd) {
+								int t = selectionStart;
+								selectionStart = selectionEnd;
+								selectionEnd = t;
+							}
+						}
+
+						resetCaretFlash();
+
+						return true;
+					default:
+						if (isAllowedCharacter(charTyped)) {
+							boolean typed = insertCharacter(charTyped);
+							clearSelection();
+							findRenderStart();
+							onCharacterEntered(typed);
+							return true;
+						} else {
+							return false;
+						}
 				}
-			}
 		}
 	}
 
@@ -808,15 +804,17 @@ public class ElementTextField extends ElementBase {
 
 		pressed = mouseButton == 0;
 		selecting = mouseButton == 0 && isFocused();
-		l: if (selecting) {
+		l:
+		if (selecting) {
 			if (textLength == 0) {
 				selectionStart = selectionEnd = caret = 0;
 				break l;
 			}
 			FontRenderer font = getFontRenderer();
 			int posX = mouseX - this.posX - 1, posY = mouseY - this.posY - 1;
-			s: if (!multiline) {
-				for (int i = renderStartX, width = 0;;) {
+			s:
+			if (!multiline) {
+				for (int i = renderStartX, width = 0; ; ) {
 					int charW = font.getCharWidth(text[i]);
 					if ((width += charW) > posX || ++i >= textLength) {
 						selectionStart = selectionEnd = caret = i;
@@ -828,7 +826,7 @@ public class ElementTextField extends ElementBase {
 				posY += renderStartY;
 				int maxX = 0;
 				boolean found = false;
-				for (int i = 0, width = 0, height = font.FONT_HEIGHT; i < textLength;) {
+				for (int i = 0, width = 0, height = font.FONT_HEIGHT; i < textLength; ) {
 					char c = text[i];
 					int charW = 0;
 					if (c == '\n') {
@@ -901,13 +899,14 @@ public class ElementTextField extends ElementBase {
 
 		boolean enableStencil = this.enableStencil;
 		int bit = -1;
-		l: if (enableStencil) {
+		l:
+		if (enableStencil) {
 			bit = MinecraftForgeClient.reserveStencilBit();
 			if (bit == -1) {
 				enableStencil = false;
 				break l;
 			}
-			glEnable(GL_STENCIL_TEST);
+			GL11.glEnable(GL11.GL_STENCIL_TEST);
 			drawStencil(posX + 1, posY + 1, posX + sizeX - 1, posY + sizeY - 1, 1 << bit);
 		}
 
@@ -936,7 +935,8 @@ public class ElementTextField extends ElementBase {
 					}
 					draw &= tWidth > renderStartX;
 				}
-				l: if (!enableStencil && tWidth > endX) {
+				l:
+				if (!enableStencil && tWidth > endX) {
 					draw = false;
 					if (multiline) {
 						if (c == '\n') {
@@ -954,8 +954,7 @@ public class ElementTextField extends ElementBase {
 				if (caretInsert) {
 					caretEnd = width + charW;
 				}
-				drawModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, (0xFF000000 & defaultCaretColor)
-						| (~defaultCaretColor & 0xFFFFFF));
+				drawModalRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, (0xFF000000 & defaultCaretColor) | (~defaultCaretColor & 0xFFFFFF));
 			}
 
 			if (draw && !end) {
@@ -974,10 +973,10 @@ public class ElementTextField extends ElementBase {
 					caretEnd = width + charW;
 				}
 
-				GL11.glEnable(GL11.GL_BLEND);
-				GL11.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ZERO);
 				gui.drawSizedRect(startX + width, startY - 1 + height, startX + caretEnd, endY + height, -1);
-				GL11.glDisable(GL11.GL_BLEND);
+				GlStateManager.disableBlend();
 			}
 
 			if (c == '\n') {
@@ -995,7 +994,7 @@ public class ElementTextField extends ElementBase {
 		}
 
 		if (enableStencil) {
-			glDisable(GL_STENCIL_TEST);
+			GL11.glDisable(GL11.GL_STENCIL_TEST);
 			MinecraftForgeClient.releaseStencilBit(bit);
 		}
 	}

@@ -1,8 +1,8 @@
 package cofh.lib.world.biome;
 
-import java.util.Random;
+import net.minecraft.world.biome.Biome;
 
-import net.minecraft.world.biome.BiomeGenBase;
+import java.util.Random;
 
 public class BiomeInfoRarity extends BiomeInfo {
 
@@ -21,11 +21,11 @@ public class BiomeInfoRarity extends BiomeInfo {
 	}
 
 	@Override
-	public boolean isBiomeEqual(BiomeGenBase biome, Random rand) {
+	public boolean isBiomeEqual(Biome biome, Random rand) {
 
 		boolean r = super.isBiomeEqual(biome, rand);
 		if (rand != null) {
-			return r ? rarity <= 1 || rand.nextInt(rarity) == 0 : false;
+			return r && (rarity <= 1 || rand.nextInt(rarity) == 0);
 		}
 		return r;
 	}

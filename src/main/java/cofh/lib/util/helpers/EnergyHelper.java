@@ -2,28 +2,31 @@ package cofh.lib.util.helpers;
 
 import cofh.api.energy.IEnergyConnection;
 import cofh.api.energy.IEnergyContainerItem;
-import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.energy.IEnergyStorage;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * This class contains helper functions related to Redstone Flux, the basis of the CoFH Energy System.
  *
- * @author King Lemming
+ * Compatibility is also provide for the Forge Energy system.
  *
+ * @author King Lemming
  */
 public class EnergyHelper {
 
-	public static final int RF_PER_MJ = 10; // Official Ratio of RF to MJ (BuildCraft)
-	public static final int RF_PER_EU = 4; // Official Ratio of RF to EU (IndustrialCraft)
+	@CapabilityInject (IEnergyStorage.class)
+	public static final Capability<IEnergyStorage> ENERGY_HANDLER = null;
 
 	private EnergyHelper() {
 
@@ -33,8 +36,7 @@ public class EnergyHelper {
 	public static void addEnergyInformation(ItemStack stack, List<String> list) {
 
 		if (stack.getItem() instanceof IEnergyContainerItem) {
-			list.add(StringHelper.localize("info.cofh.charge") + ": " + StringHelper.getScaledNumber(stack.stackTagCompound.getInteger("Energy")) + " / "
-					+ StringHelper.getScaledNumber(((IEnergyContainerItem) stack.getItem()).getMaxEnergyStored(stack)) + " RF");
+			list.add(StringHelper.localize("info.cofh.charge") + ": " + StringHelper.getScaledNumber(stack.getTagCompound().getInteger("Energy")) + " / " + StringHelper.getScaledNumber(((IEnergyContainerItem) stack.getItem()).getMaxEnergyStored(stack)) + " RF");
 		}
 	}
 
@@ -51,21 +53,21 @@ public class EnergyHelper {
 
 	public static int extractEnergyFromHeldContainer(EntityPlayer player, int maxExtract, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
 	}
 
 	public static int insertEnergyIntoHeldContainer(EntityPlayer player, int maxReceive, boolean simulate) {
 
-		ItemStack container = player.getCurrentEquippedItem();
+		ItemStack container = player.getHeldItemMainhand();
 
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
 	}
 
 	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
-		return isEnergyContainerItem(player.getCurrentEquippedItem());
+		return isEnergyContainerItem(player.getHeldItemMainhand());
 	}
 
 	public static boolean isEnergyContainerItem(ItemStack container) {
@@ -73,95 +75,104 @@ public class EnergyHelper {
 		return container != null && container.getItem() instanceof IEnergyContainerItem;
 	}
 
+	/**
+	 * Checks if an item has the EnergyHandler capability.
+	 *
+	 * @param stack The ItemStack to check.
+	 * @return If the ItemStack has the fluid cap.
+	 */
+	public static boolean isEnergyHandler(@Nullable ItemStack stack) {
+
+		return stack != null && stack.hasCapability(ENERGY_HANDLER, null);
+	}
+
 	public static ItemStack setDefaultEnergyTag(ItemStack container, int energy) {
 
-		if (container.stackTagCompound == null) {
+		if (!container.hasTagCompound()) {
 			container.setTagCompound(new NBTTagCompound());
 		}
-		container.stackTagCompound.setInteger("Energy", energy);
+		container.getTagCompound().setInteger("Energy", energy);
 
 		return container;
 	}
 
 	/* IEnergyHandler Interaction */
-	@Deprecated
-	public static int extractEnergyFromAdjacentEnergyHandler(TileEntity tile, int side, int energy, boolean simulate) {
+	public static int extractEnergyFromAdjacentEnergyProvider(TileEntity tile, EnumFacing side, int energy, boolean simulate) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyHandler ? ((IEnergyHandler) handler).extractEnergy(ForgeDirection.VALID_DIRECTIONS[side ^ 1], energy, simulate) : 0;
+		if (handler instanceof IEnergyProvider) {
+			return ((IEnergyProvider) handler).extractEnergy(side.getOpposite(), energy, simulate);
+		} else if (handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite())) {
+			return handler.getCapability(ENERGY_HANDLER, side.getOpposite()).extractEnergy(energy, simulate);
+		}
+		return 0;
 	}
 
-	@Deprecated
-	public static int insertEnergyIntoAdjacentEnergyHandler(TileEntity tile, int side, int energy, boolean simulate) {
+	public static int insertEnergyIntoAdjacentEnergyReceiver(TileEntity tile, EnumFacing side, int energy, boolean simulate) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyHandler ? ((IEnergyHandler) handler).receiveEnergy(ForgeDirection.VALID_DIRECTIONS[side ^ 1], energy, simulate) : 0;
+		if (handler instanceof IEnergyReceiver) {
+			return ((IEnergyReceiver) handler).receiveEnergy(side.getOpposite(), energy, simulate);
+		} else if (handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite())) {
+			return handler.getCapability(ENERGY_HANDLER, side.getOpposite()).receiveEnergy(energy, simulate);
+		}
+		return 0;
 	}
 
-	public static int extractEnergyFromAdjacentEnergyProvider(TileEntity tile, int side, int energy, boolean simulate) {
+	public static boolean isAdjacentEnergyConnectableFromSide(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyProvider ? ((IEnergyProvider) handler).extractEnergy(ForgeDirection.VALID_DIRECTIONS[side ^ 1], energy, simulate) : 0;
+		return isEnergyConnectableFromSide(handler, side.getOpposite());
 	}
 
-	public static int insertEnergyIntoAdjacentEnergyReceiver(TileEntity tile, int side, int energy, boolean simulate) {
+	public static boolean isEnergyConnectableFromSide(TileEntity tile, EnumFacing from) {
+
+		return tile instanceof IEnergyConnection && ((IEnergyConnection) tile).canConnectEnergy(from);
+	}
+
+	public static boolean isAdjacentEnergyReceiverFromSide(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return handler instanceof IEnergyReceiver ? ((IEnergyReceiver) handler).receiveEnergy(ForgeDirection.VALID_DIRECTIONS[side ^ 1], energy, simulate) : 0;
+		return isEnergyReceiverFromSide(handler, side.getOpposite());
 	}
 
-	@Deprecated
-	public static boolean isAdjacentEnergyHandlerFromSide(TileEntity tile, int side) {
+	public static boolean isEnergyReceiverFromSide(TileEntity tile, EnumFacing from) {
+
+		return tile instanceof IEnergyReceiver && ((IEnergyReceiver) tile).canConnectEnergy(from);
+	}
+
+	public static boolean isAdjacentEnergyProviderFromSide(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 
-		return isEnergyHandlerFromSide(handler, ForgeDirection.VALID_DIRECTIONS[side ^ 1]);
+		return isEnergyProviderFromSide(handler, side.getOpposite());
 	}
 
-	@Deprecated
-	public static boolean isEnergyHandlerFromSide(TileEntity tile, ForgeDirection from) {
+	public static boolean isEnergyProviderFromSide(TileEntity tile, EnumFacing from) {
 
-		return tile instanceof IEnergyHandler ? ((IEnergyHandler) tile).canConnectEnergy(from) : false;
+		return tile instanceof IEnergyProvider && ((IEnergyProvider) tile).canConnectEnergy(from);
 	}
 
-	public static boolean isAdjacentEnergyConnectableFromSide(TileEntity tile, int side) {
+	public static boolean isAdjacentEnergyHandler(TileEntity tile, EnumFacing side) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-		return isEnergyConnectableFromSide(handler, ForgeDirection.VALID_DIRECTIONS[side ^ 1]);
+		return handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite());
 	}
 
-	public static boolean isEnergyConnectableFromSide(TileEntity tile, ForgeDirection from) {
+	/**
+	 * Checks if the tile has the energy capability on a specific face.
+	 *
+	 * @param tile The tile to check.
+	 * @param face The face of the block to check.
+	 * @return If the face has the cap.
+	 */
+	public static boolean isEnergyHandler(TileEntity tile, EnumFacing face) {
 
-		return tile instanceof IEnergyConnection ? ((IEnergyConnection) tile).canConnectEnergy(from) : false;
-	}
-
-	public static boolean isAdjacentEnergyReceiverFromSide(TileEntity tile, int side) {
-
-		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-		return isEnergyReceiverFromSide(handler, ForgeDirection.VALID_DIRECTIONS[side ^ 1]);
-	}
-
-	public static boolean isEnergyReceiverFromSide(TileEntity tile, ForgeDirection from) {
-
-		return tile instanceof IEnergyReceiver ? ((IEnergyReceiver) tile).canConnectEnergy(from) : false;
-	}
-
-	public static boolean isAdjacentEnergyProviderFromSide(TileEntity tile, int side) {
-
-		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-
-		return isEnergyProviderFromSide(handler, ForgeDirection.VALID_DIRECTIONS[side ^ 1]);
-	}
-
-	public static boolean isEnergyProviderFromSide(TileEntity tile, ForgeDirection from) {
-
-		return tile instanceof IEnergyProvider ? ((IEnergyProvider) tile).canConnectEnergy(from) : false;
+		return tile != null && tile.hasCapability(ENERGY_HANDLER, face);
 	}
 
 }

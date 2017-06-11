@@ -1,22 +1,21 @@
 package cofh.lib.inventory;
 
 import cofh.lib.util.helpers.ItemHelper;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-
 public class InventoryManagerStandard implements IInventoryManager {
 
 	private final IInventory _inv;
-	protected ForgeDirection _targetSide;
+	protected EnumFacing _targetSide;
 	protected int _cachedSize;
 	protected int[] _cachedSlots = new int[] {};
 
-	public InventoryManagerStandard(IInventory inventory, ForgeDirection targetSide) {
+	public InventoryManagerStandard(IInventory inventory, EnumFacing targetSide) {
 
 		_inv = inventory;
 		_targetSide = targetSide;
@@ -196,7 +195,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 	@Override
 	public Map<Integer, ItemStack> getContents() {
 
-		Map<Integer, ItemStack> contents = new HashMap<Integer, ItemStack>();
+		Map<Integer, ItemStack> contents = new HashMap<>();
 		for (int i : getSlots()) {
 			contents.put(i, _inv.getStackInSlot(i));
 		}

@@ -32,7 +32,6 @@ public class ElementSimpleBox extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		return;
 	}
 
 }

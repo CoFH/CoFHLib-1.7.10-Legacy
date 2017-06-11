@@ -1,24 +1,23 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 public class ElementButton extends ElementButtonBase {
 
-	int sheetX;
-	int sheetY;
-	int hoverX;
-	int hoverY;
-	int disabledX = 0;
-	int disabledY = 0;
-	boolean tooltipLocalized = false;
-	boolean managedClicks;
-	String tooltip;
+	private int sheetX;
+	private int sheetY;
+	private int hoverX;
+	private int hoverY;
+	private int disabledX = 0;
+	private int disabledY = 0;
+	private boolean tooltipLocalized = false;
+	private boolean managedClicks;
+	private String tooltip;
 
 	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, String texture) {
 
@@ -31,8 +30,7 @@ public class ElementButton extends ElementButtonBase {
 		this.hoverY = hoverY;
 	}
 
-	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY,
-			String texture) {
+	public ElementButton(GuiBase gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, String texture) {
 
 		this(gui, posX, posY, sizeX, sizeY, sheetX, sheetY, hoverX, hoverY, texture);
 		this.disabledX = disabledX;
@@ -51,8 +49,7 @@ public class ElementButton extends ElementButtonBase {
 		this.hoverY = hoverY;
 	}
 
-	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, int sizeX,
-			int sizeY, String texture) {
+	public ElementButton(GuiBase gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, int sizeX, int sizeY, String texture) {
 
 		this(gui, posX, posY, name, sheetX, sheetY, hoverX, hoverY, sizeX, sizeY, texture);
 		this.disabledX = disabledX;
@@ -91,11 +88,10 @@ public class ElementButton extends ElementButtonBase {
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
-		GL11.glColor4f(1, 1, 1, 1);
+		GlStateManager.color(1, 1, 1, 1);
 		RenderHelper.bindTexture(texture);
 		if (isEnabled()) {
 			if (intersectsWith(mouseX, mouseY)) {
-
 				drawTexturedModalRect(posX, posY, hoverX, hoverY, sizeX, sizeY);
 			} else {
 				drawTexturedModalRect(posX, posY, sheetX, sheetY, sizeX, sizeY);

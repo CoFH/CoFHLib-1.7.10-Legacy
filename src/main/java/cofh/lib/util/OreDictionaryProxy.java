@@ -1,7 +1,7 @@
 package cofh.lib.util;
 
 import cofh.lib.util.helpers.ItemHelper;
-
+import com.google.common.base.Strings;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -9,9 +9,8 @@ import net.minecraftforge.oredict.OreDictionary;
  * Don't instantiate this or call these methods in any way. Use the methods in {@link ItemHelper}.
  *
  * @author King Lemming
- *
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings ("deprecation")
 public class OreDictionaryProxy {
 
 	public ItemStack getOre(String oreName) {
@@ -19,22 +18,29 @@ public class OreDictionaryProxy {
 		if (!oreNameExists(oreName)) {
 			return null;
 		}
-		return ItemHelper.cloneStack(OreDictionary.getOres(oreName).get(0), 1);
+		return ItemHelper.cloneStack(OreDictionary.getOres(oreName, false).get(0), 1);
 	}
 
 	public int getOreID(ItemStack stack) {
 
-		return OreDictionary.getOreID(stack);
+		return getOreID(getOreName(stack));
 	}
 
 	public int getOreID(String oreName) {
 
+		if (Strings.isNullOrEmpty(oreName)) {
+			return -1;
+		}
 		return OreDictionary.getOreID(oreName);
 	}
 
 	public String getOreName(ItemStack stack) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack));
+		int[] ids = OreDictionary.getOreIDs(stack);
+		if (ids != null && ids.length >= 1) {
+			return OreDictionary.getOreName(ids[0]);
+		}
+		return "";
 	}
 
 	public String getOreName(int oreID) {
@@ -44,12 +50,12 @@ public class OreDictionaryProxy {
 
 	public boolean isOreIDEqual(ItemStack stack, int oreID) {
 
-		return OreDictionary.getOreID(stack) == oreID;
+		return getOreID(stack) == oreID;
 	}
 
 	public boolean isOreNameEqual(ItemStack stack, String oreName) {
 
-		return OreDictionary.getOreName(OreDictionary.getOreID(stack)).equals(oreName);
+		return OreDictionary.getOreName(getOreID(stack)).equals(oreName);
 	}
 
 	public boolean oreNameExists(String oreName) {

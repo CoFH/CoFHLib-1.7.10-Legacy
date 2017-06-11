@@ -1,29 +1,29 @@
 package cofh.lib.inventory;
 
-import java.util.Map;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.Map;
 
 public interface IInventoryManager {
 
-	public boolean canAddItem(ItemStack stack, int slot);
+	boolean canAddItem(ItemStack stack, int slot);
 
-	public boolean canRemoveItem(ItemStack stack, int slot);
+	boolean canRemoveItem(ItemStack stack, int slot);
 
-	public ItemStack addItem(ItemStack stack);
+	ItemStack addItem(ItemStack stack);
 
-	public ItemStack removeItem(int maxRemove);
+	ItemStack removeItem(int maxRemove);
 
-	public ItemStack removeItem(int maxRemove, ItemStack type);
+	ItemStack removeItem(int maxRemove, ItemStack type);
 
-	public ItemStack getSlotContents(int slot);
+	ItemStack getSlotContents(int slot);
 
-	public int hasItem(ItemStack type);
+	int hasItem(ItemStack type);
 
-	public int findItem(ItemStack type);
+	int findItem(ItemStack type);
 
-	public int[] getSlots();
+	int[] getSlots();
 
-	public Map<Integer, ItemStack> getContents();
+	Map<Integer, ItemStack> getContents();
 
 }

@@ -1,7 +1,6 @@
 package cofh.lib.util;
 
 import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -9,7 +8,6 @@ import net.minecraft.item.ItemStack;
  * Wrapper for an Item/Metadata combination post 1.7. Quick and dirty, allows for Integer-based Hashes without collisions.
  *
  * @author King Lemming
- *
  */
 public class ComparableItem {
 
@@ -109,12 +107,8 @@ public class ComparableItem {
 	@Override
 	public String toString() {
 
-		StringBuilder b = new StringBuilder(getClass().getName());
-		b.append('@').append(System.identityHashCode(this)).append('{');
-		b.append("m:").append(metadata).append(", i:").append(item == null ? null : item.getClass().getName());
-		b.append('@').append(System.identityHashCode(item)).append(", v:");
-		b.append(getId()).append('}');
-		return b.toString();
+		String b = getClass().getName() + '@' + System.identityHashCode(this) + '{' + "m:" + metadata + ", i:" + (item == null ? null : item.getClass().getName()) + '@' + System.identityHashCode(item) + ", v:" + getId() + '}';
+		return b;
 	}
 
 }

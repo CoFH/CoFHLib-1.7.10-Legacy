@@ -52,7 +52,7 @@ public class GuiColor extends Number {
 
 	public int getIntB() {
 
-		return (_color >> 0) & 0xFF;
+		return _color & 0xFF;
 	}
 
 	public int getIntA() {
@@ -103,14 +103,12 @@ public class GuiColor extends Number {
 
 	public GuiColor add(int amount) {
 
-		return new GuiColor(Math.max(Math.min(getIntR() + amount, 255), 0), Math.max(Math.min(getIntG() + amount, 255), 0), Math.max(
-				Math.min(getIntB() + amount, 255), 0), Math.max(Math.min(getIntA() + amount, 255), 0));
+		return new GuiColor(Math.max(Math.min(getIntR() + amount, 255), 0), Math.max(Math.min(getIntG() + amount, 255), 0), Math.max(Math.min(getIntB() + amount, 255), 0), Math.max(Math.min(getIntA() + amount, 255), 0));
 	}
 
 	public GuiColor add(GuiColor color) {
 
-		return new GuiColor(Math.max(Math.min(getIntR() + color.getIntR(), 255), 0), Math.max(Math.min(getIntG() + color.getIntG(), 255), 0), Math.max(
-				Math.min(getIntB() + color.getIntB(), 255), 0), Math.max(Math.min(getIntA() + color.getIntA(), 255), 0));
+		return new GuiColor(Math.max(Math.min(getIntR() + color.getIntR(), 255), 0), Math.max(Math.min(getIntG() + color.getIntG(), 255), 0), Math.max(Math.min(getIntB() + color.getIntB(), 255), 0), Math.max(Math.min(getIntA() + color.getIntA(), 255), 0));
 	}
 
 	// ///////////////////////////////////////////////////////////////////////////////////////////////

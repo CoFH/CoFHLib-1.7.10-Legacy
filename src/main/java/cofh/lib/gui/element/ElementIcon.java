@@ -2,27 +2,19 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiColor;
-
-import net.minecraft.util.IIcon;
-
-import org.lwjgl.opengl.GL11;
+import cofh.lib.util.helpers.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class ElementIcon extends ElementBase {
 
-	protected IIcon icon;
-	protected int spriteSheet;
+	protected TextureAtlasSprite icon;
 	protected GuiColor color = new GuiColor(-1);
 
-	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon) {
-
-		this(gui, posX, posY, icon, 0);
-	}
-
-	public ElementIcon(GuiBase gui, int posX, int posY, IIcon icon, int spriteSheet) {
+	public ElementIcon(GuiBase gui, int posX, int posY, TextureAtlasSprite icon) {
 
 		super(gui, posX, posY);
 		this.icon = icon;
-		this.spriteSheet = spriteSheet;
 	}
 
 	public ElementIcon setColor(Number color) {
@@ -31,15 +23,9 @@ public class ElementIcon extends ElementBase {
 		return this;
 	}
 
-	public ElementIcon setIcon(IIcon icon) {
+	public ElementIcon setIcon(TextureAtlasSprite icon) {
 
 		this.icon = icon;
-		return this;
-	}
-
-	public ElementIcon setSpriteSheet(int spriteSheet) {
-
-		this.spriteSheet = spriteSheet;
 		return this;
 	}
 
@@ -52,16 +38,16 @@ public class ElementIcon extends ElementBase {
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		if (icon != null) {
-			GL11.glColor4f(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
-			gui.drawColorIcon(icon, posX, posY, spriteSheet);
-			GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+			RenderHelper.setBlockTextureSheet();
+			GlStateManager.color(color.getFloatR(), color.getFloatG(), color.getFloatB(), color.getFloatA());
+			gui.drawColorIcon(icon, posX, posY);
+			GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0F);
 		}
 	}
 
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		return;
 	}
 
 }

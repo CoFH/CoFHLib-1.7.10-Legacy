@@ -1,7 +1,6 @@
 package cofh.lib.gui.slot;
 
-import cofh.api.core.ICustomInventory;
-
+import cofh.lib.gui.container.ICustomInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -64,7 +63,7 @@ public class SlotCustomInventory extends Slot {
 	}
 
 	@Override
-	public boolean isSlotInInventory(IInventory inventory, int slot) {
+	public boolean isHere(IInventory inventory, int slot) {
 
 		return false;
 	}

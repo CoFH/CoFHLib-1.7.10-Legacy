@@ -2,15 +2,15 @@ package cofh.lib.inventory;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class InventoryManager {
-	
+
 	private InventoryManager() {
-		
+
 	}
 
-	public static IInventoryManager create(Object inventory, ForgeDirection targetSide) {
+	public static IInventoryManager create(Object inventory, EnumFacing targetSide) {
 
 		if (inventory instanceof ISidedInventory) {
 			return new InventoryManagerSided((ISidedInventory) inventory, targetSide);

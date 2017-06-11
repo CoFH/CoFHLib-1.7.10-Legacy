@@ -1,10 +1,10 @@
 package cofh.lib.gui.container;
 
-import cofh.api.core.ICustomInventory;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class CustomInventoryWrapper implements IInventory {
 
@@ -45,7 +45,7 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 
 		if (inventory[slot] == null) {
 			return null;
@@ -66,15 +66,21 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 
 		return "container.crafting";
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 
 		return false;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+
+		return new TextComponentString("");
 	}
 
 	@Override
@@ -95,12 +101,12 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 
@@ -108,6 +114,28 @@ public class CustomInventoryWrapper implements IInventory {
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 
 		return true;
+	}
+
+	@Override
+	public int getField(int id) {
+
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
 	}
 
 }

@@ -4,30 +4,36 @@ import cofh.lib.audio.SoundBase;
 import cofh.lib.gui.element.ElementBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.FluidStack;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 /**
  * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
@@ -48,15 +54,20 @@ public abstract class GuiBase extends GuiContainer {
 	protected String name;
 	protected ResourceLocation texture;
 
-	public ArrayList<TabBase> tabs = new ArrayList<TabBase>();
-	protected ArrayList<ElementBase> elements = new ArrayList<ElementBase>();
+	public ArrayList<TabBase> tabs = new ArrayList<>();
+	protected ArrayList<ElementBase> elements = new ArrayList<>();
 
-	protected List<String> tooltip = new LinkedList<String>();
+	protected List<String> tooltip = new LinkedList<>();
 	protected boolean tooltips = true;
 
-	public static void playSound(String name, float volume, float pitch) {
+	public static void playSound(String name, SoundCategory category, float volume, float pitch) {
 
-		guiSoundManager.playSound(new SoundBase(name, volume, pitch));
+		guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
+	}
+
+	public static void playClickSound(float volume, float pitch) {
+
+		guiSoundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, volume, pitch));
 	}
 
 	public GuiBase(Container container) {
@@ -102,7 +113,7 @@ public abstract class GuiBase extends GuiContainer {
 			fontRendererObj.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		}
 		if (drawInventory) {
-			fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
+			fontRendererObj.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
 		drawElements(0, true);
 		drawTabs(0, true);
@@ -111,24 +122,24 @@ public abstract class GuiBase extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1, 1, 1, 1);
 		bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(guiLeft, guiTop, 0.0F);
 		drawElements(partialTick, false);
 		drawTabs(partialTick, false);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	@Override
-	protected void keyTyped(char characterTyped, int keyPressed) {
+	protected void keyTyped(char characterTyped, int keyPressed) throws IOException {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled()) {
 				continue;
@@ -141,7 +152,7 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	@Override
-	public void handleMouseInput() {
+	public void handleMouseInput() throws IOException {
 
 		int x = Mouse.getEventX() * width / mc.displayWidth;
 		int y = height - Mouse.getEventY() * height / mc.displayHeight - 1;
@@ -152,7 +163,7 @@ public abstract class GuiBase extends GuiContainer {
 		int wheelMovement = Mouse.getEventDWheel();
 
 		if (wheelMovement != 0) {
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = elements.size(); i-- > 0; ) {
 				ElementBase c = elements.get(i);
 				if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mouseX, mouseY)) {
 					continue;
@@ -180,12 +191,12 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	@Override
-	protected void mouseClicked(int mX, int mY, int mouseButton) {
+	protected void mouseClicked(int mX, int mY, int mouseButton) throws IOException {
 
 		mX -= guiLeft;
 		mY -= guiTop;
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (!c.isVisible() || !c.isEnabled() || !c.intersectsWith(mX, mY)) {
 				continue;
@@ -200,7 +211,7 @@ public abstract class GuiBase extends GuiContainer {
 			int tMx = mX;
 
 			if (!tab.onMousePressed(tMx, mY, mouseButton)) {
-				for (int i = tabs.size(); i-- > 0;) {
+				for (int i = tabs.size(); i-- > 0; ) {
 					TabBase other = tabs.get(i);
 					if (other != tab && other.open && other.side == tab.side) {
 						other.toggleOpen();
@@ -216,35 +227,35 @@ public abstract class GuiBase extends GuiContainer {
 
 		if (tab != null) {
 			switch (tab.side) {
-			case TabBase.LEFT:
-				// guiLeft -= tab.currentWidth;
-				break;
-			case TabBase.RIGHT:
-				xSize += tab.currentWidth;
-				break;
+				case TabBase.LEFT:
+					// guiLeft -= tab.currentWidth;
+					break;
+				case TabBase.RIGHT:
+					xSize += tab.currentWidth;
+					break;
 			}
 		}
 		super.mouseClicked(mX, mY, mouseButton);
 		if (tab != null) {
 			switch (tab.side) {
-			case TabBase.LEFT:
-				// guiLeft += tab.currentWidth;
-				break;
-			case TabBase.RIGHT:
-				xSize -= tab.currentWidth;
-				break;
+				case TabBase.LEFT:
+					// guiLeft += tab.currentWidth;
+					break;
+				case TabBase.RIGHT:
+					xSize -= tab.currentWidth;
+					break;
 			}
 		}
 	}
 
 	@Override
-	protected void mouseMovedOrUp(int mX, int mY, int mouseButton) {
+	protected void mouseReleased(int mX, int mY, int mouseButton) {
 
 		mX -= guiLeft;
 		mY -= guiTop;
 
 		if (mouseButton >= 0 && mouseButton <= 2) { // 0:left, 1:right, 2: middle
-			for (int i = elements.size(); i-- > 0;) {
+			for (int i = elements.size(); i-- > 0; ) {
 				ElementBase c = elements.get(i);
 				if (!c.isVisible() || !c.isEnabled()) { // no bounds checking on mouseUp events
 					continue;
@@ -255,7 +266,7 @@ public abstract class GuiBase extends GuiContainer {
 		mX += guiLeft;
 		mY += guiTop;
 
-		super.mouseMovedOrUp(mX, mY, mouseButton);
+		super.mouseReleased(mX, mY, mouseButton);
 	}
 
 	@Override
@@ -264,10 +275,10 @@ public abstract class GuiBase extends GuiContainer {
 		Slot slot = getSlotAtPosition(mX, mY);
 		ItemStack itemstack = this.mc.thePlayer.inventory.getItemStack();
 
-		if (this.field_147007_t && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
+		if (this.dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
 			if (lastIndex != slot.slotNumber) {
 				lastIndex = slot.slotNumber;
-				this.handleMouseClick(slot, slot.slotNumber, 0, 0);
+				this.handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
 			}
 		} else {
 			lastIndex = -1;
@@ -278,7 +289,7 @@ public abstract class GuiBase extends GuiContainer {
 	public Slot getSlotAtPosition(int xCoord, int yCoord) {
 
 		for (int k = 0; k < this.inventorySlots.inventorySlots.size(); ++k) {
-			Slot slot = (Slot) this.inventorySlots.inventorySlots.get(k);
+			Slot slot = this.inventorySlots.inventorySlots.get(k);
 
 			if (this.isMouseOverSlot(slot, xCoord, yCoord)) {
 				return slot;
@@ -289,7 +300,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	public boolean isMouseOverSlot(Slot theSlot, int xCoord, int yCoord) {
 
-		return this.func_146978_c(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
+		return this.isPointInRegion(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
 	}
 
 	/**
@@ -357,18 +368,6 @@ public abstract class GuiBase extends GuiContainer {
 		}
 	}
 
-	/**
-	 * Called by NEI if installed
-	 */
-	// @Override
-	public List<String> handleTooltip(int mousex, int mousey, List<String> tooltip) {
-
-		if (mc.thePlayer.inventory.getItemStack() == null) {
-			addTooltips(tooltip);
-		}
-		return tooltip;
-	}
-
 	public void addTooltips(List<String> tooltip) {
 
 		TabBase tab = getTabAtPosition(mouseX, mouseY);
@@ -411,7 +410,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected ElementBase getElementAtPosition(int mX, int mY) {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase element = elements.get(i);
 			if (element.intersectsWith(mX, mY)) {
 				return element;
@@ -456,7 +455,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	protected final void updateElements() {
 
-		for (int i = elements.size(); i-- > 0;) {
+		for (int i = elements.size(); i-- > 0; ) {
 			ElementBase c = elements.get(i);
 			if (c.isVisible() && c.isEnabled()) {
 				c.update(mouseX, mouseY);
@@ -479,32 +478,19 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	/**
-	 * Abstract method to retrieve icons by name from a registry. You must override this if you use any of the String methods below.
-	 */
-	public IIcon getIcon(String name) {
-
-		return null;
-	}
-
-	/**
 	 * Essentially a placeholder method for tabs to use should they need to draw a button.
 	 */
-	public void drawButton(IIcon icon, int x, int y, int spriteSheet, int mode) {
+	public void drawButton(TextureAtlasSprite icon, int x, int y, int mode) {
 
-		drawIcon(icon, x, y, spriteSheet);
-	}
-
-	public void drawButton(String iconName, int x, int y, int spriteSheet, int mode) {
-
-		drawButton(getIcon(iconName), x, y, spriteSheet, mode);
+		drawIcon(icon, x, y);
 	}
 
 	public void drawItemStack(ItemStack stack, int x, int y, boolean drawOverlay, String overlayTxt) {
 
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glPushMatrix();
-		GL11.glTranslatef(0.0F, 0.0F, 32.0F);
+		GlStateManager.enableDepth();
+		GlStateManager.enableLighting();
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0.0F, 0.0F, 32.0F);
 		this.zLevel = 200.0F;
 		itemRender.zLevel = 200.0F;
 
@@ -516,16 +502,15 @@ public abstract class GuiBase extends GuiContainer {
 			font = fontRendererObj;
 		}
 
-		itemRender.renderItemAndEffectIntoGUI(font, this.mc.getTextureManager(), stack, x, y);
+		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 
 		if (drawOverlay) {
-			itemRender.renderItemOverlayIntoGUI(font, this.mc.getTextureManager(), stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
 		}
-
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
-		GL11.glPopMatrix();
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.popMatrix();
+		GlStateManager.disableLighting();
 	}
 
 	/**
@@ -533,22 +518,22 @@ public abstract class GuiBase extends GuiContainer {
 	 */
 	public void drawFluid(int x, int y, FluidStack fluid, int width, int height) {
 
-		if (fluid == null || fluid.getFluid() == null) {
+		if (fluid == null) {
 			return;
 		}
 		RenderHelper.setBlockTextureSheet();
-		RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
-
-		drawTiledTexture(x, y, fluid.getFluid().getIcon(fluid), width, height);
+		int color = fluid.getFluid().getColor(fluid);
+		RenderHelper.setGLColorFromInt(color);
+		drawTiledTexture(x, y, RenderHelper.getTexture(fluid.getFluid().getStill(fluid)), width, height);
 	}
 
-	public void drawTiledTexture(int x, int y, IIcon icon, int width, int height) {
+	public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
-		int i = 0;
-		int j = 0;
+		int i;
+		int j;
 
-		int drawHeight = 0;
-		int drawWidth = 0;
+		int drawHeight;
+		int drawWidth;
 
 		for (i = 0; i < width; i += 16) {
 			for (j = 0; j < height; j += 16) {
@@ -557,33 +542,19 @@ public abstract class GuiBase extends GuiContainer {
 				drawScaledTexturedModelRectFromIcon(x + i, y + j, icon, drawWidth, drawHeight);
 			}
 		}
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
-	public void drawIcon(IIcon icon, int x, int y, int spriteSheet) {
+	public void drawIcon(TextureAtlasSprite icon, int x, int y) {
 
-		if (spriteSheet == 0) {
-			RenderHelper.setBlockTextureSheet();
-		} else {
-			RenderHelper.setItemTextureSheet();
-		}
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
-		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
+		RenderHelper.setBlockTextureSheet();
+		GlStateManager.color(1, 1, 1, 1);
+		drawTexturedModalRect(x, y, icon, 16, 16);
 	}
 
-	public void drawColorIcon(IIcon icon, int x, int y, int spriteSheet) {
+	public void drawColorIcon(TextureAtlasSprite icon, int x, int y) {
 
-		if (spriteSheet == 0) {
-			RenderHelper.setBlockTextureSheet();
-		} else {
-			RenderHelper.setItemTextureSheet();
-		}
-		drawTexturedModelRectFromIcon(x, y, icon, 16, 16);
-	}
-
-	public void drawIcon(String iconName, int x, int y, int spriteSheet) {
-
-		drawIcon(getIcon(iconName), x, y, spriteSheet);
+		drawTexturedModalRect(x, y, icon, 16, 16);
 	}
 
 	public void drawSizedModalRect(int x1, int y1, int x2, int y2, int color) {
@@ -605,19 +576,20 @@ public abstract class GuiBase extends GuiContainer {
 		float r = (color >> 16 & 255) / 255.0F;
 		float g = (color >> 8 & 255) / 255.0F;
 		float b = (color & 255) / 255.0F;
-		Tessellator tessellator = Tessellator.instance;
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(r, g, b, a);
-		tessellator.startDrawingQuads();
-		tessellator.addVertex(x1, y2, this.zLevel);
-		tessellator.addVertex(x2, y2, this.zLevel);
-		tessellator.addVertex(x2, y1, this.zLevel);
-		tessellator.addVertex(x1, y1, this.zLevel);
-		tessellator.draw();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
+		GlStateManager.disableTexture2D();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(r, g, b, a);
+
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, this.zLevel).endVertex();
+		buffer.pos(x2, y2, this.zLevel).endVertex();
+		buffer.pos(x2, y1, this.zLevel).endVertex();
+		buffer.pos(x1, y1, this.zLevel).endVertex();
+		Tessellator.getInstance().draw();
+		GlStateManager.enableTexture2D();
+		GlStateManager.disableBlend();
 	}
 
 	public void drawSizedRect(int x1, int y1, int x2, int y2, int color) {
@@ -639,32 +611,33 @@ public abstract class GuiBase extends GuiContainer {
 		float r = (color >> 16 & 255) / 255.0F;
 		float g = (color >> 8 & 255) / 255.0F;
 		float b = (color & 255) / 255.0F;
-		Tessellator tessellator = Tessellator.instance;
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(r, g, b, a);
-		tessellator.startDrawingQuads();
-		tessellator.addVertex(x1, y2, this.zLevel);
-		tessellator.addVertex(x2, y2, this.zLevel);
-		tessellator.addVertex(x2, y1, this.zLevel);
-		tessellator.addVertex(x1, y1, this.zLevel);
-		tessellator.draw();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
+		GlStateManager.color(r, g, b, a);
+
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+		buffer.pos(x1, y2, this.zLevel).endVertex();
+		buffer.pos(x2, y2, this.zLevel).endVertex();
+		buffer.pos(x2, y1, this.zLevel).endVertex();
+		buffer.pos(x1, y1, this.zLevel).endVertex();
+		Tessellator.getInstance().draw();
+		GlStateManager.enableTexture2D();
 	}
 
 	public void drawSizedTexturedModalRect(int x, int y, int u, int v, int width, int height, float texW, float texH) {
 
 		float texU = 1 / texW;
 		float texV = 1 / texH;
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, (u + 0) * texU, (v + height) * texV);
-		tessellator.addVertexWithUV(x + width, y + height, this.zLevel, (u + width) * texU, (v + height) * texV);
-		tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, (u + width) * texU, (v + 0) * texV);
-		tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, (u + 0) * texU, (v + 0) * texV);
-		tessellator.draw();
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x, y + height, this.zLevel).tex((u) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x + width, y + height, this.zLevel).tex((u + width) * texU, (v + height) * texV).endVertex();
+		buffer.pos(x + width, y, this.zLevel).tex((u + width) * texU, (v) * texV).endVertex();
+		buffer.pos(x, y, this.zLevel).tex((u) * texU, (v) * texV).endVertex();
+		Tessellator.getInstance().draw();
 	}
 
-	public void drawScaledTexturedModelRectFromIcon(int x, int y, IIcon icon, int width, int height) {
+	public void drawScaledTexturedModelRectFromIcon(int x, int y, TextureAtlasSprite icon, int width, int height) {
 
 		if (icon == null) {
 			return;
@@ -674,13 +647,13 @@ public abstract class GuiBase extends GuiContainer {
 		double minV = icon.getMinV();
 		double maxV = icon.getMaxV();
 
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(x + 0, y + height, this.zLevel, minU, minV + (maxV - minV) * height / 16F);
-		tessellator.addVertexWithUV(x + width, y + height, this.zLevel, minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F);
-		tessellator.addVertexWithUV(x + width, y + 0, this.zLevel, minU + (maxU - minU) * width / 16F, minV);
-		tessellator.addVertexWithUV(x + 0, y + 0, this.zLevel, minU, minV);
-		tessellator.draw();
+		VertexBuffer buffer = Tessellator.getInstance().getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		buffer.pos(x, y + height, this.zLevel).tex(minU, minV + (maxV - minV) * height / 16F).endVertex();
+		buffer.pos(x + width, y + height, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV + (maxV - minV) * height / 16F).endVertex();
+		buffer.pos(x + width, y, this.zLevel).tex(minU + (maxU - minU) * width / 16F, minV).endVertex();
+		buffer.pos(x, y, this.zLevel).tex(minU, minV).endVertex();
+		Tessellator.getInstance().draw();
 	}
 
 	public void drawTooltip(List<String> list) {
@@ -689,15 +662,15 @@ public abstract class GuiBase extends GuiContainer {
 		tooltip.clear();
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings ("rawtypes")
 	protected void drawTooltipHoveringText(List list, int x, int y, FontRenderer font) {
 
 		if (list == null || list.isEmpty()) {
 			return;
 		}
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GlStateManager.disableRescaleNormal();
+		GlStateManager.disableLighting();
+		GlStateManager.disableDepth();
 		int k = 0;
 		Iterator iterator = list.iterator();
 
@@ -748,15 +721,15 @@ public abstract class GuiBase extends GuiContainer {
 		}
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableLighting();
+		GlStateManager.enableDepth();
+		GlStateManager.enableRescaleNormal();
 	}
 
 	/**
 	 * Passthrough method for tab use.
 	 */
-	public void mouseClicked(int mouseButton) {
+	public void mouseClicked(int mouseButton) throws IOException {
 
 		super.mouseClicked(guiLeft + mouseX, guiTop + mouseY, mouseButton);
 	}
@@ -794,10 +767,6 @@ public abstract class GuiBase extends GuiContainer {
 	public int getMouseY() {
 
 		return mouseY;
-	}
-
-	public void overlayRecipe() {
-
 	}
 
 }

@@ -1,12 +1,13 @@
 package cofh.lib.gui.container;
 
 import cofh.api.item.IInventoryContainerItem;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 
 public class InventoryContainerItemWrapper implements IInventory {
 
@@ -35,14 +36,14 @@ public class InventoryContainerItemWrapper implements IInventory {
 	protected void loadInventory() {
 
 		boolean loaded = false;
-		if (stack.stackTagCompound == null || !stack.stackTagCompound.hasKey("Inventory")) {
+		if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("Inventory")) {
 			loaded = stack.hasTagCompound();
 			if (loaded) {
-				if (stack.stackTagCompound.hasKey("inventory")) {
-					tag = stack.stackTagCompound.getCompoundTag("inventory");
-					stack.stackTagCompound.removeTag("inventory");
+				if (stack.getTagCompound().hasKey("inventory")) {
+					tag = stack.getTagCompound().getCompoundTag("inventory");
+					stack.getTagCompound().removeTag("inventory");
 				} else {
-					tag = stack.stackTagCompound;
+					tag = stack.getTagCompound();
 				}
 				loadStacks();
 				tag = new NBTTagCompound();
@@ -51,13 +52,13 @@ public class InventoryContainerItemWrapper implements IInventory {
 				stack.setTagInfo("Inventory", new NBTTagCompound());
 			}
 		}
-		tag = stack.stackTagCompound.getCompoundTag("Inventory");
+		tag = stack.getTagCompound().getCompoundTag("Inventory");
 		loadStacks();
 	}
 
 	protected void loadStacks() {
 
-		for (int i = inventory.length; i-- > 0;) {
+		for (int i = inventory.length; i-- > 0; ) {
 			if (tag.hasKey("Slot" + i)) {
 				inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + i));
 			} else if (tag.hasKey("slot" + i)) {
@@ -70,7 +71,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 
 	protected void saveStacks() {
 
-		for (int i = inventory.length; i-- > 0;) {
+		for (int i = inventory.length; i-- > 0; ) {
 			if (inventory[i] == null) {
 				tag.removeTag("Slot" + i);
 			} else {
@@ -139,7 +140,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 
 		return null;
 	}
@@ -154,15 +155,43 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public int getField(int id) {
+
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
+	}
+
+	@Override
+	public String getName() {
 
 		return stack.getDisplayName();
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 
 		return true;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+
+		return new TextComponentString(stack.getDisplayName());
 	}
 
 	@Override
@@ -178,12 +207,12 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 		markDirty();
 	}

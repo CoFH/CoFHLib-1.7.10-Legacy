@@ -1,23 +1,26 @@
 package cofh.lib.world;
 
-import static cofh.lib.world.WorldGenMinableCluster.*;
-
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import static cofh.lib.world.WorldGenMinableCluster.fabricateList;
+import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 
 public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	private final List<WeightedRandomBlock> cluster;
-	private final int genClusterSize;
+	private final INumberProvider genClusterSize;
 	private final WeightedRandomBlock[] genBlock;
 
 	public WorldGenSparseMinableCluster(ItemStack ore, int clusterSize) {
@@ -32,7 +35,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize) {
 
-		this(resource, clusterSize, Blocks.stone);
+		this(resource, clusterSize, Blocks.STONE);
 	}
 
 	public WorldGenSparseMinableCluster(ItemStack ore, int clusterSize, Block block) {
@@ -52,15 +55,24 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 
 	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, int clusterSize, List<WeightedRandomBlock> block) {
 
+		this(resource, new ConstantProvider(clusterSize), block);
+	}
+
+	public WorldGenSparseMinableCluster(List<WeightedRandomBlock> resource, INumberProvider clusterSize, List<WeightedRandomBlock> block) {
+
 		cluster = resource;
-		genClusterSize = clusterSize > 32 ? 32 : clusterSize;
+		genClusterSize = clusterSize;
 		genBlock = block.toArray(new WeightedRandomBlock[block.size()]);
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int x, int y, int z) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
 
-		int blocks = genClusterSize;
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+
+		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 42);
 		float f = rand.nextFloat() * (float) Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
 		float yMin = (y + rand.nextInt(3)) - 2;
@@ -75,10 +87,10 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 			++blocks;
 		}
 		// }
-		float xMin = x + 8 + (MathHelper.sin(f) * blocks) / 8F;
-		float xMax = x + 8 - (MathHelper.sin(f) * blocks) / 8F;
-		float zMin = z + 8 + (MathHelper.cos(f) * blocks) / 8F;
-		float zMax = z + 8 - (MathHelper.cos(f) * blocks) / 8F;
+		float xMin = x + (MathHelper.sin(f) * blocks) / 8F;
+		float xMax = x - (MathHelper.sin(f) * blocks) / 8F;
+		float zMin = z + (MathHelper.cos(f) * blocks) / 8F;
+		float zMax = z - (MathHelper.cos(f) * blocks) / 8F;
 
 		// optimization so this subtraction doesn't occur every time in the loop
 		xMax -= xMin;

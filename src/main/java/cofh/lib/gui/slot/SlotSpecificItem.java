@@ -1,7 +1,6 @@
 package cofh.lib.gui.slot;
 
 import cofh.lib.inventory.ComparableItemStack;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -11,12 +10,11 @@ import net.minecraft.item.ItemStack;
  * Slot which is restricted to a specific item and maximum amount.
  *
  * @author King Lemming
- *
  */
 public class SlotSpecificItem extends Slot {
 
 	protected final ComparableItemStack stack;
-	protected ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.stone));
+	protected ComparableItemStack query = new ComparableItemStack(new ItemStack(Blocks.STONE));
 	protected int slotStackLimit = -1;
 
 	public SlotSpecificItem(IInventory inventory, int index, int x, int y, ItemStack stack) {

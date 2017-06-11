@@ -1,14 +1,15 @@
 package cofh.lib.world;
 
-import static cofh.lib.world.WorldGenMinableCluster.*;
-
 import cofh.lib.util.WeightedRandomBlock;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenerator;
+import static cofh.lib.world.WorldGenMinableCluster.canGenerateInBlock;
+import static cofh.lib.world.WorldGenMinableCluster.generateBlock;
 
 public class WorldGenStalagmite extends WorldGenerator {
 
@@ -65,9 +66,12 @@ public class WorldGenStalagmite extends WorldGenerator {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, int xStart, int yStart, int zStart) {
+	public boolean generate(World world, Random rand, BlockPos pos) {
 
-		while (world.isAirBlock(xStart, yStart, zStart) && yStart > 0) {
+		int xStart = pos.getX();
+		int yStart = pos.getY();
+		int zStart = pos.getZ();
+		while (world.isAirBlock(new BlockPos(xStart, yStart, zStart)) && yStart > 0) {
 			--yStart;
 		}
 

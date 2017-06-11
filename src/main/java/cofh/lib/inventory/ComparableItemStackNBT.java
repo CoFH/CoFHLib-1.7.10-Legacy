@@ -9,7 +9,6 @@ import net.minecraft.nbt.NBTTagCompound;
  * It is expected that this will have limited use, so this is a child class for overhead performance reasons.
  *
  * @author King Lemming
- *
  */
 public class ComparableItemStackNBT extends ComparableItemStack {
 
@@ -19,8 +18,8 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 
 		super(stack);
 
-		if (stack != null && stack.stackTagCompound != null) {
-			tag = (NBTTagCompound) stack.stackTagCompound.copy();
+		if (stack != null && stack.getTagCompound() != null) {
+			tag = stack.getTagCompound().copy();
 		}
 	}
 
@@ -32,7 +31,7 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 
 	private boolean isStackTagEqual(ComparableItemStackNBT other) {
 
-		return tag == null ? other.tag == null : other.tag == null ? false : tag.equals(other.tag);
+		return tag == null ? other.tag == null : other.tag != null && tag.equals(other.tag);
 	}
 
 	@Override
@@ -40,7 +39,7 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 
 		ItemStack ret = super.toItemStack();
 		if (ret != null) {
-			ret.stackTagCompound = (NBTTagCompound) tag.copy();
+			ret.setTagCompound(tag.copy());
 		}
 		return ret;
 	}

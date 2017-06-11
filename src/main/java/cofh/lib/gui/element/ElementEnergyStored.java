@@ -3,16 +3,16 @@ package cofh.lib.gui.element;
 import cofh.api.energy.IEnergyStorage;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
-import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.helpers.RenderHelper;
+import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-import net.minecraft.util.ResourceLocation;
-
 public class ElementEnergyStored extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Energy.png");
+	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "energy.png");
 	public static final int DEFAULT_SCALE = 42;
 
 	protected IEnergyStorage storage;
@@ -43,7 +43,6 @@ public class ElementEnergyStored extends ElementBase {
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
 		int amount = getScaled();
-
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
 		drawTexturedModalRect(posX, posY + DEFAULT_SCALE - amount, 16, DEFAULT_SCALE - amount, sizeX, amount);
@@ -60,7 +59,7 @@ public class ElementEnergyStored extends ElementBase {
 		if (storage.getMaxEnergyStored() < 0) {
 			list.add("Infinite RF");
 		} else {
-			list.add(storage.getEnergyStored() + " / " + storage.getMaxEnergyStored() + " RF");
+			list.add(StringHelper.formatNumber(storage.getEnergyStored()) + " / " + StringHelper.formatNumber(storage.getMaxEnergyStored()) + " RF");
 		}
 	}
 

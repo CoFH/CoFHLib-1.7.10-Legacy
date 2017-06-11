@@ -23,11 +23,8 @@ public class ElementTextFieldFiltered extends ElementTextField {
 	}
 
 	/**
-	 *
-	 * @param pattern
-	 *            Regex limit what characters can be typed
-	 * @param includeVanilla
-	 *            Include vanilla disallowed characters
+	 * @param pattern        Regex limit what characters can be typed
+	 * @param includeVanilla Include vanilla disallowed characters
 	 * @return this
 	 */
 	public ElementTextFieldFiltered setFilter(Pattern pattern, boolean includeVanilla) {

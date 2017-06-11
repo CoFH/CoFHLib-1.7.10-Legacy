@@ -1,7 +1,7 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 
 public class ElementDualScaled extends ElementBase {
 
@@ -41,18 +41,17 @@ public class ElementDualScaled extends ElementBase {
 			drawTexturedModalRect(posX, posY, 0, 0, sizeX, sizeY);
 		}
 		switch (mode) {
-		case 0:
-			// vertical bottom -> top
-			drawTexturedModalRect(posX, posY + sizeY - quantity, sizeX, sizeY - quantity, sizeX, quantity);
-			return;
-		case 1:
-			// horizontal left -> right
-			drawTexturedModalRect(posX, posY, sizeX, 0, quantity, sizeY);
-			return;
-		case 2:
-			// horizontal right -> left
-			drawTexturedModalRect(posX + sizeX - quantity, posY, sizeX + sizeX - quantity, 0, quantity, sizeY);
-			return;
+			case 0:
+				// vertical bottom -> top
+				drawTexturedModalRect(posX, posY + sizeY - quantity, sizeX, sizeY - quantity, sizeX, quantity);
+				return;
+			case 1:
+				// horizontal left -> right
+				drawTexturedModalRect(posX, posY, sizeX, 0, quantity, sizeY);
+				return;
+			case 2:
+				// horizontal right -> left
+				drawTexturedModalRect(posX + sizeX - quantity, posY, sizeX + sizeX - quantity, 0, quantity, sizeY);
 		}
 	}
 

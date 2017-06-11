@@ -1,12 +1,11 @@
 package cofh.lib.gui.slot;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Slot that will redirect inserts to another inventory slot (other than index), but not be visible.
@@ -49,8 +48,8 @@ public class SlotInvisible extends Slot {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean func_111238_b() {
+	@SideOnly (Side.CLIENT)
+	public boolean canBeHovered() {
 
 		return false;
 	}

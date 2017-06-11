@@ -8,12 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
  * Contains helper functions for the {@link NBTTagCompound} on an {@link ItemStack}
  *
  * @author Jotato
- *
  */
 public final class NBTHelper {
-	
+
 	private NBTHelper() {
-		
+
 	}
 
 	public static NBTTagCompound getTagCompound(ItemStack stack) {
@@ -119,7 +118,7 @@ public final class NBTHelper {
 			return defaultValue;
 		}
 		return getTagCompound(stack).getFloat(key);
-	};
+	}
 
 	public static void setFloat(ItemStack stack, String key, float value) {
 

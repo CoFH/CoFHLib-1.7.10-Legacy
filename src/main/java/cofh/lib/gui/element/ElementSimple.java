@@ -1,18 +1,17 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 
 /**
  * Basic element which can render an arbitrary texture.
  *
  * @author King Lemming
- *
  */
 public class ElementSimple extends ElementBase {
 
-	int texU = 0;
-	int texV = 0;
+	protected int texU = 0;
+	protected int texV = 0;
 
 	public ElementSimple(GuiBase gui, int posX, int posY) {
 
@@ -36,7 +35,6 @@ public class ElementSimple extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
-		return;
 	}
 
 }

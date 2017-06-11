@@ -1,10 +1,9 @@
 /**
- * (C) 2014 Team CoFH / CoFH / Cult of the Full Hub
+ * (C) 2014-2017 Team CoFH / CoFH / Cult of the Full Hub
  * http://www.teamcofh.com
  */
-@API(apiVersion = CoFHLibProps.VERSION, owner = "CoFHLib", provides = "CoFHLib|audio")
+@API (apiVersion = CoFHLibProps.VERSION, owner = "cofhlib", provides = "cofhlib|audio")
 package cofh.lib.audio;
 
 import cofh.lib.CoFHLibProps;
-import cpw.mods.fml.common.API;
-
+import net.minecraftforge.fml.common.API;

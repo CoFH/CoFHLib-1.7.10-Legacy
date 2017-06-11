@@ -11,7 +11,9 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	public IInventory masterInv;
 	public int invOffset = 0;
 	public int invSize = 0;
-	/** the width of the crafting inventory */
+	/**
+	 * the width of the crafting inventory
+	 */
 	public final int inventoryWidth;
 
 	/**
@@ -52,7 +54,7 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 
 		if (masterInv.getStackInSlot(invOffset + slot) != null) {
 			ItemStack stack = masterInv.getStackInSlot(invOffset + slot);
@@ -111,12 +113,12 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer player) {
 
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer player) {
 
 	}
 

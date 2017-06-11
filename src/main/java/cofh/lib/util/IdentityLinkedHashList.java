@@ -2,8 +2,8 @@ package cofh.lib.util;
 
 import java.util.Collection;
 
-@SuppressWarnings("unchecked")
-public class IdentityLinkedHashList<E extends Object> extends LinkedHashList<E> {
+@SuppressWarnings ("unchecked")
+public class IdentityLinkedHashList<E> extends LinkedHashList<E> {
 
 	private static final long serialVersionUID = 4893829808146776641L;
 
@@ -43,6 +43,6 @@ public class IdentityLinkedHashList<E extends Object> extends LinkedHashList<E> 
 	@Override
 	public IdentityLinkedHashList<E> clone() {
 
-		return new IdentityLinkedHashList<E>(this);
+		return new IdentityLinkedHashList<>(this);
 	}
 }
