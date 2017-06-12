@@ -5,6 +5,7 @@ import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.IFluidTank;
 
@@ -22,6 +23,8 @@ public class ElementFluidTank extends ElementBase {
 
 	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
 	protected boolean alwaysShowMinimum = false;
+
+	protected TextureAtlasSprite fluidTextureOverride;
 
 	public ElementFluidTank(GuiBase gui, int posX, int posY, IFluidTank tank) {
 
@@ -69,6 +72,13 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
+	public ElementFluidTank setFluidTextureOverride(TextureAtlasSprite fluidTextureOverride) {
+
+		this.fluidTextureOverride = fluidTextureOverride;
+		return this;
+
+	}
+
 	public ElementFluidTank drawTank(boolean drawTank) {
 
 		this.drawTank = drawTank;
@@ -88,8 +98,7 @@ public class ElementFluidTank extends ElementBase {
 			RenderHelper.bindTexture(texture);
 			drawTexturedModalRect(posX - 1, posY - 1, 0, 0, sizeX + 2, sizeY + 2);
 		}
-		int amount = getScaled();
-		gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
+		drawFluid();
 		RenderHelper.bindTexture(texture);
 		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
 	}
@@ -120,6 +129,18 @@ public class ElementFluidTank extends ElementBase {
 		long fraction = (long) tank.getFluidAmount() * sizeY / tank.getCapacity();
 
 		return alwaysShowMinimum && tank.getFluidAmount() > 0 ? Math.max(1, MathHelper.ceil(fraction)) : MathHelper.ceil(fraction);
+	}
+
+	protected void drawFluid() {
+
+		int amount = getScaled();
+
+		if (fluidTextureOverride != null) {
+			RenderHelper.setBlockTextureSheet();
+			gui.drawTiledTexture(posX, posY + sizeY - amount, fluidTextureOverride, sizeX, amount);
+		} else {
+			gui.drawFluid(posX, posY + sizeY - amount, tank.getFluid(), sizeX, amount);
+		}
 	}
 
 }
