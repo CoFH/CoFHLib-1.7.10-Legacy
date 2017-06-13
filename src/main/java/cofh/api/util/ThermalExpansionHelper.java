@@ -25,7 +25,7 @@ public class ThermalExpansionHelper {
 	/* FURNACE */
 	public static void addFurnaceRecipe(int energy, ItemStack input, ItemStack output) {
 
-		if (input == null || output == null) {
+		if (input.isEmpty() || output.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -41,7 +41,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeFurnaceRecipe(ItemStack input) {
 
-		if (input == null) {
+		if (input.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -55,7 +55,7 @@ public class ThermalExpansionHelper {
 	/* PULVERIZER */
 	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput) {
 
-		addPulverizerRecipe(energy, input, primaryOutput, null, 0);
+		addPulverizerRecipe(energy, input, primaryOutput, ItemStack.EMPTY, 0);
 	}
 
 	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput) {
@@ -65,7 +65,7 @@ public class ThermalExpansionHelper {
 
 	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
-		if (input == null || primaryOutput == null) {
+		if (input.isEmpty() || primaryOutput.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -77,7 +77,7 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag("input"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
 
-		if (secondaryOutput != null) {
+		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag("secondaryOutput", new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
 			toSend.setInteger("secondaryChance", secondaryChance);
@@ -87,7 +87,7 @@ public class ThermalExpansionHelper {
 
 	public static void removePulverizerRecipe(ItemStack input) {
 
-		if (input == null) {
+		if (input.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -101,7 +101,7 @@ public class ThermalExpansionHelper {
 	/* SAWMILL */
 	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput) {
 
-		addSawmillRecipe(energy, input, primaryOutput, null, 0);
+		addSawmillRecipe(energy, input, primaryOutput, ItemStack.EMPTY, 0);
 	}
 
 	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput) {
@@ -111,7 +111,7 @@ public class ThermalExpansionHelper {
 
 	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
-		if (input == null || primaryOutput == null) {
+		if (input.isEmpty() || primaryOutput.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -123,7 +123,7 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag("input"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
 
-		if (secondaryOutput != null) {
+		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag("secondaryOutput", new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
 			toSend.setInteger("secondaryChance", secondaryChance);
@@ -134,7 +134,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeSawmillRecipe(ItemStack input) {
 
-		if (input == null) {
+		if (input.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -148,7 +148,7 @@ public class ThermalExpansionHelper {
 	/* SMELTER */
 	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput) {
 
-		addSmelterRecipe(energy, primaryInput, secondaryInput, primaryOutput, null, 0);
+		addSmelterRecipe(energy, primaryInput, secondaryInput, primaryOutput, ItemStack.EMPTY, 0);
 	}
 
 	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput) {
@@ -158,7 +158,7 @@ public class ThermalExpansionHelper {
 
 	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
-		if (primaryInput == null || secondaryInput == null || primaryOutput == null) {
+		if (primaryInput.isEmpty() || secondaryInput.isEmpty() || primaryOutput.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -172,7 +172,7 @@ public class ThermalExpansionHelper {
 		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
 
-		if (secondaryOutput != null) {
+		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag("secondaryOutput", new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
 			toSend.setInteger("secondaryChance", secondaryChance);
@@ -182,7 +182,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeSmelterRecipe(ItemStack primaryInput, ItemStack secondaryInput) {
 
-		if (primaryInput == null || secondaryInput == null) {
+		if (primaryInput.isEmpty() || secondaryInput.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -198,7 +198,7 @@ public class ThermalExpansionHelper {
 	/* INSOLATOR */
 	public static void addInsolatorRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput) {
 
-		addInsolatorRecipe(energy, primaryInput, secondaryInput, primaryOutput, null, 0);
+		addInsolatorRecipe(energy, primaryInput, secondaryInput, primaryOutput, ItemStack.EMPTY, 0);
 	}
 
 	public static void addInsolatorRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput) {
@@ -208,7 +208,7 @@ public class ThermalExpansionHelper {
 
 	public static void addInsolatorRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
 
-		if (primaryInput == null || secondaryInput == null || primaryOutput == null) {
+		if (primaryInput.isEmpty() || secondaryInput.isEmpty() || primaryOutput.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -222,7 +222,7 @@ public class ThermalExpansionHelper {
 		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
 		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
 
-		if (secondaryOutput != null) {
+		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag("secondaryOutput", new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
 			toSend.setInteger("secondaryChance", secondaryChance);
@@ -232,7 +232,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeInsolatorRecipe(ItemStack primaryInput, ItemStack secondaryInput) {
 
-		if (primaryInput == null || secondaryInput == null) {
+		if (primaryInput.isEmpty() || secondaryInput.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -248,7 +248,7 @@ public class ThermalExpansionHelper {
 	/* CRUCIBLE */
 	public static void addCrucibleRecipe(int energy, ItemStack input, FluidStack output) {
 
-		if (input == null || output == null) {
+		if (input.isEmpty() || output == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -265,7 +265,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeCrucibleRecipe(ItemStack input) {
 
-		if (input == null) {
+		if (input.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -288,7 +288,7 @@ public class ThermalExpansionHelper {
 		toSend.setTag("input", new NBTTagCompound());
 		toSend.setTag("output", new NBTTagCompound());
 
-		if (outputItem != null) {
+		if (!outputItem.isEmpty()) {
 			toSend.setTag("secondaryOutput", new NBTTagCompound());
 			outputItem.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
 		}
@@ -314,7 +314,7 @@ public class ThermalExpansionHelper {
 	/* TRANSPOSER */
 	public static void addTransposerFill(int energy, ItemStack input, ItemStack output, FluidStack fluid, boolean reversible) {
 
-		if (input == null || output == null || fluid == null) {
+		if (input.isEmpty() || output.isEmpty() || fluid == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -334,7 +334,7 @@ public class ThermalExpansionHelper {
 
 	public static void addTransposerExtract(int energy, ItemStack input, ItemStack output, FluidStack fluid, int chance, boolean reversible) {
 
-		if (input == null || output == null || fluid == null) {
+		if (input.isEmpty() || output.isEmpty() || fluid == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -355,7 +355,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeTransposerFill(ItemStack input, FluidStack fluid) {
 
-		if (input == null || fluid == null) {
+		if (input.isEmpty() || fluid == null) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -370,7 +370,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeTransposerExtract(ItemStack input) {
 
-		if (input == null) {
+		if (input.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -384,7 +384,7 @@ public class ThermalExpansionHelper {
 	/* CHARGER */
 	public static void addChargerRecipe(int energy, ItemStack input, ItemStack output) {
 
-		if (input == null || output == null) {
+		if (input.isEmpty() || output.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -400,7 +400,7 @@ public class ThermalExpansionHelper {
 
 	public static void removeChargerRecipe(ItemStack input) {
 
-		if (input == null) {
+		if (input.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();

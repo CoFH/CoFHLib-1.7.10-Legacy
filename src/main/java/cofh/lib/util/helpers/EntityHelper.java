@@ -74,14 +74,12 @@ public class EntityHelper {
 		double z = entity.posZ * moveFactor;
 
 		oldWorld.theProfiler.startSection("placing");
-		x = MathHelper.clamp_double(x, -29999872, 29999872);
-		z = MathHelper.clamp_double(z, -29999872, 29999872);
+		x = MathHelper.clamp(x, -29999872, 29999872);
+		z = MathHelper.clamp(z, -29999872, 29999872);
 
 		if (entity.isEntityAlive()) {
 			entity.setLocationAndAngles(x, entity.posY, z, entity.rotationYaw, entity.rotationPitch);
-			entity.forceSpawn = true;
-			newWorld.spawnEntityInWorld(entity);
-			entity.forceSpawn = false;
+			newWorld.spawnEntity(entity);
 			newWorld.updateEntityWithOptionalForce(entity, false);
 		}
 
@@ -96,7 +94,7 @@ public class EntityHelper {
 		WorldServer worldserver = manager.getServerInstance().worldServerForDimension(player.dimension);
 		player.dimension = dimension;
 		WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(player.dimension);
-		player.connection.sendPacket(new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), player.worldObj.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+		player.connection.sendPacket(new SPacketRespawn(player.dimension, player.world.getDifficulty(), player.world.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
 		worldserver.removeEntityDangerously(player);
 		if (player.isBeingRidden()) {
 			player.removePassengers();
@@ -141,12 +139,12 @@ public class EntityHelper {
 	public static void transferEntityToWorld(Entity entity, double x, double y, double z, WorldServer oldWorld, WorldServer newWorld) {
 
 		oldWorld.theProfiler.startSection("placing");
-		x = MathHelper.clamp_double(x, -29999872, 29999872);
-		z = MathHelper.clamp_double(z, -29999872, 29999872);
+		x = MathHelper.clamp(x, -29999872, 29999872);
+		z = MathHelper.clamp(z, -29999872, 29999872);
 
 		if (entity.isEntityAlive()) {
 			entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
-			newWorld.spawnEntityInWorld(entity);
+			newWorld.spawnEntity(entity);
 			newWorld.updateEntityWithOptionalForce(entity, false);
 		}
 
@@ -161,7 +159,7 @@ public class EntityHelper {
 		WorldServer worldserver = manager.getServerInstance().worldServerForDimension(player.dimension);
 		player.dimension = dimension;
 		WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(player.dimension);
-		player.connection.sendPacket(new SPacketRespawn(player.dimension, player.worldObj.getDifficulty(), player.worldObj.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
+		player.connection.sendPacket(new SPacketRespawn(player.dimension, player.world.getDifficulty(), player.world.getWorldInfo().getTerrainType(), player.interactionManager.getGameType()));
 		worldserver.removeEntityDangerously(player);
 		if (player.isBeingRidden()) {
 			player.removePassengers();

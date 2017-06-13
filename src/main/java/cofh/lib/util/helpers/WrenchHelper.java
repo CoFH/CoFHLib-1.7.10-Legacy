@@ -18,11 +18,11 @@ public final class WrenchHelper {
 
 		EnumHand hand = EnumHand.MAIN_HAND;
 		ItemStack stack = player.getHeldItem(hand);
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			hand = EnumHand.OFF_HAND;
 			stack = player.getHeldItem(hand);
 		}
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 		if (stack.getItem() instanceof IToolHammer) {
@@ -38,11 +38,11 @@ public final class WrenchHelper {
 
 		EnumHand hand = EnumHand.MAIN_HAND;
 		ItemStack stack = player.getHeldItem(hand);
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			hand = EnumHand.OFF_HAND;
 			stack = player.getHeldItem(hand);
 		}
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return;
 		}
 		if (stack.getItem() instanceof IToolHammer) {

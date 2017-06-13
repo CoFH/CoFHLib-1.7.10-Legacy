@@ -96,7 +96,7 @@ public abstract class GuiBase extends GuiContainer {
 
 		super.drawScreen(x, y, partialTick);
 
-		if (tooltips && mc.thePlayer.inventory.getItemStack() == null) {
+		if (tooltips && mc.player.inventory.getItemStack().isEmpty()) {
 			addTooltips(tooltip);
 			drawTooltip(tooltip);
 		}
@@ -273,9 +273,9 @@ public abstract class GuiBase extends GuiContainer {
 	protected void mouseClickMove(int mX, int mY, int lastClick, long timeSinceClick) {
 
 		Slot slot = getSlotAtPosition(mX, mY);
-		ItemStack itemstack = this.mc.thePlayer.inventory.getItemStack();
+		ItemStack itemstack = this.mc.player.inventory.getItemStack();
 
-		if (this.dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
+		if (this.dragSplitting && slot != null && !itemstack.isEmpty() && slot instanceof SlotFalseCopy) {
 			if (lastIndex != slot.slotNumber) {
 				lastIndex = slot.slotNumber;
 				this.handleMouseClick(slot, slot.slotNumber, 0, ClickType.PICKUP);
@@ -300,7 +300,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	public boolean isMouseOverSlot(Slot theSlot, int xCoord, int yCoord) {
 
-		return this.isPointInRegion(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
+		return this.isPointInRegion(theSlot.xPos, theSlot.yPos, 16, 16, xCoord, yCoord);
 	}
 
 	/**
@@ -309,15 +309,13 @@ public abstract class GuiBase extends GuiContainer {
 	protected void drawElements(float partialTick, boolean foreground) {
 
 		if (foreground) {
-			for (int i = 0; i < elements.size(); i++) {
-				ElementBase element = elements.get(i);
+			for (ElementBase element : elements) {
 				if (element.isVisible()) {
 					element.drawForeground(mouseX, mouseY);
 				}
 			}
 		} else {
-			for (int i = 0; i < elements.size(); i++) {
-				ElementBase element = elements.get(i);
+			for (ElementBase element : elements) {
 				if (element.isVisible()) {
 					element.drawBackground(mouseX, mouseY, partialTick);
 				}
@@ -334,8 +332,7 @@ public abstract class GuiBase extends GuiContainer {
 		int yPosLeft = 4;
 
 		if (foreground) {
-			for (int i = 0; i < tabs.size(); i++) {
-				TabBase tab = tabs.get(i);
+			for (TabBase tab : tabs) {
 				tab.update();
 				if (!tab.isVisible()) {
 					continue;
@@ -349,8 +346,7 @@ public abstract class GuiBase extends GuiContainer {
 				}
 			}
 		} else {
-			for (int i = 0; i < tabs.size(); i++) {
-				TabBase tab = tabs.get(i);
+			for (TabBase tab : tabs) {
 				tab.update();
 				if (!tab.isVisible()) {
 					continue;
@@ -392,9 +388,9 @@ public abstract class GuiBase extends GuiContainer {
 	public TabBase addTab(TabBase tab) {
 
 		int yOffset = 4;
-		for (int i = 0; i < tabs.size(); i++) {
-			if (tabs.get(i).side == tab.side && tabs.get(i).isVisible()) {
-				yOffset += tabs.get(i).currentHeight;
+		for (TabBase tab1 : tabs) {
+			if (tab1.side == tab.side && tab1.isVisible()) {
+				yOffset += tab1.currentHeight;
 			}
 		}
 		tab.setPosition(tab.side == TabBase.LEFT ? 0 : xSize, yOffset);
@@ -424,8 +420,7 @@ public abstract class GuiBase extends GuiContainer {
 		int xShift = 0;
 		int yShift = 4;
 
-		for (int i = 0; i < tabs.size(); i++) {
-			TabBase tab = tabs.get(i);
+		for (TabBase tab : tabs) {
 			if (!tab.isVisible() || tab.side == TabBase.RIGHT) {
 				continue;
 			}
@@ -439,8 +434,7 @@ public abstract class GuiBase extends GuiContainer {
 		xShift = xSize;
 		yShift = 4;
 
-		for (int i = 0; i < tabs.size(); i++) {
-			TabBase tab = tabs.get(i);
+		for (TabBase tab : tabs) {
 			if (!tab.isVisible() || tab.side == TabBase.LEFT) {
 				continue;
 			}
@@ -495,7 +489,7 @@ public abstract class GuiBase extends GuiContainer {
 		itemRender.zLevel = 200.0F;
 
 		FontRenderer font = null;
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			font = stack.getItem().getFontRenderer(stack);
 		}
 		if (font == null) {
@@ -505,7 +499,7 @@ public abstract class GuiBase extends GuiContainer {
 		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 
 		if (drawOverlay) {
-			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (this.draggedStack.isEmpty() ? 0 : 8), overlayTxt);
 		}
 		this.zLevel = 0.0F;
 		itemRender.zLevel = 0.0F;
@@ -662,8 +656,7 @@ public abstract class GuiBase extends GuiContainer {
 		tooltip.clear();
 	}
 
-	@SuppressWarnings ("rawtypes")
-	protected void drawTooltipHoveringText(List list, int x, int y, FontRenderer font) {
+	protected void drawTooltipHoveringText(List<String> list, int x, int y, FontRenderer font) {
 
 		if (list == null || list.isEmpty()) {
 			return;
@@ -672,10 +665,8 @@ public abstract class GuiBase extends GuiContainer {
 		GlStateManager.disableLighting();
 		GlStateManager.disableDepth();
 		int k = 0;
-		Iterator iterator = list.iterator();
 
-		while (iterator.hasNext()) {
-			String s = (String) iterator.next();
+		for (String s : list) {
 			int l = font.getStringWidth(s);
 
 			if (l > k) {
@@ -711,7 +702,7 @@ public abstract class GuiBase extends GuiContainer {
 		this.drawGradientRect(i1 - 3, j1 + k1 + 2, i1 + k + 3, j1 + k1 + 3, j2, j2);
 
 		for (int k2 = 0; k2 < list.size(); ++k2) {
-			String s1 = (String) list.get(k2);
+			String s1 = list.get(k2);
 			font.drawStringWithShadow(s1, i1, j1, -1);
 
 			if (k2 == 0) {

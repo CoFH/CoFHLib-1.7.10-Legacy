@@ -1,5 +1,6 @@
 package cofh.lib.gui.container;
 
+import cofh.lib.util.helpers.InventoryHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,11 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return InventoryHelper.isEmpty(inventory);
+	}
+
+	@Override
 	public ItemStack getStackInSlot(int slot) {
 
 		return inventory[slot];
@@ -30,16 +36,16 @@ public class CustomInventoryWrapper implements IInventory {
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
 
-		if (inventory[slot] == null) {
-			return null;
+		if (inventory[slot].isEmpty()) {
+			return ItemStack.EMPTY;
 		}
-		if (inventory[slot].stackSize <= amount) {
-			amount = inventory[slot].stackSize;
+		if (inventory[slot].getCount() <= amount) {
+			amount = inventory[slot].getCount();
 		}
 		ItemStack stack = inventory[slot].splitStack(amount);
 
-		if (inventory[slot].stackSize <= 0) {
-			inventory[slot] = null;
+		if (inventory[slot].getCount() <= 0) {
+			inventory[slot] = ItemStack.EMPTY;
 		}
 		return stack;
 	}
@@ -47,11 +53,11 @@ public class CustomInventoryWrapper implements IInventory {
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 
-		if (inventory[slot] == null) {
-			return null;
+		if (inventory[slot].isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		ItemStack stack = inventory[slot];
-		inventory[slot] = null;
+		inventory[slot] = ItemStack.EMPTY;
 		return stack;
 	}
 
@@ -60,8 +66,8 @@ public class CustomInventoryWrapper implements IInventory {
 
 		inventory[slot] = stack;
 
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
+		if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
+			stack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -95,7 +101,7 @@ public class CustomInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 
 		return true;
 	}

@@ -144,7 +144,7 @@ public final class BlockHelper {
 
 	public static int determineXZPlaceFacing(EntityLivingBase living) {
 
-		int quadrant = MathHelper.floor_double(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int quadrant = MathHelper.floor(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
 		switch (quadrant) {
 			case 0:
@@ -316,11 +316,11 @@ public final class BlockHelper {
 
 		List<EntityItem> result = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3));
 		for (EntityItem entity : result) {
-			if (entity.isDead || entity.getEntityItem().stackSize <= 0) {
+			if (entity.isDead || entity.getEntityItem().getCount() <= 0) {
 				continue;
 			}
 			stacks.add(entity.getEntityItem());
-			entity.worldObj.removeEntity(entity);
+			entity.world.removeEntity(entity);
 		}
 		return stacks;
 	}
@@ -343,7 +343,7 @@ public final class BlockHelper {
 
 	public void callNeighborStateChange(World world, BlockPos pos) {
 
-		world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock());
+		world.notifyNeighborsOfStateChange(pos, world.getBlockState(pos).getBlock(), false);
 	}
 
 	public void callNeighborTileChange(World world, BlockPos pos) {

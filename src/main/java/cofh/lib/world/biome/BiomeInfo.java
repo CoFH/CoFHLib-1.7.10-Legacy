@@ -48,7 +48,7 @@ public class BiomeInfo {
 					r = biome.getTempCategory() == data;
 					break;
 				case 2:
-					r = BiomeDictionary.isBiomeOfType(biome, (Type) data);
+					r = BiomeDictionary.hasType(biome, (Type) data);
 					break;
 				case 4:
 					r = ((Collection<String>) data).contains(biome.getBiomeName());
@@ -60,7 +60,7 @@ public class BiomeInfo {
 					Type[] d = (Type[]) data;
 					int c = 0, e = d.length;
 					for (int i = 0; i < e; ++i) {
-						if (BiomeDictionary.isBiomeOfType(biome, d[i])) {
+						if (BiomeDictionary.hasType(biome, d[i])) {
 							++c;
 						}
 					}

@@ -72,7 +72,7 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 42);
+		int blocks = MathHelper.clamp(genClusterSize.intValue(world, rand, pos), 1, 42);
 		float f = rand.nextFloat() * (float) Math.PI;
 		// despite naming, these are not exactly min/max. more like direction
 		float yMin = (y + rand.nextInt(3)) - 2;
@@ -110,13 +110,13 @@ public class WorldGenSparseMinableCluster extends WorldGenerator {
 			float hMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
 			float vMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1f) * size + 1f) * .5f;
 
-			int xStart = MathHelper.floor_float(xCenter - hMod);
-			int yStart = MathHelper.floor_float(yCenter - vMod);
-			int zStart = MathHelper.floor_float(zCenter - hMod);
+			int xStart = MathHelper.floor(xCenter - hMod);
+			int yStart = MathHelper.floor(yCenter - vMod);
+			int zStart = MathHelper.floor(zCenter - hMod);
 
-			int xStop = MathHelper.floor_float(xCenter + hMod);
-			int yStop = MathHelper.floor_float(yCenter + vMod);
-			int zStop = MathHelper.floor_float(zCenter + hMod);
+			int xStop = MathHelper.floor(xCenter + hMod);
+			int yStop = MathHelper.floor(yCenter + vMod);
+			int zStop = MathHelper.floor(zCenter + hMod);
 
 			for (int blockX = xStart; blockX <= xStop; blockX++) {
 				float xDistSq = ((blockX + .5f) - xCenter) / hMod;

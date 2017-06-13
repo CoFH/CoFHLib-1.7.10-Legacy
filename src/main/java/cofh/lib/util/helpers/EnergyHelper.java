@@ -72,7 +72,7 @@ public class EnergyHelper {
 
 	public static boolean isEnergyContainerItem(ItemStack container) {
 
-		return container != null && container.getItem() instanceof IEnergyContainerItem;
+		return !container.isEmpty() && container.getItem() instanceof IEnergyContainerItem;
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class EnergyHelper {
 	 */
 	public static boolean isEnergyHandler(@Nullable ItemStack stack) {
 
-		return stack != null && stack.hasCapability(ENERGY_HANDLER, null);
+		return !stack.isEmpty() && stack.hasCapability(ENERGY_HANDLER, null);
 	}
 
 	public static IEnergyStorage getEnergyHandler(ItemStack stack) {

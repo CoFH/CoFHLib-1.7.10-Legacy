@@ -48,16 +48,16 @@ public class SlotCustomInventory extends Slot {
 	@Override
 	public ItemStack decrStackSize(int amount) {
 
-		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] == null) {
-			return null;
+		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].isEmpty()) {
+			return ItemStack.EMPTY;
 		}
-		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize <= amount) {
-			amount = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize;
+		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].getCount() <= amount) {
+			amount = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].getCount();
 		}
 		ItemStack stack = customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].splitStack(amount);
 
-		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].stackSize <= 0) {
-			customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] = null;
+		if (customInv.getInventorySlots(inventoryIndex)[getSlotIndex()].getCount() <= 0) {
+			customInv.getInventorySlots(inventoryIndex)[getSlotIndex()] = ItemStack.EMPTY;
 		}
 		return stack;
 	}

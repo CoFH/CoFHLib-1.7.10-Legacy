@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public abstract class ContainerBase extends Container {
 
 	public ContainerBase() {
@@ -72,10 +74,10 @@ public abstract class ContainerBase extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
 		if (!supportsShiftClick(player, slotIndex)) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
@@ -83,21 +85,21 @@ public abstract class ContainerBase extends Container {
 			stack = stackInSlot.copy();
 
 			if (!performMerge(player, slotIndex, stackInSlot)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			slot.onSlotChange(stackInSlot, stack);
 
-			if (stackInSlot.stackSize <= 0) {
-				slot.putStack(null);
+			if (stackInSlot.getCount() <= 0) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.putStack(stackInSlot);
 			}
 
-			if (stackInSlot.stackSize == stack.stackSize) {
-				return null;
+			if (stackInSlot.getCount() == stack.getCount()) {
+				return ItemStack.EMPTY;
 			}
-			slot.onPickupFromSlot(player, stackInSlot);
+			slot.onTake(player, stackInSlot);
 		}
 		return stack;
 	}
@@ -109,7 +111,7 @@ public abstract class ContainerBase extends Container {
 		for (; start < end; ++start) {
 			ItemStack itemstack = inventorySlots.get(start).getStack();
 
-			ItemStack itemstack1 = itemstack == null ? null : itemstack.copy();
+			ItemStack itemstack1 = itemstack.isEmpty() ? ItemStack.EMPTY : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
 			for (int j = 0; j < this.listeners.size(); ++j) {
@@ -120,10 +122,10 @@ public abstract class ContainerBase extends Container {
 
 	@SideOnly (Side.CLIENT)
 	@Override
-	public void putStacksInSlots(ItemStack[] stacks) {
+	public void setAll(List<ItemStack> stacks) {
 
-		for (int i = 0; i < stacks.length; ++i) {
-			putStackInSlot(i, stacks[i]);
+		for (int i = 0; i < stacks.size(); ++i) {
+			putStackInSlot(i, stacks.get(i));
 		}
 	}
 
@@ -133,9 +135,9 @@ public abstract class ContainerBase extends Container {
 		Slot slot = slotId < 0 ? null : this.inventorySlots.get(slotId);
 		if (slot instanceof SlotFalseCopy) {
 			if (mouseButton == 2) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
-				slot.putStack(player.inventory.getItemStack() == null ? null : player.inventory.getItemStack().copy());
+				slot.putStack(player.inventory.getItemStack().isEmpty() ? ItemStack.EMPTY : player.inventory.getItemStack().copy());
 			}
 			return player.inventory.getItemStack();
 		}

@@ -18,7 +18,7 @@ public class SlotPotionIngredient extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && BrewingRecipeRegistry.isValidIngredient(stack);
+		return !stack.isEmpty() && BrewingRecipeRegistry.isValidIngredient(stack);
 	}
 
 }

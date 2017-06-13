@@ -25,6 +25,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -52,7 +53,7 @@ public final class ItemHelper {
 
 	public static boolean isPlayerHoldingSomething(EntityPlayer player) {
 
-		return player.getHeldItemMainhand() != null || player.getHeldItemOffhand() != null;
+		return !player.getHeldItemMainhand().isEmpty() || !player.getHeldItemOffhand().isEmpty();
 	}
 
 	public static ItemStack getMainhandStack(EntityPlayer player) {
@@ -68,7 +69,7 @@ public final class ItemHelper {
 	public static ItemStack getHeldStack(EntityPlayer player) {
 
 		ItemStack stack = player.getHeldItemMainhand();
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			stack = player.getHeldItemOffhand();
 		}
 		return stack;
@@ -77,38 +78,38 @@ public final class ItemHelper {
 	public static ItemStack cloneStack(Item item, int stackSize) {
 
 		if (item == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return new ItemStack(item, stackSize);
 	}
 
-	public static ItemStack cloneStack(Block item, int stackSize) {
+	public static ItemStack cloneStack(Block block, int stackSize) {
 
-		if (item == null) {
-			return null;
+		if (block == null) {
+			return ItemStack.EMPTY;
 		}
-		return new ItemStack(item, stackSize);
+		return new ItemStack(block, stackSize);
 	}
 
 	public static ItemStack cloneStack(ItemStack stack, int stackSize) {
 
-		if (stack == null) {
-			return null;
+		if (stack.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		ItemStack retStack = stack.copy();
-		retStack.stackSize = stackSize;
+		retStack.setCount(stackSize);
 
 		return retStack;
 	}
 
 	public static ItemStack cloneStack(ItemStack stack) {
 
-		return stack == null ? null : stack.copy();
+		return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
 	}
 
 	public static ItemStack copyTag(ItemStack container, ItemStack other) {
 
-		if (other != null && other.hasTagCompound()) {
+		if (!other.isEmpty() && other.hasTagCompound()) {
 			container.setTagCompound(other.getTagCompound().copy());
 		}
 		return container;
@@ -133,7 +134,7 @@ public final class ItemHelper {
 	public static ItemStack readItemStackFromNBT(NBTTagCompound nbt) {
 
 		ItemStack stack = new ItemStack(Item.getItemById(nbt.getShort("id")));
-		stack.stackSize = nbt.getInteger("Count");
+		stack.setCount(nbt.getInteger("Count"));
 		stack.setItemDamage(Math.max(0, nbt.getShort("Damage")));
 
 		if (nbt.hasKey("tag", 10)) {
@@ -145,7 +146,7 @@ public final class ItemHelper {
 	public static NBTTagCompound writeItemStackToNBT(ItemStack stack, NBTTagCompound nbt) {
 
 		nbt.setShort("id", (short) Item.getIdFromItem(stack.getItem()));
-		nbt.setInteger("Count", stack.stackSize);
+		nbt.setInteger("Count", stack.getCount());
 		nbt.setShort("Damage", (short) getItemDamage(stack));
 
 		if (stack.hasTagCompound()) {
@@ -168,7 +169,7 @@ public final class ItemHelper {
 
 	public static String getNameFromItemStack(ItemStack stack) {
 
-		if (stack == null || !stack.hasTagCompound() || !stack.getTagCompound().hasKey("display")) {
+		if (stack.isEmpty() || !stack.hasTagCompound() || !stack.getTagCompound().hasKey("display")) {
 			return "";
 		}
 		return stack.getTagCompound().getCompoundTag("display").getString("Name");
@@ -176,9 +177,10 @@ public final class ItemHelper {
 
 	public static ItemStack damageItem(ItemStack stack, int amt, Random rand) {
 
-		if (stack != null && stack.isItemStackDamageable() && stack.attemptDamageItem(amt, rand)) {
-			if (--stack.stackSize <= 0) {
-				stack = null;
+		if (!stack.isEmpty() && stack.isItemStackDamageable() && stack.attemptDamageItem(amt, rand)) {
+			stack.shrink(1);
+			if (stack.getCount() <= 0) {
+				stack = ItemStack.EMPTY;
 			} else {
 				stack.setItemDamage(0);
 			}
@@ -188,56 +190,56 @@ public final class ItemHelper {
 
 	public static ItemStack consumeItem(ItemStack stack) {
 
-		if (stack == null) {
-			return null;
+		if (stack.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		Item item = stack.getItem();
-		boolean largerStack = stack.stackSize > 1;
+		boolean largerStack = stack.getCount() > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
 
 		if (largerStack) {
-			stack.stackSize -= 1;
+			stack.shrink(1);
 		}
 		if (item.hasContainerItem(stack)) {
 			ItemStack ret = item.getContainerItem(stack);
 
-			if (ret == null) {
-				return null;
+			if (ret.isEmpty()) {
+				return ItemStack.EMPTY;
 			}
 			if (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage()) {
-				ret = null;
+				ret = ItemStack.EMPTY;
 			}
 			return ret;
 		}
-		return largerStack ? stack : null;
+		return largerStack ? stack : ItemStack.EMPTY;
 	}
 
 	public static ItemStack consumeItem(ItemStack stack, EntityPlayer player) {
 
-		if (stack == null) {
-			return null;
+		if (stack.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		Item item = stack.getItem();
-		boolean largerStack = stack.stackSize > 1;
+		boolean largerStack = stack.getCount() > 1;
 		// vanilla only alters the stack passed to hasContainerItem/etc. when the size is >1
 
 		if (largerStack) {
-			stack.stackSize -= 1;
+			stack.shrink(1);
 		}
 		if (item.hasContainerItem(stack)) {
 			ItemStack ret = item.getContainerItem(stack);
 
-			if (ret == null || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage())) {
-				ret = null;
+			if (ret.isEmpty() || (ret.isItemStackDamageable() && ret.getItemDamage() > ret.getMaxDamage())) {
+				ret = ItemStack.EMPTY;
 			}
-			if (stack.stackSize < 1) {
+			if (stack.getCount() < 1) {
 				return ret;
 			}
-			if (ret != null && !player.inventory.addItemStackToInventory(ret)) {
+			if (!ret.isEmpty() && !player.inventory.addItemStackToInventory(ret)) {
 				player.dropItem(ret, false, true);
 			}
 		}
-		return largerStack ? stack : null;
+		return largerStack ? stack : ItemStack.EMPTY;
 	}
 
 	public static boolean disposePlayerItem(ItemStack stack, ItemStack dropStack, EntityPlayer entityplayer, boolean allowDrop) {
@@ -250,13 +252,13 @@ public final class ItemHelper {
 		if (entityplayer == null || entityplayer.capabilities.isCreativeMode) {
 			return true;
 		}
-		if (allowReplace && stack.stackSize <= 1) {
-			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+		if (allowReplace && stack.getCount() <= 1) {
+			entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, ItemStack.EMPTY);
 			entityplayer.inventory.addItemStackToInventory(dropStack);
 			return true;
 		} else if (allowDrop) {
-			stack.stackSize -= 1;
-			if (dropStack != null && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
+			stack.shrink(1);
+			if (!dropStack.isEmpty() && !entityplayer.inventory.addItemStackToInventory(dropStack)) {
 				entityplayer.dropItem(dropStack, false, true);
 			}
 			return true;
@@ -278,9 +280,10 @@ public final class ItemHelper {
 	public static ItemStack findMatchingRecipe(InventoryCrafting inv, World world) {
 
 		ItemStack[] dmgItems = new ItemStack[2];
+		Arrays.fill(dmgItems, ItemStack.EMPTY);
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			if (inv.getStackInSlot(i) != null) {
-				if (dmgItems[0] == null) {
+			if (!inv.getStackInSlot(i).isEmpty()) {
+				if (dmgItems[0].isEmpty()) {
 					dmgItems[0] = inv.getStackInSlot(i);
 				} else {
 					dmgItems[1] = inv.getStackInSlot(i);
@@ -288,9 +291,9 @@ public final class ItemHelper {
 				}
 			}
 		}
-		if (dmgItems[0] == null || dmgItems[0].getItem() == null) {
-			return null;
-		} else if (dmgItems[1] != null && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].stackSize == 1 && dmgItems[1].stackSize == 1 && dmgItems[0].getItem().isRepairable()) {
+		if (dmgItems[0].isEmpty() || dmgItems[0].getItem() == null) {
+			return ItemStack.EMPTY;
+		} else if (!dmgItems[1].isEmpty() && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].getCount() == 1 && dmgItems[1].getCount() == 1 && dmgItems[0].getItem().isRepairable()) {
 			Item theItem = dmgItems[0].getItem();
 			int var13 = theItem.getMaxDamage() - dmgItems[0].getItemDamage();
 			int var8 = theItem.getMaxDamage() - dmgItems[1].getItemDamage();
@@ -307,7 +310,7 @@ public final class ItemHelper {
 					return recipe.getCraftingResult(inv);
 				}
 			}
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -488,7 +491,7 @@ public final class ItemHelper {
 	// GEARS{
 	public static boolean addGearRecipe(ItemStack gear, String ingot) {
 
-		if (gear == null || !oreNameExists(ingot)) {
+		if (gear.isEmpty() || !oreNameExists(ingot)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron"));
@@ -497,7 +500,7 @@ public final class ItemHelper {
 
 	public static boolean addGearRecipe(ItemStack gear, String ingot, String center) {
 
-		if (gear == null || !oreNameExists(ingot) || !oreNameExists(center)) {
+		if (gear.isEmpty() || !oreNameExists(ingot) || !oreNameExists(center)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
@@ -506,7 +509,7 @@ public final class ItemHelper {
 
 	public static boolean addGearRecipe(ItemStack gear, String ingot, ItemStack center) {
 
-		if (gear == null | center == null || !oreNameExists(ingot)) {
+		if (gear.isEmpty() | center.isEmpty() || !oreNameExists(ingot)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
@@ -515,7 +518,7 @@ public final class ItemHelper {
 
 	public static boolean addGearRecipe(ItemStack gear, ItemStack ingot, String center) {
 
-		if (gear == null | ingot == null || !oreNameExists(center)) {
+		if (gear.isEmpty() | ingot.isEmpty() || !oreNameExists(center)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', center));
@@ -524,7 +527,7 @@ public final class ItemHelper {
 
 	public static boolean addGearRecipe(ItemStack gear, ItemStack ingot, ItemStack center) {
 
-		if (gear == null | ingot == null | center == null) {
+		if (gear.isEmpty() | ingot.isEmpty() | center.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addRecipe(cloneStack(gear), " X ", "XIX", " X ", 'X', cloneStack(ingot, 1), 'I', cloneStack(center, 1));
@@ -534,7 +537,7 @@ public final class ItemHelper {
 	// rotated
 	public static boolean addRotatedGearRecipe(ItemStack gear, String ingot, String center) {
 
-		if (gear == null || !oreNameExists(ingot) || !oreNameExists(center)) {
+		if (gear.isEmpty() || !oreNameExists(ingot) || !oreNameExists(center)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
@@ -543,7 +546,7 @@ public final class ItemHelper {
 
 	public static boolean addRotatedGearRecipe(ItemStack gear, String ingot, ItemStack center) {
 
-		if (gear == null | center == null || !oreNameExists(ingot)) {
+		if (gear.isEmpty() | center.isEmpty() || !oreNameExists(ingot)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
@@ -552,7 +555,7 @@ public final class ItemHelper {
 
 	public static boolean addRotatedGearRecipe(ItemStack gear, ItemStack ingot, String center) {
 
-		if (gear == null | ingot == null || !oreNameExists(center)) {
+		if (gear.isEmpty() | ingot.isEmpty() || !oreNameExists(center)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(gear, "X X", " I ", "X X", 'X', ingot, 'I', center));
@@ -561,7 +564,7 @@ public final class ItemHelper {
 
 	public static boolean addRotatedGearRecipe(ItemStack gear, ItemStack ingot, ItemStack center) {
 
-		if (gear == null | ingot == null | center == null) {
+		if (gear.isEmpty() | ingot.isEmpty() | center.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addRecipe(cloneStack(gear), "X X", " I ", "X X", 'X', cloneStack(ingot, 1), 'I', cloneStack(center, 1));
@@ -573,7 +576,7 @@ public final class ItemHelper {
 	// SURROUND{
 	public static boolean addSurroundRecipe(ItemStack out, ItemStack one, ItemStack eight) {
 
-		if (out == null | one == null | eight == null) {
+		if (out.isEmpty() | one.isEmpty() | eight.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addRecipe(cloneStack(out), "XXX", "XIX", "XXX", 'X', cloneStack(eight, 1), 'I', cloneStack(one, 1));
@@ -582,7 +585,7 @@ public final class ItemHelper {
 
 	public static boolean addSurroundRecipe(ItemStack out, String one, ItemStack eight) {
 
-		if (out == null | eight == null || !oreNameExists(one)) {
+		if (out.isEmpty() | eight.isEmpty() || !oreNameExists(one)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
@@ -591,7 +594,7 @@ public final class ItemHelper {
 
 	public static boolean addSurroundRecipe(ItemStack out, ItemStack one, String eight) {
 
-		if (out == null | one == null || !oreNameExists(eight)) {
+		if (out.isEmpty() | one.isEmpty() || !oreNameExists(eight)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
@@ -600,7 +603,7 @@ public final class ItemHelper {
 
 	public static boolean addSurroundRecipe(ItemStack out, String one, String eight) {
 
-		if (out == null || !oreNameExists(one) || !oreNameExists(eight)) {
+		if (out.isEmpty() || !oreNameExists(one) || !oreNameExists(eight)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XIX", "XXX", 'X', eight, 'I', one));
@@ -612,7 +615,7 @@ public final class ItemHelper {
 	// FENCES{
 	public static boolean addFenceRecipe(ItemStack out, ItemStack in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addRecipe(cloneStack(out), "XXX", "XXX", 'X', cloneStack(in, 1));
@@ -621,7 +624,7 @@ public final class ItemHelper {
 
 	public static boolean addFenceRecipe(ItemStack out, String in) {
 
-		if (out == null || !oreNameExists(in)) {
+		if (out.isEmpty() || !oreNameExists(in)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(out, "XXX", "XXX", 'X', in));
@@ -633,7 +636,7 @@ public final class ItemHelper {
 	// REVERSE STORAGE{
 	public static boolean addReverseStorageRecipe(ItemStack nine, String one) {
 
-		if (nine == null || !oreNameExists(one)) {
+		if (nine.isEmpty() || !oreNameExists(one)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapelessRecipe(cloneStack(nine, 9), one));
@@ -642,7 +645,7 @@ public final class ItemHelper {
 
 	public static boolean addReverseStorageRecipe(ItemStack nine, ItemStack one) {
 
-		if (nine == null | one == null) {
+		if (nine.isEmpty() | one.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addShapelessRecipe(cloneStack(nine, 9), cloneStack(one, 1));
@@ -651,7 +654,7 @@ public final class ItemHelper {
 
 	public static boolean addSmallReverseStorageRecipe(ItemStack four, String one) {
 
-		if (four == null || !oreNameExists(one)) {
+		if (four.isEmpty() || !oreNameExists(one)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapelessRecipe(cloneStack(four, 4), one));
@@ -660,7 +663,7 @@ public final class ItemHelper {
 
 	public static boolean addSmallReverseStorageRecipe(ItemStack four, ItemStack one) {
 
-		if (four == null | one == null) {
+		if (four.isEmpty() | one.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addShapelessRecipe(cloneStack(four, 4), cloneStack(one, 1));
@@ -672,7 +675,7 @@ public final class ItemHelper {
 	// STORAGE{
 	public static boolean addStorageRecipe(ItemStack one, String nine) {
 
-		if (one == null || !oreNameExists(nine)) {
+		if (one.isEmpty() || !oreNameExists(nine)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapelessRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine));
@@ -681,7 +684,7 @@ public final class ItemHelper {
 
 	public static boolean addStorageRecipe(ItemStack one, ItemStack nine) {
 
-		if (one == null | nine == null) {
+		if (one.isEmpty() | nine.isEmpty()) {
 			return false;
 		}
 		nine = cloneStack(nine, 1);
@@ -691,7 +694,7 @@ public final class ItemHelper {
 
 	public static boolean addSmallStorageRecipe(ItemStack one, String four) {
 
-		if (one == null || !oreNameExists(four)) {
+		if (one.isEmpty() || !oreNameExists(four)) {
 			return false;
 		}
 		GameRegistry.addRecipe(ShapedRecipe(one, "XX", "XX", 'X', four));
@@ -700,7 +703,7 @@ public final class ItemHelper {
 
 	public static boolean addSmallStorageRecipe(ItemStack one, ItemStack four) {
 
-		if (one == null | four == null) {
+		if (one.isEmpty() | four.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addRecipe(cloneStack(one), "XX", "XX", 'X', cloneStack(four, 1));
@@ -732,7 +735,7 @@ public final class ItemHelper {
 	// SMELTING{
 	public static boolean addSmelting(ItemStack out, Item in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in == null) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0);
@@ -741,7 +744,7 @@ public final class ItemHelper {
 
 	public static boolean addSmelting(ItemStack out, Block in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in == null) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0);
@@ -750,7 +753,7 @@ public final class ItemHelper {
 
 	public static boolean addSmelting(ItemStack out, ItemStack in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in.isEmpty()) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0);
@@ -759,7 +762,7 @@ public final class ItemHelper {
 
 	public static boolean addSmelting(ItemStack out, Item in, float XP) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in == null) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), XP);
@@ -768,7 +771,7 @@ public final class ItemHelper {
 
 	public static boolean addSmelting(ItemStack out, Block in, float XP) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in == null) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), XP);
@@ -777,7 +780,7 @@ public final class ItemHelper {
 
 	public static boolean addSmelting(ItemStack out, ItemStack in, float XP) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in.isEmpty()) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), XP);
@@ -786,7 +789,7 @@ public final class ItemHelper {
 
 	public static boolean addWeakSmelting(ItemStack out, Item in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in == null) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0.1f);
@@ -795,7 +798,7 @@ public final class ItemHelper {
 
 	public static boolean addWeakSmelting(ItemStack out, Block in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in == null) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0.1f);
@@ -804,7 +807,7 @@ public final class ItemHelper {
 
 	public static boolean addWeakSmelting(ItemStack out, ItemStack in) {
 
-		if (out == null | in == null) {
+		if (out.isEmpty() | in.isEmpty()) {
 			return false;
 		}
 		FurnaceRecipes.instance().addSmeltingRecipe(cloneStack(in, 1), cloneStack(out), 0.1f);
@@ -815,7 +818,7 @@ public final class ItemHelper {
 
 	public static boolean addTwoWayConversionRecipe(ItemStack a, ItemStack b) {
 
-		if (a == null | b == null) {
+		if (a.isEmpty() | b.isEmpty()) {
 			return false;
 		}
 		GameRegistry.addShapelessRecipe(cloneStack(a, 1), cloneStack(b, 1));
@@ -964,12 +967,12 @@ public final class ItemHelper {
 
 	public static boolean isPlayerHoldingNothing(EntityPlayer player) {
 
-		return getHeldStack(player) == null;
+		return getHeldStack(player).isEmpty();
 	}
 
 	public static Item getItemFromStack(ItemStack theStack) {
 
-		return theStack == null ? null : theStack.getItem();
+		return theStack.isEmpty() ? null : theStack.getItem();
 	}
 
 	public static boolean areItemsEqual(Item itemA, Item itemB) {
@@ -1024,7 +1027,7 @@ public final class ItemHelper {
 	 */
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA == null || stackB == null) {
+		if (stackA.isEmpty() || stackB.isEmpty()) {
 			return false;
 		}
 		return areItemsEqual(stackA.getItem(), stackB.getItem());
@@ -1085,7 +1088,7 @@ public final class ItemHelper {
 
 		if (itemsEqualForCrafting(checked, source)) {
 			return true;
-		} else if (output != null && isBlacklist(output)) {
+		} else if (!output.isEmpty() && isBlacklist(output)) {
 			return false;
 		} else if (oreDict == null || oreDict.equals("Unknown")) {
 			return false;
@@ -1149,9 +1152,9 @@ public final class ItemHelper {
 				continue;
 			}
 			visited[i] = true;
-			curStack = ItemStack.loadItemStackFromNBT(tag);
+			curStack = new ItemStack(tag);
 
-			if (curStack == null) {
+			if (curStack.isEmpty()) {
 				continue;
 			}
 			containedItems.add(curStack);
@@ -1162,13 +1165,13 @@ public final class ItemHelper {
 				if (visited[j] || slot2 < minSlot || slot2 > maxSlot) {
 					continue;
 				}
-				curStack2 = ItemStack.loadItemStackFromNBT(tag2);
+				curStack2 = new ItemStack(tag2);
 
-				if (curStack2 == null) {
+				if (curStack.isEmpty()) {
 					continue;
 				}
 				if (itemsIdentical(curStack, curStack2)) {
-					curStack.stackSize += curStack2.stackSize;
+					curStack.grow(curStack2.getCount());
 					visited[j] = true;
 				}
 			}
@@ -1179,13 +1182,13 @@ public final class ItemHelper {
 		for (ItemStack item : containedItems) {
 			int maxStackSize = item.getMaxStackSize();
 
-			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-				list.add("    " + StringHelper.ORANGE + item.stackSize + " " + StringHelper.getItemName(item));
+			if (!StringHelper.displayStackCount || item.getCount() < maxStackSize || maxStackSize == 1) {
+				list.add("    " + StringHelper.ORANGE + item.getCount() + " " + StringHelper.getItemName(item));
 			} else {
-				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
+				if (item.getCount() % maxStackSize != 0) {
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.getCount() / maxStackSize + "+" + item.getCount() % maxStackSize + " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.getCount() / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
@@ -1212,10 +1215,10 @@ public final class ItemHelper {
 			if (!tag.hasKey("Slot" + i)) {
 				continue;
 			}
-			curStack = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + i));
+			curStack = new ItemStack(tag.getCompoundTag("Slot" + i));
 			visited[i] = true;
 
-			if (curStack == null) {
+			if (curStack.isEmpty()) {
 				continue;
 			}
 			containedItems.add(curStack);
@@ -1226,13 +1229,13 @@ public final class ItemHelper {
 				if (!tag.hasKey("Slot" + j)) {
 					continue;
 				}
-				curStack2 = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + j));
+				curStack2 = new ItemStack(tag.getCompoundTag("Slot" + j));
 
-				if (curStack2 == null) {
+				if (curStack2.isEmpty()) {
 					continue;
 				}
 				if (itemsIdentical(curStack, curStack2)) {
-					curStack.stackSize += curStack2.stackSize;
+					curStack.grow(curStack2.getCount());
 					visited[j] = true;
 				}
 			}
@@ -1245,13 +1248,13 @@ public final class ItemHelper {
 		for (ItemStack item : containedItems) {
 			int maxStackSize = item.getMaxStackSize();
 
-			if (!StringHelper.displayStackCount || item.stackSize < maxStackSize || maxStackSize == 1) {
-				list.add("    " + StringHelper.ORANGE + item.stackSize + " " + StringHelper.getItemName(item));
+			if (!StringHelper.displayStackCount || item.getCount() < maxStackSize || maxStackSize == 1) {
+				list.add("    " + StringHelper.ORANGE + item.getCount() + " " + StringHelper.getItemName(item));
 			} else {
-				if (item.stackSize % maxStackSize != 0) {
-					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + "+" + item.stackSize % maxStackSize + " " + StringHelper.getItemName(item));
+				if (item.getCount() % maxStackSize != 0) {
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.getCount() / maxStackSize + "+" + item.getCount() % maxStackSize + " " + StringHelper.getItemName(item));
 				} else {
-					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.stackSize / maxStackSize + " " + StringHelper.getItemName(item));
+					list.add("    " + StringHelper.ORANGE + maxStackSize + "x" + item.getCount() / maxStackSize + " " + StringHelper.getItemName(item));
 				}
 			}
 		}
@@ -1267,13 +1270,13 @@ public final class ItemHelper {
 	 */
 	public static boolean areItemStacksEqualIgnoreTags(ItemStack stackA, ItemStack stackB, String... nbtTagsToIgnore) {
 
-		if (stackA == null && stackB == null) {
+		if (stackA.isEmpty() && stackB.isEmpty()) {
 			return true;
 		}
-		if (stackA == null && stackB != null) {
+		if (stackA.isEmpty() && !stackB.isEmpty()) {
 			return false;
 		}
-		if (stackA != null && stackB == null) {
+		if (!stackA.isEmpty() && stackB.isEmpty()) {
 			return false;
 		}
 		if (stackA.getItem() != stackB.getItem()) {
@@ -1282,7 +1285,7 @@ public final class ItemHelper {
 		if (stackA.getItemDamage() != stackB.getItemDamage()) {
 			return false;
 		}
-		if (stackA.stackSize != stackB.stackSize) {
+		if (stackA.getCount() != stackB.getCount()) {
 			return false;
 		}
 		if (stackA.getTagCompound() == null && stackB.getTagCompound() == null) {

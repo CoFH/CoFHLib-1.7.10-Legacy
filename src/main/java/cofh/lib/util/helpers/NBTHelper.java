@@ -17,7 +17,7 @@ public final class NBTHelper {
 
 	public static NBTTagCompound getTagCompound(ItemStack stack) {
 
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return null;
 		}
 		if (stack.getTagCompound() == null) {
@@ -28,7 +28,7 @@ public final class NBTHelper {
 
 	public static boolean keyExists(ItemStack stack, String key) {
 
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 		return getTagCompound(stack).hasKey(key);

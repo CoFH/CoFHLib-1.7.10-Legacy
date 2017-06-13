@@ -87,7 +87,7 @@ public class WorldGenMinableCluster extends WorldGenerator {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		int blocks = MathHelper.clamp_int(genClusterSize.intValue(world, rand, pos), 1, 42);
+		int blocks = MathHelper.clamp(genClusterSize.intValue(world, rand, pos), 1, 42);
 		if (blocks < 4) { // HACK: at 1 and 2 no ores are ever generated. at 3 only 1/3 veins generate
 			return generateTiny(world, rand, blocks, x, y, z);
 		}
@@ -118,13 +118,13 @@ public class WorldGenMinableCluster extends WorldGenerator {
 			float hMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1F) * size + 1F) * 0.5F;
 			float vMod = ((MathHelper.sin((i * (float) Math.PI) / blocks) + 1F) * size + 1F) * 0.5F;
 
-			int xStart = MathHelper.floor_float(xCenter - hMod);
-			int yStart = MathHelper.floor_float(yCenter - vMod);
-			int zStart = MathHelper.floor_float(zCenter - hMod);
+			int xStart = MathHelper.floor(xCenter - hMod);
+			int yStart = MathHelper.floor(yCenter - vMod);
+			int zStart = MathHelper.floor(zCenter - hMod);
 
-			int xStop = MathHelper.floor_float(xCenter + hMod);
-			int yStop = MathHelper.floor_float(yCenter + vMod);
-			int zStop = MathHelper.floor_float(zCenter + hMod);
+			int xStop = MathHelper.floor(xCenter + hMod);
+			int yStop = MathHelper.floor(yCenter + vMod);
+			int zStop = MathHelper.floor(zCenter + hMod);
 
 			for (int blockX = xStart; blockX <= xStop; blockX++) {
 				float xDistSq = ((blockX + .5F) - xCenter) / hMod;

@@ -17,7 +17,7 @@ public class SlotAcceptValid extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && this.inventory.isItemValidForSlot(this.slotNumber, stack);
+		return !stack.isEmpty() && this.inventory.isItemValidForSlot(this.slotNumber, stack);
 	}
 
 }

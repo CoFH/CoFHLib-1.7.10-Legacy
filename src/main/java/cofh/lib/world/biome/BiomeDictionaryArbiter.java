@@ -7,37 +7,30 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class BiomeDictionaryArbiter {
 
-	private static HashMap<Biome, Type[]> types = new HashMap<>();
-	private static HashMap<Type, Biome[]> biomes = new HashMap<>();
+	private static HashMap<Biome, Set<Type>> types = new HashMap<>();
+	private static HashMap<Type, Set<Biome>> biomes = new HashMap<>();
 	private static boolean loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
 
-	public static Type[] getTypesForBiome(Biome biome) {
+	public static Set<Type> getTypesForBiome(Biome biome) {
 
 		if (loaded) {
-			Type[] r = types.get(biome);
-			if (r == null) {
-				types.put(biome, r = BiomeDictionary.getTypesForBiome(biome));
-			}
-			return r;
+			return types.computeIfAbsent(biome, BiomeDictionary::getTypes);
 		}
 		loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
-		return BiomeDictionary.getTypesForBiome(biome);
+		return BiomeDictionary.getTypes(biome);
 	}
 
-	public static Biome[] getTypesForBiome(Type type) {
+	public static Set<Biome> getBiomesForType(Type type) {
 
 		if (loaded) {
-			Biome[] r = biomes.get(type);
-			if (r == null) {
-				biomes.put(type, r = BiomeDictionary.getBiomesForType(type));
-			}
-			return r;
+			return biomes.computeIfAbsent(type, BiomeDictionary::getBiomes);
 		}
 		loaded = Loader.instance().isInState(LoaderState.AVAILABLE);
-		return BiomeDictionary.getBiomesForType(type);
+		return BiomeDictionary.getBiomes(type);
 	}
 
 	private BiomeDictionaryArbiter() {

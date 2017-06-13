@@ -1,6 +1,7 @@
 package cofh.lib.gui.container;
 
 import cofh.api.item.IInventoryContainerItem;
+import cofh.lib.util.helpers.InventoryHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -8,6 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+
+import java.util.Arrays;
 
 public class InventoryContainerItemWrapper implements IInventory {
 
@@ -28,6 +31,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 		stack = itemstack;
 		inventoryItem = (IInventoryContainerItem) stack.getItem();
 		inventory = new ItemStack[getSizeInventory()];
+		Arrays.fill(inventory, ItemStack.EMPTY);
 
 		loadInventory();
 		markDirty();
@@ -60,11 +64,11 @@ public class InventoryContainerItemWrapper implements IInventory {
 
 		for (int i = inventory.length; i-- > 0; ) {
 			if (tag.hasKey("Slot" + i)) {
-				inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("Slot" + i));
+				inventory[i] = new ItemStack(tag.getCompoundTag("Slot" + i));
 			} else if (tag.hasKey("slot" + i)) {
-				inventory[i] = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("slot" + i));
+				inventory[i] = new ItemStack(tag.getCompoundTag("slot" + i));
 			} else {
-				inventory[i] = null;
+				inventory[i] = ItemStack.EMPTY;
 			}
 		}
 	}
@@ -72,7 +76,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	protected void saveStacks() {
 
 		for (int i = inventory.length; i-- > 0; ) {
-			if (inventory[i] == null) {
+			if (inventory[i].isEmpty()) {
 				tag.removeTag("Slot" + i);
 			} else {
 				tag.setTag("Slot" + i, inventory[i].writeToNBT(new NBTTagCompound()));
@@ -113,6 +117,11 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return InventoryHelper.isEmpty(inventory);
+	}
+
+	@Override
 	public ItemStack getStackInSlot(int i) {
 
 		return inventory[i];
@@ -122,13 +131,13 @@ public class InventoryContainerItemWrapper implements IInventory {
 	public ItemStack decrStackSize(int i, int j) {
 
 		ItemStack s = inventory[i];
-		if (s == null) {
-			return null;
+		if (s.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		ItemStack r = s.splitStack(j);
-		if (s.stackSize <= 0) {
-			inventory[i] = null;
-			r.stackSize += s.stackSize;
+		if (s.getCount() <= 0) {
+			inventory[i] = ItemStack.EMPTY;
+			r.grow(s.getCount());
 		}
 		return r;
 	}
@@ -142,13 +151,13 @@ public class InventoryContainerItemWrapper implements IInventory {
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 
-		if (stack != null && stack.getItem() instanceof IInventoryContainerItem) {
+		if (!stack.isEmpty() && stack.getItem() instanceof IInventoryContainerItem) {
 			return ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack) <= 0;
 		}
 		return true;
@@ -201,7 +210,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 
 		return true;
 	}

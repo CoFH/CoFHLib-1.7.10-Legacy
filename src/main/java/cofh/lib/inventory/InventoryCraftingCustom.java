@@ -40,7 +40,7 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 
-		return slot >= this.getSizeInventory() ? null : masterInv.getStackInSlot(invOffset + slot);
+		return slot >= this.getSizeInventory() ? ItemStack.EMPTY : masterInv.getStackInSlot(invOffset + slot);
 	}
 
 	@Override
@@ -50,42 +50,42 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 			int k = row + column * this.inventoryWidth;
 			return this.getStackInSlot(k);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 
-		if (masterInv.getStackInSlot(invOffset + slot) != null) {
+		if (!masterInv.getStackInSlot(invOffset + slot).isEmpty()) {
 			ItemStack stack = masterInv.getStackInSlot(invOffset + slot);
-			masterInv.setInventorySlotContents(invOffset + slot, null);
+			masterInv.setInventorySlotContents(invOffset + slot, ItemStack.EMPTY);
 			return stack;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
 
-		if (masterInv.getStackInSlot(invOffset + slot) != null) {
+		if (!masterInv.getStackInSlot(invOffset + slot).isEmpty()) {
 			ItemStack stack;
 
-			if (masterInv.getStackInSlot(invOffset + slot).stackSize <= amount) {
+			if (masterInv.getStackInSlot(invOffset + slot).getCount() <= amount) {
 				stack = masterInv.getStackInSlot(invOffset + slot);
-				masterInv.setInventorySlotContents(invOffset + slot, null);
+				masterInv.setInventorySlotContents(invOffset + slot, ItemStack.EMPTY);
 				this.eventHandler.onCraftMatrixChanged(this);
 				return stack;
 			} else {
 				stack = masterInv.getStackInSlot(invOffset + slot).splitStack(amount);
 
-				if (masterInv.getStackInSlot(invOffset + slot).stackSize <= 0) {
-					masterInv.setInventorySlotContents(invOffset + slot, null);
+				if (masterInv.getStackInSlot(invOffset + slot).getCount() <= 0) {
+					masterInv.setInventorySlotContents(invOffset + slot, ItemStack.EMPTY);
 				}
 				this.eventHandler.onCraftMatrixChanged(this);
 				return stack;
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class InventoryCraftingCustom extends InventoryCrafting {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 
 		return true;
 	}

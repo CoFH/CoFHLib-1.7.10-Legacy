@@ -20,8 +20,8 @@ public class WeightedRandomItemStack extends WeightedRandom.Item {
 
 	public ItemStack getStack() {
 
-		if (stack == null) {
-			return null;
+		if (stack.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		return stack.copy();
 	}

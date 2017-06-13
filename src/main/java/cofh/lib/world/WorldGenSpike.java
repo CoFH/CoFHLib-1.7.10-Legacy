@@ -66,13 +66,13 @@ public class WorldGenSpike extends WorldGenerator {
 			} else {
 				layerSize = largeSpikeFillerSize;
 			}
-			int width = MathHelper.ceiling_float_int(layerSize);
+			int width = MathHelper.ceil(layerSize);
 
 			for (int x = -width; x <= width; ++x) {
-				float xDist = MathHelper.abs_int(x) - 0.25F;
+				float xDist = MathHelper.abs(x) - 0.25F;
 
 				for (int z = -width; z <= width; ++z) {
-					float zDist = MathHelper.abs_int(z) - 0.25F;
+					float zDist = MathHelper.abs(z) - 0.25F;
 
 					if ((x == 0 && z == 0 || xDist * xDist + zDist * zDist <= layerSize * layerSize) && (x != -width && x != width && z != -width && z != width || rand.nextFloat() <= 0.75F)) {
 

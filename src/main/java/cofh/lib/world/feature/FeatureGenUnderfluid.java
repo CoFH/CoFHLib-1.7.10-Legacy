@@ -14,9 +14,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class FeatureGenUnderfluid extends FeatureBase {
 
@@ -24,15 +22,14 @@ public class FeatureGenUnderfluid extends FeatureBase {
 	final WorldGenerator worldGen;
 	final INumberProvider count;
 	final List<WeightedRandomBlock> matList;
-	@Deprecated
-	final int[] fluidList;
+	final String[] fluidList;
 
 	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		this(name, worldGen, matList, new ConstantProvider(count), biomeRes, regen, dimRes);
 	}
 
-	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int[] fluidList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, String[] fluidList, int count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		this(name, worldGen, matList, fluidList, new ConstantProvider(count), biomeRes, regen, dimRes);
 	}
@@ -47,14 +44,13 @@ public class FeatureGenUnderfluid extends FeatureBase {
 		fluidList = null;
 	}
 
-	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, int[] fluidList, INumberProvider count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+	public FeatureGenUnderfluid(String name, WorldGenerator worldGen, List<WeightedRandomBlock> matList, String[] fluidList, INumberProvider count, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 		super(name, biomeRes, regen, dimRes);
 		this.worldGen = worldGen;
 		this.count = count;
 		this.matList = matList;
 		water = false;
-		Arrays.sort(fluidList);
 		this.fluidList = fluidList;
 	}
 
@@ -86,12 +82,12 @@ public class FeatureGenUnderfluid extends FeatureBase {
 					}
 				} else {
 					Fluid fluid = FluidHelper.lookupFluidForBlock(state.getBlock());
-					if (fluid != null && Arrays.binarySearch(fluidList, FluidRegistry.getFluidID(fluid)) >= 0) {
+					if (fluid != null && Arrays.binarySearch(fluidList, fluid.getName()) >= 0) {
 						continue;
 					}
 
 					fluid = FluidHelper.lookupFluidForBlock(world.getBlockState(new BlockPos(x, y + 1, z)).getBlock());
-					if (fluid == null || Arrays.binarySearch(fluidList, FluidRegistry.getFluidID(fluid)) < 0) {
+					if (fluid == null || Arrays.binarySearch(fluidList, fluid.getName()) < 0) {
 						continue;
 					}
 				}

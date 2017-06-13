@@ -32,13 +32,13 @@ public class SlotInvisible extends Slot {
 	@Override
 	public ItemStack getStack() {
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public ItemStack decrStackSize(int par1) {
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

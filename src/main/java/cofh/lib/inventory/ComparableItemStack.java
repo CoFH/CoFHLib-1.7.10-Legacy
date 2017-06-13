@@ -2,6 +2,7 @@ package cofh.lib.inventory;
 
 import cofh.lib.util.ComparableItem;
 import cofh.lib.util.helpers.ItemHelper;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -27,7 +28,7 @@ public class ComparableItemStack extends ComparableItem {
 		if (ItemHelper.oreNameExists(oreName)) {
 			return ItemHelper.oreProxy.getOre(oreName);
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	public ComparableItemStack(String oreName) {
@@ -38,8 +39,8 @@ public class ComparableItemStack extends ComparableItem {
 	public ComparableItemStack(ItemStack stack) {
 
 		super(stack);
-		if (stack != null) {
-			stackSize = stack.stackSize;
+		if (!stack.isEmpty()) {
+			stackSize = stack.getCount();
 			oreID = ItemHelper.oreProxy.getOreID(stack);
 		}
 	}
@@ -61,13 +62,13 @@ public class ComparableItemStack extends ComparableItem {
 	@Override
 	public ComparableItemStack set(ItemStack stack) {
 
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			item = stack.getItem();
 			metadata = ItemHelper.getItemDamage(stack);
-			stackSize = stack.stackSize;
+			stackSize = stack.getCount();
 			oreID = ItemHelper.oreProxy.getOreID(stack);
 		} else {
-			item = null;
+			item = Items.AIR;
 			metadata = -1;
 			stackSize = -1;
 			oreID = -1;
@@ -83,7 +84,7 @@ public class ComparableItemStack extends ComparableItem {
 			stackSize = stack.stackSize;
 			oreID = stack.oreID;
 		} else {
-			item = null;
+			item = Items.AIR;
 			metadata = -1;
 			stackSize = -1;
 			oreID = -1;
@@ -103,12 +104,12 @@ public class ComparableItemStack extends ComparableItem {
 
 	public boolean isStackValid() {
 
-		return item != null;
+		return item != Items.AIR;
 	}
 
 	public ItemStack toItemStack() {
 
-		return item != null ? new ItemStack(item, stackSize, metadata) : null;
+		return item != Items.AIR ? new ItemStack(item, stackSize, metadata) : ItemStack.EMPTY;
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class SlotAcceptAssignable extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && clazz.isInstance(stack.getItem());
+		return !stack.isEmpty() && clazz.isInstance(stack.getItem());
 	}
 
 }

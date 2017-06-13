@@ -20,7 +20,7 @@ public class ThermalFoundationHelper {
 	/* Lexicon */
 	public static void addBlacklistEntry(ItemStack entry) {
 
-		if (entry == null) {
+		if (entry.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -33,7 +33,7 @@ public class ThermalFoundationHelper {
 
 	public static void removeBlacklistEntry(ItemStack entry) {
 
-		if (entry == null) {
+		if (entry.isEmpty()) {
 			return;
 		}
 		NBTTagCompound toSend = new NBTTagCompound();

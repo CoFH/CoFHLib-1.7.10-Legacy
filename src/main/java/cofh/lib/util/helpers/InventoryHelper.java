@@ -33,7 +33,7 @@ public class InventoryHelper {
 
 		ItemStack[] inventoryCopy = new ItemStack[inventory.length];
 		for (int i = 0; i < inventory.length; i++) {
-			inventoryCopy[i] = inventory[i] == null ? null : inventory[i].copy();
+			inventoryCopy[i] = inventory[i].isEmpty() ? ItemStack.EMPTY : inventory[i].copy();
 		}
 		return inventoryCopy;
 	}
@@ -48,22 +48,22 @@ public class InventoryHelper {
 	 */
 	public static boolean addItemStackToInventory(ItemStack[] inventory, ItemStack stack, int startIndex, int endIndex) {
 
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return true;
 		}
 		int openSlot = -1;
 		for (int i = startIndex; i <= endIndex; i++) {
-			if (ItemHelper.itemsEqualForCrafting(stack, inventory[i]) && inventory[i].getMaxStackSize() > inventory[i].stackSize) {
-				int hold = inventory[i].getMaxStackSize() - inventory[i].stackSize;
-				if (hold >= stack.stackSize) {
-					inventory[i].stackSize += stack.stackSize;
-					stack = null;
+			if (ItemHelper.itemsEqualForCrafting(stack, inventory[i]) && inventory[i].getMaxStackSize() > inventory[i].getCount()) {
+				int hold = inventory[i].getMaxStackSize() - inventory[i].getCount();
+				if (hold >= stack.getCount()) {
+					inventory[i].grow(stack.getCount());
+					stack = ItemStack.EMPTY;
 					return true;
 				} else {
-					stack.stackSize -= hold;
-					inventory[i].stackSize += hold;
+					stack.shrink(hold);
+					inventory[i].grow(hold);
 				}
-			} else if (inventory[i] == null && openSlot == -1) {
+			} else if (inventory[i].isEmpty() && openSlot == -1) {
 				openSlot = i;
 			}
 		}
@@ -104,8 +104,8 @@ public class InventoryHelper {
 	@Deprecated
 	public static ItemStack simulateInsertItemStackIntoInventory(IInventory inventory, ItemStack stack, EnumFacing side) {
 
-		if (stack == null || inventory == null) {
-			return null;
+		if (stack.isEmpty() || inventory == null) {
+			return ItemStack.EMPTY;
 		}
 		if (inventory instanceof ISidedInventory) {
 			ISidedInventory sidedInv = (ISidedInventory) inventory;
@@ -114,7 +114,7 @@ public class InventoryHelper {
 			if (slots == null) {
 				return stack;
 			}
-			for (int i = 0; i < slots.length && stack != null; i++) {
+			for (int i = 0; i < slots.length && !stack.isEmpty(); i++) {
 				if (sidedInv.canInsertItem(slots[i], stack, side)) {
 					ItemStack existingStack = inventory.getStackInSlot(slots[i]);
 					if (ItemHelper.itemsEqualWithMetadata(stack, existingStack, true)) {
@@ -122,21 +122,21 @@ public class InventoryHelper {
 					}
 				}
 			}
-			for (int i = 0; i < slots.length && stack != null; i++) {
-				if (inventory.getStackInSlot(slots[i]) == null && sidedInv.canInsertItem(slots[i], stack, side)) {
+			for (int i = 0; i < slots.length && !stack.isEmpty(); i++) {
+				if (inventory.getStackInSlot(slots[i]).isEmpty() && sidedInv.canInsertItem(slots[i], stack, side)) {
 					stack = simulateAddToEmptyInventorySlot(sidedInv, slots[i], stack);
 				}
 			}
 		} else {
 			int invSize = inventory.getSizeInventory();
-			for (int i = 0; i < invSize && stack != null; i++) {
+			for (int i = 0; i < invSize && !stack.isEmpty(); i++) {
 				ItemStack existingStack = inventory.getStackInSlot(i);
 				if (ItemHelper.itemsEqualWithMetadata(stack, existingStack, true)) {
 					stack = simulateAddToOccupiedInventorySlot(inventory, i, stack, existingStack);
 				}
 			}
-			for (int i = 0; i < invSize && stack != null; i++) {
-				if (inventory.getStackInSlot(i) == null) {
+			for (int i = 0; i < invSize && !stack.isEmpty(); i++) {
+				if (inventory.getStackInSlot(i).isEmpty()) {
 					stack = simulateAddToEmptyInventorySlot(inventory, i, stack);
 				}
 			}
@@ -152,8 +152,8 @@ public class InventoryHelper {
 			return stack;
 		}
 		int stackLimit = inventory.getInventoryStackLimit();
-		inventory.setInventorySlotContents(slot, ItemHelper.cloneStack(stack, Math.min(stack.stackSize, stackLimit)));
-		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+		inventory.setInventorySlotContents(slot, ItemHelper.cloneStack(stack, Math.min(stack.getCount(), stackLimit)));
+		return stackLimit >= stack.getCount() ? ItemStack.EMPTY : stack.splitStack(stack.getCount() - stackLimit);
 	}
 
 	@Deprecated
@@ -162,16 +162,16 @@ public class InventoryHelper {
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
 
-		if (stack.stackSize + stackInSlot.stackSize > stackLimit) {
-			int stackDiff = stackLimit - stackInSlot.stackSize;
-			stackInSlot.stackSize = stackLimit;
-			stack.stackSize -= stackDiff;
+		if (stack.getCount() + stackInSlot.getCount() > stackLimit) {
+			int stackDiff = stackLimit - stackInSlot.getCount();
+			stackInSlot.setCount(stackLimit);
+			stack.shrink(stackDiff);
 			inventory.setInventorySlotContents(slot, stackInSlot);
 			return stack;
 		}
-		stackInSlot.stackSize += Math.min(stack.stackSize, stackLimit);
+		stackInSlot.grow(Math.min(stack.getCount(), stackLimit));
 		inventory.setInventorySlotContents(slot, stackInSlot);
-		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+		return stackLimit >= stack.getCount() ? ItemStack.EMPTY : stack.splitStack(stack.getCount() - stackLimit);
 	}
 
 	@Deprecated
@@ -179,19 +179,19 @@ public class InventoryHelper {
 
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 
-		if (existingStack.stackSize >= stackLimit) {
+		if (existingStack.getCount() >= stackLimit) {
 			return stack;
 		}
-		if (stack.stackSize + existingStack.stackSize > stackLimit) {
-			int stackDiff = stackLimit - existingStack.stackSize;
-			existingStack.stackSize = stackLimit;
-			stack.stackSize -= stackDiff;
+		if (stack.getCount() + existingStack.getCount() > stackLimit) {
+			int stackDiff = stackLimit - existingStack.getCount();
+			existingStack.setCount(stackLimit);
+			stack.shrink(stackDiff);
 			inventory.setInventorySlotContents(slot, existingStack);
 			return stack;
 		}
-		existingStack.stackSize += stack.stackSize;
+		existingStack.grow(stack.getCount());
 		inventory.setInventorySlotContents(slot, existingStack);
-		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+		return stackLimit >= stack.getCount() ? ItemStack.EMPTY : stack.splitStack(stack.getCount() - stackLimit);
 	}
 
 	public static ItemStack simulateAddToEmptyInventorySlot(IInventory inventory, int slot, ItemStack stack) {
@@ -200,7 +200,7 @@ public class InventoryHelper {
 			return stack;
 		}
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
-		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+		return stackLimit >= stack.getCount() ? ItemStack.EMPTY : stack.splitStack(stack.getCount() - stackLimit);
 	}
 
 	public static ItemStack simulateAddToOccupiedInventorySlot(IInventory inventory, int slot, ItemStack stack) {
@@ -208,25 +208,25 @@ public class InventoryHelper {
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 		ItemStack stackInSlot = inventory.getStackInSlot(slot);
 
-		if (stack.stackSize + stackInSlot.stackSize > stackLimit) {
-			stack.stackSize -= stackLimit - stackInSlot.stackSize;
+		if (stack.getCount() + stackInSlot.getCount() > stackLimit) {
+			stack.shrink(stackLimit - stackInSlot.getCount());
 			return stack;
 		}
-		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+		return stackLimit >= stack.getCount() ? ItemStack.EMPTY : stack.splitStack(stack.getCount() - stackLimit);
 	}
 
 	public static ItemStack simulateAddToOccupiedInventorySlot(IInventory inventory, int slot, ItemStack stack, ItemStack existingStack) {
 
 		int stackLimit = Math.min(inventory.getInventoryStackLimit(), stack.getMaxStackSize());
 
-		if (existingStack.stackSize >= stackLimit) {
+		if (existingStack.getCount() >= stackLimit) {
 			return stack;
 		}
-		if (stack.stackSize + existingStack.stackSize > stackLimit) {
-			stack.stackSize -= stackLimit - existingStack.stackSize;
+		if (stack.getCount() + existingStack.getCount() > stackLimit) {
+			stack.shrink(stackLimit - existingStack.getCount());
 			return stack;
 		}
-		return stackLimit >= stack.stackSize ? null : stack.splitStack(stack.stackSize - stackLimit);
+		return stackLimit >= stack.getCount() ? ItemStack.EMPTY : stack.splitStack(stack.getCount() - stackLimit);
 	}
 
 	public static boolean mergeItemStack(List<Slot> slots, ItemStack stack, int start, int length, boolean reverse) {
@@ -244,25 +244,25 @@ public class InventoryHelper {
 		ItemStack existingStack;
 
 		if (stack.isStackable()) {
-			while (stack.stackSize > 0 && (!r && i < length || r && i >= start)) {
+			while (stack.getCount() > 0 && (!r && i < length || r && i >= start)) {
 				slot = slots.get(i);
 				existingStack = slot.getStack();
 
-				if (existingStack != null) {
+				if (!existingStack.isEmpty()) {
 					int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
-					int rmv = Math.min(maxStack, stack.stackSize);
+					int rmv = Math.min(maxStack, stack.getCount());
 
 					if (slot.isItemValid(ItemHelper.cloneStack(stack, rmv)) && existingStack.getItem().equals(stack.getItem()) && (!stack.getHasSubtypes() || stack.getItemDamage() == existingStack.getItemDamage()) && ItemStack.areItemStackTagsEqual(stack, existingStack)) {
-						int existingSize = existingStack.stackSize + stack.stackSize;
+						int existingSize = existingStack.getCount() + stack.getCount();
 
 						if (existingSize <= maxStack) {
-							stack.stackSize = 0;
-							existingStack.stackSize = existingSize;
+							stack.setCount(0);
+							existingStack.setCount(existingSize);
 							slot.putStack(existingStack);
 							successful = true;
-						} else if (existingStack.stackSize < maxStack) {
-							stack.stackSize -= maxStack - existingStack.stackSize;
-							existingStack.stackSize = maxStack;
+						} else if (existingStack.getCount() < maxStack) {
+							stack.shrink(maxStack - existingStack.getCount());
+							existingStack.setCount(maxStack);
 							slot.putStack(existingStack);
 							successful = true;
 						}
@@ -273,16 +273,16 @@ public class InventoryHelper {
 			}
 		}
 
-		if (stack.stackSize > 0) {
+		if (stack.getCount() > 0) {
 			i = !r ? start : length - 1;
 
-			while (stack.stackSize > 0 && (!r && i < length || r && i >= start)) {
+			while (stack.getCount() > 0 && (!r && i < length || r && i >= start)) {
 				slot = slots.get(i);
 				existingStack = slot.getStack();
 
-				if (existingStack == null) {
+				if (existingStack.isEmpty()) {
 					int maxStack = Math.min(stack.getMaxStackSize(), slot.getSlotStackLimit());
-					int rmv = Math.min(maxStack, stack.stackSize);
+					int rmv = Math.min(maxStack, stack.getCount());
 
 					if (slot.isItemValid(ItemHelper.cloneStack(stack, rmv))) {
 						existingStack = stack.splitStack(rmv);
@@ -301,8 +301,8 @@ public class InventoryHelper {
 	/* HELPERS */
 	public static ItemStack addToInsertion(TileEntity tile, EnumFacing side, ItemStack stack) {
 
-		if (stack == null) {
-			return null;
+		if (stack.isEmpty()) {
+			return ItemStack.EMPTY;
 		}
 		if (hasItemHandlerCap(tile, side.getOpposite())) {
 			stack = insertStackIntoInventory(getItemHandlerCap(tile, side.getOpposite()), stack, false);
@@ -325,6 +325,15 @@ public class InventoryHelper {
 			return new InvWrapper(((IInventory) tileEntity));
 		}
 		return new EmptyHandler();
+	}
+
+	public static boolean isEmpty(ItemStack[] inventory) {
+		for (ItemStack stack : inventory) {
+			if (!stack.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
