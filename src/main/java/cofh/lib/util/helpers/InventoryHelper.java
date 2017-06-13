@@ -328,7 +328,6 @@ public class InventoryHelper {
 	}
 
 	public static boolean isEmpty(ItemStack[] inventory) {
-
 		for (ItemStack stack : inventory) {
 			if (!stack.isEmpty()) {
 				return false;

@@ -291,7 +291,7 @@ public final class ItemHelper {
 				}
 			}
 		}
-		if (dmgItems[0].isEmpty()) {
+		if (dmgItems[0].isEmpty() || dmgItems[0].getItem() == null) {
 			return ItemStack.EMPTY;
 		} else if (!dmgItems[1].isEmpty() && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].getCount() == 1 && dmgItems[1].getCount() == 1 && dmgItems[0].getItem().isRepairable()) {
 			Item theItem = dmgItems[0].getItem();

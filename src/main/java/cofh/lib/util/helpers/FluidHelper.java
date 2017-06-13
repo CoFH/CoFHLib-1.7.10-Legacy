@@ -1,5 +1,6 @@
 package cofh.lib.util.helpers;
 
+import cofh.api.fluid.IFluidContainerItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
@@ -48,18 +50,39 @@ public class FluidHelper {
 
 	}
 
+	/* IFluidContainer Interaction */
+	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
+
+		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+	}
+
+	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
+
+		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
+	}
+
+	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
+
+		ItemStack container = player.getHeldItemMainhand();
+
+		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
+	}
+
+	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
+
+		ItemStack container = player.getHeldItemMainhand();
+
+		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
+	}
+
 	public static boolean isPlayerHoldingFluidHandler(EntityPlayer player) {
 
 		return isFluidHandler(player.getHeldItemMainhand());
 	}
 
-	public static FluidStack getFluidStackFromHandler(ItemStack container) {
+	public static FluidStack getFluidStackFromContainerItem(ItemStack container) {
 
-		if (isFluidHandler(container)) {
-			IFluidTankProperties[] tank = container.getCapability(FLUID_HANDLER, null).getTankProperties();
-			return tank.length <= 0 ? null : tank[0].getContents();
-		}
-		return null;
+		return ((IFluidContainerItem) container.getItem()).getFluid(container);
 	}
 
 	/**
@@ -70,7 +93,7 @@ public class FluidHelper {
 	 */
 	public static boolean isFluidHandler(@Nullable ItemStack stack) {
 
-		return stack != null && stack.hasCapability(FLUID_HANDLER, null);
+		return !stack.isEmpty() && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 	}
 
 	public static boolean isFillableEmptyContainer(ItemStack empty) {
@@ -173,7 +196,6 @@ public class FluidHelper {
 
 	/**
 	 * Attempts to drain the item to an IFluidHandler.
-	 * TODO This is a bouncer for pre 1.11, 1.11 has immutable stacks, so this needs to change a little bit, here so we don't need to change 40 classes.
 	 *
 	 * @param stack   The stack to drain from.
 	 * @param handler The IFluidHandler to fill.
@@ -183,16 +205,20 @@ public class FluidHelper {
 	 */
 	public static boolean drainItemToHandler(ItemStack stack, IFluidHandler handler, EntityPlayer player, EnumHand hand) {
 
-		if (stack == null || handler == null || player == null) {
+		if (stack.isEmpty() || handler == null || player == null) {
 			return false;
 		}
 		IItemHandler playerInv = new InvWrapper(player.inventory);
-		return FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
+		FluidActionResult result = FluidUtil.tryEmptyContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
+		if (result.isSuccess()) {
+			player.setHeldItem(hand, result.getResult());
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Attempts to fill the item from an IFluidHandler.
-	 * TODO This is a bouncer for pre 1.11, 1.11 has immutable stacks, so this needs to change a little bit, here so we don't need to change 40 classes.
 	 *
 	 * @param stack   The stack to fill.
 	 * @param handler The IFluidHandler to drain from.
@@ -202,17 +228,21 @@ public class FluidHelper {
 	 */
 	public static boolean fillItemFromHandler(ItemStack stack, IFluidHandler handler, EntityPlayer player, EnumHand hand) {
 
-		if (stack == null || handler == null || player == null) {
+		if (stack.isEmpty() || handler == null || player == null) {
 			return false;
 		}
 		IItemHandler playerInv = new InvWrapper(player.inventory);
-		return FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
+		FluidActionResult result = FluidUtil.tryFillContainerAndStow(stack, handler, playerInv, Integer.MAX_VALUE, player);
+		if (result.isSuccess()) {
+			player.setHeldItem(hand, result.getResult());
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Attempts to interact the item with an IFluidHandler.
 	 * Interaction will always try and fill the item first, if this fails it will attempt to drain the item.
-	 * TODO This is a bouncer for pre 1.11, 1.11 has immutable stacks, so this needs to change a little bit, here so we don't need to change 40 classes.
 	 *
 	 * @param stack   The stack to interact with.
 	 * @param handler The Handler to fill / drain.
@@ -312,8 +342,8 @@ public class FluidHelper {
 
 	public static FluidStack getFluidForFilledItem(ItemStack container) {
 
-		if (container != null && isFluidHandler(container)) {
-			return getFluidStackFromHandler(container);
+		if (container != null && container.getItem() instanceof IFluidContainerItem) {
+			return ((IFluidContainerItem) container.getItem()).getFluid(container);
 		}
 		return null;
 	}
