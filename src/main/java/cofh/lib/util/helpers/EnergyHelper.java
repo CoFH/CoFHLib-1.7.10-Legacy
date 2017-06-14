@@ -79,11 +79,16 @@ public class EnergyHelper {
 	 * Checks if an item has the EnergyHandler capability.
 	 *
 	 * @param stack The ItemStack to check.
-	 * @return If the ItemStack has the fluid cap.
+	 * @return If the ItemStack has the Energy cap.
 	 */
 	public static boolean isEnergyHandler(@Nullable ItemStack stack) {
 
 		return stack != null && stack.hasCapability(ENERGY_HANDLER, null);
+	}
+
+	public static IEnergyStorage getEnergyHandler(ItemStack stack) {
+
+		return stack.getCapability(ENERGY_HANDLER, null);
 	}
 
 	public static ItemStack setDefaultEnergyTag(ItemStack container, int energy) {
