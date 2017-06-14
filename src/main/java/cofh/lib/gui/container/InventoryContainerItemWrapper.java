@@ -118,6 +118,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 
 	@Override
 	public boolean isEmpty() {
+
 		return InventoryHelper.isEmpty(inventory);
 	}
 
