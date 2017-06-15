@@ -77,10 +77,10 @@ public class WorldGenGeode extends WorldGenerator {
 						double dist = xDist * xDist + yDist * yDist + zDist * zDist;
 
 						if (dist < 1.0D) {
-							spawnBlock[(x * width + z) * height + y] = !hollow || dist > minDist;
+							spawnBlock[(x * width + z) * height + y] = true;
 						}
-						if (hollow) {
-							hollowBlock[(x * width + z) * height + y] = dist <= minDist;
+						if (hollow && dist <= minDist) {
+							hollowBlock[(x * width + z) * height + y] = true;
 						}
 					}
 				}
