@@ -48,39 +48,18 @@ public class FluidHelper {
 
 	}
 
-	/* IFluidContainer Interaction */
-	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
-
-		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
-	}
-
-	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
-
-		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
-	}
-
-	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
-
-		ItemStack container = player.getHeldItemMainhand();
-
-		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
-	}
-
-	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
-
-		ItemStack container = player.getHeldItemMainhand();
-
-		return isFluidHandler(container) && container.stackSize == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
-	}
-
 	public static boolean isPlayerHoldingFluidHandler(EntityPlayer player) {
 
 		return isFluidHandler(player.getHeldItemMainhand());
 	}
 
-	public static FluidStack getFluidStackFromContainerItem(ItemStack container) {
+	public static FluidStack getFluidStackFromHandler(ItemStack container) {
 
-		return ((IFluidContainerItem) container.getItem()).getFluid(container);
+		if (isFluidHandler(container)) {
+			IFluidTankProperties[] tank = container.getCapability(FLUID_HANDLER, null).getTankProperties();
+			return tank.length <= 0 ? null : tank[0].getContents();
+		}
+		return null;
 	}
 
 	/**
@@ -246,69 +225,6 @@ public class FluidHelper {
 		return fillItemFromHandler(stack, handler, player, hand) || drainItemToHandler(stack, handler, player, hand);
 	}
 
-	/* Fluid Container Registry Interaction */
-	@Deprecated
-	public static boolean fillContainerFromHandler(World world, net.minecraftforge.fluids.IFluidHandler handler, EntityPlayer player, FluidStack tankFluid) {
-
-		ItemStack container = player.getHeldItemMainhand();
-
-		if (FluidContainerRegistry.isEmptyContainer(container)) {
-			ItemStack returnStack = FluidContainerRegistry.fillFluidContainer(tankFluid, container);
-			FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(returnStack);
-
-			if (fluid == null || returnStack == null) {
-				return false;
-			}
-			if (ServerHelper.isClientWorld(world)) {
-				return true;
-			}
-			if (!player.capabilities.isCreativeMode) {
-				if (container.stackSize == 1) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, returnStack);
-					container.stackSize--;
-					if (container.stackSize <= 0) {
-						container = null;
-					}
-				} else {
-					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
-						player.openContainer.detectAndSendChanges();
-						((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
-					}
-				}
-			}
-			handler.drain(null, fluid.amount, true);
-			return true;
-		}
-		return false;
-	}
-
-	@Deprecated
-	public static boolean fillHandlerWithContainer(World world, net.minecraftforge.fluids.IFluidHandler handler, EntityPlayer player) {
-
-		ItemStack container = player.getHeldItemMainhand();
-		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(container);
-
-		if (fluid != null) {
-			if (handler.fill(null, fluid, false) == fluid.amount || player.capabilities.isCreativeMode) {
-				ItemStack returnStack = FluidContainerRegistry.drainFluidContainer(container);
-				if (ServerHelper.isClientWorld(world)) {
-					return true;
-				}
-				if (!player.capabilities.isCreativeMode) {
-					if (ItemHelper.disposePlayerItem(player.getHeldItemMainhand(), returnStack, player, true)) {
-						if (ServerHelper.isServerWorld(world)) {
-							player.openContainer.detectAndSendChanges();
-							((EntityPlayerMP) player).sendContainerToPlayer(player.openContainer);
-						}
-					}
-				}
-				handler.fill(null, fluid, true);
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/* PACKETS */
 	public static void writeFluidStackToPacket(FluidStack fluid, DataOutput data) throws IOException {
 
@@ -396,10 +312,10 @@ public class FluidHelper {
 
 	public static FluidStack getFluidForFilledItem(ItemStack container) {
 
-		if (container != null && container.getItem() instanceof IFluidContainerItem) {
-			return ((IFluidContainerItem) container.getItem()).getFluid(container);
+		if (container != null && isFluidHandler(container)) {
+			return getFluidStackFromHandler(container);
 		}
-		return FluidContainerRegistry.getFluidForFilledItem(container);
+		return null;
 	}
 
 	public static boolean isFluidEqualOrNull(FluidStack resourceA, FluidStack resourceB) {
