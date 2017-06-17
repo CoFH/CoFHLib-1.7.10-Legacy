@@ -72,7 +72,7 @@ public class FluidHelper {
 	 * @param stack The ItemStack to check.
 	 * @return If the ItemStack has the fluid cap.
 	 */
-	public static boolean isFluidHandler(@Nullable ItemStack stack) {
+	public static boolean isFluidHandler(ItemStack stack) {
 
 		return !stack.isEmpty() && stack.hasCapability(FLUID_HANDLER_ITEM, null);
 	}
