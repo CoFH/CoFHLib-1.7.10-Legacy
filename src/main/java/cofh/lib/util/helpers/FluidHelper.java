@@ -16,8 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -43,35 +43,13 @@ public class FluidHelper {
 	@CapabilityInject (IFluidHandler.class)
 	public static final Capability<IFluidHandler> FLUID_HANDLER = null;
 
+	@CapabilityInject (IFluidHandlerItem.class)
+	public static final Capability<IFluidHandler> FLUID_HANDLER_ITEM = null;
+
 	public static final FluidTankInfo[] NULL_TANK_INFO = new FluidTankInfo[] {};
 
 	private FluidHelper() {
 
-	}
-
-	/* IFluidContainer Interaction */
-	public static int fillFluidContainerItem(ItemStack container, FluidStack resource, boolean doFill) {
-
-		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
-	}
-
-	public static FluidStack drainFluidContainerItem(ItemStack container, int maxDrain, boolean doDrain) {
-
-		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
-	}
-
-	public static FluidStack extractFluidFromHeldContainer(EntityPlayer player, int maxDrain, boolean doDrain) {
-
-		ItemStack container = player.getHeldItemMainhand();
-
-		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).drain(container, maxDrain, doDrain) : null;
-	}
-
-	public static int insertFluidIntoHeldContainer(EntityPlayer player, FluidStack resource, boolean doFill) {
-
-		ItemStack container = player.getHeldItemMainhand();
-
-		return isFluidHandler(container) && container.getCount() == 1 ? ((IFluidContainerItem) container.getItem()).fill(container, resource, doFill) : 0;
 	}
 
 	public static boolean isPlayerHoldingFluidHandler(EntityPlayer player) {
@@ -79,20 +57,24 @@ public class FluidHelper {
 		return isFluidHandler(player.getHeldItemMainhand());
 	}
 
-	public static FluidStack getFluidStackFromContainerItem(ItemStack container) {
+	public static FluidStack getFluidStackFromHandler(ItemStack container) {
 
-		return ((IFluidContainerItem) container.getItem()).getFluid(container);
+		if (isFluidHandler(container)) {
+			IFluidTankProperties[] tank = container.getCapability(FLUID_HANDLER_ITEM, null).getTankProperties();
+			return tank.length <= 0 ? null : tank[0].getContents();
+		}
+		return null;
 	}
 
 	/**
-	 * Checks if an item has the FluidHandler capability.
+	 * Checks if an item has the FluidHandlerItem capability.
 	 *
 	 * @param stack The ItemStack to check.
 	 * @return If the ItemStack has the fluid cap.
 	 */
 	public static boolean isFluidHandler(@Nullable ItemStack stack) {
 
-		return !stack.isEmpty() && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		return !stack.isEmpty() && stack.hasCapability(FLUID_HANDLER_ITEM, null);
 	}
 
 	public static boolean isFillableEmptyContainer(ItemStack empty) {
@@ -341,8 +323,8 @@ public class FluidHelper {
 
 	public static FluidStack getFluidForFilledItem(ItemStack container) {
 
-		if (container != null && container.getItem() instanceof IFluidContainerItem) {
-			return ((IFluidContainerItem) container.getItem()).getFluid(container);
+		if (container != null && isFluidHandler(container)) {
+			return getFluidStackFromHandler(container);
 		}
 		return null;
 	}
