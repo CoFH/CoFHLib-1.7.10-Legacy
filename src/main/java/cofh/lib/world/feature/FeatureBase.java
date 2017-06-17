@@ -119,7 +119,6 @@ public abstract class FeatureBase implements IFeatureGenerator {
 		if (rarity > 1 && random.nextInt(rarity) != 0) {
 			return false;
 		}
-
 		return generateFeature(random, chunkX * 16 + 8, chunkZ * 16 + 8, world);
 	}
 

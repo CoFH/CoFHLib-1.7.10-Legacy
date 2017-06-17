@@ -9,9 +9,10 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class FluidContainerItemWrapper implements ICapabilityProvider {
@@ -28,13 +29,14 @@ public class FluidContainerItemWrapper implements ICapabilityProvider {
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing from) {
 
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, final EnumFacing from) {
 
-		return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new IFluidHandler() {
+		return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.cast(new IFluidHandlerItem() {
+
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
 
@@ -63,6 +65,14 @@ public class FluidContainerItemWrapper implements ICapabilityProvider {
 
 				return container.drain(stack, maxDrain, doDrain);
 			}
+
+			@Nonnull
+			@Override
+			public ItemStack getContainer() {
+
+				return stack;
+			}
+
 		});
 	}
 
