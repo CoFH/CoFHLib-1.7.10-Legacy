@@ -32,11 +32,11 @@ public class RegistryUtils {
 
 	private static class Repl {
 
-		private static IdentityHashMap<RegistryNamespaced, Multimap<String, Object>> replacements;
+		private static IdentityHashMap<RegistryNamespaced, Multimap<ResourceLocation, Object>> replacements;
 		private static Class<RegistryDelegate<?>> DelegateClass;
 
 		@SuppressWarnings ({ "rawtypes", "unchecked" })
-		private static void overwrite_do(RegistryNamespaced registry, String name, Object object, Object oldThing) {
+		private static void overwrite_do(RegistryNamespaced registry, ResourceLocation name, Object object, Object oldThing) {
 
 			int id = registry.getIDForObject(oldThing);
 			BiMap map = ((BiMap) registry.registryObjects);
@@ -45,9 +45,9 @@ public class RegistryUtils {
 			map.forcePut(name, object);
 		}
 
-		private static void alterDelegateChain(RegistryNamespaced registry, String id, Object object) {
+		private static void alterDelegateChain(RegistryNamespaced registry, ResourceLocation id, Object object) {
 
-			Multimap<String, Object> map = replacements.get(registry);
+			Multimap<ResourceLocation, Object> map = replacements.get(registry);
 			List<Object> c = (List<Object>) map.get(id);
 			int i = 0, e = c.size() - 1;
 			Object end = c.get(e);
@@ -61,7 +61,7 @@ public class RegistryUtils {
 
 			if (obj instanceof Item) {
 				RegistryDelegate<Item> delegate = ((Item) obj).delegate;
-				ReflectionHelper.setPrivateValue(DelegateClass, delegate, repl, "referant");
+				ReflectionHelper.setPrivateValue(DelegateClass, delegate, repl, "referent");
 				ReflectionHelper.setPrivateValue(DelegateClass, ((Item) repl).delegate, delegate.name(), "name");
 			}
 		}
@@ -84,12 +84,12 @@ public class RegistryUtils {
 		if (Repl.replacements.size() < 1) {
 			return;
 		}
-		for (Map.Entry<RegistryNamespaced, Multimap<String, Object>> entry : Repl.replacements.entrySet()) {
+		for (Map.Entry<RegistryNamespaced, Multimap<ResourceLocation, Object>> entry : Repl.replacements.entrySet()) {
 			RegistryNamespaced reg = entry.getKey();
-			Multimap<String, Object> map = entry.getValue();
-			Iterator<String> v = map.keySet().iterator();
+			Multimap<ResourceLocation, Object> map = entry.getValue();
+			Iterator<ResourceLocation> v = map.keySet().iterator();
 			while (v.hasNext()) {
-				String id = v.next();
+				ResourceLocation id = v.next();
 				List<Object> c = (List<Object>) map.get(id);
 				int i = 0, e = c.size() - 1;
 				Object end = c.get(e);
@@ -108,17 +108,18 @@ public class RegistryUtils {
 	@SuppressWarnings ("unchecked")
 	public static void overwriteEntry(RegistryNamespaced registry, String name, Object object) {
 
-		Object oldThing = registry.getObject(name);
-		Repl.overwrite_do(registry, name, object, oldThing);
-		Multimap<String, Object> reg = Repl.replacements.get(registry);
+		ResourceLocation loc = new ResourceLocation(name);
+		Object oldThing = registry.getObject(loc);
+		Repl.overwrite_do(registry, loc, object, oldThing);
+		Multimap<ResourceLocation, Object> reg = Repl.replacements.get(registry);
 		if (reg == null) {
 			Repl.replacements.put(registry, reg = ArrayListMultimap.create());
 		}
-		if (!reg.containsKey(name)) {
-			reg.put(name, oldThing);
+		if (!reg.containsKey(loc)) {
+			reg.put(loc, oldThing);
 		}
-		reg.put(name, object);
-		Repl.alterDelegateChain(registry, name, object);
+		reg.put(loc, object);
+		Repl.alterDelegateChain(registry, loc, object);
 	}
 
 	@SideOnly (Side.CLIENT)
