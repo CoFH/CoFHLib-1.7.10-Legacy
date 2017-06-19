@@ -5,6 +5,7 @@ import cofh.lib.gui.element.ElementBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.gui.slot.SlotFalseCopy;
 import cofh.lib.util.helpers.RenderHelper;
+import cofh.lib.util.helpers.SoundHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
@@ -42,8 +43,6 @@ import java.util.List;
  */
 public abstract class GuiBase extends GuiContainer {
 
-	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
-
 	protected boolean drawTitle = true;
 	protected boolean drawInventory = true;
 	protected int mouseX = 0;
@@ -62,12 +61,12 @@ public abstract class GuiBase extends GuiContainer {
 
 	public static void playSound(String name, SoundCategory category, float volume, float pitch) {
 
-		guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
+		SoundHelper.playSound(new SoundBase(name, category, volume, pitch));
 	}
 
 	public static void playClickSound(float volume, float pitch) {
 
-		guiSoundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, volume, pitch));
+		SoundHelper.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, volume, pitch));
 	}
 
 	public GuiBase(Container container) {
