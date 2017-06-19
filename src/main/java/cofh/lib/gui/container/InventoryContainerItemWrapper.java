@@ -20,12 +20,6 @@ public class InventoryContainerItemWrapper implements IInventory {
 	protected ItemStack[] inventory;
 	protected boolean dirty = false;
 
-	@Deprecated
-	public InventoryContainerItemWrapper(ContainerInventoryItem gui, ItemStack stack) {
-
-		this(stack);
-	}
-
 	public InventoryContainerItemWrapper(ItemStack itemstack) {
 
 		stack = itemstack;
@@ -39,7 +33,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 
 	protected void loadInventory() {
 
-		boolean loaded = false;
+		boolean loaded;
 		if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("Inventory")) {
 			loaded = stack.hasTagCompound();
 			if (loaded) {
