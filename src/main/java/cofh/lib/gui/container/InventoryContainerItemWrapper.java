@@ -2,6 +2,7 @@ package cofh.lib.gui.container;
 
 import cofh.api.item.IInventoryContainerItem;
 import cofh.lib.util.helpers.InventoryHelper;
+import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -189,7 +190,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	@Override
 	public boolean hasCustomName() {
 
-		return true;
+		return stack.hasDisplayName();
 	}
 
 	@Override
