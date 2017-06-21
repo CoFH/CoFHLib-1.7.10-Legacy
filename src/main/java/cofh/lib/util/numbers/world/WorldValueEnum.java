@@ -57,6 +57,13 @@ public enum WorldValueEnum {
 			return BlockHelper.getSurfaceBlockY(world, pos.getX(), pos.getZ());
 		}
 	},
+	CURRENT_Y {
+		@Override
+		public long getValue(World world, Random rand, BlockPos pos) {
+
+			return pos.getY();
+		}
+	},
 	LOWEST_CHUNK_HORIZON {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
