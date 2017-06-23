@@ -6,10 +6,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ISoundSource {
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	ISound getSound();
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	boolean shouldPlaySound();
 
 }

@@ -14,57 +14,49 @@ public enum WorldValueEnum {
 
 			return world.getActualHeight();
 		}
-	},
-	SEA_LEVEL {
+	}, SEA_LEVEL {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return world.getSeaLevel();
 		}
-	},
-	GROUND_LEVEL {
+	}, GROUND_LEVEL {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return world.provider.getAverageGroundLevel();
 		}
-	},
-	RAIN_HEIGHT {
+	}, RAIN_HEIGHT {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return world.getPrecipitationHeight(pos).getY();
 		}
-	},
-	HEIGHT_MAP {
+	}, HEIGHT_MAP {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return world.getHeightmapHeight(pos.getX(), pos.getZ());
 		}
-	},
-	HIGHEST_BLOCK {
+	}, HIGHEST_BLOCK {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return BlockHelper.getTopBlockY(world, pos.getX(), pos.getY());
 		}
-	},
-	SURFACE_BLOCK {
+	}, SURFACE_BLOCK {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return BlockHelper.getSurfaceBlockY(world, pos.getX(), pos.getZ());
 		}
-	},
-	CURRENT_Y {
+	}, CURRENT_Y {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 
 			return pos.getY();
 		}
-	},
-	LOWEST_CHUNK_HORIZON {
+	}, LOWEST_CHUNK_HORIZON {
 		@Override
 		public long getValue(World world, Random rand, BlockPos pos) {
 

@@ -1,6 +1,5 @@
 package cofh.lib.util.numbers.world;
 
-import cofh.lib.util.numbers.ConstantProvider;
 import cofh.lib.util.numbers.INumberProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

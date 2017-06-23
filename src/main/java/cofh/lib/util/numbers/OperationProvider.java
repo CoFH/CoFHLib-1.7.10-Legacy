@@ -45,62 +45,69 @@ public class OperationProvider implements INumberProvider {
 	private static enum Operation {
 
 		ADD {
-			@Override public long perform(long a, long b) {
+			@Override
+			public long perform(long a, long b) {
 
 				return a + b;
 			}
 
-			@Override public double perform(double a, double b) {
+			@Override
+			public double perform(double a, double b) {
 
 				return a + b;
 			}
-		},
-		SUBTRACT {
-			@Override public long perform(long a, long b) {
+		}, SUBTRACT {
+			@Override
+			public long perform(long a, long b) {
 
 				return a - b;
 			}
 
-			@Override public double perform(double a, double b) {
+			@Override
+			public double perform(double a, double b) {
 
 				return a - b;
 			}
-		},
-		MULTIPLY {
-			@Override public long perform(long a, long b) {
+		}, MULTIPLY {
+			@Override
+			public long perform(long a, long b) {
 
 				return a * b;
 			}
 
-			@Override public double perform(double a, double b) {
+			@Override
+			public double perform(double a, double b) {
 
 				return a * b;
 			}
-		},
-		DIVIDE {
-			@Override public long perform(long a, long b) {
+		}, DIVIDE {
+			@Override
+			public long perform(long a, long b) {
 
 				return a / b;
 			}
 
-			@Override public double perform(double a, double b) {
+			@Override
+			public double perform(double a, double b) {
 
 				return a / b;
 			}
-		},
-		MODULO {
-			@Override public long perform(long a, long b) {
+		}, MODULO {
+			@Override
+			public long perform(long a, long b) {
 
 				return a % b;
 			}
 
-			@Override public double perform(double a, double b) {
+			@Override
+			public double perform(double a, double b) {
 
 				return a % b;
 			}
 		};
 
 		public abstract long perform(long a, long b);
+
 		public abstract double perform(double a, double b);
 	}
 
