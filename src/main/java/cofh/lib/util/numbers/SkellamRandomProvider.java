@@ -26,4 +26,5 @@ public class SkellamRandomProvider extends ConstantProvider {
 		double val = min.doubleValue();
 		return getRandomDouble(val, rand) - getRandomDouble(val, rand);
 	}
+
 }

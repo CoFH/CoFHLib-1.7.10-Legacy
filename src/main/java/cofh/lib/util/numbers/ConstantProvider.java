@@ -36,4 +36,5 @@ public class ConstantProvider implements INumberProvider {
 
 		return min.doubleValue();
 	}
+
 }
