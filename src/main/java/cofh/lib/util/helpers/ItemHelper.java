@@ -275,43 +275,29 @@ public final class ItemHelper {
 	}
 
 	/**
+	 * Gets a vanilla CraftingManager recipe.
+	 */
+	public static IRecipe getCraftingRecipe(InventoryCrafting inv, World world) {
+
+		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
+			if (recipe.matches(inv, world)) {
+				return recipe;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Gets a vanilla CraftingManager result.
 	 */
-	public static ItemStack findMatchingRecipe(InventoryCrafting inv, World world) {
+	public static ItemStack getCraftingResult(InventoryCrafting inv, World world) {
 
-		ItemStack[] dmgItems = new ItemStack[2];
-		Arrays.fill(dmgItems, ItemStack.EMPTY);
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			if (!inv.getStackInSlot(i).isEmpty()) {
-				if (dmgItems[0].isEmpty()) {
-					dmgItems[0] = inv.getStackInSlot(i);
-				} else {
-					dmgItems[1] = inv.getStackInSlot(i);
-					break;
-				}
+		for (IRecipe recipe : CraftingManager.getInstance().getRecipeList()) {
+			if (recipe.matches(inv, world)) {
+				return recipe.getCraftingResult(inv);
 			}
 		}
-		if (dmgItems[0].isEmpty() || dmgItems[0].getItem() == null) {
-			return ItemStack.EMPTY;
-		} else if (!dmgItems[1].isEmpty() && dmgItems[0].getItem() == dmgItems[1].getItem() && dmgItems[0].getCount() == 1 && dmgItems[1].getCount() == 1 && dmgItems[0].getItem().isRepairable()) {
-			Item theItem = dmgItems[0].getItem();
-			int var13 = theItem.getMaxDamage() - dmgItems[0].getItemDamage();
-			int var8 = theItem.getMaxDamage() - dmgItems[1].getItemDamage();
-			int var9 = var13 + var8 + theItem.getMaxDamage() * 5 / 100;
-			int var10 = Math.max(0, theItem.getMaxDamage() - var9);
-
-			return new ItemStack(dmgItems[0].getItem(), 1, var10);
-		} else {
-			IRecipe recipe;
-			for (int i = 0; i < CraftingManager.getInstance().getRecipeList().size(); i++) {
-				recipe = CraftingManager.getInstance().getRecipeList().get(i);
-
-				if (recipe.matches(inv, world)) {
-					return recipe.getCraftingResult(inv);
-				}
-			}
-			return ItemStack.EMPTY;
-		}
+		return ItemStack.EMPTY;
 	}
 
 	/* ORE DICTIONARY FUNCTIONS */
