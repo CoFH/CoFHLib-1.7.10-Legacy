@@ -157,7 +157,7 @@ public class InventoryHelper {
 	}
 
 	/* HELPERS */
-	public static ItemStack addToInsertion(TileEntity tile, EnumFacing side, ItemStack stack) {
+	public static ItemStack addToInventory(TileEntity tile, EnumFacing side, ItemStack stack) {
 
 		if (stack.isEmpty()) {
 			return ItemStack.EMPTY;
