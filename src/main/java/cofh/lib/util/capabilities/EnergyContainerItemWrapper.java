@@ -28,7 +28,11 @@ public class EnergyContainerItemWrapper implements ICapabilityProvider {
 	@Override
 	public <T> T getCapability(Capability<T> capability, final EnumFacing from) {
 
+		if (!hasCapability(capability, from)) {
+			return null;
+		}
 		return CapabilityEnergy.ENERGY.cast(new net.minecraftforge.energy.IEnergyStorage() {
+
 			@Override
 			public int receiveEnergy(int maxReceive, boolean simulate) {
 
