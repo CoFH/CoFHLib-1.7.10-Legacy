@@ -34,7 +34,11 @@ public class FluidContainerItemWrapper implements ICapabilityProvider {
 	@Override
 	public <T> T getCapability(Capability<T> capability, final EnumFacing from) {
 
+		if (!hasCapability(capability, from)) {
+			return null;
+		}
 		return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(new IFluidHandler() {
+
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
 
