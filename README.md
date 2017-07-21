@@ -1,21 +1,49 @@
-﻿The intention of the CoFH Common Library is to establish a framework for modders
-to use to avoid "reinventing the wheel," as it were. This library contains a lot
-of basic functionality that quite a few mods end up adding at some point during
-their development.
+CoFH "Don't Be a Jerk" License
+====================================
+#### Okay, so here's the deal.
 
-Ideally, using this library will allow for more rapid mod development as a lot
-of the "boring" yet essential code is provided here. Additionally, it has the
-potential to greatly reduce permgen space, and who can argue with that?
+You'll notice that this repository does not have a license! By default, that means "All Rights Reserved."
 
-Obviously, we have to maintain this library and keep it compatible with the
-changes and updates introduced by Minecraft and Forge, but we'll try and only
-add new things if at all possible.
+That is indeed the case. All rights reserved, as far as the code is concerned.
 
-If you feel that there is anything obvious or very basic that we have missed,
-feel free to suggest it to the team.
+Art and sound assets are released under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0), a summary of which can be found at: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
-We look forward to seeing what the community does with this.
+©2012-2017 Cult of the Full Hub / Team CoFH / CoFH
 
--Team CoFH
+#### Homepage
 
-Oh, and don't be a jerk.
+[TeamCoFH Home Page](http://teamcofh.com/)
+
+[IRC #ThermalExpansion on esper.net](http://webchat.esper.net/?nick=ThermalWiki....&channels=ThermalExpansion)
+
+#### Notice
+
+Contribution to this repository means that you are granting us rights over the code that you choose to contribute. If you do not agree with that, do not contribute.
+
+So, why is this here? Well, the rights are reserved, but what that really means is that we choose what to do with the rights. So here you go.
+
+#### You CAN
+- Fork and modify the code.
+- Submit Pull Requests to this repository.
+- Copy portions of this code for use in other projects.
+- Write your own code that uses this code as a dependency. (addon mods!)
+
+#### You CANNOT
+- Redistribute this in its entirety as source or compiled code.
+- Create or distribute code which contains 50% or more Functionally Equivalent Statements* from this repository.
+
+#### You MUST
+- Maintain a visible repository of your code which is inspired by, derived from, or copied from this code. Basically, if you use it, pay it forward. You keep rights to your OWN code, but you still must make your source visible.
+- Not be a jerk**. Seriously, if you're a jerk, you can't use this code. That's part of the agreement.
+
+#### Notes, License & Copyright
+
+*A Functionally Equivalent Statement is a code fragment which, regardless of whitespace and object names, achieves the same result within the context of a Minecraft mod or addon. Basically you can't copy the code, rename the variables, add whitespace and say it's different. It's not.
+
+**A jerk is anyone who attempts to or intends to claim partial or total ownership of the original or repackaged code and/or attempts to or intends to redistribute original or repackaged code without prior express written permission from the owners (CoFH).
+
+Essentially, take this and learn from it! Create addon mods that depend on it! If you see something we can improve, tell us. Submit a Pull Request. The one catch: don't steal! A lot of effort has gone into this, and if you were to take this and call it your own, you'd basically be a big jerk.
+
+Don't be a jerk.
+
+©2012-2017 Cult of the Full Hub / Team CoFH / CoFH
